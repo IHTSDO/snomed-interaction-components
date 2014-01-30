@@ -84,10 +84,17 @@ In both calls, one of the parameters is the concept UUID, in the example the UUI
 
 Some example UUIDs to test:
 
-SNOMED CT (Root): ee9ac5d2-a07c-3981-a57a-f7f26baf38d8
-Clinical finding: bd83b1dd-5a82-34fa-bb52-06f666420a1c
-Asthma: c265cf22-2a11-3488-b71e-296ec0317f96
-Atenolol: f4298478-304f-36ca-bf05-7e14fbaebc5a
+* SNOMED CT (Root): ee9ac5d2-a07c-3981-a57a-f7f26baf38d8
+* Clinical finding: bd83b1dd-5a82-34fa-bb52-06f666420a1c
+* Asthma: c265cf22-2a11-3488-b71e-296ec0317f96
+* Atenolol: f4298478-304f-36ca-bf05-7e14fbaebc5a
+
+After the initial load, it is possible to set the panel to a different concept by using the Javascript object methods.
+
+```
+panel.conceptId = "ee9ac5d2-a07c-3981-a57a-f7f26baf38d8";
+panel.updateDivContent();
+```
 
 ## Full Example HTML
 ```
