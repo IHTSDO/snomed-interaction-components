@@ -14,7 +14,7 @@ The widget has two modes, plain Javascript object, or JQuery plugin. We will exp
 
 This widget depends on JQuery (js) and Bootstrap (js + css), so any recent version of both needs to be made available.
 
-```
+```HTML
 <script src="../lib/jquery-2.1.0.min.js" type="text/javascript"></script>
 <script src="../lib/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../css/bootstrap.min.css">
@@ -25,7 +25,7 @@ This widget depends on JQuery (js) and Bootstrap (js + css), so any recent versi
 
 The concept details widget is distributed as a Javascript file (.js), available [here](https://github.com/termMed/snomed-interaction-components/raw/master/lib/conceptDetailsPlugIn.js). It needs to be imported in the HTML page also.
 
-```
+```HTML
 <script src="../lib/conceptDetailsPlugIn.js" type="text/javascript"></script>
 ```
 
@@ -35,7 +35,7 @@ The body of the HTML page needs to include a div element that will contain the w
 
 In this exampel we create two different divs, one as an example of plain Javascript mode and the other for the example of the JQuery mode.
 
-```
+```HTML
     <body onload="initialize()">
         <h1>Testing Concept Details Widget</h1>
 
@@ -53,7 +53,7 @@ The `initialize()` function should be implemented in javascript in this example 
 
 After that, 2 panels are created using the 2 different modes.
 
-```
+```HTML
     <script type="text/javascript">
         function initialize() {
             // Example: common options object
@@ -91,13 +91,13 @@ Some example UUIDs to test:
 
 After the initial load, it is possible to set the panel to a different concept by using the Javascript object methods.
 
-```
+```JavaScript
 panel.conceptId = "ee9ac5d2-a07c-3981-a57a-f7f26baf38d8";
 panel.updateDivContent();
 ```
 
 ## Full Example HTML
-```
+```HTML
 <!--
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
