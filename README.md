@@ -33,7 +33,7 @@ The concept details widget is distributed as a Javascript file (.js), available 
 
 The body of the HTML page needs to include a div element that will contain the widget. This div needs to have a unique id. In this example we also assign the `onload` event of the body to the `initialize()` javascript function (that we will create later).
 
-In this exampel we create two different divs, one as an example of plain Javascript mode and the other for the example of the JQuery mode.
+In this example we create two different divs, one as an example of plain Javascript mode and the other for the example of the JQuery mode.
 
 ```HTML
     <body onload="initialize()">
