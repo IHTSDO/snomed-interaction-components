@@ -84,7 +84,7 @@ function conceptDetails(divElement, conceptId, options) {
         // load attributes
         $.getJSON(panel.url + "rest/snomed/concepts/" + panel.conceptId, function(result) {
             panel.attributesPId = divElement.id + "-attributes-panel";
-            attrHtml = "<div class='jqui-droppable'>SCTID: " + result.sctid + ", " + result.definitionStatus.defaultTerm;
+            attrHtml = "<div class='jqui-droppable'><h3>" + result.description +  "</h4><br>SCTID: " + result.sctid + ", " + result.definitionStatus.defaultTerm;
             if (result.active == true) {
                 attrHtml = attrHtml + ", ACTIVE";
             } else {
