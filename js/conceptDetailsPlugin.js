@@ -76,21 +76,32 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.updateCanvas = function() {
-        console.log("UPDATE:");
-        console.log(JSON.stringify(panel.options));
+        //console.log("UPDATE:");
+        //console.log(JSON.stringify(panel.options));
         $('#' + panel.attributesPId).html($('#' + panel.attributesPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.descsPId).html($('#' + panel.descsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.relsPId).html($('#' + panel.relsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         // load attributes
         $.getJSON(panel.url + "rest/snomed/concepts/" + panel.conceptId, function(result) {
             panel.attributesPId = divElement.id + "-attributes-panel";
-            attrHtml = "SCTID: " + result.sctid + ", " + result.definitionStatus.defaultTerm;
-            if (result.active == "true") {
+            attrHtml = "<div class='jqui-droppable'>SCTID: " + result.sctid + ", " + result.definitionStatus.defaultTerm;
+            if (result.active == true) {
                 attrHtml = attrHtml + ", ACTIVE";
             } else {
                 attrHtml = attrHtml + ", INACTIVE";
             }
+            attrHtml = attrHtml + "</div>";
             $('#' + panel.attributesPId).html(attrHtml);
+            $('#' + panel.attributesPId).find('.jqui-droppable').droppable({
+                drop: handleDropEvent,
+                hoverClass: "bg-info"
+            });
+            function handleDropEvent(event, ui) {
+                var draggable = ui.draggable;
+                console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
+                panel.conceptId = draggable.attr('data-concept-id');
+                panel.updateCanvas()
+            }
         }).done(function() {
             //$(divElement).html(detailsHtml);
         }).fail(function() {
@@ -115,7 +126,9 @@ function conceptDetails(divElement, conceptId, options) {
                     } else {
                         row = "<tr class='synonym-row'>";
                     }
-                    row = row + "<td>" + field.term + "</td>";
+
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.conceptId + "'>" + field.term + "</div></td>";
+
                     if (panel.options.showIds == true) {
                         row = row + "<td>" + field.descSctid + "</td>";
                     }
@@ -142,6 +155,10 @@ function conceptDetails(divElement, conceptId, options) {
                     $(val).toggle();
                 });
             });
+            $('#' + panel.descsPId).find(".jqui-draggable").draggable({
+                containment: 'window',
+                helper: 'clone'
+            });
         }).done(function() {
             //$(divElement).html(detailsHtml);
         }).fail(function() {
@@ -167,8 +184,8 @@ function conceptDetails(divElement, conceptId, options) {
                         row = "<tr class='inferred-rel'>";
                     }
 
-                    row = row + "<td>" + field.type.defaultTerm + "</td>";
-                    row = row + "<td>" + field.target.defaultTerm + "</td>";
+                    row = row + "<td><div class='jqui-draggable'data-concept-id='" + field.type.conceptId + "'>" + field.type.defaultTerm + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable'data-concept-id='" + field.target.conceptId + "'>" + field.target.defaultTerm + "</div></td>";
                     row = row + "<td>" + field.groupId + "</td>";
                     if (field.charType.conceptId == "900000000000010007") {
                         row = row + "<td>Stated</td>";
@@ -195,6 +212,10 @@ function conceptDetails(divElement, conceptId, options) {
             } else if (panel.options.selectedView != "all") {
                 // show all
             }
+            $('#' + panel.relsPId).find(".jqui-draggable").draggable({
+                containment: 'window',
+                helper: 'clone'
+            });
         }).done(function() {
             //$(divElement).html(detailsHtml);
         }).fail(function() {
@@ -208,13 +229,22 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '<label for="displaySynonyms">Display synonyms</label>';
         optionsHtml = optionsHtml + '<div class="radio">';
         optionsHtml = optionsHtml + '<label>';
-        optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true>';
+        if (panel.options.displaySynonyms == true) {
+            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true checked>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true>';
+
+        }
         optionsHtml = optionsHtml + 'Display Synonyms along with FSN and preferred terms.';
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '<div class="radio">';
         optionsHtml = optionsHtml + '<label>';
-        optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsNo" value=false checked>';
+        if (panel.options.displaySynonyms == true) {
+            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsNo" value=false>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsNo" value=false checked>';
+        }
         optionsHtml = optionsHtml + 'Only display FSN and preferred terms.';
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
@@ -223,13 +253,21 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '<label for="displayIds">Display Ids</label>';
         optionsHtml = optionsHtml + '<div class="radio">';
         optionsHtml = optionsHtml + '<label>';
-        optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsYes" value=true>';
+        if (panel.options.showIds == true) {
+            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsYes" value=true checked>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsYes" value=true>';
+        }
         optionsHtml = optionsHtml + 'Display Ids for all components.';
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '<div class="radio">';
         optionsHtml = optionsHtml + '<label>';
-        optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsNo" value=false checked>';
+        if (panel.options.showIds == true) {
+            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsNo" value=false>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsNo" value=false checked>';
+        }
         optionsHtml = optionsHtml + 'Hide Ids for all components.';
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
@@ -237,9 +275,21 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<label for="selectedRelsView">Relationships View</label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
-        optionsHtml = optionsHtml + '<option value="stated" selected>Stated</option>';
-        optionsHtml = optionsHtml + '<option value="inferred">Inferred</option>';
-        optionsHtml = optionsHtml + '<option value="all">All</option>';
+        if (panel.options.selectedView == "stated") {
+            optionsHtml = optionsHtml + '<option value="stated" selected>Stated</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="stated">Stated</option>';
+        }
+        if (panel.options.selectedView == "inferred") {
+            optionsHtml = optionsHtml + '<option value="inferred" selected>Inferred</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="inferred">Inferred</option>';
+        }
+        if (panel.options.selectedView == "all") {
+            optionsHtml = optionsHtml + '<option value="all" selected>All</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="all">All</option>';
+        }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</form>';
