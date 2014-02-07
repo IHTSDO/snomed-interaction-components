@@ -38,13 +38,15 @@ function conceptDetails(divElement, conceptId, options) {
         panel.relsPId = panel.divElement.id + "-rels-panel";
         $(divElement).html();
         // main panel
-        detailsHtml = "Concept Details ";
-        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-configButton' class='glyphicon glyphicon-cog' data-toggle='modal' data-target='#" + panel.divElement.id + "-configModal'></button>";
+        detailsHtml = "<div style='width:500px;'>";
+        detailsHtml = detailsHtml +  "<p>Concept Details ";
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-configButton' class='glyphicon glyphicon-cog' data-toggle='modal' data-target='#" + panel.divElement.id + "-configModal'></button></p>";
         detailsHtml = detailsHtml + "<div id='" + panel.attributesPId + "' class='panel panel-default'>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div id='" + panel.descsPId + "' class='panel panel-default'>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div id='" + panel.relsPId + "' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div>";
         // modal config panel
         detailsHtml = detailsHtml + "<div class='modal fade' id='" + panel.divElement.id + "-configModal'>";
@@ -64,6 +66,7 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "</div><!-- /.modal-content -->";
         detailsHtml = detailsHtml + "</div><!-- /.modal-dialog -->";
         detailsHtml = detailsHtml + "</div><!-- /.modal -->";
+        
         $(divElement).html(detailsHtml);
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
         $("#" + panel.divElement.id + "-apply-button").click(function() {

@@ -17,7 +17,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="../css/sct-widgets.css">
         <link rel="stylesheet" href="../css/jquery-ui-1.10.4.custom.min.css">
-        <script src="../lib/bootstrap.min.js"></script>`
+        <script src="../lib/bootstrap.min.js"></script>
         <style>
             .jqui-draggable.ui-draggable-dragging { background: yellow; font: bold; z-index: 1000;}
         </style>
@@ -41,21 +41,32 @@ and open the template in the editor.
                 cdPanel.setupCanvas();
 
                 // Example: load second widget using JQery
-                $("#concept_details_canvas_jquery").addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
+                //$("#concept_details_canvas_jquery").addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
+                var count = 2;
+                $("#addButton").click(function() {
+                    count = count + 1;
+                    $("#cdRow").append('<div class ="col-md-6"><div id="concept_details_canvas_' + count + '"></div></div>');
+                    $("#concept_details_canvas_" + count).addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
+                });
+
+                //$("#concept_details_canvas_3").addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
+                //$("#concept_details_canvas_4").addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
 
             }
         </script>
     </head>
     <body onload="initialize()">
         <h1>Testing SCT Interaction Components</h1>
-        <div class="panel panel-default col-md-10 col-offset-1">
-            <div id="search_canvas" style="width:95%; height:100%"></div>
+        <div class="container">
             <div class="row">
-                <div class="col-md-6">
-                    <div id="concept_details_canvas" style="width:95%; height:100%"></div>
-                </div>
-                <div class="col-md-6">
-                    <div id="concept_details_canvas_jquery" style="width:95%; height:100%"></div>
+                <div id="search_canvas" style="width:95%; height:100%;"></div>
+            </div>
+            <div class="row container">
+                <button type="button" class="btn btn-primary" id="addButton">Add CD</button>
+            </div>
+            <div class="row" id="cdRow">
+                <div class ="col-md-6">
+                    <div id="concept_details_canvas"></div>
                 </div>
             </div>
         </div>

@@ -11,14 +11,17 @@ function searchPanel(divElement, options) {
     this.options = options;
     this.url = "http://ec2-23-22-254-72.compute-1.amazonaws.com/sct-rest-api/";
     
-    this.$divElement.append('<form>');
-    this.$divElement.append('<div class="form-group">');
-    this.$divElement.append('<label for="searchBox">Search as you type</label>');
-    this.$divElement.append('<input type="search" class="form-control" id="searchBox" placeholder="Search...">');
-    this.$divElement.append('</div>');
-    this.$divElement.append('</form>');
-    this.$divElement.append("<div id='searchResultItems'/>").append("<table id='resultsTable' class='table table-bordered'/>");
-
+    searchHtml = '<form>';
+    searchHtml = searchHtml + '<div class="form-group">';
+    searchHtml = searchHtml + '<label for="searchBox">Search as you type</label>';
+    searchHtml = searchHtml + '<input type="search" class="form-control" id="searchBox" placeholder="Search...">';
+    searchHtml = searchHtml + '</div>';
+    searchHtml = searchHtml + '</form>';
+    searchHtml = searchHtml + "<div id='searchResultItems' class='panel panel-default' style='height:100px;overflow:auto;margin-bottom: 15px;'>";
+    searchHtml = searchHtml + "<table id='resultsTable' class='table table-bordered'>";
+    searchHtml = searchHtml + "</table>";
+    searchHtml = searchHtml + "</div>";
+    this.$divElement.html(searchHtml);
     $('#searchBox').keyup(function() {
         clearTimeout(thread);
         var $this = $(this);
@@ -31,11 +34,13 @@ function searchPanel(divElement, options) {
         console.log(t);
         //http://ec2-23-22-254-72.compute-1.amazonaws.com/sct-rest-api/rest/snomed/descriptions?phrase=asthma
         //$('#resultsTable').append("<tr><td>" + t + "</td></tr>");
-        $('.resultRow').remove();
+        $('#resultsTable').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        resultsHtml = "";
         $.getJSON("http://ec2-23-22-254-72.compute-1.amazonaws.com/sct-rest-api/" + "rest/snomed/descriptions?limit=5&phrase=" + t, function(result) {
             $.each(result, function(i, field) {
-                $('#resultsTable').append("<tr class='resultRow'><td><div class='jqui-draggable'data-concept-id='" + field.conceptId + "'>"  + field.term + "</div></td></tr>");
+                resultsHtml = resultsHtml + "<tr class='resultRow'><td><div class='jqui-draggable'data-concept-id='" + field.conceptId + "'>"  + field.term + "</div></td></tr>";
             });
+            $('#resultsTable').html(resultsHtml);
             $('#resultsTable').find(".jqui-draggable").draggable({
                 containment: 'window',
                 helper: 'clone'
