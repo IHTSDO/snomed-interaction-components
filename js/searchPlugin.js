@@ -9,20 +9,16 @@ function searchPanel(divElement, options) {
     var panel = this;
     this.subscribers = [];
     var lastT = "";
-    
     var xhr = null;
-
     if (typeof componentsRegistry == "undefined") {
         componentsRegistry = [];
     }
 
     this.markerColor = 'black';
-
     this.type = "search";
     this.divElement = divElement;
     this.options = options;
     this.url = "http://ec2-23-22-254-72.compute-1.amazonaws.com/browser-api/";
-
     var componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
         if (field.divElement.id == panel.divElement.id) {
@@ -34,14 +30,13 @@ function searchPanel(divElement, options) {
     }
 
     this.history = [];
-
     this.setupCanvas = function() {
         searchHtml = "<div style='width:500px; margin: 5px;' class='panel panel-default'>";
         searchHtml = searchHtml + "<div class='panel-heading'>";
+        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 64px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         searchHtml = searchHtml + "<div class='row'>";
         searchHtml = searchHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'><strong>Search</strong></div>";
         searchHtml = searchHtml + "<div class='col-md-4 text-right'>";
-        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-star'></i></button>"
         searchHtml = searchHtml + "<span id='" + panel.divElement.id + "-linkerButton' class='jqui-draggable' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></span>"
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-historyButton' class='btn btn-link history-button' style='padding:2px'><i class='glyphicon glyphicon-time'></i></button>"
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
@@ -79,36 +74,29 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
         $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
         $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
-
         $("#" + panel.divElement.id + "-expandButton").hide();
         $("#" + panel.divElement.id + "-subscribersMarker").hide();
-
         $("#" + panel.divElement.id + "-closeButton").click(function(event) {
             $(divElement).remove();
         });
-
         $("#" + panel.divElement.id + "-expandButton").click(function(event) {
             $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
             $("#" + panel.divElement.id + "-expandButton").hide();
             $("#" + panel.divElement.id + "-collapseButton").show();
         });
-
         $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
             $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
             $("#" + panel.divElement.id + "-expandButton").show();
             $("#" + panel.divElement.id + "-collapseButton").hide();
         });
-
         $("#" + panel.divElement.id + "-linkerButton").draggable({
             containment: 'window',
             helper: 'clone'
         });
-
         $("#" + panel.divElement.id + "-linkerButton").droppable({
             drop: panel.handlePanelDropEvent,
             hoverClass: "bg-info"
         });
-
         $("#" + panel.divElement.id + "-historyButton").click(function(event) {
             $("#" + panel.divElement.id + "-historyButton").popover({
                 trigger: 'manual',
@@ -116,6 +104,9 @@ function searchPanel(divElement, options) {
                 html: true,
                 content: function() {
                     historyHtml = '<div style="width:300px;height:100px;overflow:auto;">';
+                    if (panel.history.length == 0) {
+                        historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em>No search terms yet...</em></div>';
+                    }
                     historyHtml = historyHtml + '<table>';
                     var reversedHistory = panel.history.slice(0);
                     reversedHistory.reverse();
@@ -155,33 +146,35 @@ function searchPanel(divElement, options) {
             });
             $("#" + panel.divElement.id + "-historyButton").popover('toggle');
         });
-
         $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
             $("#" + panel.divElement.id + "-linkerButton").popover({
                 trigger: 'manual',
                 placement: 'bottom',
                 html: true,
                 content: function() {
-                    linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>' + panel.subscribers.length + ' links established</em></div>';
+                    linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
+                    if (panel.subscribers.length == 1) {
+                        linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
+                    } else {
+                        linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
+                    }
                     return linkerHtml;
                 }
             });
             $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
         });
-
     }
 
     this.handlePanelDropEvent = function(event, ui) {
         var draggable = ui.draggable;
         if (!draggable.attr('data-panel')) {
-            //console.log("ignore");
+//console.log("ignore");
         } else {
-            //console.log("OK : " + draggable.attr('data-panel'));
+//console.log("OK : " + draggable.attr('data-panel'));
             $.each(componentsRegistry, function(i, field) {
                 if (field.divElement.id == draggable.attr('data-panel')) {
                     if (field.type == "concept-details") {
                         panel.subscribe(field);
-                        field.setSubscription(panel);
                     }
                 }
             });
@@ -216,15 +209,15 @@ function searchPanel(divElement, options) {
                 });
                 $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function(event) {
                     $.each(panel.subscribers, function(i, field) {
-                        //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
                         field.conceptId = $(event.target).attr('data-concept-id');
                         field.updateCanvas();
                     });
                 });
             }).done(function() {
-                //$(divElement).html(searchHtml);
+//$(divElement).html(searchHtml);
             }).fail(function() {
-                //$('#resultsTable').html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
+//$('#resultsTable').html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
             });
         }
     }
@@ -236,7 +229,6 @@ function searchPanel(divElement, options) {
                 alreadySubscribed = true;
             }
         });
-
         if (!alreadySubscribed) {
             if (panel.subscribers.length == 0) {
                 if (typeof globalMarkerColor == "undefined") {
@@ -248,6 +240,7 @@ function searchPanel(divElement, options) {
                 $("#" + panel.divElement.id + "-subscribersMarker").show();
             }
             panel.subscribers.push(subscriber);
+            subscriber.setSubscription(panel);
         }
     }
 
@@ -266,34 +259,40 @@ function searchPanel(divElement, options) {
         if (panel.subscribers.length == 0) {
             $("#" + panel.divElement.id + "-subscribersMarker").hide();
         }
+        subscriber.clearSubscription();
+    }
+    
+    this.unsubscribeAll = function() {
+        $.each(panel.subscribers, function(i, field) {
+            this.unsubscribe(field);
+        });
     }
 
     this.getNextMarkerColor = function(color) {
-        //console.log(color);
+//console.log(color);
         var returnColor = 'black';
         if (color == 'black') {
-            returnColor = 'red';
-        } else if (color == 'red') {
-            returnColor = 'blue';
-        } else if (color == 'blue') {
             returnColor = 'green';
         } else if (color == 'green') {
             returnColor = 'purple';
         } else if (color == 'purple') {
             returnColor = 'red';
+        } else if (color == 'red') {
+            returnColor = 'blue';
+        } else if (color == 'blue') {
+            returnColor = 'green';
         }
-        //console.log(returnColor);
+//console.log(returnColor);
         globalMarkerColor = returnColor;
         return returnColor;
     }
 
     this.setupCanvas();
-
 }
 
 function searchInPanel(divElementId, searchTerm) {
     $.each(componentsRegistry, function(i, field) {
-        //console.log(field.divElement.id + ' == ' + divElementId);
+//console.log(field.divElement.id + ' == ' + divElementId);
         if (field.divElement.id == divElementId) {
             $('#' + divElementId + '-searchBox').val(searchTerm);
             field.search(searchTerm);

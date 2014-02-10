@@ -59,10 +59,10 @@ function conceptDetails(divElement, conceptId, options) {
         // main panel
         detailsHtml = "<div style='width:500px; margin: 5px;' class='panel panel-default'>";
         detailsHtml = detailsHtml + "<div class='panel-heading'>";
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding:2px;position: absolute;top: 1px;right: 64px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         detailsHtml = detailsHtml + "<div class='row'>";
         detailsHtml = detailsHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'><strong>Concept Details</strong></div>";
         detailsHtml = detailsHtml + "<div class='col-md-4 text-right'>";
-        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-star'></i></button>"
         detailsHtml = detailsHtml + "<span id='" + panel.divElement.id + "-linkerButton' class='jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></span>"
         detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-historyButton' class='btn btn-link history-button' style='padding:2px'><i class='glyphicon glyphicon-time'></i></button>"
         detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
@@ -182,7 +182,7 @@ function conceptDetails(divElement, conceptId, options) {
             });
             $("#" + panel.divElement.id + "-historyButton").popover('toggle');
         });
-        
+
 
         $("#" + panel.divElement.id + "-apply-button").click(function() {
             //console.log("apply!");
@@ -209,7 +209,7 @@ function conceptDetails(divElement, conceptId, options) {
                     if (!panel.subscription) {
                         linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
                     } else {
-                        linkerHtml = '<div class="text-center"><a href="#" onclick="cancelSubscription(\'' + panel.subscription.divElement.id +  '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
+                        linkerHtml = '<div class="text-center"><a href="#" onclick="cancelSubscription(\'' + panel.subscription.divElement.id + '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
                     }
                     return linkerHtml;
                 }
@@ -231,7 +231,6 @@ function conceptDetails(divElement, conceptId, options) {
                 if (field.divElement.id == draggable.attr('data-panel')) {
                     if (field.type == "search") {
                         field.subscribe(panel);
-                        panel.setSubscription(field);
                     }
                 }
             });
@@ -256,7 +255,7 @@ function conceptDetails(divElement, conceptId, options) {
             console.log("aborting call...");
         }
         xhr = $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/details", function(result) {
-            
+
         }).done(function(result) {
             xhr = null;
             panel.attributesPId = divElement.id + "-attributes-panel";
@@ -278,6 +277,11 @@ function conceptDetails(divElement, conceptId, options) {
             attrHtml = attrHtml + "</td></tr></table>";
 
             $('#' + panel.attributesPId).html(attrHtml);
+
+            if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
+                $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+            }
+
             $('#' + panel.attributesPId).find('.jqui-droppable').droppable({
                 drop: panel.handleDropEvent,
                 hoverClass: "bg-info"
@@ -576,18 +580,8 @@ function cancelSubscription(divElementId1, divElementId2) {
             d2 = field;
         }
     });
-    if (d1.type == "concept-details") {
-        d1.clearSubscription();
-    } else if (d1.type == "search") {
-        d1.unsubscribe(d2);
-    }
-    if (d2.type == "concept-details") {
-        d2.clearSubscription();
-    } else if (d2.type == "search") {
-        d2.unsubscribe(d1);
-    }
-    
-    $('.linker-button').popover('hide');
+    d1.unsubscribe(d2);
+    $(d2.divElement).find('.linker-button').popover('toggle');
 }
 
 (function($) {
@@ -603,7 +597,8 @@ $(document).keypress(function(event) {
     if (event.which == '13') {
         event.preventDefault();
     }
-});
+}
+);
 
 
 
