@@ -6,23 +6,39 @@ $(function() {
             });
         });
     });
-    $('.noSelect').disableTextSelect();//No text selection on elements with a class of 'noSelect'
+    $('.noSelect').disableTextSelect(); //No text selection on elements with a class of 'noSelect'
 });
-
 function conceptDetails(divElement, conceptId, options) {
+
+    if (typeof componentsRegistry == "undefined") {
+        componentsRegistry = [];
+    }
+
     var panel = this;
+    this.type = "concept-details";
     this.conceptId = conceptId;
     this.divElement = divElement;
     this.options = options;
-    this.url = "http://ec2-23-22-254-72.compute-1.amazonaws.com/sct-rest-api/";
-
+    this.url = "http://ec2-23-22-254-72.compute-1.amazonaws.com/browser-api/";
     this.attributesPId = "";
     this.descsPId = "";
     this.relsPId = "";
-
     if (typeof options.url != "undefined") {
         this.url = options.url;
     }
+    this.history = [];
+    this.subscription = null;
+
+    componentLoaded = false;
+    $.each(componentsRegistry, function(i, field) {
+        if (field.divElement.id == panel.divElement.id) {
+            componentLoaded = true;
+        }
+    });
+    if (componentLoaded == false) {
+        componentsRegistry.push(panel);
+    }
+
 
     this.getConceptId = function() {
         return this.conceptId;
@@ -36,16 +52,34 @@ function conceptDetails(divElement, conceptId, options) {
         panel.attributesPId = panel.divElement.id + "-attributes-panel";
         panel.descsPId = panel.divElement.id + "-descriptions-panel";
         panel.relsPId = panel.divElement.id + "-rels-panel";
+        panel.childrenPId = panel.divElement.id + "-children-panel";
+        panel.defaultTerm = "";
         $(divElement).html();
         // main panel
-        detailsHtml = "<div style='width:500px;'>";
-        detailsHtml = detailsHtml +  "<p>Concept Details ";
-        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-configButton' class='glyphicon glyphicon-cog' data-toggle='modal' data-target='#" + panel.divElement.id + "-configModal'></button></p>";
+        detailsHtml = "<div style='width:500px; margin: 5px;' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "<div class='panel-heading'>";
+        detailsHtml = detailsHtml + "<div class='row'>";
+        detailsHtml = detailsHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'><strong>Concept Details</strong></div>";
+        detailsHtml = detailsHtml + "<div class='col-md-4 text-right'>";
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-star'></i></button>"
+        detailsHtml = detailsHtml + "<span id='" + panel.divElement.id + "-linkerButton' class='jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></span>"
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-historyButton' class='btn btn-link history-button' style='padding:2px'><i class='glyphicon glyphicon-time'></i></button>"
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-expandButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-full'></i></button>"
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-closeButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-remove'></i></button>"
+        detailsHtml = detailsHtml + "</div>";
+        detailsHtml = detailsHtml + "</div>";
+        detailsHtml = detailsHtml + "</div>";
+        detailsHtml = detailsHtml + "<div class='panel-body' id='" + panel.divElement.id + "-panelBody'>";
         detailsHtml = detailsHtml + "<div id='" + panel.attributesPId + "' class='panel panel-default'>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div id='" + panel.descsPId + "' class='panel panel-default'>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div id='" + panel.relsPId + "' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "</div>";
+        detailsHtml = detailsHtml + "<div id='" + panel.childrenPId + "' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div>";
         // modal config panel
@@ -66,53 +100,190 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "</div><!-- /.modal-content -->";
         detailsHtml = detailsHtml + "</div><!-- /.modal-dialog -->";
         detailsHtml = detailsHtml + "</div><!-- /.modal -->";
-        
         $(divElement).html(detailsHtml);
+
+        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
+
+        $("#" + panel.divElement.id + "-expandButton").hide();
+        $("#" + panel.divElement.id + "-subscribersMarker").hide();
+
+        $("#" + panel.divElement.id + "-closeButton").click(function(event) {
+            $(divElement).remove();
+        });
+
+        $("#" + panel.divElement.id + "-expandButton").click(function(event) {
+            $("#" + panel.divElement.id + "-panelBody").show();
+            $("#" + panel.divElement.id + "-expandButton").hide();
+            $("#" + panel.divElement.id + "-collapseButton").show();
+            $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details</strong>");
+        });
+
+        $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
+            $("#" + panel.divElement.id + "-panelBody").hide();
+            $("#" + panel.divElement.id + "-expandButton").show();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+            //if (panel.defaultTerm.length > 25) {
+            //    $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm.substring(0, 24).trim() + "...</strong>");
+            //} else {
+            $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+            //}
+        });
+
+        $("#" + panel.divElement.id + "-historyButton").click(function(event) {
+            $("#" + panel.divElement.id + "-historyButton").popover({
+                trigger: 'manual',
+                placement: 'bottom',
+                html: true,
+                content: function() {
+                    historyHtml = '<div style="height:100px;overflow:auto;">';
+                    historyHtml = historyHtml + '<table>';
+                    var reversedHistory = panel.history.slice(0);
+                    reversedHistory.reverse();
+                    //console.log(JSON.stringify(reversedHistory));
+                    $.each(reversedHistory, function(i, field) {
+                        var d = new Date();
+                        var curTime = d.getTime();
+                        var ago = curTime - field.time;
+                        var agoString = "";
+                        if (ago < (1000 * 60)) {
+                            if (Math.round((ago / 1000)) == 1) {
+                                agoString = Math.round((ago / 1000)) + ' second ago';
+                            } else {
+                                agoString = Math.round((ago / 1000)) + ' seconds ago';
+                            }
+                        } else if (ago < (1000 * 60 * 60)) {
+                            if (Math.round((ago / 1000) / 60) == 1) {
+                                agoString = Math.round((ago / 1000) / 60) + ' minute ago';
+                            } else {
+                                agoString = Math.round((ago / 1000) / 60) + ' minutes ago';
+                            }
+                        } else if (ago < (1000 * 60 * 60 * 60)) {
+                            if (Math.round(((ago / 1000) / 60) / 60) == 1) {
+                                agoString = Math.round(((ago / 1000) / 60) / 60) + ' hour ago';
+                            } else {
+                                agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
+                            }
+                        }
+                        historyHtml = historyHtml + '<tr><td><a href="#" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.sctid + ');">' + field.defaultTerm + '</a>';
+                        historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
+                        historyHtml = historyHtml + '</td></tr>';
+                    });
+                    historyHtml = historyHtml + '</table>';
+                    historyHtml = historyHtml + '</div>';
+                    return historyHtml;
+                }
+            });
+            $("#" + panel.divElement.id + "-historyButton").popover('toggle');
+        });
+        
+
         $("#" + panel.divElement.id + "-apply-button").click(function() {
-            console.log("apply!");
+            //console.log("apply!");
             panel.readOptionsPanel();
             panel.updateCanvas();
         });
+
+        $("#" + panel.divElement.id + "-linkerButton").draggable({
+            containment: 'window',
+            helper: 'clone'
+        });
+
+        $("#" + panel.divElement.id + "-linkerButton").droppable({
+            drop: panel.handlePanelDropEvent,
+            hoverClass: "bg-info"
+        });
+
+        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+            $("#" + panel.divElement.id + "-linkerButton").popover({
+                trigger: 'manual',
+                placement: 'bottom',
+                html: true,
+                content: function() {
+                    if (!panel.subscription) {
+                        linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
+                    } else {
+                        linkerHtml = '<div class="text-center"><a href="#" onclick="cancelSubscription(\'' + panel.subscription.divElement.id +  '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
+                    }
+                    return linkerHtml;
+                }
+            });
+            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+        });
+
         panel.updateCanvas();
         panel.setupOptionsPanel();
     }
 
+    this.handlePanelDropEvent = function(event, ui) {
+        var draggable = ui.draggable;
+        if (!draggable.attr('data-panel')) {
+            //console.log("ignore");
+        } else {
+            //console.log("OK : " + draggable.attr('data-panel'));
+            $.each(componentsRegistry, function(i, field) {
+                if (field.divElement.id == draggable.attr('data-panel')) {
+                    if (field.type == "search") {
+                        field.subscribe(panel);
+                        panel.setSubscription(field);
+                    }
+                }
+            });
+        }
+    }
+
     this.updateCanvas = function() {
-        //console.log("UPDATE:");
-        //console.log(JSON.stringify(panel.options));
-        $('#' + panel.attributesPId).html($('#' + panel.attributesPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-        $('#' + panel.descsPId).html($('#' + panel.descsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-        $('#' + panel.relsPId).html($('#' + panel.relsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        ////console.log("UPDATE:");
+        ////console.log(JSON.stringify(panel.options));
+//        $('#' + panel.attributesPId).html($('#' + panel.attributesPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+//        $('#' + panel.descsPId).html($('#' + panel.descsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+//        $('#' + panel.relsPId).html($('#' + panel.relsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+//        $('#' + panel.childrenPId).html($('#' + panel.childrenPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#' + panel.attributesPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#' + panel.descsPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#' + panel.relsPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#' + panel.childrenPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+
         // load attributes
-        $.getJSON(panel.url + "rest/snomed/concepts/" + panel.conceptId, function(result) {
+        $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/details", function(result) {
             panel.attributesPId = divElement.id + "-attributes-panel";
-            attrHtml = "<div class='jqui-droppable'><h3>" + result.description +  "</h4><br>SCTID: " + result.sctid + ", " + result.definitionStatus.defaultTerm;
+            panel.defaultTerm = result.defaultTerm;
+            var d = new Date();
+            var time = d.getTime();
+            panel.history.push({defaultTerm: result.defaultTerm, sctid: result.sctid, time: time});
+            attrHtml = "<table class='table table-default' ><tr><td class='jqui-droppable jqui-draggable' data-concept-id='" + result.sctid + "'><h3>" + result.defaultTerm + "</h4><br>SCTID: " + result.sctid;
+            if (result.definitionStatus.sctid == "900000000000073002") {
+                attrHtml = attrHtml + ", Fully defined";
+            } else {
+                attrHtml = attrHtml + ", Primitive";
+            }
             if (result.active == true) {
                 attrHtml = attrHtml + ", ACTIVE";
             } else {
                 attrHtml = attrHtml + ", INACTIVE";
             }
-            attrHtml = attrHtml + "</div>";
+            attrHtml = attrHtml + "</td></tr></table>";
+
             $('#' + panel.attributesPId).html(attrHtml);
             $('#' + panel.attributesPId).find('.jqui-droppable').droppable({
-                drop: handleDropEvent,
+                drop: panel.handleDropEvent,
                 hoverClass: "bg-info"
             });
-            function handleDropEvent(event, ui) {
-                var draggable = ui.draggable;
-                console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
-                panel.conceptId = draggable.attr('data-concept-id');
-                panel.updateCanvas()
-            }
-        }).done(function() {
-            //$(divElement).html(detailsHtml);
-        }).fail(function() {
-            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
-        });
+            $('#' + panel.divElement.id + '-panelTitle').droppable({
+                drop: panel.handleDropEvent,
+                hoverClass: "bg-info"
+            });
+            $('#' + panel.attributesPId).find(".jqui-draggable").draggable({
+                containment: 'window',
+                helper: 'clone'
+            });
 
-        // load descriptions
-        $.getJSON(panel.url + "rest/snomed/concepts/" + panel.conceptId + "/descriptions", function(result) {
+            // load descriptions panel
             panel.descsPId = divElement.id + "-descriptions-panel";
             descDetailsHtml = "<table class='table table-bordered' id = '" + panel.descsPId + "-table'>";
             descDetailsHtml = descDetailsHtml + "<thead><tr>";
@@ -121,26 +292,24 @@ function conceptDetails(divElement, conceptId, options) {
                 descDetailsHtml = descDetailsHtml + "<th>SCTID</th>";
             }
             descDetailsHtml = descDetailsHtml + "</tr></thead><tbody>";
-            $.each(result, function(i, field) {
+            $.each(result.descriptions, function(i, field) {
                 if (field.active == true) {
                     var row = "";
-                    if (field.type.conceptId == "900000000000003001") {
+                    if (field.type.sctid == "900000000000003001") {
                         row = "<tr class='fsn-row'>";
                     } else {
                         row = "<tr class='synonym-row'>";
                     }
 
                     row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.conceptId + "'>" + field.term + "</div></td>";
-
                     if (panel.options.showIds == true) {
-                        row = row + "<td>" + field.descSctid + "</td>";
+                        row = row + "<td>" + field.sctid + "</td>";
                     }
                     row = row + "</tr>";
                     descDetailsHtml = descDetailsHtml + row;
                 }
             });
             descDetailsHtml = descDetailsHtml + "</tbody></table>";
-
             $('#' + panel.descsPId).html(descDetailsHtml);
             if (panel.options.displaySynonyms != true) { // hide synonyms
                 $('#' + panel.descsPId).find('.synonym-row').each(function(i, val) {
@@ -162,14 +331,7 @@ function conceptDetails(divElement, conceptId, options) {
                 containment: 'window',
                 helper: 'clone'
             });
-        }).done(function() {
-            //$(divElement).html(detailsHtml);
-        }).fail(function() {
-            $('#' + panel.descsPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
-        });
-
-        // load relationships
-        $.getJSON(panel.url + "rest/snomed/concepts/" + panel.conceptId + "/relationships", function(result) {
+            // load relationships panel
             panel.relsPId = divElement.id + "-rels-panel";
             relsDetailsHtml = "<table class='table table-bordered'>";
             relsDetailsHtml = relsDetailsHtml + "<thead><tr>";
@@ -178,21 +340,22 @@ function conceptDetails(divElement, conceptId, options) {
             relsDetailsHtml = relsDetailsHtml + "<th>Group</th>";
             relsDetailsHtml = relsDetailsHtml + "<th>CharType</th>";
             relsDetailsHtml = relsDetailsHtml + "</tr></thead><tbody>";
-            $.each(result, function(i, field) {
-                if (field.active = "true") {
+            $.each(result.relationships, function(i, field) {
+                //console.log(JSON.stringify(field));
+                if (field.active == true) {
                     var row = "";
-                    if (field.charType.conceptId == "900000000000010007") {
+                    if (field.charType.sctid == "900000000000010007") {
                         row = "<tr class='stated-rel'>";
                     } else {
                         row = "<tr class='inferred-rel'>";
                     }
 
-                    row = row + "<td><div class='jqui-draggable'data-concept-id='" + field.type.conceptId + "'>" + field.type.defaultTerm + "</div></td>";
-                    row = row + "<td><div class='jqui-draggable'data-concept-id='" + field.target.conceptId + "'>" + field.target.defaultTerm + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.sctid + "'>" + field.type.defaultTerm + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.sctid + "'>" + field.target.defaultTerm + "</div></td>";
                     row = row + "<td>" + field.groupId + "</td>";
-                    if (field.charType.conceptId == "900000000000010007") {
+                    if (field.charType.sctid == "900000000000010007") {
                         row = row + "<td>Stated</td>";
-                    } else if (field.charType.conceptId == "900000000000011006") {
+                    } else if (field.charType.sctid == "900000000000011006") {
                         row = row + "<td>Inferred</td>";
                     } else {
                         row = row + "<td>Other</td>";
@@ -203,7 +366,6 @@ function conceptDetails(divElement, conceptId, options) {
             });
             relsDetailsHtml = relsDetailsHtml + "</tbody></table>";
             $('#' + panel.relsPId).html(relsDetailsHtml);
-
             if (panel.options.selectedView == "stated") {
                 $('#' + panel.relsPId).find('.inferred-rel').each(function(i, val) {
                     $(val).toggle();
@@ -222,9 +384,76 @@ function conceptDetails(divElement, conceptId, options) {
         }).done(function() {
             //$(divElement).html(detailsHtml);
         }).fail(function() {
-            $('#' + panel.relsPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
+            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
+            $('#' + panel.descsPId).html("");
+            $('#' + panel.relsPId).html("");
+            $('#' + panel.relsPId).html(relsDetailsHtml);
         });
+//        if (typeof xhr != "undefined") {
+//            console.log("aborting call...");
+//
+//        }
+        if (panel.options.displayChildren == false) {
+            $('#' + panel.childrenPId).html("");
+            $('#' + panel.childrenPId).hide();
+        } else {
+            $('#' + panel.childrenPId).show();
+            var xhr = $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
+                // load relationships panel
+                panel.childrenPId = divElement.id + "-children-panel";
+                childrenDetailsHtml = "";
+                childrenDetailsHtml = "<table class='table table-bordered'>";
+                childrenDetailsHtml = childrenDetailsHtml + "<thead><tr>";
+                childrenDetailsHtml = childrenDetailsHtml + "<th>Child concept</th>";
+                childrenDetailsHtml = childrenDetailsHtml + "</tr></thead><tbody>";
+                $.each(result, function(i, field) {
+                    if (field.active == true) {
+                        childrenDetailsHtml = childrenDetailsHtml + "<tr><td class=' jqui-draggable'data-concept-id='" + field.sctid + "'>" + field.defaultTerm + "</td></tr>";
+                    }
+                });
+
+                childrenDetailsHtml = childrenDetailsHtml + "</tbody></table>";
+                //console.log(JSON.stringify(childrenDetailsHtml));
+                $('#' + panel.childrenPId).html(childrenDetailsHtml);
+                $('#' + panel.childrenPId).find(".jqui-draggable").draggable({
+                    containment: 'window',
+                    helper: 'clone'
+                });
+            }).done(function() {
+                //$(divElement).html(detailsHtml);
+            }).fail(function() {
+                $('#' + panel.childrenPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
+            });
+
+        }
+        // debug
+//        $.each(componentsRegistry, function(i, field) {
+//            console.log(field.divElement.id + " - " + field.type);
+//            if (field.type == "search") {
+//                field.subscribe(panel);
+//                panel.setSubscription(field);
+//            }
+//        });
     }
+
+    this.handleDropEvent = function(event, ui) {
+        var draggable = ui.draggable;
+        //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
+        panel.conceptId = draggable.attr('data-concept-id');
+        panel.updateCanvas();
+    }
+
+    this.setSubscription = function(subscriptionPanel) {
+        panel.subscription = subscriptionPanel;
+        $("#" + panel.divElement.id + "-subscribersMarker").css('color', subscriptionPanel.markerColor);
+        $("#" + panel.divElement.id + "-subscribersMarker").show();
+    }
+
+    this.clearSubscription = function() {
+        panel.subscription = null;
+        $("#" + panel.divElement.id + "-subscribersMarker").hide();
+    }
+
 
     this.setupOptionsPanel = function() {
         optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
@@ -236,7 +465,6 @@ function conceptDetails(divElement, conceptId, options) {
             optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true checked>';
         } else {
             optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true>';
-
         }
         optionsHtml = optionsHtml + 'Display Synonyms along with FSN and preferred terms.';
         optionsHtml = optionsHtml + '</label>';
@@ -295,18 +523,65 @@ function conceptDetails(divElement, conceptId, options) {
         }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
+        optionsHtml = optionsHtml + '<div class="form-group">';
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.displayChildren == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> Display children';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption" checked> Display children';
+        }
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+        optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</form>';
         $("#" + panel.divElement.id + "-modal-body").html(optionsHtml);
     }
 
     this.readOptionsPanel = function() {
-        console.log($('input[name=displaySynonyms]:checked', "#" + panel.divElement.id + "-options-form").val());
+        //console.log($('input[name=displaySynonyms]:checked', "#" + panel.divElement.id + "-options-form").val());
         panel.options.displaySynonyms = ($('input[name=displaySynonyms]:checked', "#" + panel.divElement.id + "-options-form").val() == "true");
-        console.log($('input[name=displayIds]:checked', "#" + panel.divElement.id + "-options-form").val());
+        //console.log($('input[name=displayIds]:checked', "#" + panel.divElement.id + "-options-form").val());
         panel.options.showIds = ($('input[name=displayIds]:checked', "#" + panel.divElement.id + "-options-form").val() == "true");
-        console.log($("#" + panel.divElement.id + "-relsViewOption").val());
+        //console.log($("#" + panel.divElement.id + "-relsViewOption").val());
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
+        panel.options.displayChildren = $("#" + panel.divElement.id + "-childrenOption").is(':checked');
     }
+}
+
+function updateCD(divElementId, sctid) {
+    $.each(componentsRegistry, function(i, field) {
+        //console.log(field.divElement.id + ' == ' + divElementId.id);
+        if (field.divElement.id == divElementId) {
+            field.conceptId = sctid;
+            field.updateCanvas();
+        }
+    });
+    $('.history-button').popover('hide');
+}
+
+function cancelSubscription(divElementId1, divElementId2) {
+    var d1;
+    var d2;
+    $.each(componentsRegistry, function(i, field) {
+        if (field.divElement.id == divElementId1) {
+            d1 = field;
+        } else if (field.divElement.id == divElementId2) {
+            d2 = field;
+        }
+    });
+    if (d1.type == "concept-details") {
+        d1.clearSubscription();
+    } else if (d1.type == "search") {
+        d1.unsubscribe(d2);
+    }
+    if (d2.type == "concept-details") {
+        d2.clearSubscription();
+    } else if (d2.type == "search") {
+        d2.unsubscribe(d1);
+    }
+    
+    $('.linker-button').popover('hide');
 }
 
 (function($) {
@@ -315,9 +590,14 @@ function conceptDetails(divElement, conceptId, options) {
             var cd = new conceptDetails(this, conceptId, options);
             cd.setupCanvas();
         });
-
     };
 }(jQuery));
+
+$(document).keypress(function(event) {
+    if (event.which == '13') {
+        event.preventDefault();
+    }
+});
 
 
 

@@ -1,0 +1,26 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 3, 2014, 1:41:56 PM
+    Author     : alo
+*/
+
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to {transform: rotate(359deg); }
+}
+@-webkit-keyframes spin {
+	from { -webkit-transform: rotate(0deg);}
+	to { -webkit-transform: rotate(359deg);}
+}
+.icon-spin {
+	animation: 1.5s linear 0s normal none infinite spin;
+	-webkit-animation: 1.5s linear 0s normal none infinite spin;
+	display: inline-block;
+}
+
+i:active { background-color: black; }
+

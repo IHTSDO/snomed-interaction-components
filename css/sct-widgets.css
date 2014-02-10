@@ -9,18 +9,31 @@ and open the template in the editor.
 */
 
 @keyframes spin {
-	from { transform: rotate(0deg); }
-	to {transform: rotate(359deg); }
+    from { transform: rotate(0deg); }
+    to {transform: rotate(359deg); }
 }
 @-webkit-keyframes spin {
-	from { -webkit-transform: rotate(0deg);}
-	to { -webkit-transform: rotate(359deg);}
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(359deg);}
 }
 .icon-spin {
-	animation: 1.5s linear 0s normal none infinite spin;
-	-webkit-animation: 1.5s linear 0s normal none infinite spin;
-	display: inline-block;
+    animation: 1.5s linear 0s normal none infinite spin;
+    -webkit-animation: 1.5s linear 0s normal none infinite spin;
+    display: inline-block;
 }
 
-i:active { background-color: black; }
+i:active { background-color: #428bca; }
 
+.selectable-row:active { background-color: #428bca; color: white;}
+
+.popover {
+    max-width: 800px;
+    min-width: 250px;
+}
+
+.jqui-draggable.ui-draggable-dragging {
+    color: black;
+    background: yellow; 
+    font: bold; 
+    z-index: 1000;
+}
