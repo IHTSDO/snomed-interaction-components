@@ -28,6 +28,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
     this.history = [];
     this.subscription = null;
+    var xhr = null;
 
     componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
@@ -118,14 +119,14 @@ function conceptDetails(divElement, conceptId, options) {
         });
 
         $("#" + panel.divElement.id + "-expandButton").click(function(event) {
-            $("#" + panel.divElement.id + "-panelBody").show();
+            $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
             $("#" + panel.divElement.id + "-expandButton").hide();
             $("#" + panel.divElement.id + "-collapseButton").show();
             $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details</strong>");
         });
 
         $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
-            $("#" + panel.divElement.id + "-panelBody").hide();
+            $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
             $("#" + panel.divElement.id + "-expandButton").show();
             $("#" + panel.divElement.id + "-collapseButton").hide();
             //if (panel.defaultTerm.length > 25) {
@@ -250,7 +251,14 @@ function conceptDetails(divElement, conceptId, options) {
         $('#' + panel.childrenPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 
         // load attributes
-        $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/details", function(result) {
+        if (xhr != null) {
+            xhr.abort();
+            console.log("aborting call...");
+        }
+        xhr = $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/details", function(result) {
+            
+        }).done(function(result) {
+            xhr = null;
             panel.attributesPId = divElement.id + "-attributes-panel";
             panel.defaultTerm = result.defaultTerm;
             var d = new Date();
@@ -381,8 +389,6 @@ function conceptDetails(divElement, conceptId, options) {
                 containment: 'window',
                 helper: 'clone'
             });
-        }).done(function() {
-            //$(divElement).html(detailsHtml);
         }).fail(function() {
             $('#' + panel.attributesPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
             $('#' + panel.descsPId).html("");

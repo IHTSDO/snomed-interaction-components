@@ -9,6 +9,8 @@ function searchPanel(divElement, options) {
     var panel = this;
     this.subscribers = [];
     var lastT = "";
+    
+    var xhr = null;
 
     if (typeof componentsRegistry == "undefined") {
         componentsRegistry = [];
@@ -86,13 +88,13 @@ function searchPanel(divElement, options) {
         });
 
         $("#" + panel.divElement.id + "-expandButton").click(function(event) {
-            $("#" + panel.divElement.id + "-panelBody").show();
+            $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
             $("#" + panel.divElement.id + "-expandButton").hide();
             $("#" + panel.divElement.id + "-collapseButton").show();
         });
 
         $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
-            $("#" + panel.divElement.id + "-panelBody").hide();
+            $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
             $("#" + panel.divElement.id + "-expandButton").show();
             $("#" + panel.divElement.id + "-collapseButton").hide();
         });
