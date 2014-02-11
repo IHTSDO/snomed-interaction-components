@@ -408,7 +408,7 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.childrenPId).hide();
         } else {
             $('#' + panel.childrenPId).show();
-            var xhr = $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
+            $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
                 // load relationships panel
                 panel.childrenPId = divElement.id + "-children-panel";
                 childrenDetailsHtml = "";
@@ -418,7 +418,7 @@ function conceptDetails(divElement, conceptId, options) {
                 childrenDetailsHtml = childrenDetailsHtml + "</tr></thead><tbody>";
                 $.each(result, function(i, field) {
                     if (field.active == true) {
-                        childrenDetailsHtml = childrenDetailsHtml + "<tr><td class=' jqui-draggable'data-concept-id='" + field.sctid + "'>" + field.defaultTerm + "</td></tr>";
+                        childrenDetailsHtml = childrenDetailsHtml + "<tr><td class='jqui-draggable' data-concept-id='" + field.sctid + "'>" + field.defaultTerm + "</td></tr>";
                     }
                 });
 

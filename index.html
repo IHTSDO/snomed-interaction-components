@@ -13,6 +13,7 @@ and open the template in the editor.
         <script src="lib/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
         <script src="js/conceptDetailsPlugin.js" type="text/javascript"></script>
         <script src="js/searchPlugin.js" type="text/javascript"></script>
+        <script src="js/taxonomyPlugin.js" type="text/javascript"></script>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="css/sct-widgets.css">
@@ -29,6 +30,8 @@ and open the template in the editor.
                     selectedView: "stated",
                     displayChildren: false
                 };
+                
+                var tp = new taxonomyPanel(document.getElementById("taxonomy_canvas"), options);
 
                 // Example: load first widget using plain javascript
                 var sp = new searchPanel(document.getElementById("search_canvas"), options);
@@ -50,6 +53,11 @@ and open the template in the editor.
                     count = count + 1;
                     $("#cdRow").append('<div class ="col-md-6"><div id="cd_auto_canvas_' + count + '"></div></div>');
                     $("#cd_auto_canvas_" + count).addConceptDetails("195967001", options);
+                });
+                $("#addTxButton").click(function() {
+                    count = count + 1;
+                    $("#txRow").append('<div class ="col-md-6"><div id="tx_auto_canvas_' + count + '"></div></div>');
+                    var tpt = new taxonomyPanel(document.getElementById("tx_auto_canvas_" + count), options);
                 });
 
                 //$("#concept_details_canvas_3").addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
@@ -75,6 +83,14 @@ and open the template in the editor.
             <div class="row" id="cdRow">
                 <div class ="col-md-6">
                     <div id="concept_details_canvas"></div>
+                </div>
+            </div>
+            <div class="row container">
+                <button type="button" class="btn btn-primary" id="addTxButton">Add Taxonomy</button>
+            </div>
+            <div class="row" id="txRow">
+                <div class ="col-md-6">
+                    <div id="taxonomy_canvas"></div>
                 </div>
             </div>
         </div>
