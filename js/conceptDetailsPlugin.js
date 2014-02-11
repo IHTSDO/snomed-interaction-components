@@ -29,6 +29,7 @@ function conceptDetails(divElement, conceptId, options) {
     this.history = [];
     this.subscription = null;
     var xhr = null;
+    var xhrChildren = null;
 
     componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
@@ -79,7 +80,7 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div id='" + panel.relsPId + "' class='panel panel-default'>";
         detailsHtml = detailsHtml + "</div>";
-        detailsHtml = detailsHtml + "<div id='" + panel.childrenPId + "' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "<div id='" + panel.childrenPId + "' class='panel panel-default' style='height:100px;overflow:auto;margin-bottom: 15px;'>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div>";
@@ -171,7 +172,7 @@ function conceptDetails(divElement, conceptId, options) {
                                 agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
                             }
                         }
-                        historyHtml = historyHtml + '<tr><td><a href="#" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.sctid + ');">' + field.defaultTerm + '</a>';
+                        historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.sctid + ');">' + field.defaultTerm + '</a>';
                         historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
                         historyHtml = historyHtml + '</td></tr>';
                     });
@@ -209,7 +210,7 @@ function conceptDetails(divElement, conceptId, options) {
                     if (!panel.subscription) {
                         linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
                     } else {
-                        linkerHtml = '<div class="text-center"><a href="#" onclick="cancelSubscription(\'' + panel.subscription.divElement.id + '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
+                        linkerHtml = '<div class="text-center"><a href="javascript:void(0);" onclick="cancelSubscription(\'' + panel.subscription.divElement.id + '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
                     }
                     return linkerHtml;
                 }
@@ -229,7 +230,7 @@ function conceptDetails(divElement, conceptId, options) {
             //console.log("OK : " + draggable.attr('data-panel'));
             $.each(componentsRegistry, function(i, field) {
                 if (field.divElement.id == draggable.attr('data-panel')) {
-                    if (field.type == "search") {
+                    if (field.type == "search" || field.type == "taxonomy") {
                         field.subscribe(panel);
                     }
                 }
@@ -303,6 +304,7 @@ function conceptDetails(divElement, conceptId, options) {
             if (panel.options.showIds == true) {
                 descDetailsHtml = descDetailsHtml + "<th>SCTID</th>";
             }
+            //descDetailsHtml = descDetailsHtml + "<th>Acceptability</th>";
             descDetailsHtml = descDetailsHtml + "</tr></thead><tbody>";
             $.each(result.descriptions, function(i, field) {
                 if (field.active == true) {
@@ -317,6 +319,15 @@ function conceptDetails(divElement, conceptId, options) {
                     if (panel.options.showIds == true) {
                         row = row + "<td>" + field.sctid + "</td>";
                     }
+//                    var langRefsetid = "900000000000508004";
+//                    $.each(field.langMemberships, function(i, lang) {
+//                        if (lang.refset.conceptId == langRefsetid) {
+//                            row = row + "<td><div class='jqui-draggable' data-concept-id='" + lang.acceptability.conceptId + "'>" + lang.acceptability.defaultTerm + "</div></td>";
+//                        } else {
+//                            row = row + "<td>Not acceptable</td>";
+//                        }
+//                    });
+                    
                     row = row + "</tr>";
                     descDetailsHtml = descDetailsHtml + row;
                 }
@@ -408,14 +419,21 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.childrenPId).hide();
         } else {
             $('#' + panel.childrenPId).show();
-            $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
+            if (xhrChildren != null) {
+                xhrChildren.abort();
+                console.log("aborting children call...");
+            }
+            xhrChildren = $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
+                
+            }).done(function(result) {
                 // load relationships panel
+                xhrChildren = null;
                 panel.childrenPId = divElement.id + "-children-panel";
-                childrenDetailsHtml = "";
+                childrenDetailsHtml = "<div>";
                 childrenDetailsHtml = "<table class='table table-bordered'>";
                 childrenDetailsHtml = childrenDetailsHtml + "<thead><tr>";
-                childrenDetailsHtml = childrenDetailsHtml + "<th>Child concept</th>";
-                childrenDetailsHtml = childrenDetailsHtml + "</tr></thead><tbody>";
+                childrenDetailsHtml = childrenDetailsHtml + "<th>Children</th>";
+                childrenDetailsHtml = childrenDetailsHtml + "</tr></thead><tbody></div>";
                 $.each(result, function(i, field) {
                     if (field.active == true) {
                         childrenDetailsHtml = childrenDetailsHtml + "<tr><td class='jqui-draggable' data-concept-id='" + field.sctid + "'>" + field.defaultTerm + "</td></tr>";
@@ -429,8 +447,6 @@ function conceptDetails(divElement, conceptId, options) {
                     containment: 'window',
                     helper: 'clone'
                 });
-            }).done(function() {
-                //$(divElement).html(detailsHtml);
             }).fail(function() {
                 $('#' + panel.childrenPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
             });
@@ -544,6 +560,21 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</div>';
+        optionsHtml = optionsHtml + '<div class="form-group">';
+        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-langRefsetOption">Language Refset</label>';
+        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-langRefsetOption">';
+        if (panel.options.langRefset == "900000000000508004") {
+            optionsHtml = optionsHtml + '<option value="900000000000508004" selected>GB Language Refset</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="900000000000508004">GB Language Refset</option>';
+        }
+        if (panel.options.langRefset == "900000000000509007") {
+            optionsHtml = optionsHtml + '<option value="900000000000509007" selected>US Language Refset</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="900000000000509007">US Language Refset</option>';
+        }
+        optionsHtml = optionsHtml + '</select>';
+        optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</form>';
         $("#" + panel.divElement.id + "-modal-body").html(optionsHtml);
     }
@@ -556,6 +587,7 @@ function conceptDetails(divElement, conceptId, options) {
         //console.log($("#" + panel.divElement.id + "-relsViewOption").val());
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.displayChildren = $("#" + panel.divElement.id + "-childrenOption").is(':checked');
+        panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").attr('data-lang-refset-id');
     }
 }
 

@@ -28,7 +28,8 @@ and open the template in the editor.
                     showIds: true,
                     displaySynonyms: false,
                     selectedView: "stated",
-                    displayChildren: false
+                    displayChildren: false,
+                    langRefset: "900000000000509007"
                 };
                 
                 var tp = new taxonomyPanel(document.getElementById("taxonomy_canvas"), options);
@@ -40,6 +41,8 @@ and open the template in the editor.
                 var cdPanel = new conceptDetails(document.getElementById("concept_details_canvas"),
                         "195967001", options);
                 cdPanel.setupCanvas();
+                
+                 $("#concept_details_tx_canvas").addConceptDetails("195967001", options);
 
                 // Example: load second widget using JQery
                 //$("#concept_details_canvas_jquery").addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
@@ -91,6 +94,9 @@ and open the template in the editor.
             <div class="row" id="txRow">
                 <div class ="col-md-6">
                     <div id="taxonomy_canvas"></div>
+                </div>
+                <div class ="col-md-6">
+                    <div id="concept_details_tx_canvas"></div>
                 </div>
             </div>
         </div>

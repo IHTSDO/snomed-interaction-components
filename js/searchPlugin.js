@@ -135,7 +135,7 @@ function searchPanel(divElement, options) {
                                 agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
                             }
                         }
-                        historyHtml = historyHtml + '<tr><td><a href="#" onclick="searchInPanel(\'' + panel.divElement.id + '\',\'' + field.searchTerm + '\');">' + field.searchTerm + '</a>';
+                        historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="searchInPanel(\'' + panel.divElement.id + '\',\'' + field.searchTerm + '\');">' + field.searchTerm + '</a>';
                         historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
                         historyHtml = historyHtml + '</td></tr>';
                     });

@@ -114,6 +114,12 @@ function taxonomyPanel(divElement, options) {
             containment: 'window',
             helper: 'clone'
         });
+        $('#' + panel.divElement.id + "-treenode-" + 138875005).click(function(event) {
+            $.each(panel.subscribers, function(i, suscriberPanel) {
+                suscriberPanel.conceptId = 138875005 + "";
+                suscriberPanel.updateCanvas();
+            });
+        });
 
         this.addOpenTreeClickAction(panel.divElement.id + "-treeicon-" + 138875005);
     }
@@ -164,11 +170,18 @@ function taxonomyPanel(divElement, options) {
             $("#" + panel.divElement.id + "-treenode-" + sctid).append(nodeHtml);
             $(".load-children-button").disableTextSelect();
             console.log(JSON.stringify(listIconIds));
-            $.each(listIconIds, function(i, field) {
-                panel.addOpenTreeClickAction(panel.divElement.id + "-treeicon-" + field);
-                $('#' + panel.divElement.id + "-treenode-" + field).draggable({
+            $.each(listIconIds, function(i, nodeId) {
+                panel.addOpenTreeClickAction(panel.divElement.id + "-treeicon-" + nodeId);
+                $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
                     containment: 'window',
                     helper: 'clone'
+                });
+                $('#' + panel.divElement.id + "-treenode-" + nodeId).click(function(event) {
+                    $.each(panel.subscribers, function(i, suscriberPanel) {
+                        console.log("click " + nodeId)
+                        suscriberPanel.conceptId = nodeId + "";
+                        suscriberPanel.updateCanvas();
+                    });
                 });
             });
         });
@@ -177,9 +190,7 @@ function taxonomyPanel(divElement, options) {
     this.handlePanelDropEvent = function(event, ui) {
         var draggable = ui.draggable;
         if (!draggable.attr('data-panel')) {
-//console.log("ignore");
         } else {
-//console.log("OK : " + draggable.attr('data-panel'));
             $.each(componentsRegistry, function(i, field) {
                 if (field.divElement.id == draggable.attr('data-panel')) {
                     if (field.type == "concept-details") {
