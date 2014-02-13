@@ -18,7 +18,7 @@ function searchPanel(divElement, options) {
     this.type = "search";
     this.divElement = divElement;
     this.options = options;
-    this.url = "http://ec2-23-22-254-72.compute-1.amazonaws.com/browser-api/";
+    this.url = "http://107.170.33.116:3000/";
     var componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
         if (field.divElement.id == panel.divElement.id) {
@@ -49,7 +49,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "<div class='panel-body' id='" + panel.divElement.id + "-panelBody'>";
         searchHtml = searchHtml + '<form>';
         searchHtml = searchHtml + '<div class="form-group">';
-        searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox">Search as you type</label>';
+        searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox">Type at least 5 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
         searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="Search..." autocomplete="off">';
         searchHtml = searchHtml + '</div>';
         searchHtml = searchHtml + '</form>';
@@ -182,43 +182,74 @@ function searchPanel(divElement, options) {
     }
 
     this.search = function(t) {
+        // panel.divElement.id + '-typeIcon
         if (t != "" && t != lastT) {
-            lastT = t;
-            //console.log(t);
-            var d = new Date();
-            var time = d.getTime();
-            panel.history.push({searchTerm: t, time: time});
-            t = t.charAt(0).toUpperCase() + t.slice(1);
-            //console.log("Capitalized t: " + t);
-            //http://ec2-23-22-254-72.compute-1.amazonaws.com/sct-rest-api/rest/snomed/descriptions?phrase=asthma
-            //http://ec2-23-22-254-72.compute-1.amazonaws.com/browser-api/rest/browser/concepts?phrase=^asthma*
-            //$('#resultsTable').append("<tr><td>" + t + "</td></tr>");
-            $('#' + panel.divElement.id + '-resultsTable').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-            resultsHtml = "";
-            $.getJSON(panel.url + "rest/browser/concepts?phrase=^" + t + "", function(result) {
-                $.each(result.matchedDescriptions, function(i, field) {
-                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "'>" + field.term + "</div></td></tr>";
-                });
-                if (result.matchedDescriptions.length == 0) {
-                    resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";
+            if (t.length < 5) {
+                $('#' + panel.divElement.id + '-typeIcon').removeClass('glyphicon-ok');
+                $('#' + panel.divElement.id + '-typeIcon').removeClass('text-success');
+                $('#' + panel.divElement.id + '-typeIcon').addClass('glyphicon-remove');
+                $('#' + panel.divElement.id + '-typeIcon').addClass('text-danger');
+            } else {
+                $('#' + panel.divElement.id + '-typeIcon').removeClass('glyphicon-remove');
+                $('#' + panel.divElement.id + '-typeIcon').removeClass('text-danger');
+                $('#' + panel.divElement.id + '-typeIcon').addClass('glyphicon-ok');
+                $('#' + panel.divElement.id + '-typeIcon').addClass('text-success');
+                lastT = t;
+                //console.log(t);
+                var d = new Date();
+                var time = d.getTime();
+                panel.history.push({searchTerm: t, time: time});
+                t = t.charAt(0).toUpperCase() + t.slice(1);
+                //console.log("Capitalized t: " + t);
+                $('#' + panel.divElement.id + '-resultsTable').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                resultsHtml = "";
+                //%7B%22descriptions%22%3A%7B%24elemMatch%3A%7B%22term%22%3A%7B%24regex%3A%22%5EAsthma*%22%7D%2C%22active%22%3Atrue%7D%7D%2C%22active%22%3Atrue%7D
+                if (xhr != null) {
+                    xhr.abort();
+                    console.log("aborting call...");
                 }
-                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                    containment: 'window',
-                    helper: 'clone'
-                });
-                $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function(event) {
-                    $.each(panel.subscribers, function(i, field) {
-//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                        field.conceptId = $(event.target).attr('data-concept-id');
-                        field.updateCanvas();
+                xhr = $.getJSON(panel.url + "browser-2/snomed?query=%7B%22descriptions%22%3A%7B%22%24elemMatch%22%3A%7B%22term%22%3A%7B%22%24regex%22%3A%22%5E" + t + "x*%22%7D%2C%22active%22%3Atrue%7D%7D%2C%22active%22%3Atrue%7D&limit=20", function(result) {
+
+                }).done(function(result) {
+                    xhr = null;
+                    var matchedDescriptions = [];
+                    $.each(result, function(i, matchedConcept) {
+                        $.each(matchedConcept.descriptions, function(i, loopDesc) {
+                            //console.log(loopDesc.term.substring(0, t.length) + '-' + t.substring(0, t.length));
+                            if (loopDesc.term.substring(0, t.length) == t.substring(0, t.length) && loopDesc.active == true) {
+                                matchedDescriptions.push({term: loopDesc.term, conceptId: loopDesc.conceptId});
+                            }
+                        });
                     });
-                });
-            }).done(function() {
-//$(divElement).html(searchHtml);
-            }).fail(function() {
+                    matchedDescriptions.sort(function(a, b) {
+                        if (a.term.length < b.term.length)
+                            return -1;
+                        if (a.term.length > b.term.length)
+                            return 1;
+                        return 0;
+                    })
+                    $.each(matchedDescriptions, function(i, field) {
+                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "'>" + field.term + "</div></td></tr>";
+                    });
+                    if (matchedDescriptions.length == 0) {
+                        resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";
+                    }
+                    $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                    $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+                        containment: 'window',
+                        helper: 'clone'
+                    });
+                    $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function(event) {
+                        $.each(panel.subscribers, function(i, field) {
+//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                            field.conceptId = $(event.target).attr('data-concept-id');
+                            field.updateCanvas();
+                        });
+                    });
+                }).fail(function() {
 //$('#resultsTable').html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
-            });
+                });
+            }
         }
     }
 
@@ -261,7 +292,7 @@ function searchPanel(divElement, options) {
         }
         subscriber.clearSubscription();
     }
-    
+
     this.unsubscribeAll = function() {
         $.each(panel.subscribers, function(i, field) {
             this.unsubscribe(field);

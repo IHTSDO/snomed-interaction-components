@@ -19,7 +19,7 @@ function conceptDetails(divElement, conceptId, options) {
     this.conceptId = conceptId;
     this.divElement = divElement;
     this.options = options;
-    this.url = "http://ec2-23-22-254-72.compute-1.amazonaws.com/browser-api/";
+    this.url = "http://107.170.33.116:3000/";
     this.attributesPId = "";
     this.descsPId = "";
     this.relsPId = "";
@@ -172,7 +172,7 @@ function conceptDetails(divElement, conceptId, options) {
                                 agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
                             }
                         }
-                        historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.sctid + ');">' + field.defaultTerm + '</a>';
+                        historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.conceptId + ');">' + field.defaultTerm + '</a>';
                         historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
                         historyHtml = historyHtml + '</td></tr>';
                     });
@@ -239,7 +239,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.updateCanvas = function() {
-        ////console.log("UPDATE:");
+        //console.log("UPDATE:" + panel.conceptId);
         ////console.log(JSON.stringify(panel.options));
 //        $('#' + panel.attributesPId).html($('#' + panel.attributesPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 //        $('#' + panel.descsPId).html($('#' + panel.descsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
@@ -255,22 +255,23 @@ function conceptDetails(divElement, conceptId, options) {
             xhr.abort();
             console.log("aborting call...");
         }
-        xhr = $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/details", function(result) {
+        xhr = $.getJSON(panel.url + "browser-2/snomed?query=%7B%22conceptId%22%3A%20" + panel.conceptId + "%7D", function(result) {
 
         }).done(function(result) {
+            var firstMatch = result[0];
             xhr = null;
             panel.attributesPId = divElement.id + "-attributes-panel";
-            panel.defaultTerm = result.defaultTerm;
+            panel.defaultTerm = firstMatch.defaultTerm;
             var d = new Date();
             var time = d.getTime();
-            panel.history.push({defaultTerm: result.defaultTerm, sctid: result.sctid, time: time});
-            attrHtml = "<table class='table table-default' ><tr><td class='jqui-droppable jqui-draggable' data-concept-id='" + result.sctid + "'><h3>" + result.defaultTerm + "</h4><br>SCTID: " + result.sctid;
-            if (result.definitionStatus.sctid == "900000000000073002") {
-                attrHtml = attrHtml + ", Fully defined";
-            } else {
+            panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
+            attrHtml = "<table class='table table-default' ><tr><td class='jqui-droppable jqui-draggable' data-concept-id='" + firstMatch.conceptId + "'><h3>" + firstMatch.defaultTerm + "</h4><br>SCTID: " + firstMatch.conceptId;
+            if (firstMatch.definitionStatus == "Primitive") {
                 attrHtml = attrHtml + ", Primitive";
+            } else {
+                attrHtml = attrHtml + ", Fully defined";
             }
-            if (result.active == true) {
+            if (firstMatch.active == true) {
                 attrHtml = attrHtml + ", ACTIVE";
             } else {
                 attrHtml = attrHtml + ", INACTIVE";
@@ -306,10 +307,10 @@ function conceptDetails(divElement, conceptId, options) {
             }
             //descDetailsHtml = descDetailsHtml + "<th>Acceptability</th>";
             descDetailsHtml = descDetailsHtml + "</tr></thead><tbody>";
-            $.each(result.descriptions, function(i, field) {
+            $.each(firstMatch.descriptions, function(i, field) {
                 if (field.active == true) {
                     var row = "";
-                    if (field.type.sctid == "900000000000003001") {
+                    if (field.type.conceptId == "900000000000003001") {
                         row = "<tr class='fsn-row'>";
                     } else {
                         row = "<tr class='synonym-row'>";
@@ -317,7 +318,7 @@ function conceptDetails(divElement, conceptId, options) {
 
                     row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.conceptId + "'>" + field.term + "</div></td>";
                     if (panel.options.showIds == true) {
-                        row = row + "<td>" + field.sctid + "</td>";
+                        row = row + "<td>" + field.conceptId + "</td>";
                     }
 //                    var langRefsetid = "900000000000508004";
 //                    $.each(field.langMemberships, function(i, lang) {
@@ -327,7 +328,7 @@ function conceptDetails(divElement, conceptId, options) {
 //                            row = row + "<td>Not acceptable</td>";
 //                        }
 //                    });
-                    
+
                     row = row + "</tr>";
                     descDetailsHtml = descDetailsHtml + row;
                 }
@@ -363,26 +364,46 @@ function conceptDetails(divElement, conceptId, options) {
             relsDetailsHtml = relsDetailsHtml + "<th>Group</th>";
             relsDetailsHtml = relsDetailsHtml + "<th>CharType</th>";
             relsDetailsHtml = relsDetailsHtml + "</tr></thead><tbody>";
-            $.each(result.relationships, function(i, field) {
+            $.each(firstMatch.relationships, function(i, field) {
                 //console.log(JSON.stringify(field));
                 if (field.active == true) {
                     var row = "";
-                    if (field.charType.sctid == "900000000000010007") {
-                        row = "<tr class='stated-rel'>";
-                    } else {
-                        row = "<tr class='inferred-rel'>";
-                    }
+                    row = "<tr class='inferred-rel'>";
 
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.sctid + "'>" + field.type.defaultTerm + "</div></td>";
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.sctid + "'>" + field.target.defaultTerm + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "'>" + field.type.defaultTerm + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "'>" + field.target.defaultTerm + "</div></td>";
                     row = row + "<td>" + field.groupId + "</td>";
-                    if (field.charType.sctid == "900000000000010007") {
+                    if (field.charType.conceptId == "900000000000010007") {
                         row = row + "<td>Stated</td>";
-                    } else if (field.charType.sctid == "900000000000011006") {
+                    } else if (field.charType.conceptId == "900000000000011006") {
                         row = row + "<td>Inferred</td>";
                     } else {
                         row = row + "<td>Other</td>";
                     }
+                    row = row + "</tr>";
+                    relsDetailsHtml = relsDetailsHtml + row;
+                }
+            });
+            $.each(firstMatch.statedRelationships, function(i, field) {
+                //console.log(JSON.stringify(field));
+                if (field.active == true) {
+                    var row = "";
+//                    if (field.charType.conceptId == "900000000000010007") {
+                    row = "<tr class='stated-rel'>";
+//                    } else {
+//                        row = "<tr class='inferred-rel'>";
+//                    }
+
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "'>" + field.type.defaultTerm + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "'>" + field.target.defaultTerm + "</div></td>";
+                    row = row + "<td>" + field.groupId + "</td>";
+//                    if (field.charType.conceptId == "900000000000010007") {
+                    row = row + "<td>Stated</td>";
+//                    } else if (field.charType.conceptId == "900000000000011006") {
+//                        row = row + "<td>Inferred</td>";
+//                    } else {
+//                        row = row + "<td>Other</td>";
+//                    }
                     row = row + "</tr>";
                     relsDetailsHtml = relsDetailsHtml + row;
                 }
@@ -423,8 +444,8 @@ function conceptDetails(divElement, conceptId, options) {
                 xhrChildren.abort();
                 console.log("aborting children call...");
             }
-            xhrChildren = $.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
-                
+            xhrChildren = $.getJSON(panel.url + "browser-2/snomed?query=%7B%22relationships%22%3A%7B%22%24elemMatch%22%3A%7B%22target.conceptId%22%20%3A%20" + panel.conceptId + "%2C%20%22active%22%3A%20true%2C%20%22type.conceptId%22%3A%20116680003%7D%7D%7D", function(result) {
+                //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
             }).done(function(result) {
                 // load relationships panel
                 xhrChildren = null;
@@ -436,7 +457,7 @@ function conceptDetails(divElement, conceptId, options) {
                 childrenDetailsHtml = childrenDetailsHtml + "</tr></thead><tbody></div>";
                 $.each(result, function(i, field) {
                     if (field.active == true) {
-                        childrenDetailsHtml = childrenDetailsHtml + "<tr><td class='jqui-draggable' data-concept-id='" + field.sctid + "'>" + field.defaultTerm + "</td></tr>";
+                        childrenDetailsHtml = childrenDetailsHtml + "<tr><td class='jqui-draggable' data-concept-id='" + field.conceptId + "'>" + field.defaultTerm + "</td></tr>";
                     }
                 });
 
@@ -465,8 +486,11 @@ function conceptDetails(divElement, conceptId, options) {
     this.handleDropEvent = function(event, ui) {
         var draggable = ui.draggable;
         //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
-        panel.conceptId = draggable.attr('data-concept-id');
-        panel.updateCanvas();
+        var droppedId = draggable.attr('data-concept-id');
+        if (typeof droppedId != "undefined") {
+            panel.conceptId = droppedId;
+            panel.updateCanvas();
+        }
     }
 
     this.setSubscription = function(subscriptionPanel) {
@@ -591,11 +615,11 @@ function conceptDetails(divElement, conceptId, options) {
     }
 }
 
-function updateCD(divElementId, sctid) {
+function updateCD(divElementId, conceptId) {
     $.each(componentsRegistry, function(i, field) {
         //console.log(field.divElement.id + ' == ' + divElementId.id);
         if (field.divElement.id == divElementId) {
-            field.conceptId = sctid;
+            field.conceptId = conceptId;
             field.updateCanvas();
         }
     });
