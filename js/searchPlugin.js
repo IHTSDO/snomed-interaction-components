@@ -208,7 +208,7 @@ function searchPanel(divElement, options) {
                     xhr.abort();
                     console.log("aborting call...");
                 }
-                xhr = $.getJSON(panel.url + "browser-2/snomed?query=%7B%22descriptions%22%3A%7B%22%24elemMatch%22%3A%7B%22term%22%3A%7B%22%24regex%22%3A%22%5E" + t + "x*%22%7D%2C%22active%22%3Atrue%7D%7D%2C%22active%22%3Atrue%7D&limit=20", function(result) {
+                xhr = $.getJSON(panel.url + "browser-2/snomed?query=%7B%22descriptions%22%3A%7B%22%24elemMatch%22%3A%7B%22term%22%3A%7B%22%24regex%22%3A%22%5E" + t + "x*%22%7D%2C%22active%22%3Atrue%7D%7D%2C%22active%22%3Atrue%7D&limit=50&fields=%7B%22descriptions.term%22%3A1%2C%22descriptions.conceptId%22%3A1%2C%22descriptions.active%22%3A1%7D", function(result) {
 
                 }).done(function(result) {
                     xhr = null;

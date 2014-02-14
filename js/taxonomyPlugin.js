@@ -33,7 +33,7 @@ function taxonomyPanel(divElement, options) {
     this.setupCanvas = function() {
         var taxonomyHtml = "<div style='width:500px; margin: 5px;' class='panel panel-default'>";
         taxonomyHtml = taxonomyHtml + "<div class='panel-heading'>";
-        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 64px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
+        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 4px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'><strong>Taxonomy</strong></div>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-4 text-right'>";
@@ -146,7 +146,7 @@ function taxonomyPanel(divElement, options) {
     }
 
     this.getChildren = function(conceptId) {
-        $.getJSON(panel.url + "browser-2/snomed?query=%7B%22relationships%22%3A%7B%22%24elemMatch%22%3A%7B%22target.conceptId%22%20%3A%20" + conceptId + "%2C%20%22active%22%3A%20true%2C%20%22type.conceptId%22%3A%20116680003%7D%7D%7D", function(result) {
+        $.getJSON(panel.url + "browser-2/snomed?query=%7B%22relationships%22%3A%7B%22%24elemMatch%22%3A%7B%22target.conceptId%22%20%3A%20" + conceptId + "%2C%20%22active%22%3A%20true%2C%20%22type.conceptId%22%3A%20116680003%7D%7D%7D&fields=%7B%22defaultTerm%22%3A1%2C%22conceptId%22%3A1%2C%22active%22%3A1%7D", function(result) {
             var nodeHtml = "<ul style='list-style-type: none; padding-left: 15px;'>";
             result.sort(function(a, b) {
                 if (a.defaultTerm < b.defaultTerm)
@@ -155,6 +155,7 @@ function taxonomyPanel(divElement, options) {
                     return 1;
                 return 0;
             })
+            //console.log(JSON.stringify(result));
             var listIconIds = [];
             $.each(result, function(i, field) {
                 if (field.active == true) {
