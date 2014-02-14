@@ -239,7 +239,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.updateCanvas = function() {
-        //console.log("UPDATE:" + panel.conceptId);
+        console.log("UPDATE:" + panel.conceptId);
         ////console.log(JSON.stringify(panel.options));
 //        $('#' + panel.attributesPId).html($('#' + panel.attributesPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 //        $('#' + panel.descsPId).html($('#' + panel.descsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
@@ -486,11 +486,8 @@ function conceptDetails(divElement, conceptId, options) {
     this.handleDropEvent = function(event, ui) {
         var draggable = ui.draggable;
         //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
-        var droppedId = draggable.attr('data-concept-id');
-        if (typeof droppedId != "undefined") {
-            panel.conceptId = droppedId;
-            panel.updateCanvas();
-        }
+        panel.conceptId = draggable.attr('data-concept-id');
+        panel.updateCanvas();
     }
 
     this.setSubscription = function(subscriptionPanel) {

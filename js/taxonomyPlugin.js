@@ -33,7 +33,7 @@ function taxonomyPanel(divElement, options) {
     this.setupCanvas = function() {
         var taxonomyHtml = "<div style='width:500px; margin: 5px;' class='panel panel-default'>";
         taxonomyHtml = taxonomyHtml + "<div class='panel-heading'>";
-        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 4px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
+        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 64px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'><strong>Taxonomy</strong></div>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-4 text-right'>";
