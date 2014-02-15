@@ -193,7 +193,8 @@ function conceptDetails(divElement, conceptId, options) {
 
         $("#" + panel.divElement.id + "-linkerButton").draggable({
             containment: 'window',
-            helper: 'clone'
+            helper: 'clone',
+            delay:500
         });
 
         $("#" + panel.divElement.id + "-linkerButton").droppable({
@@ -265,7 +266,7 @@ function conceptDetails(divElement, conceptId, options) {
             var d = new Date();
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
-            attrHtml = "<table class='table table-default' ><tr><td class='jqui-droppable jqui-draggable' data-concept-id='" + firstMatch.conceptId + "'><h3>" + firstMatch.defaultTerm + "</h4><br>SCTID: " + firstMatch.conceptId;
+            attrHtml = "<table class='table table-default' ><tr><td class='jqui-droppable' data-concept-id='" + firstMatch.conceptId + "'><h3 class='jqui-draggable' data-concept-id='" + firstMatch.conceptId + "'>" + firstMatch.defaultTerm + "</h4><br>SCTID: " + firstMatch.conceptId;
             if (firstMatch.definitionStatus == "Primitive") {
                 attrHtml = attrHtml + ", Primitive";
             } else {
@@ -294,7 +295,8 @@ function conceptDetails(divElement, conceptId, options) {
             });
             $('#' + panel.attributesPId).find(".jqui-draggable").draggable({
                 containment: 'window',
-                helper: 'clone'
+                helper: 'clone',
+                delay: 500
             });
 
             // load descriptions panel
@@ -353,7 +355,8 @@ function conceptDetails(divElement, conceptId, options) {
             });
             $('#' + panel.descsPId).find(".jqui-draggable").draggable({
                 containment: 'window',
-                helper: 'clone'
+                helper: 'clone',
+                delay: 500
             });
             // load relationships panel
             panel.relsPId = divElement.id + "-rels-panel";
@@ -423,7 +426,8 @@ function conceptDetails(divElement, conceptId, options) {
             }
             $('#' + panel.relsPId).find(".jqui-draggable").draggable({
                 containment: 'window',
-                helper: 'clone'
+                helper: 'clone',
+                delay: 500
             });
         }).fail(function() {
             $('#' + panel.attributesPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
@@ -466,7 +470,8 @@ function conceptDetails(divElement, conceptId, options) {
                 $('#' + panel.childrenPId).html(childrenDetailsHtml);
                 $('#' + panel.childrenPId).find(".jqui-draggable").draggable({
                     containment: 'window',
-                    helper: 'clone'
+                    helper: 'clone',
+                    delay: 500
                 });
             }).fail(function() {
                 $('#' + panel.childrenPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");

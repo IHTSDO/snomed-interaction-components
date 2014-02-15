@@ -91,7 +91,8 @@ function searchPanel(divElement, options) {
         });
         $("#" + panel.divElement.id + "-linkerButton").draggable({
             containment: 'window',
-            helper: 'clone'
+            helper: 'clone',
+            delay: 500
         });
         $("#" + panel.divElement.id + "-linkerButton").droppable({
             drop: panel.handlePanelDropEvent,
@@ -237,7 +238,8 @@ function searchPanel(divElement, options) {
                     $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                     $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
                         containment: 'window',
-                        helper: 'clone'
+                        helper: 'clone',
+                        delay: 500
                     });
                     $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function(event) {
                         $.each(panel.subscribers, function(i, field) {

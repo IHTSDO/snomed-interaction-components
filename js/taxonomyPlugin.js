@@ -72,7 +72,8 @@ function taxonomyPanel(divElement, options) {
         });
         $("#" + panel.divElement.id + "-linkerButton").draggable({
             containment: 'window',
-            helper: 'clone'
+            helper: 'clone',
+            delay: 500
         });
         $("#" + panel.divElement.id + "-linkerButton").droppable({
             drop: panel.handlePanelDropEvent,
@@ -112,7 +113,8 @@ function taxonomyPanel(divElement, options) {
 
         $('#' + panel.divElement.id + "-treenode-" + 138875005).draggable({
             containment: 'window',
-            helper: 'clone'
+            helper: 'clone',
+            delay: 500
         });
         $('#' + panel.divElement.id + "-treenode-" + 138875005).click(function(event) {
             var selectedId = $(event.target).attr('data-concept-id');
@@ -178,7 +180,8 @@ function taxonomyPanel(divElement, options) {
                 panel.addOpenTreeClickAction(panel.divElement.id + "-treeicon-" + nodeId);
                 $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
                     containment: 'window',
-                    helper: 'clone'
+                    helper: 'clone',
+                    delay: 500
                 });
 //                $('#' + panel.divElement.id + "-treenode-" + nodeId).click(function(event) {
 //                    $.each(panel.subscribers, function(i, suscriberPanel) {
