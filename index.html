@@ -19,6 +19,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/sct-widgets.css">
         <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css">
         <script src="lib/bootstrap.min.js"></script>
+        <script src="lib/jquery.ui.touch-punch.min.js"></script>
 
         <script type="text/javascript">
             function initialize() {
@@ -49,17 +50,17 @@ and open the template in the editor.
                 var count = 1;
                 $("#addSearchButton").click(function() {
                     count = count + 1;
-                    $("#searchRow").append('<div class ="col-md-6"><div id="search_auto_canvas_' + count + '"></div></div>');
+                    $("#searchRow").append('<div class ="col-md-6 col-sm-12 col-xs-12"><div id="search_auto_canvas_' + count + '"></div></div>');
                     var spa = new searchPanel(document.getElementById("search_auto_canvas_" + count), options);
                 });
                 $("#addCDButton").click(function() {
                     count = count + 1;
-                    $("#cdRow").append('<div class ="col-md-6"><div id="cd_auto_canvas_' + count + '"></div></div>');
+                    $("#cdRow").append('<div class ="col-md-6 col-sm-12 col-xs-12"><div id="cd_auto_canvas_' + count + '"></div></div>');
                     $("#cd_auto_canvas_" + count).addConceptDetails("195967001", options);
                 });
                 $("#addTxButton").click(function() {
                     count = count + 1;
-                    $("#txRow").append('<div class ="col-md-6"><div id="tx_auto_canvas_' + count + '"></div></div>');
+                    $("#txRow").append('<div class ="col-md-6 col-sm-12 col-xs-12"><div id="tx_auto_canvas_' + count + '"></div></div>');
                     var tpt = new taxonomyPanel(document.getElementById("tx_auto_canvas_" + count), options);
                 });
 
@@ -78,13 +79,13 @@ and open the template in the editor.
                 <button type="button" class="btn btn-primary" id="addSearchButton">Add Search</button>
             </div>
             <div class="row" id="searchRow">
-                <div id="search_canvas" class ="col-md-6"></div>
+                <div id="search_canvas" class ="col-md-6 col-sm-12 col-xs-12"></div>
             </div>
             <div class="row container">
                 <button type="button" class="btn btn-primary" id="addCDButton">Add Concept Details</button>
             </div>
             <div class="row" id="cdRow">
-                <div class ="col-md-6">
+                <div class ="col-md-6 col-sm-12 col-xs-12">
                     <div id="concept_details_canvas"></div>
                 </div>
             </div>
@@ -92,10 +93,10 @@ and open the template in the editor.
                 <button type="button" class="btn btn-primary" id="addTxButton">Add Taxonomy</button>
             </div>
             <div class="row" id="txRow">
-                <div class ="col-md-6">
+                <div class ="col-md-6 col-sm-12 col-xs-12">
                     <div id="taxonomy_canvas"></div>
                 </div>
-                <div class ="col-md-6">
+                <div class ="col-md-6 col-sm-12 col-xs-12">
                     <div id="concept_details_tx_canvas"></div>
                 </div>
             </div>
