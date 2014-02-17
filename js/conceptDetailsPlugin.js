@@ -59,7 +59,7 @@ function conceptDetails(divElement, conceptId, options) {
         $(divElement).html();
         // main panel
         detailsHtml = "<div style='width:500px; margin: 5px;' class='panel panel-default'>";
-        detailsHtml = detailsHtml + "<div class='panel-heading'>";
+        detailsHtml = detailsHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
         detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding:2px;position: absolute;top: 1px;right: 64px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         detailsHtml = detailsHtml + "<div class='row'>";
         detailsHtml = detailsHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'><strong>Concept Details</strong></div>";
@@ -194,11 +194,11 @@ function conceptDetails(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-linkerButton").draggable({
             containment: 'window',
             helper: 'clone',
-            delay:500
+            delay: 500
         });
 
-        $("#" + panel.divElement.id + "-linkerButton").droppable({
-            drop: panel.handlePanelDropEvent,
+        $('#' + panel.divElement.id + '-panelHeading').droppable({
+            drop: panel.handleDropEvent,
             hoverClass: "bg-info"
         });
 
@@ -222,9 +222,17 @@ function conceptDetails(divElement, conceptId, options) {
         panel.updateCanvas();
         panel.setupOptionsPanel();
     }
-
-    this.handlePanelDropEvent = function(event, ui) {
+    
+    this.handleDropEvent = function(event, ui) {
         var draggable = ui.draggable;
+        //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
+        if (!draggable.attr('data-concept-id')) {
+            //console.log("ignore");
+        } else {
+            panel.conceptId = draggable.attr('data-concept-id');
+            panel.updateCanvas();
+        }
+        
         if (!draggable.attr('data-panel')) {
             //console.log("ignore");
         } else {
@@ -240,7 +248,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.updateCanvas = function() {
-        console.log("UPDATE:" + panel.conceptId);
+        //console.log("UPDATE:" + panel.conceptId);
         ////console.log(JSON.stringify(panel.options));
 //        $('#' + panel.attributesPId).html($('#' + panel.attributesPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 //        $('#' + panel.descsPId).html($('#' + panel.descsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
@@ -289,10 +297,7 @@ function conceptDetails(divElement, conceptId, options) {
                 drop: panel.handleDropEvent,
                 hoverClass: "bg-info"
             });
-            $('#' + panel.divElement.id + '-panelTitle').droppable({
-                drop: panel.handleDropEvent,
-                hoverClass: "bg-info"
-            });
+
             $('#' + panel.attributesPId).find(".jqui-draggable").draggable({
                 containment: 'window',
                 helper: 'clone',
@@ -301,15 +306,38 @@ function conceptDetails(divElement, conceptId, options) {
 
             // load descriptions panel
             panel.descsPId = divElement.id + "-descriptions-panel";
+            var languageName = "";
+            if (panel.options.langRefset == "900000000000508004") {
+                languageName = "(GB)";
+            } else if (panel.options.langRefset == "900000000000509007") {
+                languageName = "(US)";
+            }
             descDetailsHtml = "<table class='table table-bordered' id = '" + panel.descsPId + "-table'>";
             descDetailsHtml = descDetailsHtml + "<thead><tr>";
             descDetailsHtml = descDetailsHtml + "<th>Term</th>";
             if (panel.options.showIds == true) {
                 descDetailsHtml = descDetailsHtml + "<th>SCTID</th>";
             }
+            descDetailsHtml = descDetailsHtml + "<th>Acceptability " + languageName + "</th>";
             //descDetailsHtml = descDetailsHtml + "<th>Acceptability</th>";
             descDetailsHtml = descDetailsHtml + "</tr></thead><tbody>";
-            $.each(firstMatch.descriptions, function(i, field) {
+
+            var allDescriptions = firstMatch.descriptions.slice(0);
+            allDescriptions.sort(function(a, b) {
+                if (a.type.conceptId < b.type.conceptId)
+                    return -1;
+                if (a.type.conceptId > b.type.conceptId)
+                    return 1;
+                if (a.type.conceptId == b.type.conceptId) {
+                    if (a.term < b.term)
+                        return -1;
+                    if (a.term > b.term)
+                        return 1;
+                }
+                return 0;
+            })
+
+            $.each(allDescriptions, function(i, field) {
                 if (field.active == true) {
                     var row = "";
                     if (field.type.conceptId == "900000000000003001") {
@@ -320,16 +348,19 @@ function conceptDetails(divElement, conceptId, options) {
 
                     row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.conceptId + "'>" + field.term + "</div></td>";
                     if (panel.options.showIds == true) {
-                        row = row + "<td>" + field.conceptId + "</td>";
+                        row = row + "<td>" + field.descriptionId + "</td>";
                     }
-//                    var langRefsetid = "900000000000508004";
-//                    $.each(field.langMemberships, function(i, lang) {
-//                        if (lang.refset.conceptId == langRefsetid) {
-//                            row = row + "<td><div class='jqui-draggable' data-concept-id='" + lang.acceptability.conceptId + "'>" + lang.acceptability.defaultTerm + "</div></td>";
-//                        } else {
-//                            row = row + "<td>Not acceptable</td>";
-//                        }
-//                    });
+
+                    var includedInLanguage = false;
+                    $.each(field.langMemberships, function(i, lang) {
+                        if (lang.refset.conceptId == panel.options.langRefset) {
+                            row = row + "<td><div class='jqui-draggable' data-concept-id='" + lang.acceptability.conceptId + "'>" + lang.acceptability.defaultTerm.substring(0, lang.acceptability.defaultTerm.indexOf("(")) + "</div></td>";
+                            includedInLanguage = true;
+                        }
+                    });
+                    if (includedInLanguage == false) {
+                        row = row + "<td>Not acceptable</td>";
+                    }
 
                     row = row + "</tr>";
                     descDetailsHtml = descDetailsHtml + row;
@@ -488,13 +519,6 @@ function conceptDetails(divElement, conceptId, options) {
 //        });
     }
 
-    this.handleDropEvent = function(event, ui) {
-        var draggable = ui.draggable;
-        //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
-        panel.conceptId = draggable.attr('data-concept-id');
-        panel.updateCanvas();
-    }
-
     this.setSubscription = function(subscriptionPanel) {
         panel.subscription = subscriptionPanel;
         $("#" + panel.divElement.id + "-subscribersMarker").css('color', subscriptionPanel.markerColor);
@@ -613,7 +637,7 @@ function conceptDetails(divElement, conceptId, options) {
         //console.log($("#" + panel.divElement.id + "-relsViewOption").val());
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.displayChildren = $("#" + panel.divElement.id + "-childrenOption").is(':checked');
-        panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").attr('data-lang-refset-id');
+        panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
     }
 }
 

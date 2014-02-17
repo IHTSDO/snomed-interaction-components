@@ -228,7 +228,7 @@ function searchPanel(divElement, options) {
                         if (a.term.length > b.term.length)
                             return 1;
                         return 0;
-                    })
+                    });
                     $.each(matchedDescriptions, function(i, field) {
                         resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "'>" + field.term + "</div></td></tr>";
                     });
