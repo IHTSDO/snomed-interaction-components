@@ -102,7 +102,7 @@ function taxonomyPanel(divElement, options) {
     }
 
     this.addTree = function() {
-        var treeHtml = "<div style='height:300px;overflow:auto;margin-bottom: 15px;'>";
+        var treeHtml = "<div style='height:100%;overflow:auto;margin-bottom: 15px;'>";
         treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 5px;'>";
         treeHtml = treeHtml + "<li id='" + panel.divElement.id + "-treenode-" + 138875005 + "' data-concept-id='138875005' class='jqui-draggable'>";
         treeHtml = treeHtml + "<button class='btn btn-link btn-xs load-children-button' style='padding:2px'><i class='glyphicon glyphicon-chevron-right'  id='" + panel.divElement.id + "-treeicon-" + 138875005 + "'></i></button>";
