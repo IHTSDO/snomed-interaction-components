@@ -209,19 +209,11 @@ function searchPanel(divElement, options) {
                     xhr.abort();
                     console.log("aborting call...");
                 }
-                xhr = $.getJSON(panel.url + "browser-2/snomed/query?query=%7B%22descriptions%22%3A%7B%22%24elemMatch%22%3A%7B%22term%22%3A%7B%22%24regex%22%3A%22%5E" + t + "x*%22%7D%2C%22active%22%3Atrue%7D%7D%2C%22active%22%3Atrue%7D&limit=50&fields=%7B%22descriptions.term%22%3A1%2C%22descriptions.conceptId%22%3A1%2C%22descriptions.active%22%3A1%7D", function(result) {
+                xhr = $.getJSON(panel.url + "browser-2/snomed/descriptions?query=" + t + "&limit=50", function(result) {
 
                 }).done(function(result) {
                     xhr = null;
-                    var matchedDescriptions = [];
-                    $.each(result, function(i, matchedConcept) {
-                        $.each(matchedConcept.descriptions, function(i, loopDesc) {
-                            //console.log(loopDesc.term.substring(0, t.length) + '-' + t.substring(0, t.length));
-                            if (loopDesc.term.substring(0, t.length) == t.substring(0, t.length) && loopDesc.active == true) {
-                                matchedDescriptions.push({term: loopDesc.term, conceptId: loopDesc.conceptId});
-                            }
-                        });
-                    });
+                    var matchedDescriptions = result;
                     matchedDescriptions.sort(function(a, b) {
                         if (a.term.length < b.term.length)
                             return -1;

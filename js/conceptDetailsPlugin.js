@@ -266,10 +266,10 @@ function conceptDetails(divElement, conceptId, options) {
             xhr.abort();
             console.log("aborting call...");
         }
-        xhr = $.getJSON(panel.url + "browser-2/snomed/query?query=%7B%22conceptId%22%3A%20" + panel.conceptId + "%7D", function(result) {
+        xhr = $.getJSON(panel.url + "browser-2/snomed/concepts/" + panel.conceptId, function(result) {
 
         }).done(function(result) {
-            var firstMatch = result[0];
+            var firstMatch = result;
             xhr = null;
             panel.attributesPId = divElement.id + "-attributes-panel";
             panel.defaultTerm = firstMatch.defaultTerm;
@@ -481,7 +481,7 @@ function conceptDetails(divElement, conceptId, options) {
                 xhrChildren.abort();
                 console.log("aborting children call...");
             }
-            xhrChildren = $.getJSON(panel.url + "browser-2/snomed/query?query=%7B%22relationships%22%3A%7B%22%24elemMatch%22%3A%7B%22target.conceptId%22%20%3A%20" + panel.conceptId + "%2C%20%22active%22%3A%20true%2C%20%22type.conceptId%22%3A%20116680003%7D%7D%7D", function(result) {
+            xhrChildren = $.getJSON(panel.url + "browser-2/snomed/concepts/" + panel.conceptId + "/children?form=inferred", function(result) {
                 //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
             }).done(function(result) {
                 // load relationships panel
