@@ -31,9 +31,9 @@ function searchPanel(divElement, options) {
 
     this.history = [];
     this.setupCanvas = function() {
-        searchHtml = "<div style='width:500px; margin: 5px;' class='panel panel-default'>";
+        searchHtml = "<div style='margin: 5px;' class='panel panel-default'>";
         searchHtml = searchHtml + "<div class='panel-heading'>";
-        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 64px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
+        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 20px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         searchHtml = searchHtml + "<div class='row'>";
         searchHtml = searchHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'><strong>Search</strong></div>";
         searchHtml = searchHtml + "<div class='col-md-4 text-right'>";

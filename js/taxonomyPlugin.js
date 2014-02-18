@@ -31,12 +31,12 @@ function taxonomyPanel(divElement, options) {
     this.history = [];
 
     this.setupCanvas = function() {
-        var taxonomyHtml = "<div style='width:500px; margin: 5px;' class='panel panel-default'>";
+        var taxonomyHtml = "<div style='margin: 5px;' class='panel panel-default' id='" + panel.divElement.id + "-mainPanel'>";
         taxonomyHtml = taxonomyHtml + "<div class='panel-heading'>";
-        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 64px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
+        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 20px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
-        taxonomyHtml = taxonomyHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'><strong>Taxonomy</strong></div>";
-        taxonomyHtml = taxonomyHtml + "<div class='col-md-4 text-right'>";
+        taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'><strong>Taxonomy</strong></div>";
+        taxonomyHtml = taxonomyHtml + "<div class='col-md-6 text-right'>";
         taxonomyHtml = taxonomyHtml + "<span id='" + panel.divElement.id + "-linkerButton' class='jqui-draggable' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></span>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
@@ -79,6 +79,9 @@ function taxonomyPanel(divElement, options) {
             drop: panel.handlePanelDropEvent,
             hoverClass: "bg-info"
         });
+        
+        //$("#"  + panel.divElement.id +  "-mainPanel").resizable();
+        
         $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
             $("#" + panel.divElement.id + "-linkerButton").popover({
                 trigger: 'manual',
@@ -99,7 +102,7 @@ function taxonomyPanel(divElement, options) {
     }
 
     this.addTree = function() {
-        var treeHtml = "<div style='height:400px;overflow:auto;margin-bottom: 15px;'>";
+        var treeHtml = "<div style='height:300px;overflow:auto;margin-bottom: 15px;'>";
         treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 5px;'>";
         treeHtml = treeHtml + "<li id='" + panel.divElement.id + "-treenode-" + 138875005 + "' data-concept-id='138875005' class='jqui-draggable'>";
         treeHtml = treeHtml + "<button class='btn btn-link btn-xs load-children-button' style='padding:2px'><i class='glyphicon glyphicon-chevron-right'  id='" + panel.divElement.id + "-treeicon-" + 138875005 + "'></i></button>";

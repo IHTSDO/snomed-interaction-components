@@ -58,9 +58,9 @@ function conceptDetails(divElement, conceptId, options) {
         panel.defaultTerm = "";
         $(divElement).html();
         // main panel
-        detailsHtml = "<div style='width:500px; margin: 5px;' class='panel panel-default'>";
+        detailsHtml = "<div style='margin: 5px;' class='panel panel-default'>";
         detailsHtml = detailsHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
-        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding:2px;position: absolute;top: 1px;right: 64px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding:2px;position: absolute;top: 1px;right: 20px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         detailsHtml = detailsHtml + "<div class='row'>";
         detailsHtml = detailsHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'><strong>Concept Details</strong></div>";
         detailsHtml = detailsHtml + "<div class='col-md-4 text-right'>";
@@ -196,6 +196,8 @@ function conceptDetails(divElement, conceptId, options) {
             helper: 'clone',
             delay: 500
         });
+        
+        $( ".resizable" ).resizable();
 
         $('#' + panel.divElement.id + '-panelHeading').droppable({
             drop: panel.handleDropEvent,
