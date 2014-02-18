@@ -151,7 +151,7 @@ function taxonomyPanel(divElement, options) {
     }
 
     this.getChildren = function(conceptId) {
-        $.getJSON(panel.url + "browser-2/snomed/query?query=%7B%22relationships%22%3A%7B%22%24elemMatch%22%3A%7B%22target.conceptId%22%20%3A%20" + conceptId + "%2C%20%22active%22%3A%20true%2C%20%22type.conceptId%22%3A%20116680003%7D%7D%7D&fields=%7B%22defaultTerm%22%3A1%2C%22conceptId%22%3A1%2C%22active%22%3A1%7D", function(result) {
+        $.getJSON(panel.url + "browser-2/snomed/concepts/" + conceptId + "/children?form=inferred", function(result) {
             var nodeHtml = "<ul style='list-style-type: none; padding-left: 15px;'>";
             result.sort(function(a, b) {
                 if (a.defaultTerm < b.defaultTerm)
