@@ -31,7 +31,7 @@ function taxonomyPanel(divElement, options) {
     this.history = [];
 
     this.setupCanvas = function() {
-        var taxonomyHtml = "<div style='margin: 5px;' class='panel panel-default' id='" + panel.divElement.id + "-mainPanel'>";
+        var taxonomyHtml = "<div style='height:100%;margin: 5px;' class='panel panel-default' id='" + panel.divElement.id + "-mainPanel'>";
         taxonomyHtml = taxonomyHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 20px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
@@ -71,7 +71,7 @@ function taxonomyPanel(divElement, options) {
             $("#" + panel.divElement.id + "-collapseButton").hide();
         });
         $("#" + panel.divElement.id + "-linkerButton").draggable({
-            containment: 'window',
+            appendTo: 'body',
             helper: 'clone',
             delay: 500
         });
@@ -137,7 +137,7 @@ function taxonomyPanel(divElement, options) {
         $(".load-children-button").disableTextSelect();
 
         $('#' + panel.divElement.id + "-treenode-" + 138875005).draggable({
-            containment: 'window',
+            appendTo: 'body',
             helper: 'clone',
             delay: 500
         });
@@ -156,8 +156,9 @@ function taxonomyPanel(divElement, options) {
                 }
             }
         });
-
+        $("#" + panel.divElement.id + "-panelBody").unbind( "click" );
         $("#" + panel.divElement.id + "-panelBody").click(function(event) {
+            console.log("pasando");
             if ($(event.target).hasClass("treeButton")) {
                 var conceptId = $(event.target).closest("li").attr('data-concept-id');
                 var iconId = panel.divElement.id + "-treeicon-" + conceptId;
@@ -226,7 +227,7 @@ function taxonomyPanel(divElement, options) {
             //console.log(JSON.stringify(listIconIds));
             $.each(listIconIds, function(i, nodeId) {
                 $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
-                    containment: 'window',
+                    appendTo: 'body',
                     helper: 'clone',
                     delay: 500
                 });
