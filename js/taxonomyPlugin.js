@@ -79,9 +79,9 @@ function taxonomyPanel(divElement, options) {
             drop: panel.handlePanelDropEvent,
             hoverClass: "bg-info"
         });
-        
+
         //$("#"  + panel.divElement.id +  "-mainPanel").resizable();
-        
+
         $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
             $("#" + panel.divElement.id + "-linkerButton").popover({
                 trigger: 'manual',
@@ -104,8 +104,8 @@ function taxonomyPanel(divElement, options) {
     this.addTree = function() {
         var treeHtml = "<div style='height:100%;overflow:auto;margin-bottom: 15px;'>";
         treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 5px;'>";
-        treeHtml = treeHtml + "<li id='" + panel.divElement.id + "-treenode-" + 138875005 + "' data-concept-id='138875005' class='jqui-draggable'>";
-        treeHtml = treeHtml + "<button class='btn btn-link btn-xs load-children-button' style='padding:2px'><i class='glyphicon glyphicon-chevron-right'  id='" + panel.divElement.id + "-treeicon-" + 138875005 + "'></i></button>";
+        treeHtml = treeHtml + "<li id='" + panel.divElement.id + "-treenode-" + 138875005 + "' data-concept-id='138875005' class='jqui-draggable treeLabel'>";
+        treeHtml = treeHtml + "<button class='btn btn-link btn-xs load-children-button treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + 138875005 + "'></i></button>";
         treeHtml = treeHtml + "SNOMED CT Root";
         treeHtml = treeHtml + "</li>";
         treeHtml = treeHtml + "</ul>";
@@ -119,21 +119,46 @@ function taxonomyPanel(divElement, options) {
             helper: 'clone',
             delay: 500
         });
-        $('#' + panel.divElement.id + "-treenode-" + 138875005).click(function(event) {
-            var selectedId = $(event.target).attr('data-concept-id');
-            if (typeof selectedId != "undefined") {
-                $.each(panel.subscribers, function(i, suscriberPanel) {
-                    suscriberPanel.conceptId = selectedId;
-                    suscriberPanel.updateCanvas();
-                });
+        $("#" + panel.divElement.id + "-panelBody").click(function(event) {
+            if ($(event.target).hasClass("treeButton")) {
+                conceptId = $(event.target).closest("li").attr('data-concept-id');
+                iconId = panel.divElement.id + "-treeicon-" + conceptId;
+                console.log(iconId);
+
+                console.log(event.target);
+                event.preventDefault();
+                if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
+                    //console.log("close");
+                    $(event.target).closest("li").find("ul").remove();
+                    $("#" + iconId).removeClass("glyphicon-chevron-down");
+                    $("#" + iconId).addClass("glyphicon-chevron-right");
+                } else {
+                    //console.log("open");
+                    $("#" + iconId).removeClass("glyphicon-chevron-right");
+                    $("#" + iconId).addClass("glyphicon-refresh");
+                    $("#" + iconId).addClass("icon-spin");
+                    panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                }
+
+            } else if ($(event.target).hasClass("treeLabel")) {
+                var selectedId = $(event.target).attr('data-concept-id');
+                if (typeof selectedId != "undefined") {
+                    $.each(panel.subscribers, function(i, suscriberPanel) {
+                        suscriberPanel.conceptId = selectedId;
+                        suscriberPanel.updateCanvas();
+                    });
+                }
             }
+
         });
 
-        this.addOpenTreeClickAction(panel.divElement.id + "-treeicon-" + 138875005);
+        //
     }
 
     this.addOpenTreeClickAction = function(iconId) {
+        console.log(iconId);
         $("#" + iconId).click(function(event) {
+            console.log(event.target);
             event.preventDefault();
             if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
                 //console.log("close");
@@ -164,8 +189,8 @@ function taxonomyPanel(divElement, options) {
             var listIconIds = [];
             $.each(result, function(i, field) {
                 if (field.active == true) {
-                    nodeHtml = nodeHtml + "<li id='" + panel.divElement.id + "-treenode-" + field.conceptId + "'  data-concept-id='" + field.conceptId + "' class='jqui-draggable'>";
-                    nodeHtml = nodeHtml + "<button class='btn btn-link btn-xs load-children-button' style='padding:2px'><i class='glyphicon glyphicon-chevron-right' id='" + panel.divElement.id + "-treeicon-" + field.conceptId + "'></i></button>";
+                    nodeHtml = nodeHtml + "<li id='" + panel.divElement.id + "-treenode-" + field.conceptId + "'  data-concept-id='" + field.conceptId + "' class='jqui-draggable treeLabel'>";
+                    nodeHtml = nodeHtml + "<button class='btn btn-link btn-xs load-children-button treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' id='" + panel.divElement.id + "-treeicon-" + field.conceptId + "'></i></button>";
                     nodeHtml = nodeHtml + field.defaultTerm;
                     listIconIds.push(field.conceptId);
                 }
@@ -180,7 +205,7 @@ function taxonomyPanel(divElement, options) {
             $(".load-children-button").disableTextSelect();
             //console.log(JSON.stringify(listIconIds));
             $.each(listIconIds, function(i, nodeId) {
-                panel.addOpenTreeClickAction(panel.divElement.id + "-treeicon-" + nodeId);
+                //panel.addOpenTreeClickAction(panel.divElement.id + "-treeicon-" + nodeId);
                 $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
                     containment: 'window',
                     helper: 'clone',
