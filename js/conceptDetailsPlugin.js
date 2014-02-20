@@ -276,7 +276,7 @@ function conceptDetails(divElement, conceptId, options) {
             var d = new Date();
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
-            attrHtml = "<table class='table table-default' ><tr><td class='jqui-droppable' data-concept-id='" + firstMatch.conceptId + "'><h3 class='jqui-draggable' data-concept-id='" + firstMatch.conceptId + "'>" + firstMatch.defaultTerm + "</h4><br>SCTID: " + firstMatch.conceptId;
+            attrHtml = "<table class='table table-default' ><tr><td class='jqui-droppable' data-concept-id='" + firstMatch.conceptId + "'><h3 class='jqui-draggable' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'>" + firstMatch.defaultTerm + "</h4><br>SCTID: " + firstMatch.conceptId;
             if (firstMatch.definitionStatus == "Primitive") {
                 attrHtml = attrHtml + ", Primitive";
             } else {
@@ -348,7 +348,7 @@ function conceptDetails(divElement, conceptId, options) {
                         row = "<tr class='synonym-row'>";
                     }
 
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.conceptId + "'>" + field.term + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>" + field.term + "</div></td>";
                     if (panel.options.showIds == true) {
                         row = row + "<td>" + field.descriptionId + "</td>";
                     }
@@ -356,7 +356,7 @@ function conceptDetails(divElement, conceptId, options) {
                     var includedInLanguage = false;
                     $.each(field.langMemberships, function(i, lang) {
                         if (lang.refset.conceptId == panel.options.langRefset) {
-                            row = row + "<td><div class='jqui-draggable' data-concept-id='" + lang.acceptability.conceptId + "'>" + lang.acceptability.defaultTerm.substring(0, lang.acceptability.defaultTerm.indexOf("(")) + "</div></td>";
+                            row = row + "<td><div class='jqui-draggable' data-concept-id='" + lang.acceptability.conceptId + "' data-term='" + lang.acceptability.defaultTerm + "'>" + lang.acceptability.defaultTerm.substring(0, lang.acceptability.defaultTerm.indexOf("(")) + "</div></td>";
                             includedInLanguage = true;
                         }
                     });
@@ -406,8 +406,8 @@ function conceptDetails(divElement, conceptId, options) {
                     var row = "";
                     row = "<tr class='inferred-rel'>";
 
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "'>" + field.type.defaultTerm + "</div></td>";
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "'>" + field.target.defaultTerm + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>" + field.type.defaultTerm + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>" + field.target.defaultTerm + "</div></td>";
                     row = row + "<td>" + field.groupId + "</td>";
                     if (field.charType.conceptId == "900000000000010007") {
                         row = row + "<td>Stated</td>";
@@ -430,8 +430,8 @@ function conceptDetails(divElement, conceptId, options) {
 //                        row = "<tr class='inferred-rel'>";
 //                    }
 
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "'>" + field.type.defaultTerm + "</div></td>";
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "'>" + field.target.defaultTerm + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>" + field.type.defaultTerm + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>" + field.target.defaultTerm + "</div></td>";
                     row = row + "<td>" + field.groupId + "</td>";
 //                    if (field.charType.conceptId == "900000000000010007") {
                     row = row + "<td>Stated</td>";
@@ -494,7 +494,7 @@ function conceptDetails(divElement, conceptId, options) {
                 childrenDetailsHtml = childrenDetailsHtml + "</tr></thead><tbody></div>";
                 $.each(result, function(i, field) {
                     if (field.active == true) {
-                        childrenDetailsHtml = childrenDetailsHtml + "<tr><td class='jqui-draggable' data-concept-id='" + field.conceptId + "'>" + field.defaultTerm + "</td></tr>";
+                        childrenDetailsHtml = childrenDetailsHtml + "<tr><td class='jqui-draggable' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>" + field.defaultTerm + "</td></tr>";
                     }
                 });
 

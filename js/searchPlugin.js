@@ -222,7 +222,7 @@ function searchPanel(divElement, options) {
                         return 0;
                     });
                     $.each(matchedDescriptions, function(i, field) {
-                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "'>" + field.term + "</div></td></tr>";
+                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>" + field.term + "</div></td></tr>";
                     });
                     if (matchedDescriptions.length == 0) {
                         resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";

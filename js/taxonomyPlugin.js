@@ -32,7 +32,7 @@ function taxonomyPanel(divElement, options) {
 
     this.setupCanvas = function() {
         var taxonomyHtml = "<div style='margin: 5px;' class='panel panel-default' id='" + panel.divElement.id + "-mainPanel'>";
-        taxonomyHtml = taxonomyHtml + "<div class='panel-heading'>";
+        taxonomyHtml = taxonomyHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 20px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'><strong>Taxonomy</strong></div>";
@@ -75,8 +75,14 @@ function taxonomyPanel(divElement, options) {
             helper: 'clone',
             delay: 500
         });
-        $("#" + panel.divElement.id + "-linkerButton").droppable({
-            drop: panel.handlePanelDropEvent,
+        
+        $("#" + panel.divElement.id + "-panelBody").droppable({
+            drop: panel.handleDropEvent,
+            hoverClass: "bg-info"
+        });
+        
+        $("#" + panel.divElement.id + "-panelHeading").droppable({
+            drop: panel.handleDropEvent,
             hoverClass: "bg-info"
         });
 
@@ -101,13 +107,29 @@ function taxonomyPanel(divElement, options) {
         });
     }
 
-    this.addTree = function() {
+    this.setupParents = function(parents, focusConcept) {
         var treeHtml = "<div style='height:100%;overflow:auto;margin-bottom: 15px;'>";
         treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 5px;'>";
-        treeHtml = treeHtml + "<li id='" + panel.divElement.id + "-treenode-" + 138875005 + "' data-concept-id='138875005' class='jqui-draggable treeLabel'>";
-        treeHtml = treeHtml + "<button class='btn btn-link btn-xs load-children-button treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + 138875005 + "'></i></button>";
-        treeHtml = treeHtml + "SNOMED CT Root";
+        var lastParent;
+        $.each(parents, function(i, parent) {
+            lastParent = parent;
+            treeHtml = treeHtml + "<li id='" + panel.divElement.id + "-treenode-" + parent.conceptId + "' data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='jqui-draggable treeLabel'>";
+            //treeHtml = treeHtml + "<button class='btn btn-link btn-xs load-children-button treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
+            treeHtml = treeHtml + parent.defaultTerm;
+            treeHtml = treeHtml + "</li>";
+        });
+        if (parents.length > 0) {
+            treeHtml = treeHtml.slice(0, -5);
+        }
+        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 15px;'>";
+        treeHtml = treeHtml + "<li id='" + panel.divElement.id + "-treenode-" + focusConcept.conceptId + "' data-concept-id='" + focusConcept.conceptId + "' data-term='" + focusConcept.defaultTerm + "' class='jqui-draggable treeLabel'>";
+        treeHtml = treeHtml + "<button class='btn btn-link btn-xs load-children-button treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + focusConcept.conceptId + "'></i></button>";
+        treeHtml = treeHtml + focusConcept.defaultTerm;
         treeHtml = treeHtml + "</li>";
+        treeHtml = treeHtml + "</ul>";
+        if (parents.length > 0) {
+            treeHtml = treeHtml + "</li>";
+        }
         treeHtml = treeHtml + "</ul>";
         treeHtml = treeHtml + "</div>";
         $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
@@ -119,13 +141,26 @@ function taxonomyPanel(divElement, options) {
             helper: 'clone',
             delay: 500
         });
+
+        $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
+            if ($(event.target).hasClass("treeLabel")) {
+                var selectedId = $(event.target).attr('data-concept-id');
+                var selectedLabel = $(event.target).attr('data-term');
+                if (typeof selectedId != "undefined") {
+                    $.getJSON(panel.url + "browser-2/snomed/concepts/" + selectedId + "/parents?form=inferred", function(result) {
+                        // done
+                    }).done(function(result) {
+                        panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel});
+                    }).fail(function() {
+                    });
+                }
+            }
+        });
+
         $("#" + panel.divElement.id + "-panelBody").click(function(event) {
             if ($(event.target).hasClass("treeButton")) {
-                conceptId = $(event.target).closest("li").attr('data-concept-id');
-                iconId = panel.divElement.id + "-treeicon-" + conceptId;
-                console.log(iconId);
-
-                console.log(event.target);
+                var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                var iconId = panel.divElement.id + "-treeicon-" + conceptId;
                 event.preventDefault();
                 if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
                     //console.log("close");
@@ -152,31 +187,16 @@ function taxonomyPanel(divElement, options) {
 
         });
 
-        //
-    }
-
-    this.addOpenTreeClickAction = function(iconId) {
-        console.log(iconId);
-        $("#" + iconId).click(function(event) {
-            console.log(event.target);
-            event.preventDefault();
-            if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
-                //console.log("close");
-                $(event.target).closest("li").find("ul").remove();
-                $("#" + iconId).removeClass("glyphicon-chevron-down");
-                $("#" + iconId).addClass("glyphicon-chevron-right");
-            } else {
-                //console.log("open");
-                $("#" + iconId).removeClass("glyphicon-chevron-right");
-                $("#" + iconId).addClass("glyphicon-refresh");
-                $("#" + iconId).addClass("icon-spin");
-                panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
-            }
-        });
+        var iconId = panel.divElement.id + "-treeicon-" + focusConcept.conceptId;
+        $("#" + iconId).removeClass("glyphicon-chevron-right");
+        $("#" + iconId).addClass("glyphicon-refresh");
+        $("#" + iconId).addClass("icon-spin");
+        panel.getChildren(focusConcept.conceptId);
     }
 
     this.getChildren = function(conceptId) {
         $.getJSON(panel.url + "browser-2/snomed/concepts/" + conceptId + "/children?form=inferred", function(result) {
+        }).done(function(result) {
             var nodeHtml = "<ul style='list-style-type: none; padding-left: 15px;'>";
             result.sort(function(a, b) {
                 if (a.defaultTerm < b.defaultTerm)
@@ -189,7 +209,7 @@ function taxonomyPanel(divElement, options) {
             var listIconIds = [];
             $.each(result, function(i, field) {
                 if (field.active == true) {
-                    nodeHtml = nodeHtml + "<li id='" + panel.divElement.id + "-treenode-" + field.conceptId + "'  data-concept-id='" + field.conceptId + "' class='jqui-draggable treeLabel'>";
+                    nodeHtml = nodeHtml + "<li id='" + panel.divElement.id + "-treenode-" + field.conceptId + "'  data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "' class='jqui-draggable treeLabel'>";
                     nodeHtml = nodeHtml + "<button class='btn btn-link btn-xs load-children-button treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' id='" + panel.divElement.id + "-treeicon-" + field.conceptId + "'></i></button>";
                     nodeHtml = nodeHtml + field.defaultTerm;
                     listIconIds.push(field.conceptId);
@@ -205,27 +225,39 @@ function taxonomyPanel(divElement, options) {
             $(".load-children-button").disableTextSelect();
             //console.log(JSON.stringify(listIconIds));
             $.each(listIconIds, function(i, nodeId) {
-                //panel.addOpenTreeClickAction(panel.divElement.id + "-treeicon-" + nodeId);
                 $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
                     containment: 'window',
                     helper: 'clone',
                     delay: 500
                 });
-//                $('#' + panel.divElement.id + "-treenode-" + nodeId).click(function(event) {
-//                    $.each(panel.subscribers, function(i, suscriberPanel) {
-//                        console.log("click " + nodeId)
-//                        suscriberPanel.conceptId = nodeId;
-//                        suscriberPanel.updateCanvas();
-//                    });
-//                });
             });
+        }).fail(function() {
         });
     }
 
-    this.handlePanelDropEvent = function(event, ui) {
+    this.handleDropEvent = function(event, ui) {
         var draggable = ui.draggable;
-        if (!draggable.attr('data-panel')) {
+        //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
+        if (!draggable.attr('data-concept-id')) {
+            //console.log("ignore");
         } else {
+            var conceptId = draggable.attr('data-concept-id');
+            var term = draggable.attr('data-term');
+            if (typeof conceptId != "undefined") {
+                $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                $.getJSON(panel.url + "browser-2/snomed/concepts/" + conceptId + "/parents?form=inferred", function(result) {
+                    // done
+                }).done(function(result) {
+                    panel.setupParents(result, {conceptId: conceptId, defaultTerm: term});
+                }).fail(function() {
+                });
+            }
+        }
+
+        if (!draggable.attr('data-panel')) {
+            //console.log("ignore");
+        } else {
+            //console.log("OK : " + draggable.attr('data-panel'));
             $.each(componentsRegistry, function(i, field) {
                 if (field.divElement.id == draggable.attr('data-panel')) {
                     if (field.type == "concept-details") {
@@ -302,5 +334,5 @@ function taxonomyPanel(divElement, options) {
     }
 
     this.setupCanvas();
-    this.addTree();
+    this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
 }
