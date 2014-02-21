@@ -45,7 +45,7 @@ function taxonomyPanel(divElement, options) {
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "</div>";
-        taxonomyHtml = taxonomyHtml + "<div class='panel-body' id='" + panel.divElement.id + "-panelBody'>";
+        taxonomyHtml = taxonomyHtml + "<div class='panel-body' style='height:100%' id='" + panel.divElement.id + "-panelBody'>";
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "</div>";
         $(divElement).html(taxonomyHtml);
