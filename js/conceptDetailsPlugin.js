@@ -348,7 +348,7 @@ function conceptDetails(divElement, conceptId, options) {
                         row = "<tr class='synonym-row'>";
                     }
 
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>" + field.term + "</div></td>";
+                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td>";
                     if (panel.options.showIds == true) {
                         row = row + "<td>" + field.descriptionId + "</td>";
                     }
