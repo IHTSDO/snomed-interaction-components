@@ -31,7 +31,7 @@ function searchPanel(divElement, options) {
 
     this.history = [];
     this.setupCanvas = function() {
-        searchHtml = "<div style='margin: 5px; height:98%;overflow:auto;' class='panel panel-default'>";
+        searchHtml = "<div style='margin: 5px; height:95%;overflow:auto;' class='panel panel-default'>";
         searchHtml = searchHtml + "<div class='panel-heading'>";
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 20px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         searchHtml = searchHtml + "<div class='row'>";
@@ -46,14 +46,14 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div>";
-        searchHtml = searchHtml + "<div class='panel-body' id='" + panel.divElement.id + "-panelBody'>";
+        searchHtml = searchHtml + "<div class='panel-body' style='height:86%' id='" + panel.divElement.id + "-panelBody'>";
         searchHtml = searchHtml + '<form>';
         searchHtml = searchHtml + '<div class="form-group">';
         searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox">Type at least 5 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
         searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="Search..." autocomplete="off">';
         searchHtml = searchHtml + '</div>';
         searchHtml = searchHtml + '</form>';
-        searchHtml = searchHtml + "<div id='searchResultItems' class='panel panel-default' style='height:100px;overflow:auto;margin-bottom: 15px;'>";
+        searchHtml = searchHtml + "<div id='searchResultItems' class='panel panel-default' style='height:70%;overflow:auto;margin-bottom: 15px;'>";
         searchHtml = searchHtml + "<table id='" + panel.divElement.id + "-resultsTable' class='table table-bordered'>";
         searchHtml = searchHtml + "</table>";
         searchHtml = searchHtml + "</div>";

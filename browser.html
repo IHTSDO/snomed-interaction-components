@@ -72,6 +72,8 @@ and open the template in the editor.
                 var cdPanel2 = new conceptDetails(document.getElementById("cc-cd2_canvas"), "195967001", options);
                 cdPanel2.setupCanvas();
                 spa.subscribe(cdPanel1);
+                $('#comparing-concepts-wrapper').split({orientation: 'horizontal'});
+                $('#comparing-concept-details').split({orientation: 'vertical'});
 
             }
             function switchToComparingTaxonomies() {
@@ -92,7 +94,9 @@ and open the template in the editor.
                 var cdPanel1 = new conceptDetails(document.getElementById("ct-cd1_canvas"), "195967001", options);
                 cdPanel1.setupCanvas();
                 spa.subscribe(cdPanel1);
-
+                $('#comparing-taxonomies-wrapper').split({orientation: 'horizontal'});
+                $('#taxonomies-canvas-wrapper').split({orientation: 'vertical'});
+                $('#search-cd-wrapper').split({orientation: 'vertical'});
             }
         </script>
         <style>
@@ -164,38 +168,38 @@ and open the template in the editor.
             </div>
         </div>
         <!-- Comparing concepts -->
-        <div id="comparing-concepts-perspective">
-            <div class="panel-body">
-                <div class="row">
+        <div id="comparing-concepts-perspective"  class="container-fluid">
+            <div id="comparing-concepts-wrapper" style="width:100%; height: 100%; position: absolute;">
+                <div class="row" id="comparing-concept-details">
                     <div class="col-md-6">
-                        <div class="col-md-12" id="cc-cd1_canvas"></div>
+                        <div class="col-md-12" id="cc-cd1_canvas" style="height: 90%"></div>
                     </div>
                     <div class="col-md-6">
-                        <div class="col-md-12" id="cc-cd2_canvas"></div>
+                        <div class="col-md-12" id="cc-cd2_canvas" style="height: 90%"></div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12" id="cc-search_canvas"></div>
+                    <div class="col-md-12" id="cc-search_canvas" style="height: 90%"></div>
                 </div>
             </div>
         </div>
         <!-- Comparing concepts -->
-        <div id="comparing-taxonomies-perspective">
-            <div class="panel-body">
-                <div class="row">
+        <div id="comparing-taxonomies-perspective" class="container-fluid"> 
+            <div id="comparing-taxonomies-wrapper" style="width:100%; height: 100%; position: absolute;">
+                <div class="row" id="taxonomies-canvas-wrapper">
                     <div class="col-md-6">
-                        <div class="col-md-12" id="ct-tx1_canvas"></div>
+                        <div class="col-md-12" id="ct-tx1_canvas" style="height: 90%"></div>
                     </div>
                     <div class="col-md-6">
-                        <div class="col-md-12" id="ct-tx2_canvas"></div>
+                        <div class="col-md-12" id="ct-tx2_canvas" style="height: 90%"></div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="search-cd-wrapper">
                     <div class="col-md-6">
-                        <div class="col-md-12" id="ct-search_canvas"></div>
+                        <div class="col-md-12" id="ct-search_canvas" style="height: 90%"></div>
                     </div>
                     <div class="col-md-6">
-                        <div class="col-md-12" id="ct-cd1_canvas"></div>
+                        <div class="col-md-12" id="ct-cd1_canvas" style="height: 90%"></div>
                     </div>
                 </div>
             </div>

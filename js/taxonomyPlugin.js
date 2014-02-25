@@ -31,7 +31,7 @@ function taxonomyPanel(divElement, options) {
     this.history = [];
 
     this.setupCanvas = function() {
-        var taxonomyHtml = "<div style='height:100%;margin: 5px;' class='panel panel-default' id='" + panel.divElement.id + "-mainPanel'>";
+        var taxonomyHtml = "<div style='height:100%;margin: 5px; overflow:auto;' class='panel panel-default' id='" + panel.divElement.id + "-mainPanel'>";
         taxonomyHtml = taxonomyHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 20px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
@@ -109,7 +109,7 @@ function taxonomyPanel(divElement, options) {
     }
 
     this.setupParents = function(parents, focusConcept) {
-        var treeHtml = "<div style='height:100%;overflow:auto;margin-bottom: 15px;'>";
+        var treeHtml = "<div style='height:100%;margin-bottom: 15px;'>";
         treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 5px;'>";
         var lastParent;
         $.each(parents, function(i, parent) {
