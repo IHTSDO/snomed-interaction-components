@@ -192,7 +192,7 @@ function conceptDetails(divElement, conceptId, options) {
         });
 
         $("#" + panel.divElement.id + "-linkerButton").draggable({
-            containment: 'window',
+            appendTo: 'body',
             helper: 'clone',
             delay: 500
         });
@@ -301,7 +301,7 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             $('#' + panel.attributesPId).find(".jqui-draggable").draggable({
-                containment: 'window',
+                appendTo: 'body',
                 helper: 'clone',
                 delay: 500
             });
@@ -387,7 +387,7 @@ function conceptDetails(divElement, conceptId, options) {
                 });
             });
             $('#' + panel.descsPId).find(".jqui-draggable").draggable({
-                containment: 'window',
+                appendTo: 'body',
                 helper: 'clone',
                 delay: 500
             });
@@ -410,9 +410,9 @@ function conceptDetails(divElement, conceptId, options) {
                     row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>" + field.target.defaultTerm + "</div></td>";
                     row = row + "<td>" + field.groupId + "</td>";
                     if (field.charType.conceptId == "900000000000010007") {
-                        row = row + "<td>Stated</td>";
+                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Stated</div></td>";
                     } else if (field.charType.conceptId == "900000000000011006") {
-                        row = row + "<td>Inferred</td>";
+                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Inferred</div></td>";
                     } else {
                         row = row + "<td>Other</td>";
                     }
@@ -433,13 +433,13 @@ function conceptDetails(divElement, conceptId, options) {
                     row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>" + field.type.defaultTerm + "</div></td>";
                     row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>" + field.target.defaultTerm + "</div></td>";
                     row = row + "<td>" + field.groupId + "</td>";
-//                    if (field.charType.conceptId == "900000000000010007") {
-                    row = row + "<td>Stated</td>";
-//                    } else if (field.charType.conceptId == "900000000000011006") {
-//                        row = row + "<td>Inferred</td>";
-//                    } else {
-//                        row = row + "<td>Other</td>";
-//                    }
+                    if (field.charType.conceptId == "900000000000010007") {
+                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Stated</div></td>";
+                    } else if (field.charType.conceptId == "900000000000011006") {
+                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Inferred</div></td>";
+                    } else {
+                        row = row + "<td>Other</td>";
+                    }
                     row = row + "</tr>";
                     relsDetailsHtml = relsDetailsHtml + row;
                 }
@@ -458,7 +458,7 @@ function conceptDetails(divElement, conceptId, options) {
                 // show all
             }
             $('#' + panel.relsPId).find(".jqui-draggable").draggable({
-                containment: 'window',
+                appendTo: 'body',
                 helper: 'clone',
                 delay: 500
             });
@@ -502,7 +502,7 @@ function conceptDetails(divElement, conceptId, options) {
                 //console.log(JSON.stringify(childrenDetailsHtml));
                 $('#' + panel.childrenPId).html(childrenDetailsHtml);
                 $('#' + panel.childrenPId).find(".jqui-draggable").draggable({
-                    containment: 'window',
+                    appendTo: 'body',
                     helper: 'clone',
                     delay: 500
                 });

@@ -109,7 +109,7 @@ function searchPanel(divElement, options) {
             $("#" + panel.divElement.id + "-collapseButton").hide();
         });
         $("#" + panel.divElement.id + "-linkerButton").draggable({
-            containment: 'window',
+            appendTo: 'body',
             helper: 'clone',
             delay: 500
         });
@@ -251,7 +251,7 @@ function searchPanel(divElement, options) {
                     }
                     $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                     $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                        containment: 'window',
+                        appendTo: 'body',
                         helper: 'clone',
                         delay: 500
                     });
