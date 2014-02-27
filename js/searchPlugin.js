@@ -231,7 +231,7 @@ function searchPanel(divElement, options) {
                     xhr.abort();
                     console.log("aborting call...");
                 }
-                xhr = $.getJSON(panel.url + "browser-2/snomed/descriptions?query=" + t + "&limit=50", function(result) {
+                xhr = $.getJSON(panel.url + "browser-2/snomed/descriptions?query=" + t + "&limit=50&searchMode=startsWith", function(result) {
 
                 }).done(function(result) {
                     xhr = null;
