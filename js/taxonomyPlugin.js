@@ -219,7 +219,7 @@ function taxonomyPanel(divElement, options) {
     }
 
     this.getChildren = function(conceptId) {
-        if (panel.options.selectedView == "undefined") {
+        if (typeof panel.options.selectedView == "undefined") {
             panel.options.selectedView = "inferred";
         }
 

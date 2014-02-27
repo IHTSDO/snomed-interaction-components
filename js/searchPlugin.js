@@ -49,7 +49,8 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "<div class='panel-body' style='height:86%' id='" + panel.divElement.id + "-panelBody'>";
         searchHtml = searchHtml + '<form>';
         searchHtml = searchHtml + '<div class="form-group">';
-        searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox">Type at least 5 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
+        searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox" id="' + panel.divElement.id + '-startWithLabel">Type at least 5 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
+        searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox" id="' + panel.divElement.id + '-stemmingLabel">Type full words</i></label>';
         searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="Search..." autocomplete="off">';
         searchHtml = searchHtml + '</div>';
         searchHtml = searchHtml + '</form>';
@@ -59,6 +60,24 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div>";
+        // modal config panel
+        searchHtml = searchHtml + "<div class='modal fade' id='" + panel.divElement.id + "-configModal'>";
+        searchHtml = searchHtml + "<div class='modal-dialog'>";
+        searchHtml = searchHtml + "<div class='modal-content'>";
+        searchHtml = searchHtml + "<div class='modal-header'>";
+        searchHtml = searchHtml + "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>";
+        searchHtml = searchHtml + "<h4 class='modal-title'>Options (" + panel.divElement.id + ")</h4>";
+        searchHtml = searchHtml + "</div>";
+        searchHtml = searchHtml + "<div class='modal-body' id='" + panel.divElement.id + "-modal-body'>";
+        searchHtml = searchHtml + "<p></p>";
+        searchHtml = searchHtml + "</div>";
+        searchHtml = searchHtml + "<div class='modal-footer'>";
+        searchHtml = searchHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>";
+        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary'>Apply changes</button>";
+        searchHtml = searchHtml + "</div>";
+        searchHtml = searchHtml + "</div><!-- /.modal-content -->";
+        searchHtml = searchHtml + "</div><!-- /.modal-dialog -->";
+        searchHtml = searchHtml + "</div><!-- /.modal -->";
         $(divElement).html(searchHtml);
         $('#' + panel.divElement.id + '-searchBox').keyup(function() {
             clearTimeout(thread);
@@ -97,6 +116,9 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-linkerButton").droppable({
             drop: panel.handlePanelDropEvent,
             hoverClass: "bg-info"
+        });
+        $("#" + panel.divElement.id + "-apply-button").click(function() {
+            panel.readOptionsPanel();
         });
         $("#" + panel.divElement.id + "-historyButton").click(function(event) {
             $("#" + panel.divElement.id + "-historyButton").popover({
@@ -311,8 +333,52 @@ function searchPanel(divElement, options) {
         globalMarkerColor = returnColor;
         return returnColor;
     }
+    
+    this.updateSearchLabel = function() {
+        if (typeof panel.options.searchMode == "undefined") {
+            panel.options.searchMode = "startsWith";
+        }
+        if (panel.options.searchMode == "startsWith") {
+            $("#" + panel.divElement.id + '-startWithLabel').show();
+            $("#" + panel.divElement.id + '-stemmingLabel').hide();
+        } else if (panel.options.searchMode == "stemming") {
+            $("#" + panel.divElement.id + '-startWithLabel').hide();
+            $("#" + panel.divElement.id + '-stemmingLabel').show();
+        } 
+    }
+
+    this.setupOptionsPanel = function() {
+        if (typeof panel.options.searchMode == "undefined") {
+            panel.options.searchMode = "startsWith";
+        }
+        optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
+        optionsHtml = optionsHtml + '<div class="form-group">';
+        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-searchModeOption">Search Mode</label>';
+        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-searchModeOption">';
+        if (panel.options.searchMode == "startsWith") {
+            optionsHtml = optionsHtml + '<option value="startsWith" selected>Starts with</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="startsWith">Starts with</option>';
+        }
+        if (panel.options.searchMode == "stemming") {
+            optionsHtml = optionsHtml + '<option value="stemming" selected>Stemming</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="stemming">Stemming</option>';
+        }
+        optionsHtml = optionsHtml + '</select>';
+        optionsHtml = optionsHtml + '</div>';
+        optionsHtml = optionsHtml + '</form>';
+        $("#" + panel.divElement.id + "-modal-body").html(optionsHtml);
+    }
+
+    this.readOptionsPanel = function() {
+        panel.options.searchMode = $("#" + panel.divElement.id + "-searchModeOption").val();
+        this.updateSearchLabel();
+    }
 
     this.setupCanvas();
+    this.setupOptionsPanel();
+    this.updateSearchLabel();
 }
 
 function searchInPanel(divElementId, searchTerm) {
