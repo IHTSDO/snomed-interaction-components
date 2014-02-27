@@ -205,6 +205,9 @@ function searchPanel(divElement, options) {
     }
 
     this.search = function(t) {
+        if (typeof panel.options.searchMode == "undefined") {
+            panel.options.searchMode = "startsWith";
+        }
         // panel.divElement.id + '-typeIcon
         if (t != "" && t != lastT) {
             if (t.length < 5) {
@@ -231,38 +234,47 @@ function searchPanel(divElement, options) {
                     xhr.abort();
                     console.log("aborting call...");
                 }
-                xhr = $.getJSON(panel.url + "browser-2/snomed/descriptions?query=" + t + "&limit=50&searchMode=startsWith", function(result) {
+                //console.log("panel.options.searchMode " + panel.options.searchMode);
+                xhr = $.getJSON(panel.url + "browser-2/snomed/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode, function(result) {
 
                 }).done(function(result) {
                     xhr = null;
                     var matchedDescriptions = result;
-                    matchedDescriptions.sort(function(a, b) {
-                        if (a.term.length < b.term.length)
-                            return -1;
-                        if (a.term.length > b.term.length)
-                            return 1;
-                        return 0;
-                    });
-                    $.each(matchedDescriptions, function(i, field) {
-                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td></tr>";
-                    });
-                    if (matchedDescriptions.length == 0) {
-                        resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";
-                    }
-                    $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                    $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                        appendTo: 'body',
-                        helper: 'clone',
-                        delay: 500
-                    });
-                    $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function(event) {
-                        $.each(panel.subscribers, function(i, field) {
-//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                            field.conceptId = $(event.target).attr('data-concept-id');
-                            field.updateCanvas();
+                    console.log(JSON.stringify(result));
+                    if (matchedDescriptions.length <= 0) {
+                        resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
+                        $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                    } else {
+                        matchedDescriptions.sort(function(a, b) {
+                            if (a.term.length < b.term.length)
+                                return -1;
+                            if (a.term.length > b.term.length)
+                                return 1;
+                            return 0;
                         });
-                    });
+                        $.each(matchedDescriptions, function(i, field) {
+                            resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td></tr>";
+                        });
+                        if (matchedDescriptions.length == 0) {
+                            resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";
+                        }
+                        $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                        $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+                            appendTo: 'body',
+                            helper: 'clone',
+                            delay: 500
+                        });
+                        $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function(event) {
+                            $.each(panel.subscribers, function(i, field) {
+//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                field.conceptId = $(event.target).attr('data-concept-id');
+                                field.updateCanvas();
+                            });
+                        });
+                    }
                 }).fail(function() {
+                    resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
+                    $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
 //$('#resultsTable').html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
                 });
             }
@@ -333,7 +345,7 @@ function searchPanel(divElement, options) {
         globalMarkerColor = returnColor;
         return returnColor;
     }
-    
+
     this.updateSearchLabel = function() {
         if (typeof panel.options.searchMode == "undefined") {
             panel.options.searchMode = "startsWith";
@@ -344,7 +356,7 @@ function searchPanel(divElement, options) {
         } else if (panel.options.searchMode == "stemming") {
             $("#" + panel.divElement.id + '-startWithLabel').hide();
             $("#" + panel.divElement.id + '-stemmingLabel').show();
-        } 
+        }
     }
 
     this.setupOptionsPanel = function() {
