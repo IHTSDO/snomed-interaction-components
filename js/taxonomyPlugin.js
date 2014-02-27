@@ -35,7 +35,7 @@ function taxonomyPanel(divElement, options) {
         taxonomyHtml = taxonomyHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;right: 20px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
-        taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'><strong>Taxonomy</strong></div>";
+        taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'><strong>Taxonomy</strong> <small><span id='" + panel.divElement.id + "-txViewLabel'></span></small></div>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-6 text-right'>";
         taxonomyHtml = taxonomyHtml + "<span id='" + panel.divElement.id + "-linkerButton' class='jqui-draggable' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></span>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
@@ -48,6 +48,24 @@ function taxonomyPanel(divElement, options) {
         taxonomyHtml = taxonomyHtml + "<div class='panel-body' style='height:100%' id='" + panel.divElement.id + "-panelBody'>";
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "</div>";
+        // modal config panel
+        taxonomyHtml = taxonomyHtml + "<div class='modal fade' id='" + panel.divElement.id + "-configModal'>";
+        taxonomyHtml = taxonomyHtml + "<div class='modal-dialog'>";
+        taxonomyHtml = taxonomyHtml + "<div class='modal-content'>";
+        taxonomyHtml = taxonomyHtml + "<div class='modal-header'>";
+        taxonomyHtml = taxonomyHtml + "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>";
+        taxonomyHtml = taxonomyHtml + "<h4 class='modal-title'>Options (" + panel.divElement.id + ")</h4>";
+        taxonomyHtml = taxonomyHtml + "</div>";
+        taxonomyHtml = taxonomyHtml + "<div class='modal-body' id='" + panel.divElement.id + "-modal-body'>";
+        taxonomyHtml = taxonomyHtml + "<p></p>";
+        taxonomyHtml = taxonomyHtml + "</div>";
+        taxonomyHtml = taxonomyHtml + "<div class='modal-footer'>";
+        taxonomyHtml = taxonomyHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>";
+        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary'>Apply changes</button>";
+        taxonomyHtml = taxonomyHtml + "</div>";
+        taxonomyHtml = taxonomyHtml + "</div><!-- /.modal-content -->";
+        taxonomyHtml = taxonomyHtml + "</div><!-- /.modal-dialog -->";
+        taxonomyHtml = taxonomyHtml + "</div><!-- /.modal -->";
         $(divElement).html(taxonomyHtml);
         $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
@@ -87,7 +105,12 @@ function taxonomyPanel(divElement, options) {
             hoverClass: "bg-info"
         });
 
-        //$("#"  + panel.divElement.id +  "-mainPanel").resizable();
+        $("#" + panel.divElement.id + "-apply-button").click(function() {
+            //console.log("apply!");
+            panel.readOptionsPanel();
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
+        });
+
 
         $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
             $("#" + panel.divElement.id + "-linkerButton").popover({
@@ -196,7 +219,13 @@ function taxonomyPanel(divElement, options) {
     }
 
     this.getChildren = function(conceptId) {
-        $.getJSON(panel.url + "browser-2/snomed/concepts/" + conceptId + "/children?form=inferred", function(result) {
+        if (panel.options.selectedView == "undefined") {
+            panel.options.selectedView = "inferred";
+        }
+
+        $("#" + panel.divElement.id + "-txViewLabel").html("(" + panel.options.selectedView + ")");
+
+        $.getJSON(panel.url + "browser-2/snomed/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
             var nodeHtml = "<ul style='list-style-type: none; padding-left: 15px;'>";
             result.sort(function(a, b) {
@@ -246,6 +275,9 @@ function taxonomyPanel(divElement, options) {
         } else {
             var conceptId = draggable.attr('data-concept-id');
             var term = draggable.attr('data-term');
+            if (panel.options.selectedView == "undefined") {
+                panel.options.selectedView = "inferred";
+            }
             if (typeof conceptId != "undefined") {
                 $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
                 $.getJSON(panel.url + "browser-2/snomed/concepts/" + conceptId + "/parents?form=inferred", function(result) {
@@ -339,6 +371,32 @@ function taxonomyPanel(divElement, options) {
         return returnColor;
     }
 
+    this.setupOptionsPanel = function() {
+        optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
+        optionsHtml = optionsHtml + '<div class="form-group">';
+        optionsHtml = optionsHtml + '<label for="selectedRelsView">Taxonomy View</label>';
+        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
+        if (panel.options.selectedView == "stated") {
+            optionsHtml = optionsHtml + '<option value="stated" selected>Stated</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="stated">Stated</option>';
+        }
+        if (panel.options.selectedView == "inferred") {
+            optionsHtml = optionsHtml + '<option value="inferred" selected>Inferred</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="inferred">Inferred</option>';
+        }
+        optionsHtml = optionsHtml + '</select>';
+        optionsHtml = optionsHtml + '</div>';
+        optionsHtml = optionsHtml + '</form>';
+        $("#" + panel.divElement.id + "-modal-body").html(optionsHtml);
+    }
+
+    this.readOptionsPanel = function() {
+        panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
+    }
+
     this.setupCanvas();
     this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
+    this.setupOptionsPanel();
 }
