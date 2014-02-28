@@ -49,8 +49,10 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "<div class='panel-body' style='height:86%' id='" + panel.divElement.id + "-panelBody'>";
         searchHtml = searchHtml + '<form>';
         searchHtml = searchHtml + '<div class="form-group">';
-        searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox" id="' + panel.divElement.id + '-startWithLabel">Type at least 5 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
-        searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox" id="' + panel.divElement.id + '-stemmingLabel">Type full words</i></label>';
+        searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox">';
+        searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-startWithLabel"><em>StartsWith Mode</em></span>';
+        searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-stemmingLabel"><em>Stemming Mode</em></span>';
+        searchHtml = searchHtml + ': Type at least 4 characters, input complete words <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
         searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="Search..." autocomplete="off">';
         searchHtml = searchHtml + '</div>';
         searchHtml = searchHtml + '</form>';
@@ -119,6 +121,11 @@ function searchPanel(divElement, options) {
         });
         $("#" + panel.divElement.id + "-apply-button").click(function() {
             panel.readOptionsPanel();
+            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+            console.log("searchTerm: " + searchTerm);
+            if (searchTerm.length > 0) {
+                panel.search(searchTerm + " ");
+            }
         });
         $("#" + panel.divElement.id + "-historyButton").click(function(event) {
             $("#" + panel.divElement.id + "-historyButton").popover({
@@ -210,7 +217,7 @@ function searchPanel(divElement, options) {
         }
         // panel.divElement.id + '-typeIcon
         if (t != "" && t != lastT) {
-            if (t.length < 5) {
+            if (t.length < 4) {
                 $('#' + panel.divElement.id + '-typeIcon').removeClass('glyphicon-ok');
                 $('#' + panel.divElement.id + '-typeIcon').removeClass('text-success');
                 $('#' + panel.divElement.id + '-typeIcon').addClass('glyphicon-remove');
