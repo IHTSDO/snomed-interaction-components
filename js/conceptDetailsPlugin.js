@@ -196,8 +196,8 @@ function conceptDetails(divElement, conceptId, options) {
             helper: 'clone',
             delay: 500
         });
-        
-        $( ".resizable" ).resizable();
+
+        $(".resizable").resizable();
 
         $('#' + panel.divElement.id + '-panelHeading').droppable({
             drop: panel.handleDropEvent,
@@ -224,7 +224,7 @@ function conceptDetails(divElement, conceptId, options) {
         panel.updateCanvas();
         panel.setupOptionsPanel();
     }
-    
+
     this.handleDropEvent = function(event, ui) {
         var draggable = ui.draggable;
         //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
@@ -234,7 +234,7 @@ function conceptDetails(divElement, conceptId, options) {
             panel.conceptId = draggable.attr('data-concept-id');
             panel.updateCanvas();
         }
-        
+
         if (!draggable.attr('data-panel')) {
             //console.log("ignore");
         } else {
@@ -400,50 +400,56 @@ function conceptDetails(divElement, conceptId, options) {
             relsDetailsHtml = relsDetailsHtml + "<th>Group</th>";
             relsDetailsHtml = relsDetailsHtml + "<th>CharType</th>";
             relsDetailsHtml = relsDetailsHtml + "</tr></thead><tbody>";
-            $.each(firstMatch.relationships, function(i, field) {
-                //console.log(JSON.stringify(field));
-                if (field.active == true) {
-                    var row = "";
-                    row = "<tr class='inferred-rel'>";
 
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>" + field.type.defaultTerm + "</div></td>";
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>" + field.target.defaultTerm + "</div></td>";
-                    row = row + "<td>" + field.groupId + "</td>";
-                    if (field.charType.conceptId == "900000000000010007") {
-                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Stated</div></td>";
-                    } else if (field.charType.conceptId == "900000000000011006") {
-                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Inferred</div></td>";
-                    } else {
-                        row = row + "<td>Other</td>";
+            if (typeof firstMatch.relationships != "undefined") {
+                $.each(firstMatch.relationships, function(i, field) {
+                    //console.log(JSON.stringify(field));
+                    if (field.active == true) {
+                        var row = "";
+                        row = "<tr class='inferred-rel'>";
+
+                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>" + field.type.defaultTerm + "</div></td>";
+                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>" + field.target.defaultTerm + "</div></td>";
+                        row = row + "<td>" + field.groupId + "</td>";
+                        if (field.charType.conceptId == "900000000000010007") {
+                            row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Stated</div></td>";
+                        } else if (field.charType.conceptId == "900000000000011006") {
+                            row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Inferred</div></td>";
+                        } else {
+                            row = row + "<td>Other</td>";
+                        }
+                        row = row + "</tr>";
+                        relsDetailsHtml = relsDetailsHtml + row;
                     }
-                    row = row + "</tr>";
-                    relsDetailsHtml = relsDetailsHtml + row;
-                }
-            });
-            $.each(firstMatch.statedRelationships, function(i, field) {
-                //console.log(JSON.stringify(field));
-                if (field.active == true) {
-                    var row = "";
+                });
+            }
+
+            if (typeof firstMatch.statedRelationships != "undefined") {
+                $.each(firstMatch.statedRelationships, function(i, field) {
+                    //console.log(JSON.stringify(field));
+                    if (field.active == true) {
+                        var row = "";
 //                    if (field.charType.conceptId == "900000000000010007") {
-                    row = "<tr class='stated-rel'>";
+                        row = "<tr class='stated-rel'>";
 //                    } else {
 //                        row = "<tr class='inferred-rel'>";
 //                    }
 
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>" + field.type.defaultTerm + "</div></td>";
-                    row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>" + field.target.defaultTerm + "</div></td>";
-                    row = row + "<td>" + field.groupId + "</td>";
-                    if (field.charType.conceptId == "900000000000010007") {
-                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Stated</div></td>";
-                    } else if (field.charType.conceptId == "900000000000011006") {
-                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Inferred</div></td>";
-                    } else {
-                        row = row + "<td>Other</td>";
+                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>" + field.type.defaultTerm + "</div></td>";
+                        row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>" + field.target.defaultTerm + "</div></td>";
+                        row = row + "<td>" + field.groupId + "</td>";
+                        if (field.charType.conceptId == "900000000000010007") {
+                            row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Stated</div></td>";
+                        } else if (field.charType.conceptId == "900000000000011006") {
+                            row = row + "<td><div class='jqui-draggable' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Inferred</div></td>";
+                        } else {
+                            row = row + "<td>Other</td>";
+                        }
+                        row = row + "</tr>";
+                        relsDetailsHtml = relsDetailsHtml + row;
                     }
-                    row = row + "</tr>";
-                    relsDetailsHtml = relsDetailsHtml + row;
-                }
-            });
+                });
+            }
             relsDetailsHtml = relsDetailsHtml + "</tbody></table>";
             $('#' + panel.relsPId).html(relsDetailsHtml);
             if (panel.options.selectedView == "stated") {

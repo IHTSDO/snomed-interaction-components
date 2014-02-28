@@ -240,18 +240,21 @@ function searchPanel(divElement, options) {
                 }).done(function(result) {
                     xhr = null;
                     var matchedDescriptions = result;
-                    console.log(JSON.stringify(result));
+                    //console.log(JSON.stringify(result));
+
                     if (matchedDescriptions.length <= 0) {
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                         $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                     } else {
-                        matchedDescriptions.sort(function(a, b) {
-                            if (a.term.length < b.term.length)
-                                return -1;
-                            if (a.term.length > b.term.length)
-                                return 1;
-                            return 0;
-                        });
+                        if (panel.options.searchMode == "startsWith") {
+                            matchedDescriptions.sort(function(a, b) {
+                                if (a.term.length < b.term.length)
+                                    return -1;
+                                if (a.term.length > b.term.length)
+                                    return 1;
+                                return 0;
+                            });
+                        }
                         $.each(matchedDescriptions, function(i, field) {
                             resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td></tr>";
                         });
