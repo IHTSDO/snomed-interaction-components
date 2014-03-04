@@ -135,7 +135,7 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-historyButton").click(function(event) {
             $("#" + panel.divElement.id + "-historyButton").popover({
                 trigger: 'manual',
-                placement: 'bottom',
+                placement: 'bottomRight',
                 html: true,
                 content: function() {
                     historyHtml = '<div style="width:300px;height:100px;overflow:auto;">';
@@ -184,7 +184,7 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
             $("#" + panel.divElement.id + "-linkerButton").popover({
                 trigger: 'manual',
-                placement: 'bottom',
+                placement: 'bottomRight',
                 html: true,
                 content: function() {
                     linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';

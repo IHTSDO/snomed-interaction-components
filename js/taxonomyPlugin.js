@@ -120,7 +120,7 @@ function taxonomyPanel(divElement, options) {
         $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
             $("#" + panel.divElement.id + "-linkerButton").popover({
                 trigger: 'manual',
-                placement: 'bottom',
+                placement: 'bottomRight',
                 html: true,
                 content: function() {
                     linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';

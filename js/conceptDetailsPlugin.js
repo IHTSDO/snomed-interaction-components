@@ -144,7 +144,7 @@ function conceptDetails(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-historyButton").click(function(event) {
             $("#" + panel.divElement.id + "-historyButton").popover({
                 trigger: 'manual',
-                placement: 'bottom',
+                placement: 'bottomRight',
                 html: true,
                 content: function() {
                     historyHtml = '<div style="height:100px;overflow:auto;">';
@@ -211,7 +211,7 @@ function conceptDetails(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
             $("#" + panel.divElement.id + "-linkerButton").popover({
                 trigger: 'manual',
-                placement: 'bottom',
+                placement: 'bottomRight',
                 html: true,
                 content: function() {
                     if (!panel.subscription) {
