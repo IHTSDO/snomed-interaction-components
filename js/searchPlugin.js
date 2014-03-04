@@ -100,6 +100,11 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-closeButton").click(function(event) {
             $(divElement).remove();
         });
+        
+        if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
+            $("#" + panel.divElement.id + "-closeButton").hide();
+        }
+        
         $("#" + panel.divElement.id + "-expandButton").click(function(event) {
             $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
             $("#" + panel.divElement.id + "-expandButton").hide();
