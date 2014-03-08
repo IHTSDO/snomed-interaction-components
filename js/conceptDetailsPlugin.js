@@ -19,13 +19,9 @@ function conceptDetails(divElement, conceptId, options) {
     this.conceptId = conceptId;
     this.divElement = divElement;
     this.options = options;
-    this.url = "http://107.170.33.116:3000/";
     this.attributesPId = "";
     this.descsPId = "";
     this.relsPId = "";
-    if (typeof options.url != "undefined") {
-        this.url = options.url;
-    }
     this.history = [];
     this.subscription = null;
     var xhr = null;
@@ -270,7 +266,7 @@ function conceptDetails(divElement, conceptId, options) {
             xhr.abort();
             console.log("aborting call...");
         }
-        xhr = $.getJSON(panel.url + "browser-2/snomed/concepts/" + panel.conceptId, function(result) {
+        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function(result) {
 
         }).done(function(result) {
             var firstMatch = result;
@@ -491,7 +487,7 @@ function conceptDetails(divElement, conceptId, options) {
                 xhrChildren.abort();
                 console.log("aborting children call...");
             }
-            xhrChildren = $.getJSON(panel.url + "browser-2/snomed/concepts/" + panel.conceptId + "/children?form=inferred", function(result) {
+            xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=inferred", function(result) {
                 //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
             }).done(function(result) {
                 // load relationships panel

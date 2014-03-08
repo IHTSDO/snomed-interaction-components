@@ -18,7 +18,6 @@ function searchPanel(divElement, options) {
     this.type = "search";
     this.divElement = divElement;
     this.options = options;
-    this.url = "http://107.170.33.116:3000/";
     var componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
         if (field.divElement.id == panel.divElement.id) {
@@ -50,9 +49,10 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + '<form>';
         searchHtml = searchHtml + '<div class="form-group">';
         searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox">';
-        searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-startWithLabel"><em>StartsWith Mode</em></span>';
-        searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-stemmingLabel"><em>Stemming Mode</em></span>';
-        searchHtml = searchHtml + ': Type at least 4 characters, input complete words <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
+        searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-startWithLabel"><em>Starts With Mode</em></span>';
+        searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-phraseMatchLabel"><em>Phrase Match Mode</em></span>';
+        searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-wordsAnyOrderLabel"><em>Words any order Mode</em></span>';
+        searchHtml = searchHtml + ': Type at least 4 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
         searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="Search..." autocomplete="off">';
         searchHtml = searchHtml + '</div>';
         searchHtml = searchHtml + '</form>';
@@ -100,11 +100,11 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-closeButton").click(function(event) {
             $(divElement).remove();
         });
-        
+
         if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
-        
+
         $("#" + panel.divElement.id + "-expandButton").click(function(event) {
             $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
             $("#" + panel.divElement.id + "-expandButton").hide();
@@ -247,7 +247,10 @@ function searchPanel(divElement, options) {
                     console.log("aborting call...");
                 }
                 //console.log("panel.options.searchMode " + panel.options.searchMode);
-                xhr = $.getJSON(panel.url + "browser-2/snomed/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode, function(result) {
+                if (panel.options.searchMode == "wordsAnyOrder") {
+                    t = t.toLowerCase();
+                }
+                xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=english", function(result) {
 
                 }).done(function(result) {
                     xhr = null;
@@ -367,10 +370,16 @@ function searchPanel(divElement, options) {
         }
         if (panel.options.searchMode == "startsWith") {
             $("#" + panel.divElement.id + '-startWithLabel').show();
-            $("#" + panel.divElement.id + '-stemmingLabel').hide();
-        } else if (panel.options.searchMode == "stemming") {
+            $("#" + panel.divElement.id + '-phraseMatchLabel').hide();
+            $("#" + panel.divElement.id + '-wordsAnyOrderLabel').hide();
+        } else if (panel.options.searchMode == "phraseMatch") {
             $("#" + panel.divElement.id + '-startWithLabel').hide();
-            $("#" + panel.divElement.id + '-stemmingLabel').show();
+            $("#" + panel.divElement.id + '-phraseMatchLabel').show();
+            $("#" + panel.divElement.id + '-wordsAnyOrderLabel').hide();
+        } else if (panel.options.searchMode == "wordsAnyOrder") {
+            $("#" + panel.divElement.id + '-startWithLabel').hide();
+            $("#" + panel.divElement.id + '-phraseMatchLabel').hide();
+            $("#" + panel.divElement.id + '-wordsAnyOrderLabel').show();
         }
     }
 
@@ -387,10 +396,15 @@ function searchPanel(divElement, options) {
         } else {
             optionsHtml = optionsHtml + '<option value="startsWith">Starts with</option>';
         }
-        if (panel.options.searchMode == "stemming") {
-            optionsHtml = optionsHtml + '<option value="stemming" selected>Stemming</option>';
+        if (panel.options.searchMode == "phraseMatch") {
+            optionsHtml = optionsHtml + '<option value="phraseMatch" selected>Phrase Match</option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="stemming">Stemming</option>';
+            optionsHtml = optionsHtml + '<option value="phraseMatch">Phrase Match</option>';
+        }
+        if (panel.options.searchMode == "wordsAnyOrder") {
+            optionsHtml = optionsHtml + '<option value="wordsAnyOrder" selected>Words any order</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="wordsAnyOrder">Words any order</option>';
         }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';

@@ -38,6 +38,9 @@ and open the template in the editor.
                 $("#comparing-taxonomies-perspective").hide();
                 $("#perspectiveLabel").html("Browsing");
                 var options = {
+                    serverUrl: "http://107.170.33.116:3000",
+                    edition: "es-edition",
+                    release: "v20140131",
                     showIds: true,
                     displaySynonyms: false,
                     selectedView: "stated",
@@ -63,11 +66,15 @@ and open the template in the editor.
                 $("#comparing-taxonomies-perspective").hide();
                 $("#perspectiveLabel").html("Comparing concepts");
                 var options = {
+                    serverUrl: "http://107.170.33.116:3000",
+                    edition: "es-edition",
+                    release: "v20140131",
                     showIds: true,
                     displaySynonyms: false,
                     selectedView: "stated",
                     displayChildren: false,
-                    langRefset: "900000000000509007"
+                    langRefset: "900000000000509007",
+                    closeButton: false
                 };
                 var spa = new searchPanel(document.getElementById("cc-search_canvas"), options);
                 var cdPanel1 = new conceptDetails(document.getElementById("cc-cd1_canvas"), "195967001", options);
@@ -85,11 +92,15 @@ and open the template in the editor.
                 $("#comparing-taxonomies-perspective").show();
                 $("#perspectiveLabel").html("Comparing taxonomies");
                 var options = {
+                    serverUrl: "http://107.170.33.116:3000",
+                    edition: "es-edition",
+                    release: "v20140131",
                     showIds: true,
                     displaySynonyms: false,
                     selectedView: "stated",
                     displayChildren: false,
-                    langRefset: "900000000000509007"
+                    langRefset: "900000000000509007",
+                    closeButton: false
                 };
                 var tx1 = new taxonomyPanel(document.getElementById("ct-tx1_canvas"), options);
                 var tx2 = new taxonomyPanel(document.getElementById("ct-tx2_canvas"), options);

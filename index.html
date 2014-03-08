@@ -27,11 +27,15 @@ and open the template in the editor.
             function initialize() {
                 // Example: common options object
                 var options = {
+                    serverUrl: "http://107.170.33.116:3000",
+                    edition: "es-edition",
+                    release: "v20140131",
                     showIds: true,
                     displaySynonyms: false,
                     selectedView: "stated",
                     displayChildren: false,
-                    langRefset: "900000000000509007"
+                    langRefset: "900000000000509007",
+                    closeButton: true
                 };
 
                 var tp = new taxonomyPanel(document.getElementById("taxonomy_canvas"), options);

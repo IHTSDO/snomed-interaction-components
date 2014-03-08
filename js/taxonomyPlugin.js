@@ -17,7 +17,6 @@ function taxonomyPanel(divElement, options) {
     this.type = "taxonomy";
     this.divElement = divElement;
     this.options = options;
-    this.url = "http://107.170.33.116:3000/";
     var componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
         if (field.divElement.id == panel.divElement.id) {
@@ -176,7 +175,7 @@ function taxonomyPanel(divElement, options) {
                 var selectedId = $(event.target).attr('data-concept-id');
                 var selectedLabel = $(event.target).attr('data-term');
                 if (typeof selectedId != "undefined") {
-                    $.getJSON(panel.url + "browser-2/snomed/concepts/" + selectedId + "/parents?form=inferred", function(result) {
+                    $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=inferred", function(result) {
                         // done
                     }).done(function(result) {
                         panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel});
@@ -230,7 +229,7 @@ function taxonomyPanel(divElement, options) {
 
         $("#" + panel.divElement.id + "-txViewLabel").html("(" + panel.options.selectedView + ")");
 
-        $.getJSON(panel.url + "browser-2/snomed/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
+        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
             var nodeHtml = "<ul style='list-style-type: none; padding-left: 15px;'>";
             result.sort(function(a, b) {
@@ -285,7 +284,7 @@ function taxonomyPanel(divElement, options) {
             }
             if (typeof conceptId != "undefined") {
                 $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-                $.getJSON(panel.url + "browser-2/snomed/concepts/" + conceptId + "/parents?form=inferred", function(result) {
+                $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=inferred", function(result) {
                     // done
                 }).done(function(result) {
                     $(ui.helper).remove(); //destroy clone
