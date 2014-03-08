@@ -52,7 +52,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-startWithLabel"><em>Starts With Mode</em></span>';
         searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-phraseMatchLabel"><em>Phrase Match Mode</em></span>';
         searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-wordsAnyOrderLabel"><em>Words any order Mode</em></span>';
-        searchHtml = searchHtml + ': Type at least 4 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
+        searchHtml = searchHtml + ': Type at least 3 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
         searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="Search..." autocomplete="off">';
         searchHtml = searchHtml + '</div>';
         searchHtml = searchHtml + '</form>';
@@ -222,7 +222,7 @@ function searchPanel(divElement, options) {
         }
         // panel.divElement.id + '-typeIcon
         if (t != "" && t != lastT) {
-            if (t.length < 4) {
+            if (t.length < 3) {
                 $('#' + panel.divElement.id + '-typeIcon').removeClass('glyphicon-ok');
                 $('#' + panel.divElement.id + '-typeIcon').removeClass('text-success');
                 $('#' + panel.divElement.id + '-typeIcon').addClass('glyphicon-remove');
