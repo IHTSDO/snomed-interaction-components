@@ -26,28 +26,29 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/popover-extra-placements.css">
 
         <script type="text/javascript">
+            var options = {
+                serverUrl: "http://107.170.33.116:3000",
+                edition: "en-edition",
+                release: "v20140131",
+                showIds: true,
+                displaySynonyms: false,
+                selectedView: "stated",
+                displayChildren: false,
+                langRefset: "900000000000509007",
+                closeButton: false,
+                searchMode: "wordsAnyOrder"
+            };
             function initialize() {
                 $("#browsing-perspective").hide();
                 $("#comparing-concepts-perspective").hide();
                 $("#comparing-taxonomies-perspective").hide();
+
             }
             function switchToBrowsing() {
                 $("#browsing-perspective").show();
-
                 $("#comparing-concepts-perspective").hide();
                 $("#comparing-taxonomies-perspective").hide();
                 $("#perspectiveLabel").html("Browsing");
-                var options = {
-                    serverUrl: "http://107.170.33.116:3000",
-                    edition: "es-edition",
-                    release: "v20140131",
-                    showIds: true,
-                    displaySynonyms: false,
-                    selectedView: "stated",
-                    displayChildren: false,
-                    langRefset: "900000000000509007",
-                    closeButton: false
-                };
                 var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), options);
                 var spa = new searchPanel(document.getElementById("bp-search_canvas"), options);
                 var cdPanel1 = new conceptDetails(document.getElementById("bp-cd1_canvas"), "195967001", options);
@@ -65,17 +66,6 @@ and open the template in the editor.
                 $("#comparing-concepts-perspective").show();
                 $("#comparing-taxonomies-perspective").hide();
                 $("#perspectiveLabel").html("Comparing concepts");
-                var options = {
-                    serverUrl: "http://107.170.33.116:3000",
-                    edition: "es-edition",
-                    release: "v20140131",
-                    showIds: true,
-                    displaySynonyms: false,
-                    selectedView: "stated",
-                    displayChildren: false,
-                    langRefset: "900000000000509007",
-                    closeButton: false
-                };
                 var spa = new searchPanel(document.getElementById("cc-search_canvas"), options);
                 var cdPanel1 = new conceptDetails(document.getElementById("cc-cd1_canvas"), "195967001", options);
                 cdPanel1.setupCanvas();
@@ -91,17 +81,6 @@ and open the template in the editor.
                 $("#comparing-concepts-perspective").hide();
                 $("#comparing-taxonomies-perspective").show();
                 $("#perspectiveLabel").html("Comparing taxonomies");
-                var options = {
-                    serverUrl: "http://107.170.33.116:3000",
-                    edition: "es-edition",
-                    release: "v20140131",
-                    showIds: true,
-                    displaySynonyms: false,
-                    selectedView: "stated",
-                    displayChildren: false,
-                    langRefset: "900000000000509007",
-                    closeButton: false
-                };
                 var tx1 = new taxonomyPanel(document.getElementById("ct-tx1_canvas"), options);
                 var tx2 = new taxonomyPanel(document.getElementById("ct-tx2_canvas"), options);
                 var spa = new searchPanel(document.getElementById("ct-search_canvas"), options);
@@ -112,6 +91,14 @@ and open the template in the editor.
                 $('#taxonomies-canvas-wrapper').split({orientation: 'vertical'});
                 $('#search-cd-wrapper').split({orientation: 'vertical'});
             }
+            
+            function switchRelease(label, edition, release) {
+                options.edition = edition;
+                options.release = release;
+                $("#editionLabel").html(label);
+                initialize();
+            }
+            
         </script>
         <style>
 
@@ -147,9 +134,10 @@ and open the template in the editor.
                     <ul class="nav navbar-nav navbar-right">
                         <li class="navbar-text" id="perspectiveLabel"></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">International Edition 20140131 <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="editionLabel">International Edition 20140131</span> <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">International Edition 20140131</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131');">International Edition 20140131</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131');">Spanish Edition 20140131</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
