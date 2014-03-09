@@ -60,7 +60,7 @@ function taxonomyPanel(divElement, options) {
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "<div class='modal-footer'>";
         taxonomyHtml = taxonomyHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>";
-        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary'>Apply changes</button>";
+        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary' data-dismiss='modal'>Apply changes</button>";
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "</div><!-- /.modal-content -->";
         taxonomyHtml = taxonomyHtml + "</div><!-- /.modal-dialog -->";

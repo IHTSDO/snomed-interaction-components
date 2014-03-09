@@ -75,7 +75,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "<div class='modal-footer'>";
         searchHtml = searchHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>";
-        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary'>Apply changes</button>";
+        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary' data-dismiss='modal'>Apply changes</button>";
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div><!-- /.modal-content -->";
         searchHtml = searchHtml + "</div><!-- /.modal-dialog -->";
@@ -250,7 +250,7 @@ function searchPanel(divElement, options) {
                 if (panel.options.searchMode == "wordsAnyOrder") {
                     t = t.toLowerCase();
                 }
-                xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=english", function(result) {
+                xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang="+panel.options.searchLang, function(result) {
 
                 }).done(function(result) {
                     xhr = null;
@@ -407,6 +407,29 @@ function searchPanel(divElement, options) {
             optionsHtml = optionsHtml + '<option value="wordsAnyOrder">Words any order</option>';
         }
         optionsHtml = optionsHtml + '</select>';
+        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-searchLanguageOption">Search Language</label>';
+        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-searchLanguageOption">';
+        if (panel.options.searchMode == "english") {
+            optionsHtml = optionsHtml + '<option value="english" selected>English</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="english">English</option>';
+        }
+        if (panel.options.searchMode == "spanish") {
+            optionsHtml = optionsHtml + '<option value="spanish" selected>Spanish</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="spanish">Spanish</option>';
+        }
+        if (panel.options.searchMode == "danish") {
+            optionsHtml = optionsHtml + '<option value="danish" selected>Danish</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="danish">Danish</option>';
+        }
+        if (panel.options.searchMode == "swedish") {
+            optionsHtml = optionsHtml + '<option value="swedish" selected>Swedish</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="swedish">Swedish</option>';
+        }
+        optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</form>';
         $("#" + panel.divElement.id + "-modal-body").html(optionsHtml);
@@ -414,6 +437,7 @@ function searchPanel(divElement, options) {
 
     this.readOptionsPanel = function() {
         panel.options.searchMode = $("#" + panel.divElement.id + "-searchModeOption").val();
+        panel.options.searchLang = $("#" + panel.divElement.id + "-searchLanguageOption").val();
         this.updateSearchLabel();
     }
 

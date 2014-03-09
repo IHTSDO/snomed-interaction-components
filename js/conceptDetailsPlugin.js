@@ -93,7 +93,7 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div class='modal-footer'>";
         detailsHtml = detailsHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>";
-        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary'>Apply changes</button>";
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary' data-dismiss='modal'>Apply changes</button>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div><!-- /.modal-content -->";
         detailsHtml = detailsHtml + "</div><!-- /.modal-dialog -->";
