@@ -56,6 +56,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="Search..." autocomplete="off">';
         searchHtml = searchHtml + '</div>';
         searchHtml = searchHtml + '</form>';
+        searchHtml = searchHtml + '<div id="' + panel.divElement.id + '-searchBar"></div>';
         searchHtml = searchHtml + "<div id='searchResultItems' class='panel panel-default' style='height:70%;overflow:auto;margin-bottom: 15px;'>";
         searchHtml = searchHtml + "<table id='" + panel.divElement.id + "-resultsTable' class='table table-bordered'>";
         searchHtml = searchHtml + "</table>";
@@ -74,7 +75,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "<p></p>";
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "<div class='modal-footer'>";
-        searchHtml = searchHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>";
+        searchHtml = searchHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>";
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary' data-dismiss='modal'>Apply changes</button>";
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div><!-- /.modal-content -->";
@@ -250,9 +251,17 @@ function searchPanel(divElement, options) {
                 if (panel.options.searchMode == "wordsAnyOrder") {
                     t = t.toLowerCase();
                 }
+                var startTime = Date.now();
                 xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang="+panel.options.searchLang, function(result) {
 
                 }).done(function(result) {
+                    var endTime = Date.now();
+                    var elapsed = endTime - startTime;
+                    var countResults = result.length;
+                    if (countResults == 100) {
+                        countResults = "more than 100";
+                    }
+                    $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'>Found " + countResults + " in " + elapsed + " milliseconds...</span>");
                     xhr = null;
                     var matchedDescriptions = result;
                     //console.log(JSON.stringify(result));
@@ -271,7 +280,7 @@ function searchPanel(divElement, options) {
                             });
                         }
                         $.each(matchedDescriptions, function(i, field) {
-                            resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td></tr>";
+                            resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-5'>" + field.fsn + "</td></tr>";
                         });
                         if (matchedDescriptions.length == 0) {
                             resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";
