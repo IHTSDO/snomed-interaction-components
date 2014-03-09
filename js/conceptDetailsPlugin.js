@@ -18,7 +18,7 @@ function conceptDetails(divElement, conceptId, options) {
     this.type = "concept-details";
     this.conceptId = conceptId;
     this.divElement = divElement;
-    this.options = options;
+    this.options = jQuery.extend(true, {}, options);
     this.attributesPId = "";
     this.descsPId = "";
     this.relsPId = "";

@@ -16,7 +16,7 @@ function taxonomyPanel(divElement, options) {
     this.markerColor = 'black';
     this.type = "taxonomy";
     this.divElement = divElement;
-    this.options = options;
+    this.options = jQuery.extend(true, {}, options);
     var componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
         if (field.divElement.id == panel.divElement.id) {
@@ -77,11 +77,11 @@ function taxonomyPanel(divElement, options) {
         $("#" + panel.divElement.id + "-closeButton").click(function(event) {
             $(divElement).remove();
         });
-        
+
         if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
-        
+
         $("#" + panel.divElement.id + "-expandButton").click(function(event) {
             $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
             $("#" + panel.divElement.id + "-expandButton").hide();
@@ -207,8 +207,10 @@ function taxonomyPanel(divElement, options) {
                 var selectedId = $(event.target).attr('data-concept-id');
                 if (typeof selectedId != "undefined") {
                     $.each(panel.subscribers, function(i, suscriberPanel) {
-                        suscriberPanel.conceptId = selectedId;
-                        suscriberPanel.updateCanvas();
+                        if (suscriberPanel.conceptId != selectedId) {
+                            suscriberPanel.conceptId = selectedId;
+                            suscriberPanel.updateCanvas();
+                        }
                     });
                 }
             }

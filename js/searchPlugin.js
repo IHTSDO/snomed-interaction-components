@@ -17,7 +17,7 @@ function searchPanel(divElement, options) {
     this.markerColor = 'black';
     this.type = "search";
     this.divElement = divElement;
-    this.options = options;
+    this.options = jQuery.extend(true, {}, options);
     var componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
         if (field.divElement.id == panel.divElement.id) {
