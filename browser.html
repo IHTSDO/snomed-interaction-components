@@ -92,9 +92,10 @@ and open the template in the editor.
                 $('#search-cd-wrapper').split({orientation: 'vertical'});
             }
             
-            function switchRelease(label, edition, release) {
+            function switchRelease(label, edition, release, langRefset) {
                 options.edition = edition;
                 options.release = release;
+                options.langRefset = langRefset;
                 $("#editionLabel").html(label);
                 initialize();
             }
@@ -136,8 +137,8 @@ and open the template in the editor.
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="editionLabel">International Edition 20140131</span> <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131');">International Edition 20140131</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131');">Spanish Edition 20140131</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131','900000000000509007');">International Edition 20140131</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131','450828004');">Spanish Edition 20140131</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">

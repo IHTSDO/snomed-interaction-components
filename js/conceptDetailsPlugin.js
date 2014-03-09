@@ -114,7 +114,7 @@ function conceptDetails(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-closeButton").click(function(event) {
             $(divElement).remove();
         });
-        
+
         if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
@@ -313,6 +313,8 @@ function conceptDetails(divElement, conceptId, options) {
                 languageName = "(GB)";
             } else if (panel.options.langRefset == "900000000000509007") {
                 languageName = "(US)";
+            } else if (panel.options.langRefset == "450828004") {
+                languageName = "(ES)";
             }
             descDetailsHtml = "<table class='table table-bordered' id = '" + panel.descsPId + "-table'>";
             descDetailsHtml = descDetailsHtml + "<thead><tr>";
@@ -343,8 +345,13 @@ function conceptDetails(divElement, conceptId, options) {
                 if (field.active == true) {
                     var row = "";
                     if (field.type.conceptId == "900000000000003001") {
-                        row = "<tr class='fsn-row'>";
-                    } else {
+                        $.each(field.langMemberships, function(i, lm) {
+                            if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
+                                row = "<tr class='fsn-row'>";
+                            }
+                        });
+                    } 
+                    if (row == "") {
                         row = "<tr class='synonym-row'>";
                     }
 
@@ -630,6 +637,11 @@ function conceptDetails(divElement, conceptId, options) {
             optionsHtml = optionsHtml + '<option value="900000000000509007" selected>US Language Refset</option>';
         } else {
             optionsHtml = optionsHtml + '<option value="900000000000509007">US Language Refset</option>';
+        }
+        if (panel.options.langRefset == "450828004") {
+            optionsHtml = optionsHtml + '<option value="450828004" selected>ES Language Refset</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="450828004">ES Language Refset</option>';
         }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
