@@ -37,3 +37,17 @@ i:active { background-color: #428bca; }
     font: bold; 
     z-index: 1000;
 }
+
+.panel {
+    border: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.navbar {
+    margin: 0 !important;
+}
+
+.table > thead > tr > th, .table > thead > tr > td {
+    border: 0;
+}
