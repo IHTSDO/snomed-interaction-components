@@ -40,22 +40,22 @@ and open the template in the editor.
                 searchLang: "english"
             };
             function initialize() {
-                $("#browsing-perspective").hide();
-                $("#comparing-concepts-perspective").hide();
-                $("#comparing-taxonomies-perspective").hide();
-
+                $("#browsing-perspective").css({"visibility":"hidden"});
+                $("#comparing-concepts-perspective").css({"visibility":"hidden"});
+                $("#comparing-taxonomies-perspective").css({"visibility":"hidden"});
+                $("#responsive-perspective").css({"visibility":"hidden"});
             }
             function switchToBrowsing() {
-                $("#browsing-perspective").show();
-                $("#comparing-concepts-perspective").hide();
-                $("#comparing-taxonomies-perspective").hide();
-                $("#responsive-perspective").hide();
+                $("#browsing-perspective").css({"visibility":"visible"});
+                $("#comparing-concepts-perspective").css({"visibility":"hidden"});
+                $("#comparing-taxonomies-perspective").css({"visibility":"hidden"});
+                $("#responsive-perspective").css({"visibility":"hidden"});
                 $("#perspectiveLabel").html("Browsing");
                 var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), options);
                 var spa = new searchPanel(document.getElementById("bp-search_canvas"), options);
-                var cdPanel1 = new conceptDetails(document.getElementById("bp-cd1_canvas"), "195967001", options);
+                var cdPanel1 = new conceptDetails(document.getElementById("bp-cd1_canvas"), "404684003", options);
                 cdPanel1.setupCanvas();
-                var cdPanel2 = new conceptDetails(document.getElementById("bp-cd2_canvas"), "195967001", options);
+                var cdPanel2 = new conceptDetails(document.getElementById("bp-cd2_canvas"), "404684003", options);
                 cdPanel2.setupCanvas();
                 tpt.subscribe(cdPanel1);
                 spa.subscribe(cdPanel2);
@@ -64,15 +64,15 @@ and open the template in the editor.
                 $('#details').split({orientation: 'vertical', limit: 20});
             }
             function switchToComparingConcepts() {
-                $("#browsing-perspective").hide();
-                $("#comparing-concepts-perspective").show();
-                $("#comparing-taxonomies-perspective").hide();
-                $("#responsive-perspective").hide();
+                $("#browsing-perspective").css({"visibility":"hidden"});
+                $("#comparing-concepts-perspective").css({"visibility":"visible"});
+                $("#comparing-taxonomies-perspective").css({"visibility":"hidden"});
+                $("#responsive-perspective").css({"visibility":"hidden"});
                 $("#perspectiveLabel").html("Comparing concepts");
                 var spa = new searchPanel(document.getElementById("cc-search_canvas"), options);
-                var cdPanel1 = new conceptDetails(document.getElementById("cc-cd1_canvas"), "195967001", options);
+                var cdPanel1 = new conceptDetails(document.getElementById("cc-cd1_canvas"), "404684003", options);
                 cdPanel1.setupCanvas();
-                var cdPanel2 = new conceptDetails(document.getElementById("cc-cd2_canvas"), "195967001", options);
+                var cdPanel2 = new conceptDetails(document.getElementById("cc-cd2_canvas"), "404684003", options);
                 cdPanel2.setupCanvas();
                 spa.subscribe(cdPanel1);
                 $('#comparing-concepts-wrapper').split({orientation: 'horizontal'});
@@ -80,33 +80,33 @@ and open the template in the editor.
 
             }
             function switchToComparingTaxonomies() {
-                $("#browsing-perspective").hide();
-                $("#comparing-concepts-perspective").hide();
-                $("#comparing-taxonomies-perspective").show();
-                $("#responsive-perspective").hide();
+                $("#browsing-perspective").css({"visibility":"hidden"});
+                $("#comparing-concepts-perspective").css({"visibility":"hidden"});
+                $("#comparing-taxonomies-perspective").css({"visibility":"visible"});
+                $("#responsive-perspective").css({"visibility":"hidden"});
                 $("#perspectiveLabel").html("Comparing taxonomies");
                 var tx1 = new taxonomyPanel(document.getElementById("ct-tx1_canvas"), options);
                 var tx2 = new taxonomyPanel(document.getElementById("ct-tx2_canvas"), options);
                 var spa = new searchPanel(document.getElementById("ct-search_canvas"), options);
-                var cdPanel1 = new conceptDetails(document.getElementById("ct-cd1_canvas"), "195967001", options);
+                var cdPanel1 = new conceptDetails(document.getElementById("ct-cd1_canvas"), "404684003", options);
                 cdPanel1.setupCanvas();
                 spa.subscribe(cdPanel1);
                 $('#comparing-taxonomies-wrapper').split({orientation: 'horizontal'});
                 $('#taxonomies-canvas-wrapper').split({orientation: 'vertical'});
                 $('#search-cd-wrapper').split({orientation: 'vertical'});
             }
-            
+
             function switchToResponsiveLayout() {
-                $("#browsing-perspective").hide();
-                $("#comparing-concepts-perspective").hide();
-                $("#comparing-taxonomies-perspective").hide();
-                $("#responsive-perspective").show();
+                $("#browsing-perspective").css({"visibility":"hidden"});
+                $("#comparing-concepts-perspective").css({"visibility":"hidden"});
+                $("#comparing-taxonomies-perspective").css({"visibility":"hidden"});
+                $("#responsive-perspective").css({"visibility":"visible"});
                 $("#perspectiveLabel").html("Responsive");
                 var tpt = new taxonomyPanel(document.getElementById("rp-taxonomy_canvas"), options);
                 var spa = new searchPanel(document.getElementById("rp-search_canvas"), options);
-                var cdPanel1 = new conceptDetails(document.getElementById("rp-cd1_canvas"), "195967001", options);
+                var cdPanel1 = new conceptDetails(document.getElementById("rp-cd1_canvas"), "404684003", options);
                 cdPanel1.setupCanvas();
-                var cdPanel2 = new conceptDetails(document.getElementById("rp-cd2_canvas"), "195967001", options);
+                var cdPanel2 = new conceptDetails(document.getElementById("rp-cd2_canvas"), "404684003", options);
                 cdPanel2.setupCanvas();
                 tpt.subscribe(cdPanel1);
                 spa.subscribe(cdPanel2);
@@ -114,7 +114,7 @@ and open the template in the editor.
                 $('#searchDetails').split({orientation: 'horizontal', limit: 10});
                 $('#details').split({orientation: 'vertical', limit: 20});
             }
-            
+
             function switchRelease(label, edition, release, langRefset) {
                 options.edition = edition;
                 options.release = release;
@@ -122,7 +122,7 @@ and open the template in the editor.
                 $("#editionLabel").html(label);
                 initialize();
             }
-            
+
         </script>
         <style>
 
@@ -130,7 +130,7 @@ and open the template in the editor.
         </style>
     </head>
     <body onLoad="initialize();" style="height: 100%; display: block;">
-        <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <nav class="navbar navbar-default  navbar-static-top" role="navigation">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -161,8 +161,8 @@ and open the template in the editor.
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="editionLabel">International Edition 20140131</span> <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131','900000000000509007');">International Edition 20140131</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131','450828004');">Spanish Edition 20140131</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');">International Edition 20140131</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131', '450828004');">Spanish Edition 20140131</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -181,7 +181,7 @@ and open the template in the editor.
         </nav>
         <div class="container-fluid" style="height: 100%">
             <!-- Browsing Perspective -->
-            <div id="browsing-perspective">
+            <div id="browsing-perspective" class="bperspective">
                 <div id="spliter2" class="row" style="width:100%; height: 85%; position: absolute;">
                     <div class="a panel panel-default" style="border-radius: 0px;">
                         <div id="bp-taxonomy_canvas" style="padding: 0px;margin: 0;"></div>
@@ -202,7 +202,7 @@ and open the template in the editor.
                 </div>
             </div>
             <!-- Comparing concepts -->
-            <div id="comparing-concepts-perspective">
+            <div id="comparing-concepts-perspective" class="bperspective">
                 <div id="comparing-concepts-wrapper" style="width:100%; height: 85%; position: absolute;">
                     <div class="" id="comparing-concept-details" >
                         <div class="col-md-6" style="padding: 0px;margin: 0;">
@@ -218,7 +218,7 @@ and open the template in the editor.
                 </div>
             </div>
             <!-- Comparing concepts -->
-            <div id="comparing-taxonomies-perspective"> 
+            <div id="comparing-taxonomies-perspective" class="bperspective"> 
                 <div id="comparing-taxonomies-wrapper" style="width:100%; height: 85%; position: absolute;padding: 0px !important;margin: 0 !important;">
                     <div class="" id="taxonomies-canvas-wrapper" style="padding: 0px;margin: 0;">
                         <div class="col-md-6" style="padding: 0px;margin: 0;">
@@ -239,12 +239,14 @@ and open the template in the editor.
                 </div>
             </div>
             <!-- Responsive Perspective -->
-            <div id="responsive-perspective">
-                <div class="row">
-                    <div id="rp-taxonomy_canvas" class="col-sm-6" style="height: 500px"></div>
-                    <div id="rp-cd1_canvas" class="col-sm-6" style="height: 500px"></div>
-                    <div id="rp-search_canvas" class="col-sm-6" style="height: 500px"></div>
-                    <div id="rp-cd2_canvas" class="col-sm-6" style="height: 500px"></div>
+            <div id="responsive-perspective" class="bperspective">
+                <div id="comparing-taxonomies-wrapper" style="width:100%; height: 85%; position: absolute;padding: 0px !important;margin: 0 !important;">
+                    <div class="row">
+                        <div id="rp-taxonomy_canvas" class="col-sm-6" style="height: 500px;padding: 0px;margin: 0;border: 1px solid gainsboro;"></div>
+                        <div id="rp-cd1_canvas" class="col-sm-6" style="height: 500px;padding: 0px;margin: 0;border: 1px solid gainsboro;"></div>
+                        <div id="rp-search_canvas" class="col-sm-6" style="height: 500px;padding: 0px;margin: 0;border: 1px solid gainsboro;"></div>
+                        <div id="rp-cd2_canvas" class="col-sm-6" style="height: 500px;padding: 0px;margin: 0;border: 1px solid gainsboro;"></div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -56,9 +56,9 @@ function conceptDetails(divElement, conceptId, options) {
         // main panel
         detailsHtml = "<div style='margin: 5px; height:98%; overflow:auto;' class='panel panel-default'>";
         detailsHtml = detailsHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
-        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding:2px;position: absolute;top: 1px;right: 20px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding:2px;position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         detailsHtml = detailsHtml + "<div class='row'>";
-        detailsHtml = detailsHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'><strong>Concept Details</strong></div>";
+        detailsHtml = detailsHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong>Concept Details</strong></div>";
         detailsHtml = detailsHtml + "<div class='col-md-4 text-right'>";
         detailsHtml = detailsHtml + "<span id='" + panel.divElement.id + "-linkerButton' class='jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></span>"
         detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-historyButton' class='btn btn-link history-button' style='padding:2px'><i class='glyphicon glyphicon-time'></i></button>"
@@ -123,7 +123,7 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
             $("#" + panel.divElement.id + "-expandButton").hide();
             $("#" + panel.divElement.id + "-collapseButton").show();
-            $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details</strong>");
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details</strong>");
         });
 
         $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
@@ -133,7 +133,7 @@ function conceptDetails(divElement, conceptId, options) {
             //if (panel.defaultTerm.length > 25) {
             //    $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm.substring(0, 24).trim() + "...</strong>");
             //} else {
-            $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
             //}
         });
 
@@ -276,7 +276,7 @@ function conceptDetails(divElement, conceptId, options) {
             var d = new Date();
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
-            attrHtml = "<table class='table table-default' ><tr><td class='jqui-droppable' data-concept-id='" + firstMatch.conceptId + "'><h3 class='jqui-draggable' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'>" + firstMatch.defaultTerm + "</h4><br>SCTID: " + firstMatch.conceptId;
+            attrHtml = "<table class='table table-default' ><tr><td class='jqui-droppable' data-concept-id='" + firstMatch.conceptId + "'><h4 class='jqui-draggable' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'>" + firstMatch.defaultTerm + "</h4><br>SCTID: " + firstMatch.conceptId;
             if (firstMatch.definitionStatus == "Primitive") {
                 attrHtml = attrHtml + ", Primitive";
             } else {
@@ -292,7 +292,7 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.attributesPId).html(attrHtml);
 
             if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
-                $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
             }
 
             $('#' + panel.attributesPId).find('.jqui-droppable').droppable({

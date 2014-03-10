@@ -38,7 +38,7 @@ i:active { background-color: #428bca; }
     z-index: 1000;
 }
 
-.panel {
+.panel, .panel-body, h4 {
     border: 0;
     padding: 0 !important;
     margin: 0 !important;
@@ -48,6 +48,16 @@ i:active { background-color: #428bca; }
     margin: 0 !important;
 }
 
+.panel-heading {
+    padding-top: 8px;
+    padding-bottom: 5px;
+}
+
 .table > thead > tr > th, .table > thead > tr > td {
     border: 0;
 }
+
+.bperspective {
+    visibility: hidden;
+}
+
