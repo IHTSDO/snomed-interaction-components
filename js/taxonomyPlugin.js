@@ -169,7 +169,7 @@ function taxonomyPanel(divElement, options) {
             helper: 'clone',
             delay: 500
         });
-
+        $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
         $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
             if ($(event.target).hasClass("treeLabel")) {
                 var selectedId = $(event.target).attr('data-concept-id');
@@ -221,6 +221,7 @@ function taxonomyPanel(divElement, options) {
         $("#" + iconId).removeClass("glyphicon-chevron-right");
         $("#" + iconId).addClass("glyphicon-refresh");
         $("#" + iconId).addClass("icon-spin");
+        console.log("getChildren..." + focusConcept.conceptId);
         panel.getChildren(focusConcept.conceptId);
     }
 
