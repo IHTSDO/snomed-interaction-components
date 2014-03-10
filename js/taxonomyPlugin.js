@@ -255,8 +255,11 @@ function taxonomyPanel(divElement, options) {
             nodeHtml = nodeHtml + "</ul>";
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
-            $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-chevron-down");
-
+            if (result.length > 0) {
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-chevron-down");
+            } else {
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
+            }
             $("#" + panel.divElement.id + "-treenode-" + conceptId).after(nodeHtml);
             $(".load-children-button").disableTextSelect();
             //console.log(JSON.stringify(listIconIds));

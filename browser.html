@@ -49,6 +49,7 @@ and open the template in the editor.
                 $("#browsing-perspective").show();
                 $("#comparing-concepts-perspective").hide();
                 $("#comparing-taxonomies-perspective").hide();
+                $("#responsive-perspective").hide();
                 $("#perspectiveLabel").html("Browsing");
                 var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), options);
                 var spa = new searchPanel(document.getElementById("bp-search_canvas"), options);
@@ -66,6 +67,7 @@ and open the template in the editor.
                 $("#browsing-perspective").hide();
                 $("#comparing-concepts-perspective").show();
                 $("#comparing-taxonomies-perspective").hide();
+                $("#responsive-perspective").hide();
                 $("#perspectiveLabel").html("Comparing concepts");
                 var spa = new searchPanel(document.getElementById("cc-search_canvas"), options);
                 var cdPanel1 = new conceptDetails(document.getElementById("cc-cd1_canvas"), "195967001", options);
@@ -81,6 +83,7 @@ and open the template in the editor.
                 $("#browsing-perspective").hide();
                 $("#comparing-concepts-perspective").hide();
                 $("#comparing-taxonomies-perspective").show();
+                $("#responsive-perspective").hide();
                 $("#perspectiveLabel").html("Comparing taxonomies");
                 var tx1 = new taxonomyPanel(document.getElementById("ct-tx1_canvas"), options);
                 var tx2 = new taxonomyPanel(document.getElementById("ct-tx2_canvas"), options);
@@ -91,6 +94,25 @@ and open the template in the editor.
                 $('#comparing-taxonomies-wrapper').split({orientation: 'horizontal'});
                 $('#taxonomies-canvas-wrapper').split({orientation: 'vertical'});
                 $('#search-cd-wrapper').split({orientation: 'vertical'});
+            }
+            
+            function switchToResponsiveLayout() {
+                $("#browsing-perspective").hide();
+                $("#comparing-concepts-perspective").hide();
+                $("#comparing-taxonomies-perspective").hide();
+                $("#responsive-perspective").show();
+                $("#perspectiveLabel").html("Responsive");
+                var tpt = new taxonomyPanel(document.getElementById("rp-taxonomy_canvas"), options);
+                var spa = new searchPanel(document.getElementById("rp-search_canvas"), options);
+                var cdPanel1 = new conceptDetails(document.getElementById("rp-cd1_canvas"), "195967001", options);
+                cdPanel1.setupCanvas();
+                var cdPanel2 = new conceptDetails(document.getElementById("rp-cd2_canvas"), "195967001", options);
+                cdPanel2.setupCanvas();
+                tpt.subscribe(cdPanel1);
+                spa.subscribe(cdPanel2);
+                $('#spliter2').split({orientation: 'vertical', limit: 20, position: '30%'});
+                $('#searchDetails').split({orientation: 'horizontal', limit: 10});
+                $('#details').split({orientation: 'vertical', limit: 20});
             }
             
             function switchRelease(label, edition, release, langRefset) {
@@ -130,6 +152,7 @@ and open the template in the editor.
                                 <li><a href="javascript:void(0);" onclick="switchToBrowsing();">Browsing</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToComparingConcepts();">Comparing concepts</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToComparingTaxonomies();">Comparing hierarchy</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToResponsiveLayout();">Responsive (tablets, phones)</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -213,6 +236,15 @@ and open the template in the editor.
                             <div class="col-md-12" id="ct-cd1_canvas" style="height: 90%"></div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <!-- Responsive Perspective -->
+            <div id="responsive-perspective">
+                <div class="row-fluid">
+                    <div id="rp-taxonomy_canvas" style="height: 500px"></div>
+                    <div id="rp-cd1_canvas" style="height: 500px"></div>
+                    <div id="rp-search_canvas" style="height: 500px"></div>
+                    <div id="rp-cd2_canvas" style="height: 500px"></div>
                 </div>
             </div>
         </div>
