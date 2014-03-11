@@ -643,6 +643,11 @@ function conceptDetails(divElement, conceptId, options) {
         } else {
             optionsHtml = optionsHtml + '<option value="450828004">ES Language Refset</option>';
         }
+        if (panel.options.langRefset == "554461000005103") {
+            optionsHtml = optionsHtml + '<option value="554461000005103" selected>DA Language Refset</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="554461000005103">DA Language Refset</option>';
+        }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</form>';
