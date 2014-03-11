@@ -19,7 +19,7 @@ function searchPanel(divElement, options) {
     this.divElement = divElement;
     this.options = jQuery.extend(true, {}, options);
     var componentLoaded = false;
-    $.each(componentsRegistry, function(i, field) {
+    $.each(componentsRegistry, function (i, field) {
         if (field.divElement.id == panel.divElement.id) {
             componentLoaded = true;
         }
@@ -29,7 +29,7 @@ function searchPanel(divElement, options) {
     }
 
     this.history = [];
-    this.setupCanvas = function() {
+    this.setupCanvas = function () {
         searchHtml = "<div style='margin: 5px; height:95%;overflow:auto;' class='panel panel-default'>";
         searchHtml = searchHtml + "<div class='panel-heading'>";
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
@@ -82,10 +82,10 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "</div><!-- /.modal-dialog -->";
         searchHtml = searchHtml + "</div><!-- /.modal -->";
         $(divElement).html(searchHtml);
-        $('#' + panel.divElement.id + '-searchBox').keyup(function() {
+        $('#' + panel.divElement.id + '-searchBox').keyup(function () {
             clearTimeout(thread);
             var $this = $(this);
-            thread = setTimeout(function() {
+            thread = setTimeout(function () {
                 panel.search($this.val())
             }, 500);
         });
@@ -98,7 +98,7 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
         $("#" + panel.divElement.id + "-expandButton").hide();
         $("#" + panel.divElement.id + "-subscribersMarker").hide();
-        $("#" + panel.divElement.id + "-closeButton").click(function(event) {
+        $("#" + panel.divElement.id + "-closeButton").click(function (event) {
             $(divElement).remove();
         });
 
@@ -106,12 +106,12 @@ function searchPanel(divElement, options) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
 
-        $("#" + panel.divElement.id + "-expandButton").click(function(event) {
+        $("#" + panel.divElement.id + "-expandButton").click(function (event) {
             $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
             $("#" + panel.divElement.id + "-expandButton").hide();
             $("#" + panel.divElement.id + "-collapseButton").show();
         });
-        $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
+        $("#" + panel.divElement.id + "-collapseButton").click(function (event) {
             $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
             $("#" + panel.divElement.id + "-expandButton").show();
             $("#" + panel.divElement.id + "-collapseButton").hide();
@@ -125,7 +125,7 @@ function searchPanel(divElement, options) {
             drop: panel.handlePanelDropEvent,
             hoverClass: "bg-info"
         });
-        $("#" + panel.divElement.id + "-apply-button").click(function() {
+        $("#" + panel.divElement.id + "-apply-button").click(function () {
             panel.readOptionsPanel();
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
             console.log("searchTerm: " + searchTerm);
@@ -133,12 +133,12 @@ function searchPanel(divElement, options) {
                 panel.search(searchTerm + " ");
             }
         });
-        $("#" + panel.divElement.id + "-historyButton").click(function(event) {
+        $("#" + panel.divElement.id + "-historyButton").click(function (event) {
             $("#" + panel.divElement.id + "-historyButton").popover({
                 trigger: 'manual',
                 placement: 'bottomRight',
                 html: true,
-                content: function() {
+                content: function () {
                     historyHtml = '<div style="width:300px;height:100px;overflow:auto;">';
                     if (panel.history.length == 0) {
                         historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em>No search terms yet...</em></div>';
@@ -147,7 +147,7 @@ function searchPanel(divElement, options) {
                     var reversedHistory = panel.history.slice(0);
                     reversedHistory.reverse();
                     //console.log(JSON.stringify(reversedHistory));
-                    $.each(reversedHistory, function(i, field) {
+                    $.each(reversedHistory, function (i, field) {
                         var d = new Date();
                         var curTime = d.getTime();
                         var ago = curTime - field.time;
@@ -182,12 +182,12 @@ function searchPanel(divElement, options) {
             });
             $("#" + panel.divElement.id + "-historyButton").popover('toggle');
         });
-        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+        $("#" + panel.divElement.id + "-linkerButton").click(function (event) {
             $("#" + panel.divElement.id + "-linkerButton").popover({
                 trigger: 'manual',
                 placement: 'bottomRight',
                 html: true,
-                content: function() {
+                content: function () {
                     linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
                     if (panel.subscribers.length == 1) {
                         linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
@@ -201,13 +201,13 @@ function searchPanel(divElement, options) {
         });
     }
 
-    this.handlePanelDropEvent = function(event, ui) {
+    this.handlePanelDropEvent = function (event, ui) {
         var draggable = ui.draggable;
         if (!draggable.attr('data-panel')) {
 //console.log("ignore");
         } else {
 //console.log("OK : " + draggable.attr('data-panel'));
-            $.each(componentsRegistry, function(i, field) {
+            $.each(componentsRegistry, function (i, field) {
                 if (field.divElement.id == draggable.attr('data-panel')) {
                     if (field.type == "concept-details") {
                         panel.subscribe(field);
@@ -217,7 +217,7 @@ function searchPanel(divElement, options) {
         }
     }
 
-    this.search = function(t) {
+    this.search = function (t) {
         if (typeof panel.options.searchMode == "undefined") {
             panel.options.searchMode = "startsWith";
         }
@@ -242,75 +242,107 @@ function searchPanel(divElement, options) {
                 //console.log("Capitalized t: " + t);
                 $('#' + panel.divElement.id + '-resultsTable').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
                 resultsHtml = "";
-                //%7B%22descriptions%22%3A%7B%24elemMatch%3A%7B%22term%22%3A%7B%24regex%3A%22%5EAsthma*%22%7D%2C%22active%22%3Atrue%7D%7D%2C%22active%22%3Atrue%7D
                 if (xhr != null) {
                     xhr.abort();
                     console.log("aborting call...");
                 }
+                $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'>Searching..</span>");
                 //console.log("panel.options.searchMode " + panel.options.searchMode);
-                if (panel.options.searchMode == "wordsAnyOrder") {
-                    t = t.toLowerCase();
-                }
-                var startTime = Date.now();
-                xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang="+panel.options.searchLang, function(result) {
+                t = t.trim();
+                if (isNumber(t)) {
+                    if (t.substr(-2, 1) == "0") {
+                        // Search conceptId
+                        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
-                }).done(function(result) {
-                    var endTime = Date.now();
-                    var elapsed = endTime - startTime;
-                    var countResults = result.length;
-                    if (countResults == 100) {
-                        countResults = "more than 100";
-                    }
-                    $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'>Found " + countResults + " in " + elapsed + " milliseconds...</span>");
-                    xhr = null;
-                    var matchedDescriptions = result;
-                    //console.log(JSON.stringify(result));
+                        }).done(function (result) {
+                                $.each(result.descriptions, function (i, field) {
+                                    console.log(i);
+                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
+                                });
+                                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                                $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
+                            });
+                    } else if (t.substr(-2, 1) == "1") {
+                        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
 
-                    if (matchedDescriptions.length <= 0) {
+                        }).done(function (result) {
+                                $.each(result, function (i, field) {
+                                    console.log(i);
+                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+                                });
+                                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                                $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
+                            });
+                    } else {
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                         $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                    } else {
-                        if (panel.options.searchMode == "startsWith") {
-                            matchedDescriptions.sort(function(a, b) {
-                                if (a.term.length < b.term.length)
-                                    return -1;
-                                if (a.term.length > b.term.length)
-                                    return 1;
-                                return 0;
-                            });
-                        }
-                        $.each(matchedDescriptions, function(i, field) {
-                            resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
-                        });
-                        if (matchedDescriptions.length == 0) {
-                            resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";
-                        }
-                        $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                        $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                            appendTo: 'body',
-                            helper: 'clone',
-                            delay: 500
-                        });
-                        $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function(event) {
-                            $.each(panel.subscribers, function(i, field) {
-//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                field.conceptId = $(event.target).attr('data-concept-id');
-                                field.updateCanvas();
-                            });
-                        });
+                        $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                     }
-                }).fail(function() {
-                    resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
-                    $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                } else {
+                    if (panel.options.searchMode == "wordsAnyOrder") {
+                        t = t.toLowerCase();
+                    }
+                    var startTime = Date.now();
+                    xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=" + panel.options.searchLang,function (result) {
+
+                    }).done(function (result) {
+                            var endTime = Date.now();
+                            var elapsed = endTime - startTime;
+                            var countResults = result.length;
+                            if (countResults == 100) {
+                                countResults = "more than 100";
+                            }
+                            $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'>Found " + countResults + " in " + elapsed + " milliseconds...</span>");
+                            xhr = null;
+                            var matchedDescriptions = result;
+                            //console.log(JSON.stringify(result));
+
+                            if (matchedDescriptions.length <= 0) {
+                                resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
+                                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                            } else {
+                                if (panel.options.searchMode == "startsWith") {
+                                    matchedDescriptions.sort(function (a, b) {
+                                        if (a.term.length < b.term.length)
+                                            return -1;
+                                        if (a.term.length > b.term.length)
+                                            return 1;
+                                        return 0;
+                                    });
+                                }
+                                $.each(matchedDescriptions, function (i, field) {
+                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+                                });
+                                if (matchedDescriptions.length == 0) {
+                                    resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";
+                                }
+                                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+                                    appendTo: 'body',
+                                    helper: 'clone',
+                                    delay: 500
+                                });
+                                $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
+                                    $.each(panel.subscribers, function (i, field) {
+//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                        field.conceptId = $(event.target).attr('data-concept-id');
+                                        field.updateCanvas();
+                                    });
+                                });
+                            }
+                        }).fail(function () {
+                            resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
+                            $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
 //$('#resultsTable').html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
-                });
+                        });
+                }
             }
         }
     }
 
-    this.subscribe = function(subscriber) {
+    this.subscribe = function (subscriber) {
         var alreadySubscribed = false;
-        $.each(panel.subscribers, function(i, field) {
+        $.each(panel.subscribers, function (i, field) {
             if (subscriber.divElement.id == field.divElement.id) {
                 alreadySubscribed = true;
             }
@@ -330,10 +362,10 @@ function searchPanel(divElement, options) {
         }
     }
 
-    this.unsubscribe = function(subscriber) {
+    this.unsubscribe = function (subscriber) {
         var indexToRemove = -1;
         var i = 0;
-        $.each(panel.subscribers, function(i, field) {
+        $.each(panel.subscribers, function (i, field) {
             if (subscriber.divElement.id == field.divElement.id) {
                 indexToRemove = i;
             }
@@ -348,13 +380,13 @@ function searchPanel(divElement, options) {
         subscriber.clearSubscription();
     }
 
-    this.unsubscribeAll = function() {
-        $.each(panel.subscribers, function(i, field) {
+    this.unsubscribeAll = function () {
+        $.each(panel.subscribers, function (i, field) {
             this.unsubscribe(field);
         });
     }
 
-    this.getNextMarkerColor = function(color) {
+    this.getNextMarkerColor = function (color) {
 //console.log(color);
         var returnColor = 'black';
         if (color == 'black') {
@@ -373,7 +405,7 @@ function searchPanel(divElement, options) {
         return returnColor;
     }
 
-    this.updateSearchLabel = function() {
+    this.updateSearchLabel = function () {
         if (typeof panel.options.searchMode == "undefined") {
             panel.options.searchMode = "startsWith";
         }
@@ -392,7 +424,7 @@ function searchPanel(divElement, options) {
         }
     }
 
-    this.setupOptionsPanel = function() {
+    this.setupOptionsPanel = function () {
         if (typeof panel.options.searchMode == "undefined") {
             panel.options.searchMode = "startsWith";
         }
@@ -444,7 +476,7 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-modal-body").html(optionsHtml);
     }
 
-    this.readOptionsPanel = function() {
+    this.readOptionsPanel = function () {
         panel.options.searchMode = $("#" + panel.divElement.id + "-searchModeOption").val();
         panel.options.searchLang = $("#" + panel.divElement.id + "-searchLanguageOption").val();
         this.updateSearchLabel();
@@ -455,8 +487,12 @@ function searchPanel(divElement, options) {
     this.updateSearchLabel();
 }
 
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 function searchInPanel(divElementId, searchTerm) {
-    $.each(componentsRegistry, function(i, field) {
+    $.each(componentsRegistry, function (i, field) {
 //console.log(field.divElement.id + ' == ' + divElementId);
         if (field.divElement.id == divElementId) {
             $('#' + divElementId + '-searchBox').val(searchTerm);
@@ -466,7 +502,7 @@ function searchInPanel(divElementId, searchTerm) {
     $('.history-button').popover('hide');
 }
 
-$(document).keypress(function(event) {
+$(document).keypress(function (event) {
     if (event.which == '13') {
         event.preventDefault();
     }
