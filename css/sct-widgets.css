@@ -58,6 +58,6 @@ i:active { background-color: #428bca; }
 }
 
 .bperspective {
-    visibility: hidden;
+    display: none;
 }
 
