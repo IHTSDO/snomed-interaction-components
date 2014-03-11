@@ -36,7 +36,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "<div class='row'>";
         searchHtml = searchHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong>Search</strong></div>";
         searchHtml = searchHtml + "<div class='col-md-4 text-right'>";
-        searchHtml = searchHtml + "<span id='" + panel.divElement.id + "-linkerButton' class='jqui-draggable' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></span>"
+        searchHtml = searchHtml + "<span id='" + panel.divElement.id + "-linkerButton' class='jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></span>"
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-historyButton' class='btn btn-link history-button' style='padding:2px'><i class='glyphicon glyphicon-time'></i></button>"
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
@@ -139,7 +139,7 @@ function searchPanel(divElement, options) {
                 placement: 'bottomRight',
                 html: true,
                 content: function () {
-                    historyHtml = '<div style="width:300px;height:100px;overflow:auto;">';
+                    historyHtml = '<div style="height:100px;overflow:auto;">';
                     if (panel.history.length == 0) {
                         historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em>No search terms yet...</em></div>';
                     }
@@ -194,6 +194,7 @@ function searchPanel(divElement, options) {
                     } else {
                         linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
                     }
+                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearSearchPanelSubscriptions(\'' + panel.divElement.id + '\');">Clear links</a></div>';
                     return linkerHtml;
                 }
             });
@@ -405,8 +406,9 @@ function searchPanel(divElement, options) {
     }
 
     this.unsubscribeAll = function () {
-        $.each(panel.subscribers, function (i, field) {
-            this.unsubscribe(field);
+        var subscribersClone = panel.subscribers.slice(0);
+        $.each(subscribersClone, function (i, field) {
+            panel.unsubscribe(field);
         });
     }
 
@@ -513,6 +515,17 @@ function searchPanel(divElement, options) {
 
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function clearSearchPanelSubscriptions(divElementId1) {
+    var d1;
+    $.each(componentsRegistry, function(i, field) {
+        if (field.divElement.id == divElementId1) {
+            d1 = field;
+        }
+    });
+    d1.unsubscribeAll();
+    $("#" + divElementId1).find('.linker-button').popover('toggle');
 }
 
 function searchInPanel(divElementId, searchTerm) {
