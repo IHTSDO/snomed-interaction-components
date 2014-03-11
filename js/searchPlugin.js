@@ -261,6 +261,18 @@ function searchPanel(divElement, options) {
                                 });
                                 $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
+                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+                                    appendTo: 'body',
+                                    helper: 'clone',
+                                    delay: 500
+                                });
+                                $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
+                                    $.each(panel.subscribers, function (i, field) {
+//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                        field.conceptId = $(event.target).attr('data-concept-id');
+                                        field.updateCanvas();
+                                    });
+                                });
                             });
                     } else if (t.substr(-2, 1) == "1") {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
@@ -272,6 +284,18 @@ function searchPanel(divElement, options) {
                                 });
                                 $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
+                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+                                    appendTo: 'body',
+                                    helper: 'clone',
+                                    delay: 500
+                                });
+                                $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
+                                    $.each(panel.subscribers, function (i, field) {
+//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                        field.conceptId = $(event.target).attr('data-concept-id');
+                                        field.updateCanvas();
+                                    });
+                                });
                             });
                     } else {
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
