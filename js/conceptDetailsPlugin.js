@@ -315,6 +315,8 @@ function conceptDetails(divElement, conceptId, options) {
                 languageName = "(US)";
             } else if (panel.options.langRefset == "450828004") {
                 languageName = "(ES)";
+            } else if (panel.options.langRefset == "554461000005103") {
+                languageName = "(DA)";
             }
             descDetailsHtml = "<table class='table table-bordered' id = '" + panel.descsPId + "-table'>";
             descDetailsHtml = descDetailsHtml + "<thead><tr>";
