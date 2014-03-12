@@ -4,7 +4,7 @@ SNOMED Interaction Components are Javascript widgets that can be easily integrat
 
 [Click here for the demo site](http://termmed.github.io/snomed-interaction-components/)
 
-## Concept Details and Search Widgets Example
+## Concept Details and Search Widgets Example 
 
 The ConceptDetails panel is a proof of concept for a panel that displays the details of a SNOMED CT concept. The search widget provides a search as you type UI for SNOMED CT. Search works with the following pattern: `^text text*`.
 
