@@ -2,7 +2,7 @@
 
 SNOMED Interaction Components are Javascript widgets that can be easily integrated in any website.
 
-[Click here for the demo site](http://termmed.github.io/snomed-interaction-components/)
+[Click here for the Beta deployment](http://browser.ihtsdotools.org/)
 
 ## Concept Details and Search Widgets Example 
 
