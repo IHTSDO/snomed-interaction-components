@@ -136,17 +136,18 @@ and open the template in the editor.
         </style>
     </head>
     <body onLoad="initialize();" style="height: 100%; display: block;">
-        <nav class="navbar navbar-default  navbar-static-top" role="navigation">
+        <nav class="navbar navbar-default  navbar-static-top" width=100% role="navigation">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <!--    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="javascript:void(0);" onclick="initialize();">IHTSDO SNOMED CT Browser</a>
+                </button> -->
+                     <img class="pull-left" src="img/beta.gif"><a class="navbar-brand" href="javascript:void(0);" onclick="initialize();"><strong>
+                     	&nbsp;&nbsp;IHTSDO SNOMED CT Browser</strong></a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -186,6 +187,7 @@ and open the template in the editor.
                                 <li><a href="#">IHTSDO.org</a></li>
                             </ul>
                         </li>
+                        <img class="pull-right" src="img/logo.png" alt="IHTSDO delivering SNOMED, the global clinical terminology">
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
