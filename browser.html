@@ -40,12 +40,15 @@ and open the template in the editor.
                 searchLang: "english"
             };
             function initialize() {
+                $("#welcome-perspective").css({"display":"block"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
+                $("#perspectiveLabel").html("<em>select...</em>");
             }
             function switchToBrowsing() {
+                $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"block"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
@@ -64,6 +67,7 @@ and open the template in the editor.
                 $('#details').split({orientation: 'vertical', limit: 20});
             }
             function switchToComparingConcepts() {
+                $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"block"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
@@ -80,6 +84,7 @@ and open the template in the editor.
 
             }
             function switchToComparingTaxonomies() {
+                $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"block"});
@@ -97,6 +102,7 @@ and open the template in the editor.
             }
 
             function switchToResponsiveLayout() {
+                $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
@@ -140,29 +146,34 @@ and open the template in the editor.
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#" onclick="initialize();">IHTSDO</a>
+                    <a class="navbar-brand" href="javascript:void(0);" onclick="initialize();">IHTSDO SNOMED CT Browser</a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Perspective<b class="caret"></b></a>
+                    <ul class="nav navbar-nav navbar">
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="navbar-btn">
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                Release:&nbsp;<span id="editionLabel">International Edition 20140131</span> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');">International Edition 20140131</a></li>
+                                <!-- <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131', '450828004');">Spanish Edition 20140131</a></li> -->
+                                <li><a href="javascript:void(0);" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20140131', '554461000005103');">Danish Edition 20140131 (20131018DA)</a></li>
+                            </ul>
+                        </li>
+                        <li class="navbar-text"></li>
+                        <li class="navbar-btn">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                Perspective:&nbsp;<span id="perspectiveLabel"><em>select...</em></span> <span class="caret"></span>
+                            </button>
                             <ul class="dropdown-menu">
                                 <li><a href="javascript:void(0);" onclick="switchToBrowsing();">Browsing</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToComparingConcepts();">Comparing concepts</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToComparingTaxonomies();">Comparing hierarchy</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToResponsiveLayout();">Responsive (tablets, phones)</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="navbar-text" id="perspectiveLabel"></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="editionLabel">International Edition 20140131</span> <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');">International Edition 20140131</a></li>
-                                <!-- <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131', '450828004');">Spanish Edition 20140131</a></li> -->
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20140131', '554461000005103');">Danish Edition 20140131 (20131018DA)</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -180,6 +191,17 @@ and open the template in the editor.
             </div><!-- /.container-fluid -->
         </nav>
         <div class="container-fluid" style="height: 100%">
+            <!-- Browsing Perspective -->
+            <div id="welcome-perspective"  class="bperspective">
+                <div class="jumbotron">
+                    <h1>Welcome to the IHTSDO Browser</h1>
+                    <p>Select a release and a perspective from the top menu to start, or...</p>
+                    <p><a class="btn btn-primary btn-lg" role="button" onclick="switchToBrowsing();">
+                        Go to the Browsing Perspective</a></p>
+                </div>
+                <p><span class="btn-success"><em>Releases</em></span> will allow the selection of SNOMED CT conetnt from the international edition or other extensions, with specific dates.</p>
+                <p><span class="btn-primary"><em>Perspectives</em></span>  are pre-defined browsing layouts for specific purposes. Use the <a href="javascript:void(0);" onclick="switchToResponsiveLayout();">responsive perspective</a> for best results in tablets and phones.</p>
+            </div>
             <!-- Browsing Perspective -->
             <div id="browsing-perspective" class="bperspective">
                 <div id="spliter2" class="row" style="width:100%; height: 91%; position: absolute;">
@@ -218,7 +240,7 @@ and open the template in the editor.
                 </div>
             </div>
             <!-- Comparing concepts -->
-            <div id="comparing-taxonomies-perspective" class="bperspective"> 
+            <div id="comparing-taxonomies-perspective" class="bperspective">
                 <div id="comparing-taxonomies-wrapper" class="row" style="width:100%; height: 91%; position: absolute;">
                     <div class="" id="taxonomies-canvas-wrapper">
                         <div class="col-md-6" style="padding: 0px;margin: 0;">
