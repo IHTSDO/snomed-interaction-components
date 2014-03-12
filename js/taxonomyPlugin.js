@@ -97,6 +97,20 @@ function taxonomyPanel(divElement, options) {
             $("#" + panel.divElement.id + "-expandButton").show();
             $("#" + panel.divElement.id + "-collapseButton").hide();
         });
+        $("#" + panel.divElement.id + "-configButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: 'Panel options',
+            animation: true,
+            delay: 1000
+        });
+        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: 'Panel links',
+            animation: true,
+            delay: 1000
+        });
         $("#" + panel.divElement.id + "-linkerButton").draggable({
             appendTo: 'body',
             helper: 'clone',

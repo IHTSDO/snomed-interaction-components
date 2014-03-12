@@ -189,6 +189,29 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-historyButton").popover('toggle');
         });
 
+        $("#" + panel.divElement.id + "-configButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: 'Panel options',
+            animation: true,
+            delay: 1000
+        });
+
+        $("#" + panel.divElement.id + "-historyButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: 'History',
+            animation: true,
+            delay: 1000
+        });
+
+        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: 'Panel links',
+            animation: true,
+            delay: 1000
+        });
 
         $("#" + panel.divElement.id + "-apply-button").click(function() {
             //console.log("apply!");
