@@ -119,6 +119,11 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
 
+        if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
+            $("#" + panel.divElement.id + "-expandButton").hide();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+        }
+
         $("#" + panel.divElement.id + "-expandButton").click(function(event) {
             $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
             $("#" + panel.divElement.id + "-expandButton").hide();
