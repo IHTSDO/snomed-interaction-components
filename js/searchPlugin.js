@@ -369,7 +369,7 @@ function searchPanel(divElement, options) {
                                     });
                                 }
                                 $.each(matchedDescriptions, function (i, field) {
-                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td class='col-md-6'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
                                 });
                                 if (matchedDescriptions.length == 0) {
                                     resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";
