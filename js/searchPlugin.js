@@ -347,10 +347,13 @@ function searchPanel(divElement, options) {
                             var endTime = Date.now();
                             var elapsed = (endTime - startTime)/1000;
                             var countResults = result.length;
+                            var searchComment = "";
                             if (countResults == 100) {
-                                countResults = "more than 100";
+                                searchComment = "<span class='text-muted'>More than 100 matches found in " + elapsed + " seconds. Searches are truncated at 100 results ordered by length.</span>";
+                            } else {
+                                searchComment = "<span class='text-muted'>Found " + countResults + " in " + elapsed + " seconds...</span>";
                             }
-                            $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'>Found " + countResults + " in " + elapsed + " seconds...</span>");
+                            $('#' + panel.divElement.id + '-searchBar').html(searchComment);
                             xhr = null;
                             var matchedDescriptions = result;
                             //console.log(JSON.stringify(result));
