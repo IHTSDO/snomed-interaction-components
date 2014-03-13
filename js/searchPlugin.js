@@ -345,12 +345,12 @@ function searchPanel(divElement, options) {
 
                     }).done(function (result) {
                             var endTime = Date.now();
-                            var elapsed = endTime - startTime;
+                            var elapsed = (endTime - startTime)/1000;
                             var countResults = result.length;
                             if (countResults == 100) {
                                 countResults = "more than 100";
                             }
-                            $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'>Found " + countResults + " in " + elapsed + " milliseconds...</span>");
+                            $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'>Found " + countResults + " in " + elapsed + " seconds...</span>");
                             xhr = null;
                             var matchedDescriptions = result;
                             //console.log(JSON.stringify(result));
