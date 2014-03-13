@@ -167,7 +167,7 @@ function taxonomyPanel(divElement, options) {
         $.each(parents, function(i, parent) {
             lastParent = parent;
             treeHtml = treeHtml + "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
-            //treeHtml = treeHtml + "<button class='btn btn-link btn-xs load-children-button treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
+            treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
             treeHtml = treeHtml + '<span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span>';
             treeHtml = treeHtml + "</li>";
         });
@@ -176,7 +176,7 @@ function taxonomyPanel(divElement, options) {
         }
         treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 15px;'>";
         treeHtml = treeHtml + "<li data-concept-id='" + focusConcept.conceptId + "' data-term='" + focusConcept.defaultTerm + "' class='treeLabel'>";
-        treeHtml = treeHtml + "<button class='btn btn-link btn-xs load-children-button treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + focusConcept.conceptId + "'></i></button>";
+        treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + focusConcept.conceptId + "'></i></button>";
         treeHtml = treeHtml + '<span data-concept-id="' + focusConcept.conceptId + '" data-term="' + focusConcept.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + focusConcept.conceptId + '">' + focusConcept.defaultTerm + "</span>";
         treeHtml = treeHtml + "</li>";
         treeHtml = treeHtml + "</ul>";
@@ -187,7 +187,7 @@ function taxonomyPanel(divElement, options) {
         treeHtml = treeHtml + "</div>";
         $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
 
-        $(".load-children-button").disableTextSelect();
+        $(".treeButton").disableTextSelect();
 
         $('.jqui-draggable').draggable({
             appendTo: 'body',
@@ -200,7 +200,7 @@ function taxonomyPanel(divElement, options) {
                 var selectedId = $(event.target).attr('data-concept-id');
                 var selectedLabel = $(event.target).attr('data-term');
                 if (typeof selectedId != "undefined") {
-                    $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=inferred", function(result) {
+                    $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
                         // done
                     }).done(function(result) {
                         panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel});
@@ -220,12 +220,20 @@ function taxonomyPanel(divElement, options) {
                     $(event.target).closest("li").find("ul").remove();
                     $("#" + iconId).removeClass("glyphicon-chevron-down");
                     $("#" + iconId).addClass("glyphicon-chevron-right");
-                } else {
+                } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
                     //console.log("open");
                     $("#" + iconId).removeClass("glyphicon-chevron-right");
                     $("#" + iconId).addClass("glyphicon-refresh");
                     $("#" + iconId).addClass("icon-spin");
                     panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                } else if ($("#" + iconId).hasClass("glyphicon-chevron-up")){
+                    $("#" + iconId).removeClass("glyphicon-chevron-up");
+                    $("#" + iconId).addClass("glyphicon-refresh");
+                    $("#" + iconId).addClass("icon-spin");
+                    panel.wrapInParents($(event.target).closest("li").attr('data-concept-id'), $(event.target).closest("li"));
+                } else if ($("#" + iconId).hasClass("glyphicon-minus")){
+                    $("#" + iconId).removeClass("glyphicon-minus");
+                    $("#" + iconId).addClass("glyphicon-chevron-right");
                 }
 
             } else if ($(event.target).hasClass("treeLabel")) {
@@ -272,7 +280,7 @@ function taxonomyPanel(divElement, options) {
             $.each(result, function(i, field) {
                 if (field.active == true) {
                     nodeHtml = nodeHtml + "<li data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "' class='treeLabel'>";
-                    nodeHtml = nodeHtml + "<button class='btn btn-link btn-xs load-children-button treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' id='" + panel.divElement.id + "-treeicon-" + field.conceptId + "'></i></button>";
+                    nodeHtml = nodeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' id='" + panel.divElement.id + "-treeicon-" + field.conceptId + "'></i></button>";
                     nodeHtml = nodeHtml + '<span class="jqui-draggable treeLabel selectable-row" data-concept-id="' + field.conceptId + '" data-term="' + field.defaultTerm + '" id="' + panel.divElement.id + '-treenode-' + field.conceptId + '">' + field.defaultTerm + '</span>';
                     listIconIds.push(field.conceptId);
                 }
@@ -287,7 +295,7 @@ function taxonomyPanel(divElement, options) {
                 $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
             }
             $("#" + panel.divElement.id + "-treenode-" + conceptId).after(nodeHtml);
-            $(".load-children-button").disableTextSelect();
+            $(".treeButton").disableTextSelect();
             //console.log(JSON.stringify(listIconIds));
             $.each(listIconIds, function(i, nodeId) {
                 $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
@@ -299,6 +307,65 @@ function taxonomyPanel(divElement, options) {
             });
         }).fail(function() {
         });
+    }
+
+    this.wrapInParents = function(conceptId, liItem) {
+        var topUl = $("#" + panel.divElement.id + "-panelBody").find('ul:first');
+        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(parents) {
+            // done
+        }).done(function(parents) {
+                if (parents.length > 0) {
+                    var firstParent = "empty";
+                    var parentsStrs = [];
+                    $.each(parents, function(i, parent) {
+                        var parentLiHtml = "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
+                        parentLiHtml = parentLiHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
+                        parentLiHtml = parentLiHtml + '<span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span>';
+                        parentLiHtml = parentLiHtml + "</li>";
+                        parentsStrs.push(parentLiHtml);
+                        if (firstParent == "empty") {
+                            firstParent = parent.conceptId;
+                        }
+                    });
+
+                    var staticChildren = topUl.children().slice(0);
+                    topUl.append(parentsStrs[0]);
+                    $('#' + panel.divElement.id + '-treenode-' + firstParent).closest('li').append("<ul id='parent-ul-id-" + firstParent + "' style='list-style-type: none; padding-left: 15px;'></ul>");
+                    var newMainChild;
+                    $.each(staticChildren, function(i, child) {
+                        if ($(child).attr('data-concept-id') == conceptId) {
+                            newMainChild = $(child);
+                            var newUl = $('#' + panel.divElement.id + '-treenode-' + firstParent).closest('li').find('ul:first');
+                            newUl.append($(child));
+                            $(child).find('i:first').removeClass("glyphicon-chevron-up");
+                            $(child).find('i:first').addClass("glyphicon-chevron-down");
+                        }
+                    });
+                    $.each(staticChildren, function(i, child) {
+                        if ($(child).attr('data-concept-id') != conceptId) {
+                            $.each($(child).children(), function(i, subchild) {
+                                if ($(subchild).is('ul')) {
+                                    newMainChild.append(subchild);
+                                }
+                            });
+                            $('#' + panel.divElement.id + '-treenode-' +$(child).attr('data-concept-id')).closest('li').remove();
+                        }
+                    });
+                    $.each(parentsStrs, function(i, parentsStr) {
+                        if (parentsStr != parentsStrs[0]) {
+                            topUl.prepend(parentsStr);
+                        }
+                    });
+                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
+                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
+                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-chevron-down");
+                } else {
+                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
+                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
+                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-chevron-up");
+                }
+            }).fail(function() {
+            });
     }
 
     this.handleDropEvent = function(event, ui) {
