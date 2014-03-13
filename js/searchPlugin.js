@@ -36,7 +36,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "<div class='row'>";
         searchHtml = searchHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong>Search</strong></div>";
         searchHtml = searchHtml + "<div class='col-md-4 text-right'>";
-        searchHtml = searchHtml + "<span id='" + panel.divElement.id + "-linkerButton' class='jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></span>"
+        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>"
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-historyButton' class='btn btn-link history-button' style='padding:2px'><i class='glyphicon glyphicon-time'></i></button>"
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
@@ -145,6 +145,7 @@ function searchPanel(divElement, options) {
             delay: 1000
         });
         $("#" + panel.divElement.id + "-linkerButton").draggable({
+            cancel: false,
             appendTo: 'body',
             helper: 'clone',
             delay: 500

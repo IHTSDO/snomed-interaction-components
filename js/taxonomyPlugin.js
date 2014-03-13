@@ -36,7 +36,7 @@ function taxonomyPanel(divElement, options) {
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong>Taxonomy</strong> <small><span id='" + panel.divElement.id + "-txViewLabel'></span></small></div>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-6 text-right'>";
-        taxonomyHtml = taxonomyHtml + "<span id='" + panel.divElement.id + "-linkerButton' class='jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></span>"
+        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-expandButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-full'></i></button>"
@@ -112,6 +112,7 @@ function taxonomyPanel(divElement, options) {
             delay: 1000
         });
         $("#" + panel.divElement.id + "-linkerButton").draggable({
+            cancel: false,
             appendTo: 'body',
             helper: 'clone',
             delay: 500,
