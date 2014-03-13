@@ -52,7 +52,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-startWithLabel"><em>Starts With Mode</em></span>';
         searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-phraseMatchLabel"><em>Phrase Match Mode</em></span>';
         searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-wordsAnyOrderLabel"><em>Words any order Mode</em></span>';
-        searchHtml = searchHtml + ': Type at least 3 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i></label>';
+        searchHtml = searchHtml + ': Type at least 3 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i> <span id="' + panel.divElement.id + '-searchExample"></span></label>';
         searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="Search..." autocomplete="off">';
         searchHtml = searchHtml + '</div>';
         searchHtml = searchHtml + '</form>';
@@ -472,14 +472,17 @@ function searchPanel(divElement, options) {
             $("#" + panel.divElement.id + '-startWithLabel').show();
             $("#" + panel.divElement.id + '-phraseMatchLabel').hide();
             $("#" + panel.divElement.id + '-wordsAnyOrderLabel').hide();
+            $("#" + panel.divElement.id + '-searchExample').html("<span class='text-muted'>Example: <em>Asthm</em></span> ");
         } else if (panel.options.searchMode == "phraseMatch") {
             $("#" + panel.divElement.id + '-startWithLabel').hide();
             $("#" + panel.divElement.id + '-phraseMatchLabel').show();
             $("#" + panel.divElement.id + '-wordsAnyOrderLabel').hide();
+            $("#" + panel.divElement.id + '-searchExample').html("<span class='text-muted'>Example: <em>blistered finger</em></span> ");
         } else if (panel.options.searchMode == "wordsAnyOrder") {
             $("#" + panel.divElement.id + '-startWithLabel').hide();
             $("#" + panel.divElement.id + '-phraseMatchLabel').hide();
             $("#" + panel.divElement.id + '-wordsAnyOrderLabel').show();
+            $("#" + panel.divElement.id + '-searchExample').html("<span class='text-muted'>Example: <em>shou fra</em></span> ");
         }
     }
 
