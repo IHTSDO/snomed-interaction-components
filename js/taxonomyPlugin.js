@@ -120,7 +120,7 @@ function taxonomyPanel(divElement, options) {
             appendTo: 'body',
             helper: 'clone',
             delay: 500,
-            revert: true
+            revert: false
         });
 
         $("#" + panel.divElement.id + "-panelBody").droppable({
@@ -302,7 +302,7 @@ function taxonomyPanel(divElement, options) {
                     appendTo: 'body',
                     helper: 'clone',
                     delay: 500,
-                    revert: true
+                    revert: false
                 });
             });
         }).fail(function() {
