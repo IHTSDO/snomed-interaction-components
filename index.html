@@ -18,11 +18,13 @@
         <link rel="stylesheet" href="css/jquery.splitter.css">
         <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css">
         <link rel="stylesheet" href="css/bootstrap.min.base.12.css">
+        <link rel="stylesheet" href="css/bootstrap-tour.min.css">
         <script src="lib/bootstrap.min.js" type="text/javascript"></script>
         <script src="lib/jquery.ui.touch-punch.min.js"></script>
         <script type="text/javascript" src="lib/popover-extra-placements.js"></script>
         <link rel="stylesheet" href="css/popover-extra-placements.css">
         <link rel="stylesheet" href="css/sct-widgets.css">
+        <script src="lib/bootstrap-tour.min.js"></script>
 
         <script type="text/javascript">
             var options = {
@@ -40,9 +42,74 @@
                 searchMode: "wordsAnyOrder",
                 searchLang: "english"
             };
-             function start() {
+
+            var tour = new Tour({
+                steps: [
+                    {
+                        element: "#bs-example-navbar-collapse-1",
+                        title: "Browsing Perspective",
+                        content: "This is a tour of the browsing perspective.<br>It includes 4 panels, a Taxonomy panel, a Search panel, and 2 concept details panels.",
+                        placement: "bottom",
+                        onShow: function (tour) { switchToBrowsing() },
+                        backdrop: false
+                    },
+                    {
+                        element: "#bp-taxonomy_canvas-panelHeading",
+                        title: "Taxonomy",
+                        content: "This panel displays the SNOMED CT Hierarchy.<br>It's based on the Inferred View by default.<br>It can be set to Stated view on the configuration panel.<br>Single click on a concept will update linked panels.<br>Double-click will re-focus the tree in the concept.<br>Dragging a concept into it will also re-focus the tree.",
+                        placement: "right",
+                        backdrop: false
+                    },
+                    {
+                        element: "#bp-taxonomy_canvas-configButton",
+                        title: "Taxonomy Configuration",
+                        content: "This button opens the taxonomy configuration.<br>The view can be set to Inferred or Stated view here.",
+                        placement: "right",
+                        backdrop: false
+                    },
+                    {
+                        element: "#bp-taxonomy_canvas-linkerButton",
+                        title: "Panels linking",
+                        content: "This button displays current links with other panels.<br>Links are used to update Concept Details panels<br>responding to clicks on the taxonomy or search results.<br>Links can be cleared from this button.",
+                        placement: "right",
+                        backdrop: false
+                    },
+                    {
+                        element: "#bp-taxonomy_canvas-subscribersMarker",
+                        title: "link marker",
+                        content: "This icon informs the link status.<br>This panel is linked to any other panel that shares<br>the same marker color.<br>When links are created, matching colors are assigned<br>automatically..",
+                        placement: "right",
+                        backdrop: false
+                    },
+                    {
+                        element: "#bp-taxonomy_canvas-treenode-404684003",
+                        title: "Concept in taxonomy",
+                        content: "Single click on a concept will update linked panels.<br>Double-click will re-focus the tree in the concept.<br>The concept can also be dragged to other panels.",
+                        placement: "right",
+                        backdrop: false
+                    },
+                    {
+                        element: "#bp-taxonomy_canvas-treeicon-404684003",
+                        title: "Navigating the taxonomy",
+                        content: "These icons open and close the hierarchy tree,<br>retrieving the children using the selected view.<br>(Inferred or Stated)",
+                        placement: "right",
+                        backdrop: false
+                    }
+                ],
+                storage: false});
+
+            function start() {
                 initialize();
                 $('#license-modal').modal('show');
+                tour.init();
+            }
+
+            function tourStart() {
+                if (tour.ended()) {
+                    tour.restart();
+                } else {
+                    tour.start();
+                }
             }
             function initialize() {
                 $("#welcome-perspective").css({"display":"block"});
@@ -160,7 +227,7 @@
 
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="navbar-btn">
+                        <li class="navbar-btn" id="edition-selector">
                             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                                 Release:&nbsp;<span id="editionLabel">International Edition 20140131</span> <span class="caret"></span>
                             </button>
@@ -171,7 +238,7 @@
                             </ul>
                         </li>
                         <li class="navbar-text"></li>
-                        <li class="navbar-btn">
+                        <li class="navbar-btn" id="perspective-selector">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                 Perspective:&nbsp;<span id="perspectiveLabel"><em>select...</em></span> <span class="caret"></span>
                             </button>
@@ -191,6 +258,9 @@
                                 <li class="divider"></li>
                                 <li><a href="http://www.ihtsdo.org" target="_blank">IHTSDO.org</a></li>
                             </ul>
+                        </li>
+                        <li class="navbar-btn" id="tour-button">
+                            <button type="button" class="btn btn-default" onclick="tourStart();">Tour</button>
                         </li>
                         <img class="pull-right" src="img/logo.png" alt="IHTSDO delivering SNOMED, the global clinical terminology">
                     </ul>
@@ -291,7 +361,8 @@
                         <h4 class="modal-title">IHTSDO SNOMED CT Browser (beta) Licence Agreement</h4>
                     </div>
                     <div class="modal-body">
-<p>In order to use the IHTSDO SNOMED CT Browser, please accept the following licence agreement:</p>                        <div style="height: 300px; overflow: auto; margin: 20px; border: 1px solid; padding: 10px;">
+                            <p>In order to use the IHTSDO SNOMED CT Browser, please accept the following licence agreement:</p>
+                            <div style="height: 300px; overflow: auto; margin: 20px; border: 1px solid; padding: 10px;">
                             <p><strong>IHTSDO SNOMED CT Browser</strong> includes SNOMED Clinical Terms® (SNOMED CT®) which is used by permission of the International Health Terminology Standards Development Organization (IHTSDO). All rights reserved. SNOMED CT® was originally created by the College of American Pathologists.
                             “SNOMED”, “SNOMED CT” and “SNOMED Clinical Terms” are registered trademarks of the IHTSDO (<a href="http://www.ihtsdo.org">www.ihtsdo.org</a>).</p>
                             <p>Use of SNOMED CT in <strong>IHTSDO SNOMED CT Browser</strong> is governed by the conditions of the following SNOMED CT license issued by the IHTSDO:</p>
