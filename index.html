@@ -50,7 +50,6 @@
                         title: "Browsing Perspective",
                         content: "This is a tour of the browsing perspective.<br>It includes 4 panels, a Taxonomy panel, a Search panel, and 2 concept details panels.",
                         placement: "bottom",
-                        onShow: function (tour) { switchToBrowsing() },
                         backdrop: false
                     },
                     {
@@ -96,7 +95,10 @@
                         backdrop: false
                     }
                 ],
-                storage: false});
+                storage: false,
+                onStart: function (tour) { switchToBrowsing() },
+                onEnd: function (tour) { initialize() }
+            });
 
             function start() {
                 initialize();
