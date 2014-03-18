@@ -321,14 +321,14 @@ function conceptDetails(divElement, conceptId, options) {
             attrHtml = attrHtml + "<br>SCTID: " + firstMatch.conceptId;
 
             if (firstMatch.definitionStatus == "Primitive") {
-                attrHtml = attrHtml + ", Primitive";
+                attrHtml = attrHtml + ", <span class='i18n' data-i18n-id='i18n_primitive'>Primitive</span>";
             } else {
-                attrHtml = attrHtml + ", Fully defined";
+                attrHtml = attrHtml + ", <span class='i18n' data-i18n-id='i18n_fully_defined'>Fully defined</span>";
             }
             if (firstMatch.active == true) {
-                attrHtml = attrHtml + ", ACTIVE";
+                attrHtml = attrHtml + ", <span class='i18n' data-i18n-id='i18n_active'>Active</span>";
             } else {
-                attrHtml = attrHtml + ", INACTIVE";
+                attrHtml = attrHtml + ", <span class='i18n' data-i18n-id='i18n_inactive'>Inactive</span>";
             }
             attrHtml = attrHtml + "</td>";
             attrHtml = attrHtml + "<td><span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "' id='" + panel.divElement.id + "-attributesClip'></span></td>";
@@ -372,12 +372,11 @@ function conceptDetails(divElement, conceptId, options) {
             }
             descDetailsHtml = "<table class='table table-bordered' id = '" + panel.descsPId + "-table'>";
             descDetailsHtml = descDetailsHtml + "<thead><tr>";
-            descDetailsHtml = descDetailsHtml + "<th>Term</th>";
+            descDetailsHtml = descDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_term'>Term</span></th>";
             if (panel.options.showIds == true) {
                 descDetailsHtml = descDetailsHtml + "<th>SCTID</th>";
             }
-            descDetailsHtml = descDetailsHtml + "<th>Acceptability " + languageName + "</th>";
-            //descDetailsHtml = descDetailsHtml + "<th>Acceptability</th>";
+            descDetailsHtml = descDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_acceptability'>Acceptability</span> " + languageName + "</th>";
             descDetailsHtml = descDetailsHtml + "</tr></thead><tbody>";
 
             var allDescriptions = firstMatch.descriptions.slice(0);
@@ -456,10 +455,10 @@ function conceptDetails(divElement, conceptId, options) {
             panel.relsPId = divElement.id + "-rels-panel";
             relsDetailsHtml = "<table class='table table-bordered'>";
             relsDetailsHtml = relsDetailsHtml + "<thead><tr>";
-            relsDetailsHtml = relsDetailsHtml + "<th>Type</th>";
-            relsDetailsHtml = relsDetailsHtml + "<th>Destination</th>";
-            relsDetailsHtml = relsDetailsHtml + "<th>Group</th>";
-            relsDetailsHtml = relsDetailsHtml + "<th>CharType</th>";
+            relsDetailsHtml = relsDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_type'>Type</span></th>";
+            relsDetailsHtml = relsDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_destination'>Destination</span></th>";
+            relsDetailsHtml = relsDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_group'>Group</span></th>";
+            relsDetailsHtml = relsDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_char_type'>CharType</span></th>";
             relsDetailsHtml = relsDetailsHtml + "</tr></thead><tbody>";
 
             if (typeof firstMatch.relationships != "undefined") {
@@ -475,11 +474,11 @@ function conceptDetails(divElement, conceptId, options) {
                         row = row + "<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
                         row = row + "<td>" + field.groupId + "</td>";
                         if (field.charType.conceptId == "900000000000010007") {
-                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Stated</div></td>";
+                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'><span class='i18n' data-i18n-id='i18n_stated'>Stated</span></div></td>";
                         } else if (field.charType.conceptId == "900000000000011006") {
-                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Inferred</div></td>";
+                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'><span class='i18n' data-i18n-id='i18n_inferred'>Inferred</span></div></td>";
                         } else {
-                            row = row + "<td>Other</td>";
+                            row = row + "<td><span class='i18n' data-i18n-id='i18n_other'>Other</span></td>";
                         }
                         row = row + "</tr>";
                         relsDetailsHtml = relsDetailsHtml + row;
@@ -501,11 +500,11 @@ function conceptDetails(divElement, conceptId, options) {
                         row = row + "<td>" + field.groupId + "</td>";
 
                         if (field.charType.conceptId == "900000000000010007") {
-                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Stated</div></td>";
+                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'><span class='i18n' data-i18n-id='i18n_stated'>Stated</span></div></td>";
                         } else if (field.charType.conceptId == "900000000000011006") {
-                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'>Inferred</div></td>";
+                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'><span class='i18n' data-i18n-id='i18n_inferred'>Inferred</span></div></td>";
                         } else {
-                            row = row + "<td>Other</td>";
+                            row = row + "<td><span class='i18n' data-i18n-id='i18n_other'>Other</span></td>";
                         }
                         row = row + "</tr>";
                         relsDetailsHtml = relsDetailsHtml + row;
@@ -537,6 +536,9 @@ function conceptDetails(divElement, conceptId, options) {
                 animation: true,
                 delay: 500
             });
+            if (typeof(switchLanguage) == "function") {
+                switchLanguage(selectedLanguage, selectedFlag, false);
+            }
         }).fail(function() {
             $('#' + panel.attributesPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
             $('#' + panel.descsPId).html("");
