@@ -86,14 +86,14 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "<div class='modal-content'>";
         detailsHtml = detailsHtml + "<div class='modal-header'>";
         detailsHtml = detailsHtml + "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>";
-        detailsHtml = detailsHtml + "<h4 class='modal-title'>Options (" + panel.divElement.id + ")</h4>";
+        detailsHtml = detailsHtml + "<h4 class='modal-title'><span class='i18n' data-i18n-id='i18n_options'>Options</span> (" + panel.divElement.id + ")</h4>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div class='modal-body' id='" + panel.divElement.id + "-modal-body'>";
         detailsHtml = detailsHtml + "<p></p>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div class='modal-footer'>";
-        detailsHtml = detailsHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>";
-        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary' data-dismiss='modal'>Apply changes</button>";
+        detailsHtml = detailsHtml + "<button type='button' class='btn btn-danger' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_cancel'>Cancel</span></button>";
+        detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-success' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_apply_changes'>Apply changes</span></button>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div><!-- /.modal-content -->";
         detailsHtml = detailsHtml + "</div><!-- /.modal-dialog -->";

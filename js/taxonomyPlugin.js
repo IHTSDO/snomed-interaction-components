@@ -34,7 +34,7 @@ function taxonomyPanel(divElement, options) {
         taxonomyHtml = taxonomyHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
-        taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong>Taxonomy</strong> <small><span id='" + panel.divElement.id + "-txViewLabel'></span></small></div>";
+        taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong><span class='i18n' data-i18n-id='i18n_taxonomy'>Taxonomy</span></strong> <small><span id='" + panel.divElement.id + "-txViewLabel'></span></small></div>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-6 text-right'>";
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-resetButton' class='btn btn-link' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-repeat'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>"
@@ -54,14 +54,14 @@ function taxonomyPanel(divElement, options) {
         taxonomyHtml = taxonomyHtml + "<div class='modal-content'>";
         taxonomyHtml = taxonomyHtml + "<div class='modal-header'>";
         taxonomyHtml = taxonomyHtml + "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>";
-        taxonomyHtml = taxonomyHtml + "<h4 class='modal-title'>Options (" + panel.divElement.id + ")</h4>";
+        taxonomyHtml = taxonomyHtml + "<h4 class='modal-title'><span class='i18n' data-i18n-id='i18n_options'>Options</span> (" + panel.divElement.id + ")</h4>";
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "<div class='modal-body' id='" + panel.divElement.id + "-modal-body'>";
         taxonomyHtml = taxonomyHtml + "<p></p>";
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "<div class='modal-footer'>";
-        taxonomyHtml = taxonomyHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>";
-        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary' data-dismiss='modal'>Apply changes</button>";
+        taxonomyHtml = taxonomyHtml + "<button type='button' class='btn btn-danger' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_cancel'>Cancel</span></button>";
+        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-success' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_apply_changes'>Apply changes</span></button>";
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "</div><!-- /.modal-content -->";
         taxonomyHtml = taxonomyHtml + "</div><!-- /.modal-dialog -->";
@@ -106,21 +106,27 @@ function taxonomyPanel(divElement, options) {
         $("#" + panel.divElement.id + "-configButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            title: 'Panel options',
+            title: i18n_panel_options,
             animation: true,
             delay: 1000
         });
-        $("#" + panel.divElement.id + "-linkerButton").tooltip({
-            placement : 'left',
-            trigger: 'hover',
-            title: 'Panel links',
-            animation: true,
-            delay: 1000
-        });
+        if (typeof i18n_reset == "undefined") {
+            i18n_reset = 'Reset';
+        }
         $("#" + panel.divElement.id + "-resetButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            title: 'Reset',
+            title: i18n_reset,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_panel_links == "undefined") {
+            i18n_panel_links = 'Panel links';
+        }
+        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_links,
             animation: true,
             delay: 1000
         });
@@ -276,7 +282,11 @@ function taxonomyPanel(divElement, options) {
             panel.options.selectedView = "inferred";
         }
 
-        $("#" + panel.divElement.id + "-txViewLabel").html("(" + panel.options.selectedView + ")");
+        if (panel.options.selectedView == "inferred") {
+            $("#" + panel.divElement.id + "-txViewLabel").html("(<span class='i18n' data-i18n-id='i18n_inferred'>Inferred</span>)");
+        } else {
+            $("#" + panel.divElement.id + "-txViewLabel").html("(<span class='i18n' data-i18n-id='i18n_stated'>Stated</span>)");
+        }
 
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
@@ -490,17 +500,23 @@ function taxonomyPanel(divElement, options) {
     this.setupOptionsPanel = function() {
         optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
         optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="selectedRelsView">Taxonomy View</label>';
+        optionsHtml = optionsHtml + '<label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_taxonomy_rels_view">Taxonomy View</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
+        if (typeof i18n_inferred == "undefined") {
+            i18n_inferred = "Inferred";
+        }
+        if (typeof i18n_stated == "undefined") {
+            i18n_stated = "Stated";
+        }
         if (panel.options.selectedView == "stated") {
-            optionsHtml = optionsHtml + '<option value="stated" selected>Stated</option>';
+            optionsHtml = optionsHtml + '<option value="stated" selected>' + i18n_stated + '</option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="stated">Stated</option>';
+            optionsHtml = optionsHtml + '<option value="stated">' + i18n_stated + '</option>';
         }
         if (panel.options.selectedView == "inferred") {
-            optionsHtml = optionsHtml + '<option value="inferred" selected>Inferred</option>';
+            optionsHtml = optionsHtml + '<option value="inferred" selected>' + i18n_inferred + '</option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="inferred">Inferred</option>';
+            optionsHtml = optionsHtml + '<option value="inferred">' + i18n_inferred + '</option>';
         }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
