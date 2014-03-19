@@ -36,6 +36,7 @@ function taxonomyPanel(divElement, options) {
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong>Taxonomy</strong> <small><span id='" + panel.divElement.id + "-txViewLabel'></span></small></div>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-6 text-right'>";
+        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-resetButton' class='btn btn-link' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-repeat'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
@@ -66,6 +67,7 @@ function taxonomyPanel(divElement, options) {
         taxonomyHtml = taxonomyHtml + "</div><!-- /.modal-dialog -->";
         taxonomyHtml = taxonomyHtml + "</div><!-- /.modal -->";
         $(divElement).html(taxonomyHtml);
+        $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
         $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
@@ -115,6 +117,13 @@ function taxonomyPanel(divElement, options) {
             animation: true,
             delay: 1000
         });
+        $("#" + panel.divElement.id + "-resetButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: 'Reset',
+            animation: true,
+            delay: 1000
+        });
         $("#" + panel.divElement.id + "-linkerButton").draggable({
             cancel: false,
             appendTo: 'body',
@@ -131,6 +140,10 @@ function taxonomyPanel(divElement, options) {
         $("#" + panel.divElement.id + "-panelHeading").droppable({
             drop: panel.handleDropEvent,
             hoverClass: "bg-info"
+        });
+
+        $("#" + panel.divElement.id + "-resetButton").click(function() {
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
         });
 
         $("#" + panel.divElement.id + "-apply-button").click(function() {
