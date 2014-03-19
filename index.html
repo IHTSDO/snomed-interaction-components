@@ -28,8 +28,8 @@
         <script src="lib/jquery.i18n.properties-min-1.0.9.js"></script>
 
         <script type="text/javascript">
-            var selectedLanguage = 'en_GB';
-            var selectedFlag = 'img/flags/gb.png';
+            var selectedLanguage = 'en_US';
+            var selectedFlag = 'img/flags/us.png';
 
             var options = {
                 serverUrl: "http://browser.ihtsdotools.org:3000",
@@ -355,12 +355,12 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="nav-selected-flag"></span> <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0);" onclick="switchLanguage('da', 'img/flags/dk.png', true);"><img src="img/flags/dk.png"> Danish</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchLanguage('en_GB', 'img/flags/gb.png', true);"><img src="img/flags/gb.png"> English (GB)</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchLanguage('en_US', 'img/flags/us.png', true);"><img src="img/flags/us.png"> English (US)</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchLanguage('en_US', 'img/flags/us.png', true);"><img src="img/flags/us.png"> English</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchLanguage('es', 'img/flags/es.png', true);"><img src="img/flags/es.png"> Spanish</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchLanguage('pt', 'img/flags/pt.png', true);"><img src="img/flags/pt.png"> Portuguese</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchLanguage('se', 'img/flags/se.png', true);"><img src="img/flags/se.png"> Swedish</a></li>
+<!--                                <li><a href="javascript:void(0);" onclick="switchLanguage('pt', 'img/flags/pt.png', true);"><img src="img/flags/pt.png"> Portuguese</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchLanguage('en_GB', 'img/flags/gb.png', true);"><img src="img/flags/gb.png"> English (GB)</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchLanguage('da', 'img/flags/dk.png', true);"><img src="img/flags/dk.png"> Danish</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchLanguage('se', 'img/flags/se.png', true);"><img src="img/flags/se.png"> Swedish</a></li> -->
                             </ul>
                         </li>
                         <img class="pull-right visible-lg" src="img/logo.png" alt="IHTSDO delivering SNOMED, the global clinical terminology">
@@ -378,7 +378,7 @@
                     <p><a class="btn btn-primary btn-lg" role="button" onclick="switchToBrowsing();"><span class="i18n" data-i18n-id="i18n_go_browsing">Go to the Browsing view</span></a>
                         &nbsp;&nbsp;or...&nbsp;&nbsp;
                         <a class="btn btn-primary btn-lg" role="button" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_take_tour">take the Tour...</span></a></p>
-                    <p><span class="i18n" data-i18n-id="i18n_home3">Also, please provide any feedback by emailing <a href="mailto:otf@ihtsdo.org?subject=Bno to the rowser Feedback" target="_blank">otf@ihtsdo.org</a>. Your feedback is essential to the evolution and improvement of this service.</span></p>
+                    <p><span class="i18n" data-i18n-id="i18n_home3">Also, please provide any feedback by emailing <a href="mailto:otf@ihtsdo.org?subject=Browser Feedback" target="_blank">otf@ihtsdo.org</a>. Your feedback is essential to the evolution and improvement of this service.</span></p>
                     <p><span class="i18n" data-i18n-id="i18n_home4">If you would like to get involved in the development, this code is available under an Apache v2 open source license. Please visit the open source repository in the <a href="https://github.com/IHTSDO/snomed-interaction-components" target="_blank">IHTSDO GitHub account</a></span></p>
 					<p></p>
                     <p><span class="i18n" data-i18n-id="i18n_home5">Don't be surprised if you see frequent changes. Similarly, please don't depend on this tool being available all the time whilst in beta, but please look around and try it out!</span></p>
