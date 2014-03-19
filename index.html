@@ -25,8 +25,12 @@
         <link rel="stylesheet" href="css/popover-extra-placements.css">
         <link rel="stylesheet" href="css/sct-widgets.css">
         <script src="lib/bootstrap-tour.min.js"></script>
+        <script src="lib/jquery.i18n.properties-min-1.0.9.js"></script>
 
         <script type="text/javascript">
+            var selectedLanguage = 'en_GB';
+            var selectedFlag = 'img/flags/gb.png';
+
             var options = {
                 serverUrl: "http://browser.ihtsdotools.org:3000",
                 edition: "en-edition",
@@ -46,61 +50,121 @@
             var tour = new Tour({
                 steps: [
                     {
-                        element: "#bs-example-navbar-collapse-1",
+                        element: "nothing",
                         title: "Browsing Perspective",
-                        content: "This is a tour of the browsing perspective.<br>It includes 4 panels, a Taxonomy panel, a Search panel, and 2 concept details panels.",
+                        content: "Hi, welcome to the tour of the browsing perspective.<br>It includes 4 panels, a Taxonomy panel, a Search panel, and 2 concept details panels.",
                         placement: "bottom",
-                        backdrop: false
+                        orphan: true,
+                        backdrop: false,
+                        onShow: function (tour) { switchToBrowsing() }
                     },
                     {
-                        element: "#bp-taxonomy_canvas-panelHeading",
-                        title: "Taxonomy",
-                        content: "This panel displays the SNOMED CT Hierarchy.<br>It's based on the Inferred View by default.<br>It can be set to Stated view on the configuration panel.<br>Single click on a concept will update linked panels.<br>Double-click will re-focus the tree in the concept.<br>Dragging a concept into it will also re-focus the tree.",
+                        element: "#bp-taxonomy_canvas",
+                        title: "Taxonomy Panel",
+                        content: "This panel displays the SNOMED CT Hierarchy.",
                         placement: "right",
-                        backdrop: false
+                        backdrop: true
+                    },
+                    {
+                        element: "#bp-search_canvas",
+                        title: "Search Panel",
+                        content: "This panel allows to search SNOMED CT content.",
+                        placement: "bottom",
+                        backdrop: true
+                    },
+                    {
+                        element: "#details",
+                        title: "Concept Details Panels",
+                        content: "These 2 concept details panels display the attributes, descriptions<br>and relationships of SNOMED CT concepts.",
+                        placement: "top",
+                        backdrop: true
                     },
                     {
                         element: "#bp-taxonomy_canvas-configButton",
                         title: "Taxonomy Configuration",
-                        content: "This button opens the taxonomy configuration.<br>The view can be set to Inferred or Stated view here.",
+                        content: "The configuration button opens the configuration of each panel.<br>The view can be set to Inferred or Stated view here.",
                         placement: "right",
-                        backdrop: false
+                        backdrop: true
+                    },
+                    {
+                        element: "#bp-search_canvas-configButton",
+                        title: "Search Configuration",
+                        content: "In the search panel, configuration can select different search modes.",
+                        placement: "left",
+                        backdrop: true
+                    },
+                    {
+                        element: "#bp-cd1_canvas-configButton",
+                        title: "Concept Details Configuration",
+                        content: "In a concept details panel, configuration can select which components<br>of a concept are display or hidden.",
+                        placement: "right",
+                        backdrop: true
                     },
                     {
                         element: "#bp-taxonomy_canvas-linkerButton",
                         title: "Panels linking",
-                        content: "This button displays current links with other panels.<br>Links are used to update Concept Details panels<br>responding to clicks on the taxonomy or search results.<br>Links can be cleared from this button.",
+                        content: "The linker button displays current links with other panels.<br>Links are used to update Concept Details panels<br>responding to clicks on the taxonomy or search results.<br>Links can be cleared from this button.<br>Also, this button can be dragged & dropped over<br>linker buttons in other panels creating new links.",
                         placement: "right",
-                        backdrop: false
+                        backdrop: true
                     },
                     {
                         element: "#bp-taxonomy_canvas-subscribersMarker",
                         title: "link marker",
-                        content: "This icon informs the link status.<br>This panel is linked to any other panel that shares<br>the same marker color.<br>When links are created, matching colors are assigned<br>automatically..",
+                        content: "This icon informs the link status.<br>This panel is linked to any other panel that shares the same marker color.<br>When links are created, matching colors are assigned automatically.",
                         placement: "right",
-                        backdrop: false
+                        backdrop: true
                     },
                     {
                         element: "#bp-taxonomy_canvas-treenode-404684003",
                         title: "Concept in taxonomy",
                         content: "Single click on a concept will update linked panels.<br>Double-click will re-focus the tree in the concept.<br>The concept can also be dragged to other panels.",
                         placement: "right",
-                        backdrop: false
+                        backdrop: true
                     },
                     {
                         element: "#bp-taxonomy_canvas-treeicon-404684003",
                         title: "Navigating the taxonomy",
                         content: "These icons open and close the hierarchy tree,<br>retrieving the children using the selected view.<br>(Inferred or Stated)",
                         placement: "right",
-                        backdrop: false
+                        backdrop: true
+                    },
+                    {
+                        element: "#bp-search_canvas",
+                        title: "Displaying results",
+                        content: "Clicking in s search results will update the linked Concept Details panel.",
+                        placement: "bottom",
+                        backdrop: true
+                    },
+                    {
+                        element: "#bp-search_canvas-historyButton",
+                        title: "History",
+                        content: "Some panels have <em><strong>History</strong></em> features.<br>The history button will show previous contents of this panel<br>and the panel can be set back to that content with just one click.",
+                        placement: "left",
+                        backdrop: true
+                    },
+                    {
+                        element: "#bp-cd1_canvas-attributesClip",
+                        title: "Draggable items",
+                        content: "References to concepts may have this icon next to them.<br>This icon can be dragged to other panels, like a concept details panel or a taxonomy,<br>in order to set the panel to this concept.",
+                        placement: "top",
+                        backdrop: true,
+                        onHide: function (tour) { initialize() }
+                    },
+                    {
+                        element: "nothing",
+                        title: "Browsing Perspective",
+                        content: "Thanks for taking this tour.<br>Other perspectives are different arrangements of the same panels and all the same UI concepts apply.<br>Try them out!<br>Remember that you can switch to other panels or perspectives using the Top menu selectors.",
+                        placement: "bottom",
+                        orphan: true,
+                        backdrop: true
                     }
                 ],
                 storage: false,
-                onStart: function (tour) { switchToBrowsing() },
-                onEnd: function (tour) { initialize() }
+                debug: true
             });
 
             function start() {
+                switchLanguage(selectedLanguage, selectedFlag, false);
                 initialize();
                 $('#license-modal').modal('show');
                 tour.init();
@@ -119,7 +183,7 @@
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
-                $("#perspectiveLabel").html("<em>select...</em>");
+                $("#perspectiveLabel").html("<em>...</em>");
             }
             function switchToBrowsing() {
                 $("#welcome-perspective").css({"display":"none"});
@@ -139,6 +203,7 @@
                 $('#spliter2').split({orientation: 'vertical', limit: 20, position: '30%'});
                 $('#searchDetails').split({orientation: 'horizontal', limit: 10});
                 $('#details').split({orientation: 'vertical', limit: 20});
+                switchLanguage(selectedLanguage, selectedFlag, false);
             }
             function switchToComparingConcepts() {
                 $("#welcome-perspective").css({"display":"none"});
@@ -155,7 +220,7 @@
                 spa.subscribe(cdPanel1);
                 $('#comparing-concepts-wrapper').split({orientation: 'horizontal'});
                 $('#comparing-concept-details').split({orientation: 'vertical'});
-
+                switchLanguage(selectedLanguage, selectedFlag, false);
             }
             function switchToComparingTaxonomies() {
                 $("#welcome-perspective").css({"display":"none"});
@@ -173,6 +238,7 @@
                 $('#comparing-taxonomies-wrapper').split({orientation: 'horizontal'});
                 $('#taxonomies-canvas-wrapper').split({orientation: 'vertical'});
                 $('#search-cd-wrapper').split({orientation: 'vertical'});
+                switchLanguage(selectedLanguage, selectedFlag, false);
             }
 
             function switchToResponsiveLayout() {
@@ -193,6 +259,7 @@
                 $('#spliter2').split({orientation: 'vertical', limit: 20, position: '30%'});
                 $('#searchDetails').split({orientation: 'horizontal', limit: 10});
                 $('#details').split({orientation: 'vertical', limit: 20});
+                switchLanguage(selectedLanguage, selectedFlag, false);
             }
 
             function switchRelease(label, edition, release, langRefset) {
@@ -203,6 +270,33 @@
                 initialize();
             }
 
+            function switchLanguage(language, flagPng, fade) {
+                selectedLanguage = language;
+                selectedFlag = flagPng;
+                $("#nav-selected-flag").html('<img src="' + flagPng + '">');
+                jQuery.i18n.properties({
+                    name:'Languages',
+                    path:'i18n/',
+                    mode:'both',
+                    language:language
+                });
+                $( ".i18n" ).each(function( index ) {
+                    var translation = jQuery.i18n.prop($(this).attr('data-i18n-id'));
+                    if (translation != "[" + $(this).attr('data-i18n-id') + "]") {
+                        if (fade) {
+                            $(this).fadeOut("slow", function(){
+                                $(this).html(translation);
+                                $(this).fadeIn("slow");
+                            });
+                        } else {
+                            $(this).html(translation);
+                        }
+                    } else {
+                        console.log($(this).attr('data-i18n-id') + " = " + $(this).html());
+                    }
+                });
+            }
+
         </script>
         <style>
 
@@ -211,27 +305,24 @@
     </head>
     <body onLoad="start();" style="height: 100%; display: block;">
         <nav class="navbar navbar-default  navbar-static-top" role="navigation">
-            <div class="container">
+            <div>
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                <!--    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                </button> -->
-                     <img class="pull-left" src="img/beta.gif"><a class="navbar-brand" href="javascript:void(0);" onclick="initialize();"><strong>
-                     	&nbsp;&nbsp;IHTSDO SNOMED CT Browser</strong></a>
+                </button>
+                <img class="pull-left hidden-xs hidden-sm" src="img/beta.gif"><a class="navbar-brand" href="javascript:void(0);" onclick="initialize();"><strong>
+                     	&nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_app_name">IHTSDO SNOMED CT Browser</span></strong></a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar">
-
-                    </ul>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-left: 20px; padding-right: 20px;">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="navbar-btn" id="edition-selector">
                             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                                Release:&nbsp;<span id="editionLabel">International Edition 20140131</span> <span class="caret"></span>
+                                <span class="i18n" data-i18n-id="i18n_release">Release</span>:&nbsp;<span id="editionLabel">International Edition 20140131</span> <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');">International Edition 20140131</a></li>
@@ -242,7 +333,7 @@
                         <li class="navbar-text"></li>
                         <li class="navbar-btn" id="perspective-selector">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                Perspective:&nbsp;<span id="perspectiveLabel"><em>select...</em></span> <span class="caret"></span>
+                                <span class="i18n" data-i18n-id="i18n_perspective">Perspective</span>:&nbsp;<span id="perspectiveLabel"><em>...</em></span> <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="javascript:void(0);" onclick="switchToBrowsing();">Browsing</a></li>
@@ -252,19 +343,27 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="i18n" data-i18n-id="i18n_about">About</span> <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="mailto:otf@ihtsdo.org?subject=feedback" target="_blank">Provide feedback on this browser</a></li>
-                                <li><a href="https://github.com/IHTSDO/snomed-interaction-components" target="_blank">See the code on GitHub</a></li>
+                                <li><a href="mailto:otf@ihtsdo.org?subject=feedback" target="_blank"><span class="i18n" data-i18n-id="i18n_provide_feedback">Provide feedback on this browser</span></a></li>
+                                <li><a href="https://github.com/IHTSDO/snomed-interaction-components" target="_blank"><span class="i18n" data-i18n-id="i18n_github">See the code on GitHub</span></a></li>
                               <!--  <li><a href="#">About SNOMED CT</a></li> -->
                                 <li class="divider"></li>
                                 <li><a href="http://www.ihtsdo.org" target="_blank">IHTSDO.org</a></li>
                             </ul>
                         </li>
-                        <li class="navbar-btn" id="tour-button">
-                            <button type="button" class="btn btn-default" onclick="tourStart();">Tour</button>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="nav-selected-flag"></span> <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="javascript:void(0);" onclick="switchLanguage('da', 'img/flags/dk.png', true);"><img src="img/flags/dk.png"> Danish</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchLanguage('en_GB', 'img/flags/gb.png', true);"><img src="img/flags/gb.png"> English (GB)</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchLanguage('en_US', 'img/flags/us.png', true);"><img src="img/flags/us.png"> English (US)</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchLanguage('es', 'img/flags/es.png', true);"><img src="img/flags/es.png"> Spanish</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchLanguage('pt', 'img/flags/pt.png', true);"><img src="img/flags/pt.png"> Portuguese</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchLanguage('se', 'img/flags/se.png', true);"><img src="img/flags/se.png"> Swedish</a></li>
+                            </ul>
                         </li>
-                        <img class="pull-right" src="img/logo.png" alt="IHTSDO delivering SNOMED, the global clinical terminology">
+                        <img class="pull-right visible-lg" src="img/logo.png" alt="IHTSDO delivering SNOMED, the global clinical terminology">
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -273,18 +372,19 @@
             <!-- Welcome Perspective -->
             <div id="welcome-perspective"  class="bperspective">
                 <div class="jumbotron">
-                    <h1>Welcome</h1>
-                    <p>This is a beta... a work in progress of ways to browse and search SNOMED CT as part of development within the IHTSDO Open Tooling Framework, by the IHTSDO and its development partners</p>
-                    <p>Please select a SNOMED CT release and a perspective from the top menu to start, or...</p>
-                    <p><a class="btn btn-primary btn-lg" role="button" onclick="switchToBrowsing();">
-                        Go to the Browsing view</a></p>
-                    <p>Also, please provide any feedback by emailing <a href="mailto:otf@ihtsdo.org?subject=Bno to the rowser Feedback" target="_blank">otf@ihtsdo.org</a>. Your feedback is essential to the evolution and improvement of this service.</p>
-                    <p>If you would like to get involved in the development, this code is available under an Apache v2 open source license. Please visit the open source repository in the <a href="https://github.com/IHTSDO/snomed-interaction-components" target="_blank">IHTSDO GitHub account</a></p>
+                    <h1><span class="i18n" data-i18n-id="i18n_welcome">Welcome</span></h1>
+                    <p><span class="i18n" data-i18n-id="i18n_home1">This is a beta... a work in progress of ways to browse and search SNOMED CT as part of development within the IHTSDO Open Tooling Framework, by the IHTSDO and its development partners</span></p>
+                    <p><span class="i18n" data-i18n-id="i18n_home2">Please select a SNOMED CT release and a perspective from the top menu to start, or...</span></p>
+                    <p><a class="btn btn-primary btn-lg" role="button" onclick="switchToBrowsing();"><span class="i18n" data-i18n-id="i18n_go_browsing">Go to the Browsing view</span></a>
+                        &nbsp;&nbsp;or...&nbsp;&nbsp;
+                        <a class="btn btn-primary btn-lg" role="button" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_take_tour">take the Tour...</span></a></p>
+                    <p><span class="i18n" data-i18n-id="i18n_home3">Also, please provide any feedback by emailing <a href="mailto:otf@ihtsdo.org?subject=Bno to the rowser Feedback" target="_blank">otf@ihtsdo.org</a>. Your feedback is essential to the evolution and improvement of this service.</span></p>
+                    <p><span class="i18n" data-i18n-id="i18n_home4">If you would like to get involved in the development, this code is available under an Apache v2 open source license. Please visit the open source repository in the <a href="https://github.com/IHTSDO/snomed-interaction-components" target="_blank">IHTSDO GitHub account</a></span></p>
 					<p></p>
-                    <p>Don't be surprised if you see frequent changes. Similarly, please don't depend on this tool being available all the time whilst in beta, but please look around and try it out!</p>
+                    <p><span class="i18n" data-i18n-id="i18n_home5">Don't be surprised if you see frequent changes. Similarly, please don't depend on this tool being available all the time whilst in beta, but please look around and try it out!</span></p>
                 </div>
-                <p><span class="btn-success"><em>Releases</em></span> will allow the selection of SNOMED CT content from the International Edition or other extensions, with specific dates.</p>
-                <p><span class="btn-primary"><em>Perspectives</em></span>  are pre-defined browsing layouts for specific purposes. Use the <a href="javascript:void(0);" onclick="switchToResponsiveLayout();">responsive perspective</a> for best results in tablets and phones.</p>
+                <p><span class="i18n" data-i18n-id="i18n_home6"><span class="btn-success"><em>Releases</em></span> will allow the selection of SNOMED CT content from the International Edition or other extensions, with specific dates.</span></p>
+                <p><span class="i18n" data-i18n-id="i18n_home7"><span class="btn-primary"><em>Perspectives</em></span>  are pre-defined browsing layouts for specific purposes. Use the <a href="javascript:void(0);" onclick="switchToResponsiveLayout();">responsive perspective</a> for best results in tablets and phones.</span></p>
             </div>
             <!-- Browsing Perspective -->
             <div id="browsing-perspective" class="bperspective">
@@ -346,7 +446,7 @@
             </div>
             <!-- Responsive Perspective -->
             <div id="responsive-perspective" class="bperspective">
-                <div id="comparing-taxonomies-wrapper" class="row" style="width:100%; height: 91%; position: absolute;padding: 0px !important;margin: 0 !important;">
+                <div id="comparing-taxonomies-wrapper3" class="row" style="width:100%; height: 91%; position: absolute;padding: 0px !important;margin: 0 !important;">
                     <div class="row">
                         <div id="rp-taxonomy_canvas" class="col-sm-6" style="height: 500px;padding: 0px;margin: 0;border: 1px solid gainsboro;"></div>
                         <div id="rp-cd1_canvas" class="col-sm-6" style="height: 500px;padding: 0px;margin: 0;border: 1px solid gainsboro;"></div>
@@ -356,7 +456,7 @@
                 </div>
             </div>
         </div>
-                <div class="modal fade" id="license-modal">
+         <div class="modal fade" id="license-modal" data-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
