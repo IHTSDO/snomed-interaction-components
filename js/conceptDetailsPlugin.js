@@ -193,29 +193,33 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-historyButton").popover('toggle');
         });
 
+        if (typeof i18n_panel_options == "undefined") {
+            i18n_panel_options = "Panel options";
+        }
         $("#" + panel.divElement.id + "-configButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            html: true,
-            title: '<span class="i18n" data-i18n-id="i18n_panel_options">Panel options</span>',
+            title: i18n_panel_options,
             animation: true,
             delay: 1000
         });
-
+        if (typeof i18n_history == "undefined") {
+            i18n_history = 'History';
+        }
         $("#" + panel.divElement.id + "-historyButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            html: true,
-            title: '<span class="i18n" data-i18n-id="i18n_history">History</span>',
+            title: i18n_history,
             animation: true,
             delay: 1000
         });
-
+        if (typeof i18n_panel_links == "undefined") {
+            i18n_panel_links = 'Panel links';
+        }
         $("#" + panel.divElement.id + "-linkerButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            html: true,
-            title: '<span class="i18n" data-i18n-id="i18n_panel_links">Panel links</span>',
+            title: i18n_panel_links,
             animation: true,
             delay: 1000
         });
@@ -356,8 +360,7 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.attributesPId).find(".jqui-draggable").tooltip({
                 placement : 'left',
                 trigger: 'hover',
-                html: true,
-                title: '<span class="i18n" data-i18n-id="i18n_drag_this">Drag this</span>',
+                title: 'Drag this',
                 animation: true,
                 delay: 500
             });
@@ -541,8 +544,7 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.relsPId).find(".jqui-draggable").tooltip({
                 placement : 'left',
                 trigger: 'hover',
-                html: true,
-                title: '<span class="i18n" data-i18n-id="i18n_drag_this">Drag this</span>',
+                title: 'Drag this',
                 animation: true,
                 delay: 500
             });
@@ -671,20 +673,29 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_rels_view">Relationships View</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
+        if (typeof i18n_inferred == "undefined") {
+            i18n_inferred = "Inferred";
+        }
+        if (typeof i18n_stated == "undefined") {
+            i18n_stated = "Stated";
+        }
+        if (typeof i18n_all == "undefined") {
+            i18n_all = "All";
+        }
         if (panel.options.selectedView == "stated") {
-            optionsHtml = optionsHtml + '<option value="stated" selected><span class="i18n" data-i18n-id="i18n_stated">Stated</span></option>';
+            optionsHtml = optionsHtml + '<option value="stated" selected>' + i18n_stated + '</option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="stated"><span class="i18n" data-i18n-id="i18n_stated">Stated</span></option>';
+            optionsHtml = optionsHtml + '<option value="stated">' + i18n_stated + '</option>';
         }
         if (panel.options.selectedView == "inferred") {
-            optionsHtml = optionsHtml + '<option value="inferred" selected><span class="i18n" data-i18n-id="i18n_inferred">Inferred</span></option>';
+            optionsHtml = optionsHtml + '<option value="inferred" selected>' + i18n_inferred + '</option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="inferred"><span class="i18n" data-i18n-id="i18n_inferred">Inferred</span></option>';
+            optionsHtml = optionsHtml + '<option value="inferred">' + i18n_inferred + '</option>';
         }
         if (panel.options.selectedView == "all") {
-            optionsHtml = optionsHtml + '<option value="all" selected><span class="i18n" data-i18n-id="i18n_all">All</span></option>';
+            optionsHtml = optionsHtml + '<option value="all" selected>' + i18n_all + '</option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="all"><span class="i18n" data-i18n-id="i18n_all">All</span></option>';
+            optionsHtml = optionsHtml + '<option value="all">' + i18n_all + '</option>';
         }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
