@@ -196,7 +196,8 @@ function conceptDetails(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-configButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            title: 'Panel options',
+            html: true,
+            title: '<span class="i18n" data-i18n-id="i18n_panel_options">Panel options</span>',
             animation: true,
             delay: 1000
         });
@@ -204,7 +205,8 @@ function conceptDetails(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-historyButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            title: 'History',
+            html: true,
+            title: '<span class="i18n" data-i18n-id="i18n_history">History</span>',
             animation: true,
             delay: 1000
         });
@@ -212,7 +214,8 @@ function conceptDetails(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-linkerButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            title: 'Panel links',
+            html: true,
+            title: '<span class="i18n" data-i18n-id="i18n_panel_links">Panel links</span>',
             animation: true,
             delay: 1000
         });
@@ -353,7 +356,8 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.attributesPId).find(".jqui-draggable").tooltip({
                 placement : 'left',
                 trigger: 'hover',
-                title: 'Drag this',
+                html: true,
+                title: '<span class="i18n" data-i18n-id="i18n_drag_this">Drag this</span>',
                 animation: true,
                 delay: 500
             });
@@ -408,7 +412,7 @@ function conceptDetails(divElement, conceptId, options) {
                         row = "<tr class='synonym-row'>";
                     }
 
-                    row = row + "<td><div class='' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td>";
+                    row = row + "<td>" + field.term + "</td>";
                     if (panel.options.showIds == true) {
                         row = row + "<td>" + field.descriptionId + "</td>";
                     }
@@ -416,12 +420,17 @@ function conceptDetails(divElement, conceptId, options) {
                     var includedInLanguage = false;
                     $.each(field.langMemberships, function(i, lang) {
                         if (lang.refset.conceptId == panel.options.langRefset) {
-                            row = row + "<td><div class='' data-concept-id='" + lang.acceptability.conceptId + "' data-term='" + lang.acceptability.defaultTerm + "'>" + lang.acceptability.defaultTerm.substring(0, lang.acceptability.defaultTerm.indexOf("(")) + "</div></td>";
+                            if (lang.acceptability.conceptId == "900000000000548007") {
+                                row = row + "<td><span class='i18n' data-i18n-id='i18n_preferred'>Preferred</span></td>";
+                            } else {
+                                row = row + "<td><span class='i18n' data-i18n-id='i18n_acceptable'>Acceptable</span></td>";
+                            }
+
                             includedInLanguage = true;
                         }
                     });
                     if (includedInLanguage == false) {
-                        row = row + "<td>Not acceptable</td>";
+                        row = row + "<td><span class='i18n' data-i18n-id='i18n_not_acceptable'>Not acceptable</span></td>";
                     }
 
                     row = row + "</tr>";
@@ -532,7 +541,8 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.relsPId).find(".jqui-draggable").tooltip({
                 placement : 'left',
                 trigger: 'hover',
-                title: 'Drag this',
+                html: true,
+                title: '<span class="i18n" data-i18n-id="i18n_drag_this">Drag this</span>',
                 animation: true,
                 delay: 500
             });
@@ -540,7 +550,7 @@ function conceptDetails(divElement, conceptId, options) {
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
         }).fail(function() {
-            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
+            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             $('#' + panel.descsPId).html("");
             $('#' + panel.relsPId).html("");
             $('#' + panel.relsPId).html(relsDetailsHtml);
@@ -567,7 +577,7 @@ function conceptDetails(divElement, conceptId, options) {
                 childrenDetailsHtml = "<div>";
                 childrenDetailsHtml = "<table class='table table-bordered'>";
                 childrenDetailsHtml = childrenDetailsHtml + "<thead><tr>";
-                childrenDetailsHtml = childrenDetailsHtml + "<th>Children</th>";
+                childrenDetailsHtml = childrenDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_children'>Children</span></th>";
                 childrenDetailsHtml = childrenDetailsHtml + "</tr></thead><tbody></div>";
                 $.each(result, function(i, field) {
                     if (field.active == true) {
@@ -584,7 +594,7 @@ function conceptDetails(divElement, conceptId, options) {
                     delay: 500
                 });
             }).fail(function() {
-                $('#' + panel.childrenPId).html("<div class='alert alert-danger'><strong>Error</strong> while retrieving data from server...</div>");
+                $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             });
 
         }
@@ -613,7 +623,7 @@ function conceptDetails(divElement, conceptId, options) {
     this.setupOptionsPanel = function() {
         optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
         optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="displaySynonyms">Display synonyms</label>';
+        optionsHtml = optionsHtml + '<label for="displaySynonyms"><span class="i18n" data-i18n-id="i18n_display_synonyms">Display synonyms</span></label>';
         optionsHtml = optionsHtml + '<div class="radio">';
         optionsHtml = optionsHtml + '<label>';
         if (panel.options.displaySynonyms == true) {
@@ -621,7 +631,7 @@ function conceptDetails(divElement, conceptId, options) {
         } else {
             optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true>';
         }
-        optionsHtml = optionsHtml + 'Display Synonyms along with FSN and preferred terms.';
+        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>.';
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '<div class="radio">';
@@ -631,12 +641,12 @@ function conceptDetails(divElement, conceptId, options) {
         } else {
             optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsNo" value=false checked>';
         }
-        optionsHtml = optionsHtml + 'Only display FSN and preferred terms.';
+        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_synonyms3">Only display FSN and preferred terms</span>.';
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="displayIds">Display Ids</label>';
+        optionsHtml = optionsHtml + '<label for="displayIds"><span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span></label>';
         optionsHtml = optionsHtml + '<div class="radio">';
         optionsHtml = optionsHtml + '<label>';
         if (panel.options.showIds == true) {
@@ -644,7 +654,7 @@ function conceptDetails(divElement, conceptId, options) {
         } else {
             optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsYes" value=true>';
         }
-        optionsHtml = optionsHtml + 'Display Ids for all components.';
+        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>.';
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '<div class="radio">';
@@ -654,27 +664,27 @@ function conceptDetails(divElement, conceptId, options) {
         } else {
             optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsNo" value=false checked>';
         }
-        optionsHtml = optionsHtml + 'Hide Ids for all components.';
+        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_hide_ids">Hide Ids for all components</span>.';
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="selectedRelsView">Relationships View</label>';
+        optionsHtml = optionsHtml + '<label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_rels_view">Relationships View</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
         if (panel.options.selectedView == "stated") {
-            optionsHtml = optionsHtml + '<option value="stated" selected>Stated</option>';
+            optionsHtml = optionsHtml + '<option value="stated" selected><span class="i18n" data-i18n-id="i18n_stated">Stated</span></option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="stated">Stated</option>';
+            optionsHtml = optionsHtml + '<option value="stated"><span class="i18n" data-i18n-id="i18n_stated">Stated</span></option>';
         }
         if (panel.options.selectedView == "inferred") {
-            optionsHtml = optionsHtml + '<option value="inferred" selected>Inferred</option>';
+            optionsHtml = optionsHtml + '<option value="inferred" selected><span class="i18n" data-i18n-id="i18n_inferred">Inferred</span></option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="inferred">Inferred</option>';
+            optionsHtml = optionsHtml + '<option value="inferred"><span class="i18n" data-i18n-id="i18n_inferred">Inferred</span></option>';
         }
         if (panel.options.selectedView == "all") {
-            optionsHtml = optionsHtml + '<option value="all" selected>All</option>';
+            optionsHtml = optionsHtml + '<option value="all" selected><span class="i18n" data-i18n-id="i18n_all">All</span></option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="all">All</option>';
+            optionsHtml = optionsHtml + '<option value="all"><span class="i18n" data-i18n-id="i18n_all">All</span></option>';
         }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
@@ -682,15 +692,15 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '<div class="checkbox">';
         optionsHtml = optionsHtml + '<label>';
         if (panel.options.displayChildren == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> Display children';
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">Display children</span>';
         } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption" checked> Display children';
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption" checked> <span class="i18n" data-i18n-id="i18n_display_children">Display children</span>';
         }
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-langRefsetOption">Language Refset</label>';
+        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">Language Refset</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-langRefsetOption">';
         if (panel.options.langRefset == "900000000000508004") {
             optionsHtml = optionsHtml + '<option value="900000000000508004" selected>GB Language Refset</option>';
