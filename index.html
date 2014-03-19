@@ -308,20 +308,17 @@
             <div>
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                <!--    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                </button> -->
-                     <img class="pull-left" src="img/beta.gif"><a class="navbar-brand" href="javascript:void(0);" onclick="initialize();"><strong>
+                </button>
+                <img class="pull-left hidden-xs hidden-sm" src="img/beta.gif"><a class="navbar-brand" href="javascript:void(0);" onclick="initialize();"><strong>
                      	&nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_app_name">IHTSDO SNOMED CT Browser</span></strong></a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar">
-
-                    </ul>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-left: 20px; padding-right: 20px;">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="navbar-btn" id="edition-selector">
                             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
@@ -369,7 +366,7 @@
                         <li class="navbar-btn" id="tour-button">
                             <button type="button" class="btn btn-default" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_Help">Help</span></button>
                         </li>
-                        <img class="pull-right" src="img/logo.png" alt="IHTSDO delivering SNOMED, the global clinical terminology">
+                        <img class="pull-right visible-lg" src="img/logo.png" alt="IHTSDO delivering SNOMED, the global clinical terminology">
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
