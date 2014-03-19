@@ -363,9 +363,6 @@
                                 <li><a href="javascript:void(0);" onclick="switchLanguage('se', 'img/flags/se.png', true);"><img src="img/flags/se.png"> Swedish</a></li>
                             </ul>
                         </li>
-                        <li class="navbar-btn" id="tour-button">
-                            <button type="button" class="btn btn-default" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_Help">Help</span></button>
-                        </li>
                         <img class="pull-right visible-lg" src="img/logo.png" alt="IHTSDO delivering SNOMED, the global clinical terminology">
                     </ul>
                 </div><!-- /.navbar-collapse -->
@@ -378,7 +375,9 @@
                     <h1><span class="i18n" data-i18n-id="i18n_welcome">Welcome</span></h1>
                     <p><span class="i18n" data-i18n-id="i18n_home1">This is a beta... a work in progress of ways to browse and search SNOMED CT as part of development within the IHTSDO Open Tooling Framework, by the IHTSDO and its development partners</span></p>
                     <p><span class="i18n" data-i18n-id="i18n_home2">Please select a SNOMED CT release and a perspective from the top menu to start, or...</span></p>
-                    <p><a class="btn btn-primary btn-lg" role="button" onclick="switchToBrowsing();"><span class="i18n" data-i18n-id="i18n_go_browsing">Go to the Browsing view</span></a></p>
+                    <p><a class="btn btn-primary btn-lg" role="button" onclick="switchToBrowsing();"><span class="i18n" data-i18n-id="i18n_go_browsing">Go to the Browsing view</span></a>
+                        &nbsp;&nbsp;or...&nbsp;&nbsp;
+                        <a class="btn btn-primary btn-lg" role="button" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_take_tour">take the Tour...</span></a></p>
                     <p><span class="i18n" data-i18n-id="i18n_home3">Also, please provide any feedback by emailing <a href="mailto:otf@ihtsdo.org?subject=Bno to the rowser Feedback" target="_blank">otf@ihtsdo.org</a>. Your feedback is essential to the evolution and improvement of this service.</span></p>
                     <p><span class="i18n" data-i18n-id="i18n_home4">If you would like to get involved in the development, this code is available under an Apache v2 open source license. Please visit the open source repository in the <a href="https://github.com/IHTSDO/snomed-interaction-components" target="_blank">IHTSDO GitHub account</a></span></p>
 					<p></p>
