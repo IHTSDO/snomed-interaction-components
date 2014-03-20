@@ -47,126 +47,131 @@
                 searchLang: "english"
             };
 
-            var tour = new Tour({
-                steps: [
-                    {
-                        element: "nothing",
-                        title: "Browsing Perspective",
-                        content: "Hi, welcome to the tour of the browsing perspective.<br>It includes 4 panels, a Taxonomy panel, a Search panel, and 2 concept details panels.",
-                        placement: "bottom",
-                        orphan: true,
-                        backdrop: false,
-                        onShow: function (tour) { switchToBrowsing() }
-                    },
-                    {
-                        element: "#bp-taxonomy_canvas",
-                        title: "Taxonomy Panel",
-                        content: "This panel displays the SNOMED CT Hierarchy.",
-                        placement: "right",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-search_canvas",
-                        title: "Search Panel",
-                        content: "This panel allows to search SNOMED CT content.",
-                        placement: "bottom",
-                        backdrop: true
-                    },
-                    {
-                        element: "#details",
-                        title: "Concept Details Panels",
-                        content: "These 2 concept details panels display the attributes, descriptions<br>and relationships of SNOMED CT concepts.",
-                        placement: "top",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-taxonomy_canvas-configButton",
-                        title: "Taxonomy Configuration",
-                        content: "The configuration button opens the configuration of each panel.<br>The view can be set to Inferred or Stated view here.",
-                        placement: "right",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-search_canvas-configButton",
-                        title: "Search Configuration",
-                        content: "In the search panel, configuration can select different search modes.",
-                        placement: "left",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-cd1_canvas-configButton",
-                        title: "Concept Details Configuration",
-                        content: "In a concept details panel, configuration can select which components<br>of a concept are display or hidden.",
-                        placement: "right",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-taxonomy_canvas-linkerButton",
-                        title: "Panels linking",
-                        content: "The linker button displays current links with other panels.<br>Links are used to update Concept Details panels<br>responding to clicks on the taxonomy or search results.<br>Links can be cleared from this button.<br>Also, this button can be dragged & dropped over<br>linker buttons in other panels creating new links.",
-                        placement: "right",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-taxonomy_canvas-subscribersMarker",
-                        title: "link marker",
-                        content: "This icon informs the link status.<br>This panel is linked to any other panel that shares the same marker color.<br>When links are created, matching colors are assigned automatically.",
-                        placement: "right",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-taxonomy_canvas-treenode-404684003",
-                        title: "Concept in taxonomy",
-                        content: "Single click on a concept will update linked panels.<br>Double-click will re-focus the tree in the concept.<br>The concept can also be dragged to other panels.",
-                        placement: "right",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-taxonomy_canvas-treeicon-404684003",
-                        title: "Navigating the taxonomy",
-                        content: "These icons open and close the hierarchy tree,<br>retrieving the children using the selected view.<br>(Inferred or Stated)",
-                        placement: "right",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-search_canvas",
-                        title: "Displaying results",
-                        content: "Clicking in s search results will update the linked Concept Details panel.",
-                        placement: "bottom",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-search_canvas-historyButton",
-                        title: "History",
-                        content: "Some panels have <em><strong>History</strong></em> features.<br>The history button will show previous contents of this panel<br>and the panel can be set back to that content with just one click.",
-                        placement: "left",
-                        backdrop: true
-                    },
-                    {
-                        element: "#bp-cd1_canvas-attributesClip",
-                        title: "Draggable items",
-                        content: "References to concepts may have this icon next to them.<br>This icon can be dragged to other panels, like a concept details panel or a taxonomy,<br>in order to set the panel to this concept.",
-                        placement: "top",
-                        backdrop: true,
-                        onHide: function (tour) { initialize() }
-                    },
-                    {
-                        element: "nothing",
-                        title: "Browsing Perspective",
-                        content: "Thanks for taking this tour.<br>Other perspectives are different arrangements of the same panels and all the same UI concepts apply.<br>Try them out!<br>Remember that you can switch to other panels or perspectives using the Top menu selectors.",
-                        placement: "bottom",
-                        orphan: true,
-                        backdrop: true
-                    }
-                ],
-                storage: false,
-                debug: true
-            });
+            var tour;
 
             function start() {
                 switchLanguage(selectedLanguage, selectedFlag, false);
                 initialize();
                 $('#license-modal').modal('show');
+                initTour();
+            }
+
+            function initTour() {
+                tour = new Tour({
+                    steps: [
+                        {
+                            element: "nothing",
+                            title: i18n_tour_step1_title,
+                            content: i18n_tour_step1_text,
+                            placement: "bottom",
+                            orphan: true,
+                            backdrop: false,
+                            onShow: function (tour) { switchToBrowsing() }
+                        },
+                        {
+                            element: "#bp-taxonomy_canvas",
+                            title: i18n_tour_step2_title,
+                            content: i18n_tour_step2_text,
+                            placement: "right",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-search_canvas",
+                            title: i18n_tour_step3_title,
+                            content: i18n_tour_step3_text,
+                            placement: "bottom",
+                            backdrop: true
+                        },
+                        {
+                            element: "#details",
+                            title: i18n_tour_step4_title,
+                            content: i18n_tour_step4_text,
+                            placement: "top",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-taxonomy_canvas-configButton",
+                            title: i18n_tour_step5_title,
+                            content: i18n_tour_step5_text,
+                            placement: "right",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-search_canvas-configButton",
+                            title: i18n_tour_step6_title,
+                            content: i18n_tour_step6_text,
+                            placement: "left",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-cd1_canvas-configButton",
+                            title: i18n_tour_step7_title,
+                            content: i18n_tour_step7_text,
+                            placement: "right",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-taxonomy_canvas-linkerButton",
+                            title: i18n_tour_step8_title,
+                            content: i18n_tour_step8_text,
+                            placement: "right",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-taxonomy_canvas-subscribersMarker",
+                            title: i18n_tour_step9_title,
+                            content: i18n_tour_step9_text,
+                            placement: "right",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-taxonomy_canvas-treenode-404684003",
+                            title: i18n_tour_step10_title,
+                            content: i18n_tour_step10_text,
+                            placement: "right",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-taxonomy_canvas-treeicon-404684003",
+                            title: i18n_tour_step11_title,
+                            content: i18n_tour_step11_text,
+                            placement: "right",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-search_canvas",
+                            title: i18n_tour_step12_title,
+                            content: i18n_tour_step12_text,
+                            placement: "bottom",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-search_canvas-historyButton",
+                            title: i18n_tour_step13_title,
+                            content: i18n_tour_step13_text,
+                            placement: "left",
+                            backdrop: true
+                        },
+                        {
+                            element: "#bp-cd1_canvas-attributesClip",
+                            title: i18n_tour_step14_title,
+                            content: i18n_tour_step14_text,
+                            placement: "top",
+                            backdrop: true,
+                            onHide: function (tour) { initialize() }
+                        },
+                        {
+                            element: "nothing",
+                            title: i18n_tour_step15_title,
+                            content: i18n_tour_step15_text,
+                            placement: "bottom",
+                            orphan: true,
+                            backdrop: true
+                        }
+                    ],
+                    storage: false,
+                    debug: false
+                });
                 tour.init();
             }
 

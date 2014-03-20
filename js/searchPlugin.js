@@ -34,7 +34,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "<div class='panel-heading'>";
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         searchHtml = searchHtml + "<div class='row'>";
-        searchHtml = searchHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong>Search</strong></div>";
+        searchHtml = searchHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong><span class='i18n' data-i18n-id='i18n_search'>Search</span></strong></div>";
         searchHtml = searchHtml + "<div class='col-md-4 text-right'>";
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>"
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-historyButton' class='btn btn-link history-button' style='padding:2px'><i class='glyphicon glyphicon-time'></i></button>"
@@ -52,8 +52,11 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-startWithLabel"><em>Starts With Mode</em></span>';
         searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-phraseMatchLabel"><em>Phrase Match Mode</em></span>';
         searchHtml = searchHtml + '<span id="' + panel.divElement.id + '-wordsAnyOrderLabel"><em>Words any order Mode</em></span>';
-        searchHtml = searchHtml + ': Type at least 3 characters <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i> <span id="' + panel.divElement.id + '-searchExample"></span></label>';
-        searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="Search..." autocomplete="off">';
+        searchHtml = searchHtml + ': <span class="i18n" data-i18n-id="i18n_type_3_chars">Type at least 3 characters</span> <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i> <span id="' + panel.divElement.id + '-searchExample"></span></label>';
+        if (typeof i18n_search_placeholder == "undefined") {
+            i18n_search_placeholder = "Search...";
+        }
+        searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="' + i18n_search_placeholder + '" autocomplete="off">';
         searchHtml = searchHtml + '</div>';
         searchHtml = searchHtml + '</form>';
         searchHtml = searchHtml + '<div id="' + panel.divElement.id + '-searchBar"></div>';
@@ -75,8 +78,8 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "<p></p>";
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "<div class='modal-footer'>";
-        searchHtml = searchHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>";
-        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary' data-dismiss='modal'>Apply changes</button>";
+        searchHtml = searchHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_cancel'>Cancel</span></button>";
+        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_apply_changes'>Apply changes</span></button>";
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div><!-- /.modal-content -->";
         searchHtml = searchHtml + "</div><!-- /.modal-dialog -->";
@@ -125,29 +128,38 @@ function searchPanel(divElement, options) {
             $("#" + panel.divElement.id + "-expandButton").show();
             $("#" + panel.divElement.id + "-collapseButton").hide();
         });
+
+        if (typeof i18n_panel_options == "undefined") {
+            i18n_panel_options = "Panel options";
+        }
         $("#" + panel.divElement.id + "-configButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            title: 'Panel options',
+            title: i18n_panel_options,
             animation: true,
             delay: 1000
         });
-
+        if (typeof i18n_history == "undefined") {
+            i18n_history = 'History';
+        }
         $("#" + panel.divElement.id + "-historyButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            title: 'History',
+            title: i18n_history,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_panel_links == "undefined") {
+            i18n_panel_links = 'Panel links';
+        }
+        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_links,
             animation: true,
             delay: 1000
         });
 
-        $("#" + panel.divElement.id + "-linkerButton").tooltip({
-            placement : 'left',
-            trigger: 'hover',
-            title: 'Panel links',
-            animation: true,
-            delay: 1000
-        });
         $("#" + panel.divElement.id + "-linkerButton").draggable({
             cancel: false,
             appendTo: 'body',
@@ -174,7 +186,7 @@ function searchPanel(divElement, options) {
                 content: function () {
                     historyHtml = '<div style="height:100px;overflow:auto;">';
                     if (panel.history.length == 0) {
-                        historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em>No search terms yet...</em></div>';
+                        historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em><span class="i18n" data-i18n-id="i18n_no_search_terms">No search terms yet...</span></em></div>';
                     }
                     historyHtml = historyHtml + '<table>';
                     var reversedHistory = panel.history.slice(0);
@@ -221,13 +233,13 @@ function searchPanel(divElement, options) {
                 placement: 'bottomRight',
                 html: true,
                 content: function () {
-                    linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
+                    linkerHtml = '<div class="text-center text-muted"><em><span class="i18n" data-i18n-id="i18n_drag_to_link">Drag to link with other panels</span><br>';
                     if (panel.subscribers.length == 1) {
                         linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
                     } else {
                         linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
                     }
-                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearSearchPanelSubscriptions(\'' + panel.divElement.id + '\');">Clear links</a></div>';
+                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearSearchPanelSubscriptions(\'' + panel.divElement.id + '\');"><span class="i18n" data-i18n-id="i18n_clear_links">Clear links</span></a></div>';
                     return linkerHtml;
                 }
             });
@@ -475,17 +487,17 @@ function searchPanel(divElement, options) {
             $("#" + panel.divElement.id + '-startWithLabel').show();
             $("#" + panel.divElement.id + '-phraseMatchLabel').hide();
             $("#" + panel.divElement.id + '-wordsAnyOrderLabel').hide();
-            $("#" + panel.divElement.id + '-searchExample').html("<span class='text-muted'>Example: <em>Asthm</em></span> ");
+            $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_1'>Example: <em>Asthm</em></span> ");
         } else if (panel.options.searchMode == "phraseMatch") {
             $("#" + panel.divElement.id + '-startWithLabel').hide();
             $("#" + panel.divElement.id + '-phraseMatchLabel').show();
             $("#" + panel.divElement.id + '-wordsAnyOrderLabel').hide();
-            $("#" + panel.divElement.id + '-searchExample').html("<span class='text-muted'>Example: <em>blistered finger</em></span> ");
+            $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_2'>Example: <em>blistered finger</em></span> ");
         } else if (panel.options.searchMode == "wordsAnyOrder") {
             $("#" + panel.divElement.id + '-startWithLabel').hide();
             $("#" + panel.divElement.id + '-phraseMatchLabel').hide();
             $("#" + panel.divElement.id + '-wordsAnyOrderLabel').show();
-            $("#" + panel.divElement.id + '-searchExample').html("<span class='text-muted'>Example: <em>shou fra</em></span> ");
+            $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_3'>Example: <em>shou fra</em></span> ");
         }
     }
 
@@ -495,25 +507,34 @@ function searchPanel(divElement, options) {
         }
         optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
         optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-searchModeOption">Search Mode</label>';
+        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-searchModeOption"><span class="i18n" data-i18n-id="i18n_search_mode">Search Mode</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-searchModeOption">';
+        if (typeof i18n_starts_with == "undefined") {
+            i18n_starts_with = "Starts with";
+        }
         if (panel.options.searchMode == "startsWith") {
-            optionsHtml = optionsHtml + '<option value="startsWith" selected>Starts with</option>';
+            optionsHtml = optionsHtml + '<option value="startsWith" selected>' + i18n_starts_with + '</option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="startsWith">Starts with</option>';
+            optionsHtml = optionsHtml + '<option value="startsWith">' + i18n_starts_with + '</option>';
+        }
+        if (typeof i18n_phrase_match == "undefined") {
+            i18n_phrase_match = "Phrase match";
         }
         if (panel.options.searchMode == "phraseMatch") {
-            optionsHtml = optionsHtml + '<option value="phraseMatch" selected>Phrase Match</option>';
+            optionsHtml = optionsHtml + '<option value="phraseMatch" selected>' + i18n_phrase_match + '</option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="phraseMatch">Phrase Match</option>';
+            optionsHtml = optionsHtml + '<option value="phraseMatch">' + i18n_phrase_match + '</option>';
+        }
+        if (typeof i18n_words_any_order == "undefined") {
+            i18n_words_any_order = "Words any order";
         }
         if (panel.options.searchMode == "wordsAnyOrder") {
-            optionsHtml = optionsHtml + '<option value="wordsAnyOrder" selected>Words any order</option>';
+            optionsHtml = optionsHtml + '<option value="wordsAnyOrder" selected>' + i18n_words_any_order + '</option>';
         } else {
-            optionsHtml = optionsHtml + '<option value="wordsAnyOrder">Words any order</option>';
+            optionsHtml = optionsHtml + '<option value="wordsAnyOrder">' + i18n_words_any_order + '</option>';
         }
         optionsHtml = optionsHtml + '</select>';
-        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-searchLanguageOption">Search Language</label>';
+        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-searchLanguageOption"><span class="i18n" data-i18n-id="i18n_search_language">Search Language</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-searchLanguageOption">';
         if (panel.options.searchMode == "english") {
             optionsHtml = optionsHtml + '<option value="english" selected>English</option>';
