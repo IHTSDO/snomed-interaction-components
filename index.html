@@ -47,132 +47,137 @@
                 searchLang: "english"
             };
 
+            var tours = {};
             var tour;
 
             function start() {
                 switchLanguage(selectedLanguage, selectedFlag, false);
                 initialize();
                 $('#license-modal').modal('show');
-                initTour();
             }
 
             function initTour() {
-                tour = new Tour({
-                    steps: [
-                        {
-                            element: "nothing",
-                            title: i18n_tour_step1_title,
-                            content: i18n_tour_step1_text,
-                            placement: "bottom",
-                            orphan: true,
-                            backdrop: false,
-                            onShow: function (tour) { switchToBrowsing() }
-                        },
-                        {
-                            element: "#bp-taxonomy_canvas",
-                            title: i18n_tour_step2_title,
-                            content: i18n_tour_step2_text,
-                            placement: "right",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-search_canvas",
-                            title: i18n_tour_step3_title,
-                            content: i18n_tour_step3_text,
-                            placement: "bottom",
-                            backdrop: true
-                        },
-                        {
-                            element: "#details",
-                            title: i18n_tour_step4_title,
-                            content: i18n_tour_step4_text,
-                            placement: "top",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-taxonomy_canvas-configButton",
-                            title: i18n_tour_step5_title,
-                            content: i18n_tour_step5_text,
-                            placement: "right",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-search_canvas-configButton",
-                            title: i18n_tour_step6_title,
-                            content: i18n_tour_step6_text,
-                            placement: "left",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-cd1_canvas-configButton",
-                            title: i18n_tour_step7_title,
-                            content: i18n_tour_step7_text,
-                            placement: "right",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-taxonomy_canvas-linkerButton",
-                            title: i18n_tour_step8_title,
-                            content: i18n_tour_step8_text,
-                            placement: "right",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-taxonomy_canvas-subscribersMarker",
-                            title: i18n_tour_step9_title,
-                            content: i18n_tour_step9_text,
-                            placement: "right",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-taxonomy_canvas-treenode-404684003",
-                            title: i18n_tour_step10_title,
-                            content: i18n_tour_step10_text,
-                            placement: "right",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-taxonomy_canvas-treeicon-404684003",
-                            title: i18n_tour_step11_title,
-                            content: i18n_tour_step11_text,
-                            placement: "right",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-search_canvas",
-                            title: i18n_tour_step12_title,
-                            content: i18n_tour_step12_text,
-                            placement: "bottom",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-search_canvas-historyButton",
-                            title: i18n_tour_step13_title,
-                            content: i18n_tour_step13_text,
-                            placement: "left",
-                            backdrop: true
-                        },
-                        {
-                            element: "#bp-cd1_canvas-attributesClip",
-                            title: i18n_tour_step14_title,
-                            content: i18n_tour_step14_text,
-                            placement: "top",
-                            backdrop: true,
-                            onHide: function (tour) { initialize() }
-                        },
-                        {
-                            element: "nothing",
-                            title: i18n_tour_step15_title,
-                            content: i18n_tour_step15_text,
-                            placement: "bottom",
-                            orphan: true,
-                            backdrop: true
-                        }
-                    ],
-                    storage: false,
-                    debug: false
-                });
-                tour.init();
+                if (typeof  tours[selectedLanguage]  == "undefined") {
+                    tours[selectedLanguage] = new Tour({
+                        steps: [
+                            {
+                                element: "nothing",
+                                title: i18n_tour_step1_title,
+                                content: i18n_tour_step1_text,
+                                placement: "bottom",
+                                orphan: true,
+                                backdrop: false,
+                                onShow: function (tour) { switchToBrowsing() }
+                            },
+                            {
+                                element: "#bp-taxonomy_canvas",
+                                title: i18n_tour_step2_title,
+                                content: i18n_tour_step2_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-search_canvas",
+                                title: i18n_tour_step3_title,
+                                content: i18n_tour_step3_text,
+                                placement: "bottom",
+                                backdrop: true
+                            },
+                            {
+                                element: "#details",
+                                title: i18n_tour_step4_title,
+                                content: i18n_tour_step4_text,
+                                placement: "top",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-taxonomy_canvas-configButton",
+                                title: i18n_tour_step5_title,
+                                content: i18n_tour_step5_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-search_canvas-configButton",
+                                title: i18n_tour_step6_title,
+                                content: i18n_tour_step6_text,
+                                placement: "left",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-cd1_canvas-configButton",
+                                title: i18n_tour_step7_title,
+                                content: i18n_tour_step7_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-taxonomy_canvas-linkerButton",
+                                title: i18n_tour_step8_title,
+                                content: i18n_tour_step8_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-taxonomy_canvas-subscribersMarker",
+                                title: i18n_tour_step9_title,
+                                content: i18n_tour_step9_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-taxonomy_canvas-treenode-404684003",
+                                title: i18n_tour_step10_title,
+                                content: i18n_tour_step10_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-taxonomy_canvas-treeicon-404684003",
+                                title: i18n_tour_step11_title,
+                                content: i18n_tour_step11_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-search_canvas",
+                                title: i18n_tour_step12_title,
+                                content: i18n_tour_step12_text,
+                                placement: "bottom",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-search_canvas-historyButton",
+                                title: i18n_tour_step13_title,
+                                content: i18n_tour_step13_text,
+                                placement: "left",
+                                backdrop: true
+                            },
+                            {
+                                element: "#bp-cd1_canvas-attributesClip",
+                                title: i18n_tour_step14_title,
+                                content: i18n_tour_step14_text,
+                                placement: "top",
+                                backdrop: true,
+                                onHide: function (tour) { initialize() }
+                            },
+                            {
+                                element: "nothing",
+                                title: i18n_tour_step15_title,
+                                content: i18n_tour_step15_text,
+                                placement: "bottom",
+                                orphan: true,
+                                backdrop: true
+                            }
+                        ],
+                        storage: false,
+                        debug: false
+                    });
+                    tour = tours[selectedLanguage];
+                    tour.init();
+                } else {
+                    tour = tours[selectedLanguage];
+                }
             }
 
             function tourStart() {
@@ -301,6 +306,7 @@
                         console.log($(this).attr('data-i18n-id') + " = " + $(this).html());
                     }
                 });
+                initTour();
             }
 
         </script>
