@@ -67,11 +67,42 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "         </ul>";
         searchHtml = searchHtml + "     </li>";
         searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'>Use <span id='" + panel.divElement.id + "-navLanguageLabel'></span> <b class='caret'></b></a>";
+        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-navLanguageLabel'></span> <b class='caret'></b></a>";
         searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
         searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-danishLangButton'><span class='i18n' data-i18n-id='i18n_danish_stemmer'>Danish language stemmer</span></button></li>";
         searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-englishLangButton'><span class='i18n' data-i18n-id='i18n_english_stemmer'>English language stemmer</span></button></li>";
         searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-spanishLangButton'><span class='i18n' data-i18n-id='i18n_spanish_stemmer'>Spanish language stemmer</span></button></li>";
+        searchHtml = searchHtml + "         </ul>";
+        searchHtml = searchHtml + "     </li>";
+        searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
+        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'>Filters: <span id='" + panel.divElement.id + "-navFiltersLabel'></span> <b class='caret'></b></a>";
+        searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
+        searchHtml = searchHtml + "             <li class='dropdown-submenu'> <a tabindex='-1' href='#'><span class='i18n' data-i18n-id='i18n_filter_semtag'>Filter by Semantic Tag</span></a>";
+        searchHtml = searchHtml + "                 <ul class='dropdown-menu' role='menu' style='float: none;'>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>attribute</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>body structure</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>environment / location</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>event</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>finding</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>linkage concept</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>metadata</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>observable entity</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>organism</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>physical force</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>physical object</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>procedure</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>product</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>qualifier value</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>record artifact</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>situation</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>social concept</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>special concept</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>specimen</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>staging scale</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>substance</button></li>";
+        searchHtml = searchHtml + "                     <li><button class='btn btn-link semtag-button' style='padding-top: 1px;padding-bottom: 1px;'>tumor staging</button></li>";
+        searchHtml = searchHtml + "                 </ul>";
+        searchHtml = searchHtml + "             </li>";
         searchHtml = searchHtml + "         </ul>";
         searchHtml = searchHtml + "     </li>";
         searchHtml = searchHtml + " </ul>";
@@ -100,8 +131,9 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
         $("#" + panel.divElement.id + "-expandButton").hide();
         $("#" + panel.divElement.id + "-subscribersMarker").hide();
-        $("#" + panel.divElement.id + "-closeButton").click(function (event) {
-            $(divElement).remove();
+
+        $("#" + panel.divElement.id).find('.semtag-button').click(function (event) {
+            console.log("Semtag click: " + $(this).html());
         });
 
         //$("#" + panel.divElement.id + "-searchConfigBar").slideUp('fast');
@@ -292,7 +324,7 @@ function searchPanel(divElement, options) {
         });
         $("#" + panel.divElement.id + "-englishLangButton").click(function (event) {
             panel.options.searchLang = 'english';
-            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_engish_stemmer'>English language stemmer</span>");
+            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_english_stemmer'>English language stemmer</span>");
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
             if (searchTerm.length > 0) {
                 panel.search(searchTerm, true);
@@ -549,25 +581,25 @@ function searchPanel(divElement, options) {
             panel.options.searchMode = "startsWith";
         }
         if (panel.options.searchMode == "startsWith") {
-            $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_1'>Example: <em>Asthm</em></span> ");
-            $("#" + panel.divElement.id + '-navSearchModeLabel').html("<span class='i18n' data-i18n-id='i18n_regex_search_mode'>Regular Expressions search mode</span>");
+            $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_1'>" + i18n_search_examp_1  +  "</span> ");
+            $("#" + panel.divElement.id + '-navSearchModeLabel').html("<span class='i18n' data-i18n-id='i18n_regex_search_mode'>" + i18n_regex_search_mode  +  "</span>");
         } else if (panel.options.searchMode == "phraseMatch") {
-            $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_2'>Example: <em>blistered finger</em></span> ");
-            $("#" + panel.divElement.id + '-navSearchModeLabel').html("<span class='i18n' data-i18n-id='i18n_full_text_search_mode'>Full text search mode</span>");
+            $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_2'>" + i18n_search_examp_2  +  "</em></span> ");
+            $("#" + panel.divElement.id + '-navSearchModeLabel').html("<span class='i18n' data-i18n-id='i18n_full_text_search_mode'>" + i18n_full_text_search_mode  +  "</span>");
         } else if (panel.options.searchMode == "wordsAnyOrder") {
-            $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_3'>Example: <em>shou fra</em></span> ");
-            $("#" + panel.divElement.id + '-navSearchModeLabel').html("<span class='i18n' data-i18n-id='i18n_partial_match_search_mode'>Partial matching search mode</span>");
+            $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_3'>" + i18n_search_examp_3  +  "</span> ");
+            $("#" + panel.divElement.id + '-navSearchModeLabel').html("<span class='i18n' data-i18n-id='i18n_partial_match_search_mode'>" + i18n_partial_match_search_mode  +  "</span>");
         }
 
         if (typeof panel.options.searchLang == "undefined") {
             panel.options.searchLang = "english";
         }
         if (panel.options.searchLang == "danish") {
-            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_danish_stemmer'>Danish language stemmer</span>");
+            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_danish_stemmer'>" + i18n_danish_stemmer  +  "</span>");
         } else if (panel.options.searchLang == "english") {
-            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_english_stemmer'>English language stemmer</span>");
+            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_english_stemmer'>" + i18n_english_stemmer  +  "</span>");
         } else if (panel.options.searchLang == "spanish") {
-            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_spanish_stemmer'>Spanish language stemmer</span>");
+            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_spanish_stemmer'>" + i18n_spanish_stemmer  +  "</span>");
         }
 
     }
