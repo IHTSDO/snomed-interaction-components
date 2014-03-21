@@ -27,16 +27,27 @@ and open the template in the editor.
             function initialize() {
                 // Example: common options object
                 var options = {
-                    serverUrl: "http://107.170.33.116:3000",
-                    edition: "es-edition",
+                    serverUrl: "http://browser.ihtsdotools.org:3000",
+                    edition: "en-edition",
                     release: "v20140131",
-                    showIds: true,
-                    displaySynonyms: false,
-                    selectedView: "stated",
+                    showIds: false,
+                    displaySynonyms: true,
+                    selectedView: "inferred",
                     displayChildren: false,
                     langRefset: "900000000000509007",
-                    closeButton: true
+                    closeButton: false,
+                    collapseButton: false,
+                    linkerButton: true,
+                    searchMode: "wordsAnyOrder",
+                    searchLang: "english"
                 };
+
+                jQuery.i18n.properties({
+                    name:'Languages',
+                    path:'i18n/',
+                    mode:'both',
+                    language:"en"
+                });
 
                 var tp = new taxonomyPanel(document.getElementById("taxonomy_canvas"), options);
 
