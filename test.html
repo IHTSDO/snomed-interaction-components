@@ -11,32 +11,48 @@ and open the template in the editor.
 
         <script src="lib/jquery-2.1.0.min.js" type="text/javascript"></script>
         <script src="lib/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="lib/jquery.splitter-0.14.0.js"></script>
         <script src="js/conceptDetailsPlugin.js" type="text/javascript"></script>
         <script src="js/searchPlugin.js" type="text/javascript"></script>
         <script src="js/taxonomyPlugin.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/sct-widgets.css">
+        <link rel="stylesheet" href="css/jquery.splitter.css">
         <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css">
-        <script src="lib/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="css/bootstrap.min.base.12.css">
+        <link rel="stylesheet" href="css/bootstrap-tour.min.css">
+        <script src="lib/bootstrap.min.js" type="text/javascript"></script>
         <script src="lib/jquery.ui.touch-punch.min.js"></script>
         <script type="text/javascript" src="lib/popover-extra-placements.js"></script>
         <link rel="stylesheet" href="css/popover-extra-placements.css">
+        <link rel="stylesheet" href="css/sct-widgets.css">
+        <script src="lib/bootstrap-tour.min.js"></script>
+        <script src="lib/jquery.i18n.properties-min-1.0.9.js"></script>
 
         <script type="text/javascript">
             function initialize() {
                 // Example: common options object
                 var options = {
-                    serverUrl: "http://107.170.33.116:3000",
-                    edition: "es-edition",
+                    serverUrl: "http://browser.ihtsdotools.org:3000",
+                    edition: "en-edition",
                     release: "v20140131",
-                    showIds: true,
-                    displaySynonyms: false,
-                    selectedView: "stated",
+                    showIds: false,
+                    displaySynonyms: true,
+                    selectedView: "inferred",
                     displayChildren: false,
                     langRefset: "900000000000509007",
-                    closeButton: true
+                    closeButton: true,
+                    collapseButton: true,
+                    linkerButton: true,
+                    searchMode: "wordsAnyOrder",
+                    searchLang: "english"
                 };
+
+                jQuery.i18n.properties({
+                    name:'Languages',
+                    path:'i18n/',
+                    mode:'both',
+                    language:"en"
+                });
 
                 var tp = new taxonomyPanel(document.getElementById("taxonomy_canvas"), options);
 

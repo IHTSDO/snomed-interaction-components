@@ -34,38 +34,33 @@ function taxonomyPanel(divElement, options) {
         taxonomyHtml = taxonomyHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         taxonomyHtml = taxonomyHtml + "<div class='row'>";
-        taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong>Taxonomy</strong> <small><span id='" + panel.divElement.id + "-txViewLabel'></span></small></div>";
+        taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong><span class='i18n' data-i18n-id='i18n_taxonomy'>Taxonomy</span></strong></div>";
         taxonomyHtml = taxonomyHtml + "<div class='col-md-6 text-right'>";
+        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-resetButton' class='btn btn-link' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-repeat'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>"
-        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
+        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-expandButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-full'></i></button>"
         taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-closeButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-remove'></i></button>"
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "</div>";
+        taxonomyHtml = taxonomyHtml + "<div id='" + panel.divElement.id + "-taxonomyConfigBar' style='margin-bottom: 10px;'><nav class='navbar navbar-default' role='navigation' style='min-height: 28px;border-radius: 0px;border-bottom: 1px lightgray solid;'>";
+        taxonomyHtml = taxonomyHtml + " <ul class='nav navbar-nav navbar-left'>";
+        taxonomyHtml = taxonomyHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
+        taxonomyHtml = taxonomyHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-txViewLabel'></span> <b class='caret'></b></a>";
+        taxonomyHtml = taxonomyHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
+        taxonomyHtml = taxonomyHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-inferredViewButton'><span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span></button></li>";
+        taxonomyHtml = taxonomyHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-statedViewButton'><span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span></button></li>";
+        taxonomyHtml = taxonomyHtml + "         </ul>";
+        taxonomyHtml = taxonomyHtml + "     </li>";
+        taxonomyHtml = taxonomyHtml + " </ul>";
+        taxonomyHtml = taxonomyHtml + "</nav></div>";
         taxonomyHtml = taxonomyHtml + "<div class='panel-body' style='height:100%' id='" + panel.divElement.id + "-panelBody'>";
         taxonomyHtml = taxonomyHtml + "</div>";
         taxonomyHtml = taxonomyHtml + "</div>";
-        // modal config panel
-        taxonomyHtml = taxonomyHtml + "<div class='modal fade' id='" + panel.divElement.id + "-configModal'>";
-        taxonomyHtml = taxonomyHtml + "<div class='modal-dialog'>";
-        taxonomyHtml = taxonomyHtml + "<div class='modal-content'>";
-        taxonomyHtml = taxonomyHtml + "<div class='modal-header'>";
-        taxonomyHtml = taxonomyHtml + "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>";
-        taxonomyHtml = taxonomyHtml + "<h4 class='modal-title'>Options (" + panel.divElement.id + ")</h4>";
-        taxonomyHtml = taxonomyHtml + "</div>";
-        taxonomyHtml = taxonomyHtml + "<div class='modal-body' id='" + panel.divElement.id + "-modal-body'>";
-        taxonomyHtml = taxonomyHtml + "<p></p>";
-        taxonomyHtml = taxonomyHtml + "</div>";
-        taxonomyHtml = taxonomyHtml + "<div class='modal-footer'>";
-        taxonomyHtml = taxonomyHtml + "<button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>";
-        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-primary' data-dismiss='modal'>Apply changes</button>";
-        taxonomyHtml = taxonomyHtml + "</div>";
-        taxonomyHtml = taxonomyHtml + "</div><!-- /.modal-content -->";
-        taxonomyHtml = taxonomyHtml + "</div><!-- /.modal-dialog -->";
-        taxonomyHtml = taxonomyHtml + "</div><!-- /.modal -->";
         $(divElement).html(taxonomyHtml);
+        $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
         $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
@@ -74,8 +69,13 @@ function taxonomyPanel(divElement, options) {
         $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
         $("#" + panel.divElement.id + "-expandButton").hide();
         $("#" + panel.divElement.id + "-subscribersMarker").hide();
+
         $("#" + panel.divElement.id + "-closeButton").click(function(event) {
             $(divElement).remove();
+        });
+
+        $("#" + panel.divElement.id + "-configButton").click(function (event) {
+            $("#" + panel.divElement.id + "-taxonomyConfigBar").slideToggle('slow');
         });
 
         if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
@@ -104,14 +104,27 @@ function taxonomyPanel(divElement, options) {
         $("#" + panel.divElement.id + "-configButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            title: 'Panel options',
+            title: i18n_panel_options,
             animation: true,
             delay: 1000
         });
+        if (typeof i18n_reset == "undefined") {
+            i18n_reset = 'Reset';
+        }
+        $("#" + panel.divElement.id + "-resetButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_reset,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_panel_links == "undefined") {
+            i18n_panel_links = 'Panel links';
+        }
         $("#" + panel.divElement.id + "-linkerButton").tooltip({
             placement : 'left',
             trigger: 'hover',
-            title: 'Panel links',
+            title: i18n_panel_links,
             animation: true,
             delay: 1000
         });
@@ -131,6 +144,10 @@ function taxonomyPanel(divElement, options) {
         $("#" + panel.divElement.id + "-panelHeading").droppable({
             drop: panel.handleDropEvent,
             hoverClass: "bg-info"
+        });
+
+        $("#" + panel.divElement.id + "-resetButton").click(function() {
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
         });
 
         $("#" + panel.divElement.id + "-apply-button").click(function() {
@@ -157,6 +174,18 @@ function taxonomyPanel(divElement, options) {
                 }
             });
             $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+        });
+
+        $("#" + panel.divElement.id + "-inferredViewButton").click(function (event) {
+            panel.options.selectedView = 'inferred';
+            $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
+        });
+
+        $("#" + panel.divElement.id + "-statedViewButton").click(function (event) {
+            panel.options.selectedView = 'stated';
+            $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
         });
     }
 
@@ -263,7 +292,11 @@ function taxonomyPanel(divElement, options) {
             panel.options.selectedView = "inferred";
         }
 
-        $("#" + panel.divElement.id + "-txViewLabel").html("(" + panel.options.selectedView + ")");
+        if (panel.options.selectedView == "inferred") {
+            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+        } else {
+            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+        }
 
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
@@ -474,34 +507,8 @@ function taxonomyPanel(divElement, options) {
         return returnColor;
     }
 
-    this.setupOptionsPanel = function() {
-        optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="selectedRelsView">Taxonomy View</label>';
-        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
-        if (panel.options.selectedView == "stated") {
-            optionsHtml = optionsHtml + '<option value="stated" selected>Stated</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="stated">Stated</option>';
-        }
-        if (panel.options.selectedView == "inferred") {
-            optionsHtml = optionsHtml + '<option value="inferred" selected>Inferred</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="inferred">Inferred</option>';
-        }
-        optionsHtml = optionsHtml + '</select>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</form>';
-        $("#" + panel.divElement.id + "-modal-body").html(optionsHtml);
-    }
-
-    this.readOptionsPanel = function() {
-        panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
-    }
-
     this.setupCanvas();
     this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
-    this.setupOptionsPanel();
 }
 
 function clearTaxonomyPanelSubscriptions(divElementId1) {
