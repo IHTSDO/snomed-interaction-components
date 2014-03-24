@@ -61,9 +61,9 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
         searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-navSearchModeLabel'></span> <b class='caret'></b></a>";
         searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
-        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-phraseMatchButton'><span class='i18n' data-i18n-id='i18n_full_text_search_mode'>Full text search mode</span></button></li>";
-        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-wordsAnyOrderButton'><span class='i18n' data-i18n-id='i18n_partial_match_search_mode'>Partial matching search mode</span></button></li>";
-        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-startsWithButton'><span class='i18n' data-i18n-id='i18n_regex_search_mode'>Regular Expressions search mode</span></button></li>";
+        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-fullTextButton'><span class='i18n' data-i18n-id='i18n_full_text_search_mode'>Full text search mode</span></button></li>";
+        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-partialMatchingButton'><span class='i18n' data-i18n-id='i18n_partial_match_search_mode'>Partial matching search mode</span></button></li>";
+        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-regexButton'><span class='i18n' data-i18n-id='i18n_regex_search_mode'>Regular Expressions search mode</span></button></li>";
         searchHtml = searchHtml + "         </ul>";
         searchHtml = searchHtml + "     </li>";
         searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
@@ -74,8 +74,8 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-spanishLangButton'><span class='i18n' data-i18n-id='i18n_spanish_stemmer'>Spanish language stemmer</span></button></li>";
         searchHtml = searchHtml + "         </ul>";
         searchHtml = searchHtml + "     </li>";
-        searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'>Filters: <span id='" + panel.divElement.id + "-navFiltersLabel'></span> <b class='caret'></b></a>";
+        /*searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
+        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span>: <span id='" + panel.divElement.id + "-navFiltersLabel'></span> <b class='caret'></b></a>";
         searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
         searchHtml = searchHtml + "             <li class='dropdown-submenu'> <a tabindex='-1' href='#'><span class='i18n' data-i18n-id='i18n_filter_semtag'>Filter by Semantic Tag</span></a>";
         searchHtml = searchHtml + "                 <ul class='dropdown-menu' role='menu' style='float: none;'>";
@@ -104,7 +104,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "                 </ul>";
         searchHtml = searchHtml + "             </li>";
         searchHtml = searchHtml + "         </ul>";
-        searchHtml = searchHtml + "     </li>";
+        searchHtml = searchHtml + "     </li>";*/
         searchHtml = searchHtml + " </ul>";
         searchHtml = searchHtml + "</nav></div>";
         searchHtml = searchHtml + "<div class='panel panel-default' style='height:70%;overflow:auto;margin-bottom: 15px;min-height: 300px;'>";
@@ -114,6 +114,58 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div>";
+        // modal semtags panel
+        searchHtml = searchHtml + "<div class='modal fade' id='" + panel.divElement.id + "-configModal'>";
+        searchHtml = searchHtml + "<div class='modal-dialog'>";
+        searchHtml = searchHtml + "<div class='modal-content'>";
+        searchHtml = searchHtml + "<div class='modal-header'>";
+        searchHtml = searchHtml + "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>";
+        searchHtml = searchHtml + "<h4 class='modal-title'><span class='i18n' data-i18n-id='i18n_options'>Filter by Semantic Tags</span></h4>";
+        searchHtml = searchHtml + "</div>";
+        searchHtml = searchHtml + "<div class='modal-body' id='" + panel.divElement.id + "-modal-body'>";
+        searchHtml = searchHtml + "<div class='col-md-4'>";
+        searchHtml = searchHtml + '   <div class="form-group">';
+        searchHtml = searchHtml + '       <div class="checkbox"><label>';
+        searchHtml = searchHtml + '           <input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">attribute</span>';
+        searchHtml = searchHtml + '       </label></div>';
+        searchHtml = searchHtml + '       <div class="checkbox"><label>';
+        searchHtml = searchHtml + '           <input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">attribute</span>';
+        searchHtml = searchHtml + '       </label></div>';
+        searchHtml = searchHtml + '       <div class="checkbox"><label>';
+        searchHtml = searchHtml + '           <input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">attribute</span>';
+        searchHtml = searchHtml + '       </label></div>';
+        searchHtml = searchHtml + '       <div class="checkbox"><label>';
+        searchHtml = searchHtml + '           <input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">attribute</span>';
+        searchHtml = searchHtml + '       </label></div>';
+        searchHtml = searchHtml + '       <div class="checkbox"><label>';
+        searchHtml = searchHtml + '           <input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">attribute</span>';
+        searchHtml = searchHtml + '       </label></div>';
+        searchHtml = searchHtml + '       <div class="checkbox"><label>';
+        searchHtml = searchHtml + '           <input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">attribute</span>';
+        searchHtml = searchHtml + '       </label></div>';
+        searchHtml = searchHtml + '       <div class="checkbox"><label>';
+        searchHtml = searchHtml + '           <input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">attribute</span>';
+        searchHtml = searchHtml + '       </label></div>';
+        searchHtml = searchHtml + '       <div class="checkbox"><label>';
+        searchHtml = searchHtml + '           <input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">attribute</span>';
+        searchHtml = searchHtml + '       </label></div>';
+        searchHtml = searchHtml + '       <div class="checkbox"><label>';
+        searchHtml = searchHtml + '           <input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">attribute</span>';
+        searchHtml = searchHtml + '       </label></div>';
+        searchHtml = searchHtml + '   </div>';
+        searchHtml = searchHtml + "</div>";
+        searchHtml = searchHtml + "<div class='col-md-4'>";
+        searchHtml = searchHtml + "</div>";
+        searchHtml = searchHtml + "<div class='col-md-4'>";
+        searchHtml = searchHtml + "</div>";
+        searchHtml = searchHtml + "</div>";
+        searchHtml = searchHtml + "<div class='modal-footer'>";
+        searchHtml = searchHtml + "<button type='button' class='btn btn-danger' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_cancel'>Cancel</span></button>";
+        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-success' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_apply_changes'>Apply changes</span></button>";
+        searchHtml = searchHtml + "</div>";
+        searchHtml = searchHtml + "</div><!-- /.modal-content -->";
+        searchHtml = searchHtml + "</div><!-- /.modal-dialog -->";
+        searchHtml = searchHtml + "</div><!-- /.modal -->";
         $(divElement).html(searchHtml);
         $('#' + panel.divElement.id + '-searchBox').keyup(function () {
             clearTimeout(thread);
@@ -137,7 +189,7 @@ function searchPanel(divElement, options) {
         });
 
         //$("#" + panel.divElement.id + "-searchConfigBar").slideUp('fast');
-        if (options.searchMode != "phraseMatch") {
+        if (options.searchMode != "fullText") {
             $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').hide();
         }
 
@@ -286,29 +338,38 @@ function searchPanel(divElement, options) {
             $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
         });
 
-        $("#" + panel.divElement.id + "-phraseMatchButton").click(function (event) {
-            panel.options.searchMode = 'phraseMatch';
+        $("#" + panel.divElement.id + "-fullTextButton").click(function (event) {
+            panel.options.searchMode = 'fullText';
             panel.updateSearchLabel();
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
             $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').show();
+            if (searchTerm.charAt(0) == "^") {
+                $("#" + panel.divElement.id + '-searchBox').val(searchTerm.slice(1));
+            }
             if (searchTerm.length > 0) {
                 panel.search(searchTerm, true);
             }
         });
-        $("#" + panel.divElement.id + "-wordsAnyOrderButton").click(function (event) {
-            panel.options.searchMode = 'wordsAnyOrder';
+        $("#" + panel.divElement.id + "-partialMatchingButton").click(function (event) {
+            panel.options.searchMode = 'partialMatching';
             panel.updateSearchLabel();
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
             $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').hide();
+            if (searchTerm.charAt(0) == "^") {
+                $("#" + panel.divElement.id + '-searchBox').val(searchTerm.slice(1));
+            }
             if (searchTerm.length > 0) {
                 panel.search(searchTerm, true);
             }
         });
-        $("#" + panel.divElement.id + "-startsWithButton").click(function (event) {
-            panel.options.searchMode = 'startsWith';
+        $("#" + panel.divElement.id + "-regexButton").click(function (event) {
+            panel.options.searchMode = 'regex';
             panel.updateSearchLabel();
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
             $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').hide();
+            if (searchTerm.charAt(0) != "^") {
+                $("#" + panel.divElement.id + '-searchBox').val("^" + searchTerm);
+            }
             if (searchTerm.length > 0) {
                 panel.search(searchTerm, true);
             }
@@ -358,7 +419,7 @@ function searchPanel(divElement, options) {
 
     this.search = function (t, forceSearch) {
         if (typeof panel.options.searchMode == "undefined") {
-            panel.options.searchMode = "startsWith";
+            panel.options.searchMode = "regex";
         }
 
         if (typeof forceSearch == "undefined") {
@@ -381,7 +442,7 @@ function searchPanel(divElement, options) {
                 var d = new Date();
                 var time = d.getTime();
                 panel.history.push({searchTerm: t, time: time});
-                t = t.charAt(0).toUpperCase() + t.slice(1);
+                //t = t.charAt(0).toUpperCase() + t.slice(1);
                 //console.log("Capitalized t: " + t);
                 $('#' + panel.divElement.id + '-resultsTable').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
                 resultsHtml = "";
@@ -446,7 +507,7 @@ function searchPanel(divElement, options) {
                         $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                     }
                 } else {
-                    if (panel.options.searchMode == "wordsAnyOrder") {
+                    if (panel.options.searchMode == "partialMatching") {
                         t = t.toLowerCase();
                     }
                     var startTime = Date.now();
@@ -471,7 +532,7 @@ function searchPanel(divElement, options) {
                                 resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                                 $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                             } else {
-                                if (panel.options.searchMode == "startsWith") {
+                                if (panel.options.searchMode == "regex") {
                                     matchedDescriptions.sort(function (a, b) {
                                         if (a.term.length < b.term.length)
                                             return -1;
@@ -578,15 +639,15 @@ function searchPanel(divElement, options) {
 
     this.updateSearchLabel = function () {
         if (typeof panel.options.searchMode == "undefined") {
-            panel.options.searchMode = "startsWith";
+            panel.options.searchMode = "partialMatching";
         }
-        if (panel.options.searchMode == "startsWith") {
+        if (panel.options.searchMode == "regex") {
             $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_1'>" + i18n_search_examp_1  +  "</span> ");
             $("#" + panel.divElement.id + '-navSearchModeLabel').html("<span class='i18n' data-i18n-id='i18n_regex_search_mode'>" + i18n_regex_search_mode  +  "</span>");
-        } else if (panel.options.searchMode == "phraseMatch") {
+        } else if (panel.options.searchMode == "fullText") {
             $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_2'>" + i18n_search_examp_2  +  "</em></span> ");
             $("#" + panel.divElement.id + '-navSearchModeLabel').html("<span class='i18n' data-i18n-id='i18n_full_text_search_mode'>" + i18n_full_text_search_mode  +  "</span>");
-        } else if (panel.options.searchMode == "wordsAnyOrder") {
+        } else if (panel.options.searchMode == "partialMatching") {
             $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_3'>" + i18n_search_examp_3  +  "</span> ");
             $("#" + panel.divElement.id + '-navSearchModeLabel').html("<span class='i18n' data-i18n-id='i18n_partial_match_search_mode'>" + i18n_partial_match_search_mode  +  "</span>");
         }
