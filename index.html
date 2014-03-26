@@ -309,6 +309,14 @@
                     }
                 });
                 initTour();
+                $("#navBarBrand").tooltip().tooltip('destroy');
+                $("#navBarBrand").tooltip({
+                    placement : 'bottom',
+                    trigger: 'hover',
+                    title: i18n_go_back_home,
+                    animation: true,
+                    delay: 1000
+                });
             }
 
         </script>
@@ -328,7 +336,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                 </button>
-                <img class="pull-left hidden-xs hidden-sm" src="img/beta.gif"><a class="navbar-brand" href="javascript:void(0);" onclick="initialize();"><strong>
+                <img class="pull-left hidden-xs hidden-sm" src="img/beta.gif"><a class="navbar-brand" href="javascript:void(0);" onclick="initialize();" id="navBarBrand"><strong>
                      	&nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_app_name">IHTSDO SNOMED CT Browser</span></strong></a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
