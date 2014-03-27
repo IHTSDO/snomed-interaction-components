@@ -77,12 +77,12 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + '</ul>';
         detailsHtml = detailsHtml + "<!-- Tab panes -->";
         detailsHtml = detailsHtml + '<div class="tab-content">';
-        detailsHtml = detailsHtml + '    <div class="tab-pane active" id="home-' + panel.divElement.id + '" style="padding: 5px;">';
-        detailsHtml = detailsHtml + '    <div style="margin-left: 15%; margin-bottom: 10px; margin-top: 10px; width: 85%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
-        detailsHtml = detailsHtml + '    <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 75%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-' + panel.divElement.id + '">Attributes</div>';
-        detailsHtml = detailsHtml + '    <div style="margin-left: 15%; margin-bottom: 10px; margin-top: 10px; width: 85%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Roles</div>';
+        detailsHtml = detailsHtml + '    <div class="tab-pane fade in active" id="home-' + panel.divElement.id + '" style="padding: 5px;">';
+        detailsHtml = detailsHtml + '       <div style="margin-left: 15%; margin-bottom: 10px; margin-top: 10px; width: 85%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
+        detailsHtml = detailsHtml + '       <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 75%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-' + panel.divElement.id + '">Attributes</div>';
+        detailsHtml = detailsHtml + '       <div style="margin-left: 15%; margin-bottom: 10px; margin-top: 10px; width: 85%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Roles</div>';
         detailsHtml = detailsHtml + '    </div>';
-        detailsHtml = detailsHtml + '    <div class="tab-pane" id="details-' + panel.divElement.id + '">';
+        detailsHtml = detailsHtml + '    <div class="tab-pane fade" id="details-' + panel.divElement.id + '">';
         detailsHtml = detailsHtml + "       <div id='" + panel.attributesPId + "' class='panel panel-default'>";
         detailsHtml = detailsHtml + "       </div>";
         detailsHtml = detailsHtml + "       <div id='" + panel.descsPId + "' class='panel panel-default'>";
