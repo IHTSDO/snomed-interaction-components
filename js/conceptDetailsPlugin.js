@@ -138,6 +138,10 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-linkerButton").hide();
         }
 
+        if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
+            $("#" + panel.divElement.id + "-subscribersMarker").remove();
+        }
+
         if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
             $("#" + panel.divElement.id + "-expandButton").hide();
             $("#" + panel.divElement.id + "-collapseButton").hide();
@@ -649,11 +653,13 @@ function conceptDetails(divElement, conceptId, options) {
             if (panel.options.selectedView == "stated") {
                 var lastGroup = 0;
                 var barHtml = "";
+                var barColor = "white";
                 $.each(statedRoles, function(i, field) {
                     if (!(lastGroup == field.groupId)) {
                         rolesHomeHtml = rolesHomeHtml + "<br>";
                         lastGroup = field.groupId;
-                        barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + getRandomColor() + "'>&nbsp;&nbsp;</span>";
+                        barColor = getRandomColor();
+                        barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + barColor + "'>&nbsp;&nbsp;</span>";
                     }
                     rolesHomeHtml = rolesHomeHtml + barHtml;
                     rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
@@ -669,6 +675,9 @@ function conceptDetails(divElement, conceptId, options) {
                         rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm + "</span><br>";
                     }
                 });
+                if (statedRoles.length == 0) {
+                    rolesHomeHtml = rolesHomeHtml + "<span class='text-muted'>No roles</span>";
+                }
             } else {
                 var lastGroup = 0;
                 var barHtml = "";
@@ -694,6 +703,9 @@ function conceptDetails(divElement, conceptId, options) {
                         rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm + "</span><br>";
                     }
                 });
+                if (inferredRoles.length == 0) {
+                    rolesHomeHtml = rolesHomeHtml + "<span class='text-muted'>No roles</span>";
+                }
             }
             rolesHomeHtml = rolesHomeHtml + "</div>";
             $('#home-roles-' + panel.divElement.id).html(rolesHomeHtml);

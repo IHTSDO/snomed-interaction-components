@@ -45,6 +45,7 @@
                 closeButton: false,
                 collapseButton: false,
                 linkerButton: true,
+                subscribersMarker: true,
                 searchMode: "partialMatching",
                 searchLang: "english"
             };
@@ -195,6 +196,7 @@
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("<em>...</em>");
             }
@@ -203,6 +205,7 @@
                 $("#browsing-perspective").css({"display":"block"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Browsing");
                 var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), options);
@@ -223,6 +226,7 @@
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"block"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Comparing concepts");
                 var spa = new searchPanel(document.getElementById("cc-search_canvas"), options);
@@ -240,6 +244,7 @@
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"block"});
+                $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Comparing taxonomies");
                 var tx1 = new taxonomyPanel(document.getElementById("ct-tx1_canvas"), options);
@@ -253,12 +258,31 @@
                 $('#search-cd-wrapper').split({orientation: 'vertical'});
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
-
+            function switchToFullHeight() {
+                $("#welcome-perspective").css({"display":"none"});
+                $("#browsing-perspective").css({"display":"none"});
+                $("#comparing-concepts-perspective").css({"display":"none"});
+                $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"block"});
+                $("#responsive-perspective").css({"display":"none"});
+                $("#perspectiveLabel").html("Browsing");
+                var fhOptions = jQuery.extend(true, {}, options);
+                fhOptions.subscribersMarker = false;
+                var tpt = new taxonomyPanel(document.getElementById("fh-taxonomy_canvas"), fhOptions);
+                var spa = new searchPanel(document.getElementById("fh-search_canvas"), fhOptions);
+                var cdPanel1 = new conceptDetails(document.getElementById("fh-cd1_canvas"), "404684003", fhOptions);
+                cdPanel1.setupCanvas();
+                tpt.subscribe(cdPanel1);
+                spa.subscribe(cdPanel1);
+                $('#spliter-fh').split({orientation: 'vertical', limit: 20, position: '40%'});
+                switchLanguage(selectedLanguage, selectedFlag, false);
+            }
             function switchToResponsiveLayout() {
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"block"});
                 $("#perspectiveLabel").html("Responsive");
                 var tpt = new taxonomyPanel(document.getElementById("rp-taxonomy_canvas"), options);
@@ -360,6 +384,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="javascript:void(0);" onclick="switchToBrowsing();">Browsing</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToFullHeight();">Full height</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToComparingConcepts();">Comparing concepts</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToComparingTaxonomies();">Comparing hierarchy</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToResponsiveLayout();">Responsive (tablets, phones)</a></li>
@@ -469,6 +494,25 @@
                     </div>
                 </div>
             </div>
+            <!-- Full height Perspective -->
+            <div id="full-height-perspective" class="bperspective">
+                <div id="spliter-fh" class="row" style="width:100%; height: 91%; position: absolute;">
+                    <div class="a panel panel-default" style="border-radius: 0px;">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#fh-taxonomy_canvas" data-toggle="tab">&nbsp;Taxonomy</a></li>
+                            <li><a href="#fh-search_canvas" data-toggle="tab">Search</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="fh-taxonomy_canvas" style="padding: 0px;margin: 0;"></div>
+                            <div class="tab-pane" id="fh-search_canvas" style="padding: 0px;margin: 0;"></div>
+                        </div>
+                    </div>
+                    <div class="" id="conceptDetails-fh">
+                        <div class="col-md-12" id="fh-cd1_canvas" style="padding: 0px;margin: 0;"></div>
+                    </div>
+                </div>
+            </div>
             <!-- Responsive Perspective -->
             <div id="responsive-perspective" class="bperspective">
                 <div id="comparing-taxonomies-wrapper3" class="row" style="width:100%; height: 91%; position: absolute;padding: 0px !important;margin: 0 !important;">
@@ -481,6 +525,7 @@
                 </div>
             </div>
         </div>
+        <!-- License agreement modal -->
          <div class="modal fade" id="license-modal" data-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">
