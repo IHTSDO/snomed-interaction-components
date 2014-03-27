@@ -79,9 +79,9 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + '<div class="tab-content">';
         detailsHtml = detailsHtml + '    <div class="tab-pane fade in active" id="home-' + panel.divElement.id + '" style="padding: 5px;">';
         detailsHtml = detailsHtml + '       <div class="row" style="margin-right: 20px"><span class="pull-right text-muted" id="home-' + panel.divElement.id + '-viewLabel"></span></div>';
-        detailsHtml = detailsHtml + '       <div style="margin-left: 15%; margin-bottom: 10px; margin-top: 10px; width: 85%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
-        detailsHtml = detailsHtml + '       <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 75%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-' + panel.divElement.id + '">Attributes</div>';
-        detailsHtml = detailsHtml + '       <div style="margin-left: 15%; margin-bottom: 10px; margin-top: 10px; width: 85%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Roles</div>';
+        detailsHtml = detailsHtml + '       <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
+        detailsHtml = detailsHtml + '       <div style="margin-left: 10%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-' + panel.divElement.id + '">Attributes</div>';
+        detailsHtml = detailsHtml + '       <div style="margin-left: 20%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Roles</div>';
         detailsHtml = detailsHtml + '    </div>';
         detailsHtml = detailsHtml + '    <div class="tab-pane fade" id="details-' + panel.divElement.id + '">';
         detailsHtml = detailsHtml + "       <div id='" + panel.attributesPId + "' class='panel panel-default'>";
@@ -708,8 +708,13 @@ function conceptDetails(divElement, conceptId, options) {
                     } else {
                         parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
                     }
-                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
-                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable";
+                    if (field.target.definitionStatus == "Primitive") {
+                        parentsHomeHtml = parentsHomeHtml + " sct-primitive-concept";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml + " sct-defined-concept";
+                    }
+                    parentsHomeHtml = parentsHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
                         parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
                     } else {
                         parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm + "</span><br>";
@@ -726,7 +731,13 @@ function conceptDetails(divElement, conceptId, options) {
                     } else {
                         parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
                     }
-                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable";
+                    if (field.target.definitionStatus == "Primitive") {
+                        parentsHomeHtml = parentsHomeHtml + " sct-primitive-concept";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml + " sct-defined-concept";
+                    }
+                    parentsHomeHtml = parentsHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
                     if (field.target.defaultTerm.lastIndexOf("(") > 0) {
                         parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
                     } else {
@@ -736,6 +747,9 @@ function conceptDetails(divElement, conceptId, options) {
                 if (inferredParents.length == 0) {
                     parentsHomeHtml = parentsHomeHtml + "<span class='text-muted'>No parents</span>";
                 }
+            }
+            if (!panel.options.diagrammingMarkupEnabled) {
+                parentsHomeHtml = panel.stripDiagrammingMarkup(parentsHomeHtml);
             }
             $('#home-parents-' + panel.divElement.id).html(parentsHomeHtml);
 
@@ -752,13 +766,19 @@ function conceptDetails(divElement, conceptId, options) {
                         barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + barColor + "'>&nbsp;&nbsp;</span>";
                     }
                     rolesHomeHtml = rolesHomeHtml + barHtml;
-                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable sct-attribute' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     if (field.type.defaultTerm.lastIndexOf("(") > 0) {
                         rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
                     } else {
                         rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
                     }
-                    rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
+                    rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable";
+                    if (field.target.definitionStatus == "Primitive") {
+                        rolesHomeHtml = rolesHomeHtml + " sct-primitive-concept";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml + " sct-defined-concept";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
                     if (field.target.defaultTerm.lastIndexOf("(") > 0) {
                         rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
                     } else {
@@ -780,13 +800,19 @@ function conceptDetails(divElement, conceptId, options) {
                         barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + barColor + "'>&nbsp;&nbsp;</span>";
                     }
                     rolesHomeHtml = rolesHomeHtml + barHtml;
-                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable sct-attribute' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     if (field.type.defaultTerm.lastIndexOf("(") > 0) {
                         rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
                     } else {
                         rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
                     }
-                    rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
+                    rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable";
+                    if (field.target.definitionStatus == "Primitive") {
+                        rolesHomeHtml = rolesHomeHtml + " sct-primitive-concept";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml + " sct-defined-concept";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
                     if (field.target.defaultTerm.lastIndexOf("(") > 0) {
                         rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
                     } else {
@@ -798,6 +824,9 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             }
             rolesHomeHtml = rolesHomeHtml + "</div>";
+            if (!panel.options.diagrammingMarkupEnabled) {
+                rolesHomeHtml = panel.stripDiagrammingMarkup(rolesHomeHtml);
+            }
             $('#home-roles-' + panel.divElement.id).html(rolesHomeHtml);
 
             if (panel.options.selectedView == "stated") {
@@ -885,6 +914,16 @@ function conceptDetails(divElement, conceptId, options) {
 //        });
     }
 
+    this.stripDiagrammingMarkup = function(htmlString) {
+        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-primitive-concept"), 'g'), "");
+        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-defined-concept"), 'g'), "");
+        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-attribute"), 'g'), "");
+        return htmlString;
+    }
+    this.escapeRegExp = function(str) {
+        return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    }
+
     this.setSubscription = function(subscriptionPanel) {
         panel.subscription = subscriptionPanel;
         $("#" + panel.divElement.id + "-subscribersMarker").css('color', subscriptionPanel.markerColor);
@@ -899,50 +938,65 @@ function conceptDetails(divElement, conceptId, options) {
 
     this.setupOptionsPanel = function() {
         optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="displaySynonyms"><span class="i18n" data-i18n-id="i18n_display_synonyms">Display synonyms</span></label>';
-        optionsHtml = optionsHtml + '<div class="radio">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displaySynonyms == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true checked>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true>';
-        }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>.';
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="radio">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displaySynonyms == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsNo" value=false>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsNo" value=false checked>';
-        }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_synonyms3">Only display FSN and preferred terms</span>.';
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
 
         optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="displayIds"><span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span></label>';
-        optionsHtml = optionsHtml + '<div class="radio">';
+        optionsHtml = optionsHtml + '<div class="checkbox">';
         optionsHtml = optionsHtml + '<label>';
-        if (panel.options.showIds == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsYes" value=true checked>';
+        if (panel.options.displaySynonyms == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displaySynonymsOption"> <span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>';
         } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsYes" value=true>';
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displaySynonymsOption" checked> <span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>';
         }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>.';
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="radio">';
+
+        optionsHtml = optionsHtml + '<div class="checkbox">';
         optionsHtml = optionsHtml + '<label>';
-        if (panel.options.showIds == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsNo" value=false>';
+        if (panel.options.showIds == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayIdsOption"> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>';
         } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsNo" value=false checked>';
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayIdsOption" checked> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>';
         }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_hide_ids">Hide Ids for all components</span>.';
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.hideNotAcceptable == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        }
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.displayInactiveDescriptions == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption" checked> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
+        }
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.hideNotAcceptable == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        }
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.diagrammingMarkupEnabled == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption"> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Standard colors enabled</span>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption" checked> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Standard colors enabled</span>';
+        }
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</div>';
@@ -978,42 +1032,6 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '</div>';
 
         optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.hideNotAcceptable == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displayInactiveDescriptions == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption" checked> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.hideNotAcceptable == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">Language Refset</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-langRefsetOption">';
         if (panel.options.langRefset == "900000000000508004") {
@@ -1043,15 +1061,13 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.readOptionsPanel = function() {
-        //console.log($('input[name=displaySynonyms]:checked', "#" + panel.divElement.id + "-options-form").val());
-        panel.options.displaySynonyms = ($('input[name=displaySynonyms]:checked', "#" + panel.divElement.id + "-options-form").val() == "true");
-        //console.log($('input[name=displayIds]:checked', "#" + panel.divElement.id + "-options-form").val());
-        panel.options.showIds = ($('input[name=displayIds]:checked', "#" + panel.divElement.id + "-options-form").val() == "true");
-        //console.log($("#" + panel.divElement.id + "-relsViewOption").val());
-        panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
+        panel.options.displaySynonyms = $("#" + panel.divElement.id + "-displaySynonymsOption").is(':checked');
+        panel.options.showIds = $("#" + panel.divElement.id + "-displayIdsOption").is(':checked');
         panel.options.displayChildren = $("#" + panel.divElement.id + "-childrenOption").is(':checked');
         panel.options.hideNotAcceptable = $("#" + panel.divElement.id + "-hideNotAcceptableOption").is(':checked');
         panel.options.displayInactiveDescriptions = $("#" + panel.divElement.id + "-displayInactiveDescriptionsOption").is(':checked');
+        panel.options.diagrammingMarkupEnabled = $("#" + panel.divElement.id + "-diagrammingMarkupEnabledOption").is(':checked');
+        panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
     }
 }
