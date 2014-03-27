@@ -437,7 +437,9 @@ function conceptDetails(divElement, conceptId, options) {
                     }
 
                     row = row + "</tr>";
-                    descDetailsHtml = descDetailsHtml + row;
+                    if (!(includedInLanguage == false && panel.options.hideNotAcceptable)) {
+                        descDetailsHtml = descDetailsHtml + row;
+                    }
                 }
             });
             descDetailsHtml = descDetailsHtml + "</tbody></table>";
@@ -647,6 +649,7 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</div>';
+
         optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<label for="displayIds"><span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span></label>';
         optionsHtml = optionsHtml + '<div class="radio">';
@@ -670,6 +673,7 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</div>';
+
         optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_rels_view">Relationships View</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
@@ -699,6 +703,19 @@ function conceptDetails(divElement, conceptId, options) {
         }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
+
+        optionsHtml = optionsHtml + '<div class="form-group">';
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.hideNotAcceptable == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        }
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+        optionsHtml = optionsHtml + '</div>';
+
         optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<div class="checkbox">';
         optionsHtml = optionsHtml + '<label>';
@@ -710,6 +727,7 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</div>';
+
         optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">Language Refset</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-langRefsetOption">';
@@ -747,6 +765,7 @@ function conceptDetails(divElement, conceptId, options) {
         //console.log($("#" + panel.divElement.id + "-relsViewOption").val());
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.displayChildren = $("#" + panel.divElement.id + "-childrenOption").is(':checked');
+        panel.options.hideNotAcceptable = $("#" + panel.divElement.id + "-hideNotAcceptableOption").is(':checked');
         panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
     }
 }
