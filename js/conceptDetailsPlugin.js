@@ -54,7 +54,7 @@ function conceptDetails(divElement, conceptId, options) {
         panel.defaultTerm = "";
         $(divElement).html();
         // main panel
-        detailsHtml = "<div style='margin: 5px; height:98%; overflow:auto;' class='panel panel-default'>";
+        var detailsHtml = "<div style='margin: 5px; height:98%; overflow:auto;' class='panel panel-default'>";
         detailsHtml = detailsHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
         detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding:2px;position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         detailsHtml = detailsHtml + "<div class='row'>";
@@ -70,14 +70,29 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div class='panel-body' id='" + panel.divElement.id + "-panelBody'>";
-        detailsHtml = detailsHtml + "<div id='" + panel.attributesPId + "' class='panel panel-default'>";
-        detailsHtml = detailsHtml + "</div>";
-        detailsHtml = detailsHtml + "<div id='" + panel.descsPId + "' class='panel panel-default'>";
-        detailsHtml = detailsHtml + "</div>";
-        detailsHtml = detailsHtml + "<div id='" + panel.relsPId + "' class='panel panel-default'>";
-        detailsHtml = detailsHtml + "</div>";
-        detailsHtml = detailsHtml + "<div id='" + panel.childrenPId + "' class='panel panel-default' style='height:100px;overflow:auto;margin-bottom: 15px;'>";
-        detailsHtml = detailsHtml + "</div>";
+        detailsHtml = detailsHtml + "<!-- Nav tabs -->";
+        detailsHtml = detailsHtml + '<ul class="nav nav-tabs">';
+        detailsHtml = detailsHtml + '    <li class="active"><a href="#home-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;">Summary</a></li>';
+        detailsHtml = detailsHtml + '    <li><a href="#details-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;">Details</a></li>';
+        detailsHtml = detailsHtml + '</ul>';
+        detailsHtml = detailsHtml + "<!-- Tab panes -->";
+        detailsHtml = detailsHtml + '<div class="tab-content">';
+        detailsHtml = detailsHtml + '    <div class="tab-pane active" id="home-' + panel.divElement.id + '" style="padding: 5px;">';
+        detailsHtml = detailsHtml + '    <div style="margin-left: 25%; margin-bottom: 10px; margin-top: 10px; width: 75%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
+        detailsHtml = detailsHtml + '    <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 75%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-' + panel.divElement.id + '">Attributes</div>';
+        detailsHtml = detailsHtml + '    <div style="margin-left: 25%; margin-bottom: 10px; margin-top: 10px; width: 75%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Roles</div>';
+        detailsHtml = detailsHtml + '    </div>';
+        detailsHtml = detailsHtml + '    <div class="tab-pane" id="details-' + panel.divElement.id + '">';
+        detailsHtml = detailsHtml + "       <div id='" + panel.attributesPId + "' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "       </div>";
+        detailsHtml = detailsHtml + "       <div id='" + panel.descsPId + "' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "       </div>";
+        detailsHtml = detailsHtml + "       <div id='" + panel.relsPId + "' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "       </div>";
+        detailsHtml = detailsHtml + "       <div id='" + panel.childrenPId + "' class='panel panel-default' style='height:100px;overflow:auto;margin-bottom: 15px;'>";
+        detailsHtml = detailsHtml + "       </div>";
+        detailsHtml = detailsHtml + '    </div>';
+        detailsHtml = detailsHtml + '</div>';
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div>";
         // modal config panel
@@ -152,7 +167,7 @@ function conceptDetails(divElement, conceptId, options) {
                 placement: 'bottomRight',
                 html: true,
                 content: function() {
-                    historyHtml = '<div style="height:100px;overflow:auto;">';
+                    var historyHtml = '<div style="height:100px;overflow:auto;">';
                     historyHtml = historyHtml + '<table>';
                     var reversedHistory = panel.history.slice(0);
                     reversedHistory.reverse();
@@ -295,15 +310,12 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.updateCanvas = function() {
-        //console.log("UPDATE:" + panel.conceptId);
-        ////console.log(JSON.stringify(panel.options));
-//        $('#' + panel.attributesPId).html($('#' + panel.attributesPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-//        $('#' + panel.descsPId).html($('#' + panel.descsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-//        $('#' + panel.relsPId).html($('#' + panel.relsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-//        $('#' + panel.childrenPId).html($('#' + panel.childrenPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.attributesPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#home-attributes-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.descsPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.relsPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#home-parents-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#home-roles-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.childrenPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 
         // load attributes
@@ -321,7 +333,7 @@ function conceptDetails(divElement, conceptId, options) {
             var d = new Date();
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
-            attrHtml = "";
+            var attrHtml = "";
             attrHtml = attrHtml + "<table class='table table-default' >";
             attrHtml = attrHtml + "<tr><td class='jqui-droppable' data-concept-id='" + firstMatch.conceptId + "'>";
             attrHtml = attrHtml + "<h4>" + firstMatch.defaultTerm + "</h4>";
@@ -343,21 +355,27 @@ function conceptDetails(divElement, conceptId, options) {
 
             $('#' + panel.attributesPId).html(attrHtml);
 
+            // load home-attributes
+            var homeAttrHtml = "";
+            homeAttrHtml = homeAttrHtml + "<h4 class='jqui-droppable'>" + firstMatch.defaultTerm + "</h4>";
+            homeAttrHtml = homeAttrHtml + firstMatch.conceptId  + "&nbsp&nbsp<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
+            $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
+
             if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
                 $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
             }
 
-            $('#' + panel.attributesPId).find('.jqui-droppable').droppable({
+            $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find('.jqui-droppable').droppable({
                 drop: panel.handleDropEvent,
                 hoverClass: "bg-info"
             });
 
-            $('#' + panel.attributesPId).find(".jqui-draggable").draggable({
+            $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").draggable({
                 appendTo: 'body',
                 helper: 'clone',
                 delay: 10
             });
-            $('#' + panel.attributesPId).find(".jqui-draggable").tooltip({
+            $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
                 placement : 'left',
                 trigger: 'hover',
                 title: 'Drag this',
@@ -377,7 +395,7 @@ function conceptDetails(divElement, conceptId, options) {
             } else if (panel.options.langRefset == "554461000005103") {
                 languageName = "(DA)";
             }
-            descDetailsHtml = "<table class='table table-bordered' id = '" + panel.descsPId + "-table'>";
+            var descDetailsHtml = "<table class='table table-bordered' id = '" + panel.descsPId + "-table'>";
             descDetailsHtml = descDetailsHtml + "<thead><tr>";
             descDetailsHtml = descDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_term'>Term</span></th>";
             if (panel.options.showIds == true) {
@@ -465,9 +483,16 @@ function conceptDetails(divElement, conceptId, options) {
                 helper: 'clone',
                 delay: 500
             });
-            // load relationships panel
+
+            // load relationships panel and home parents/roles
             panel.relsPId = divElement.id + "-rels-panel";
-            relsDetailsHtml = "<table class='table table-bordered'>";
+            var parentsHomeHtml = "";
+            var rolesHomeHtml = "";
+            var statedParents = [];
+            var inferredParents = [];
+            var statedRoles = [];
+            var inferredRoles = [];
+            var relsDetailsHtml = "<table class='table table-bordered'>";
             relsDetailsHtml = relsDetailsHtml + "<thead><tr>";
             relsDetailsHtml = relsDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_type'>Type</span></th>";
             relsDetailsHtml = relsDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_destination'>Destination</span></th>";
@@ -479,6 +504,15 @@ function conceptDetails(divElement, conceptId, options) {
                 $.each(firstMatch.relationships, function(i, field) {
                     //console.log(JSON.stringify(field));
                     if (field.active == true) {
+                        if (field.type.conceptId == 116680003 && field.charType.conceptId == "900000000000010007") {
+                            statedParents.push(field);
+                        } else if (field.type.conceptId == 116680003 && field.charType.conceptId == "900000000000011006") {
+                            inferredParents.push(field);
+                        } else if (field.type.conceptId != 116680003 && field.charType.conceptId == "900000000000010007") {
+                            statedRoles.push(field);
+                        } else if (field.type.conceptId != 116680003 && field.charType.conceptId == "900000000000011006") {
+                            inferredRoles.push(field);
+                        }
                         var row = "";
                         row = "<tr class='inferred-rel'>";
 
