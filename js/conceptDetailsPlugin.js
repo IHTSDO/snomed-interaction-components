@@ -78,6 +78,7 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "<!-- Tab panes -->";
         detailsHtml = detailsHtml + '<div class="tab-content">';
         detailsHtml = detailsHtml + '    <div class="tab-pane fade in active" id="home-' + panel.divElement.id + '" style="padding: 5px;">';
+        detailsHtml = detailsHtml + '       <div class="row" style="margin-right: 20px"><span class="pull-right text-muted" id="home-' + panel.divElement.id + '-viewLabel"></span></div>';
         detailsHtml = detailsHtml + '       <div style="margin-left: 15%; margin-bottom: 10px; margin-top: 10px; width: 85%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
         detailsHtml = detailsHtml + '       <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 75%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-' + panel.divElement.id + '">Attributes</div>';
         detailsHtml = detailsHtml + '       <div style="margin-left: 15%; margin-bottom: 10px; margin-top: 10px; width: 85%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Roles</div>';
@@ -430,42 +431,76 @@ function conceptDetails(divElement, conceptId, options) {
             })
 
             $.each(allDescriptions, function(i, field) {
-                if (field.active == true) {
+                if (panel.options.displayInactiveComponents || field.active == true) {
                     var row = "";
+                    var isFsn = false;
+                    var isPreferred = false;
+
                     if (field.type.conceptId == "900000000000003001") {
+                        isFsn = true;
                         $.each(field.langMemberships, function(i, lm) {
                             if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
-                                row = "<tr class='fsn-row'>";
+                                isPreferred = true;
                             }
                         });
-                    } 
-                    if (row == "") {
-                        row = "<tr class='synonym-row'>";
+                    } else {
+                        isFsn = false;
+                        $.each(field.langMemberships, function(i, lm) {
+                            if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
+                                isPreferred = true;
+                            }
+                        });
+                    }
+                    row = "<tr class='";
+                    if (isFsn) {
+                        row = row + " fsn-row";
+                    } else {
+                        row = row + " synonym-row";
+                    }
+                    if (!field.active) {
+                        row = row + " danger";
                     }
 
-                    row = row + "<td>" + field.term + "</td>";
+                    row = row + "'><td>";
+
+                    if (isFsn) {
+                        row = row + '&Omicron;';
+                    } else {
+                        row = row + '&omicron;';
+                    }
+
+                    if (isPreferred) {
+                        row = row + '&nbsp;<span class="glyphicon glyphicon-star-empty"></span>';
+                    } else {
+                        row = row + '&nbsp;&#10004;</span>';
+                    }
+
+
+                    row = row + "&nbsp;&nbsp;&nbsp;" + field.term + "</td>";
                     if (panel.options.showIds == true) {
                         row = row + "<td>" + field.descriptionId + "</td>";
                     }
-
+                    console.log(field.term);
                     var includedInLanguage = false;
-                    $.each(field.langMemberships, function(i, lang) {
-                        if (lang.refset.conceptId == panel.options.langRefset) {
-                            if (lang.acceptability.conceptId == "900000000000548007") {
-                                row = row + "<td><span class='i18n' data-i18n-id='i18n_preferred'>Preferred</span></td>";
-                            } else {
-                                row = row + "<td><span class='i18n' data-i18n-id='i18n_acceptable'>Acceptable</span></td>";
-                            }
+                    if (typeof field.langMemberships != "undefined") {
+                        $.each(field.langMemberships, function(i, lang) {
+                            if (lang.refset.conceptId == panel.options.langRefset) {
+                                if (lang.acceptability.conceptId == "900000000000548007") {
+                                    row = row + "<td><span class='i18n' data-i18n-id='i18n_preferred'>Preferred</span></td>";
+                                } else {
+                                    row = row + "<td><span class='i18n' data-i18n-id='i18n_acceptable'>Acceptable</span></td>";
+                                }
 
-                            includedInLanguage = true;
-                        }
-                    });
+                                includedInLanguage = true;
+                            }
+                        });
+                    }
                     if (includedInLanguage == false) {
                         row = row + "<td><span class='i18n' data-i18n-id='i18n_not_acceptable'>Not acceptable</span></td>";
                     }
 
                     row = row + "</tr>";
-                    if (!(includedInLanguage == false && panel.options.hideNotAcceptable)) {
+                    if (!(includedInLanguage == false && panel.options.hideNotAcceptable) || panel.options.displayInactiveComponents) {
                         descDetailsHtml = descDetailsHtml + row;
                     }
                 }
@@ -495,6 +530,11 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             // load relationships panel and home parents/roles
+            if (panel.options.selectedView == "inferred") {
+                $('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+            } else {
+                $('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+            }
             panel.relsPId = divElement.id + "-rels-panel";
             var statedParents = [];
             var inferredParents = [];
@@ -631,6 +671,9 @@ function conceptDetails(divElement, conceptId, options) {
                         parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm + "</span><br>";
                     }
                 });
+                if (statedParents.length == 0) {
+                    parentsHomeHtml = parentsHomeHtml + "<span class='text-muted'>No parents</span>";
+                }
             } else {
                 $.each(inferredParents, function(i, field) {
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
@@ -646,6 +689,9 @@ function conceptDetails(divElement, conceptId, options) {
                         parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm + "</span><br>";
                     }
                 });
+                if (inferredParents.length == 0) {
+                    parentsHomeHtml = parentsHomeHtml + "<span class='text-muted'>No parents</span>";
+                }
             }
             $('#home-parents-' + panel.divElement.id).html(parentsHomeHtml);
 
@@ -902,10 +948,22 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<div class="checkbox">';
         optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displayChildren == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">Display children</span>';
+        if (panel.options.displayInactiveComponents == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveComponentsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_components">Display inactive components</span>';
         } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption" checked> <span class="i18n" data-i18n-id="i18n_display_children">Display children</span>';
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveComponentsOption" checked> <span class="i18n" data-i18n-id="i18n_display_inactive_components">Display inactive components</span>';
+        }
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+        optionsHtml = optionsHtml + '</div>';
+
+        optionsHtml = optionsHtml + '<div class="form-group">';
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.hideNotAcceptable == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
         }
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
@@ -949,6 +1007,7 @@ function conceptDetails(divElement, conceptId, options) {
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.displayChildren = $("#" + panel.divElement.id + "-childrenOption").is(':checked');
         panel.options.hideNotAcceptable = $("#" + panel.divElement.id + "-hideNotAcceptableOption").is(':checked');
+        panel.options.displayInactiveComponents = $("#" + panel.divElement.id + "-displayInactiveComponentsOption").is(':checked');
         panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
     }
 }
