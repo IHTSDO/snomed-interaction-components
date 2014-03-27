@@ -78,9 +78,9 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "<!-- Tab panes -->";
         detailsHtml = detailsHtml + '<div class="tab-content">';
         detailsHtml = detailsHtml + '    <div class="tab-pane active" id="home-' + panel.divElement.id + '" style="padding: 5px;">';
-        detailsHtml = detailsHtml + '    <div style="margin-left: 25%; margin-bottom: 10px; margin-top: 10px; width: 75%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
+        detailsHtml = detailsHtml + '    <div style="margin-left: 15%; margin-bottom: 10px; margin-top: 10px; width: 85%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
         detailsHtml = detailsHtml + '    <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 75%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-' + panel.divElement.id + '">Attributes</div>';
-        detailsHtml = detailsHtml + '    <div style="margin-left: 25%; margin-bottom: 10px; margin-top: 10px; width: 75%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Roles</div>';
+        detailsHtml = detailsHtml + '    <div style="margin-left: 15%; margin-bottom: 10px; margin-top: 10px; width: 85%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Roles</div>';
         detailsHtml = detailsHtml + '    </div>';
         detailsHtml = detailsHtml + '    <div class="tab-pane" id="details-' + panel.divElement.id + '">';
         detailsHtml = detailsHtml + "       <div id='" + panel.attributesPId + "' class='panel panel-default'>";
@@ -357,12 +357,18 @@ function conceptDetails(divElement, conceptId, options) {
 
             // load home-attributes
             var homeAttrHtml = "";
-            homeAttrHtml = homeAttrHtml + "<h4 class='jqui-droppable'>" + firstMatch.defaultTerm + "</h4>";
-            homeAttrHtml = homeAttrHtml + firstMatch.conceptId  + "&nbsp&nbsp<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
+            if (firstMatch.definitionStatus == "Primitive") {
+                homeAttrHtml = homeAttrHtml + "<h4 class='jqui-droppable'><strong>&nbsp;&nbsp;&nbsp;</strong>";
+            } else {
+                homeAttrHtml = homeAttrHtml + "<h4 class='jqui-droppable'><strong>&equiv;&nbsp;&nbsp;</strong>";
+            }
+            homeAttrHtml = homeAttrHtml + firstMatch.defaultTerm + "</h4>";
+            homeAttrHtml = homeAttrHtml + firstMatch.conceptId;
+            homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
             $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
 
             if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
-                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
             }
 
             $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find('.jqui-droppable').droppable({
@@ -486,8 +492,6 @@ function conceptDetails(divElement, conceptId, options) {
 
             // load relationships panel and home parents/roles
             panel.relsPId = divElement.id + "-rels-panel";
-            var parentsHomeHtml = "";
-            var rolesHomeHtml = "";
             var statedParents = [];
             var inferredParents = [];
             var statedRoles = [];
@@ -504,13 +508,9 @@ function conceptDetails(divElement, conceptId, options) {
                 $.each(firstMatch.relationships, function(i, field) {
                     //console.log(JSON.stringify(field));
                     if (field.active == true) {
-                        if (field.type.conceptId == 116680003 && field.charType.conceptId == "900000000000010007") {
-                            statedParents.push(field);
-                        } else if (field.type.conceptId == 116680003 && field.charType.conceptId == "900000000000011006") {
+                        if (field.type.conceptId == 116680003) {
                             inferredParents.push(field);
-                        } else if (field.type.conceptId != 116680003 && field.charType.conceptId == "900000000000010007") {
-                            statedRoles.push(field);
-                        } else if (field.type.conceptId != 116680003 && field.charType.conceptId == "900000000000011006") {
+                        } else {
                             inferredRoles.push(field);
                         }
                         var row = "";
@@ -538,6 +538,11 @@ function conceptDetails(divElement, conceptId, options) {
                 $.each(firstMatch.statedRelationships, function(i, field) {
                     //console.log(JSON.stringify(field));
                     if (field.active == true) {
+                        if (field.type.conceptId == 116680003) {
+                            statedParents.push(field);
+                        } else {
+                            statedRoles.push(field);
+                        }
                         var row = "";
                         row = "<tr class='stated-rel'>";
 
@@ -561,6 +566,136 @@ function conceptDetails(divElement, conceptId, options) {
             }
             relsDetailsHtml = relsDetailsHtml + "</tbody></table>";
             $('#' + panel.relsPId).html(relsDetailsHtml);
+
+            inferredParents.sort(function(a, b) {
+                if (a.target.defaultTerm < b.target.defaultTerm)
+                    return -1;
+                if (a.target.defaultTerm > b.target.defaultTerm)
+                    return 1;
+                return 0;
+            });
+
+            statedParents.sort(function(a, b) {
+                if (a.target.defaultTerm < b.target.defaultTerm)
+                    return -1;
+                if (a.target.defaultTerm > b.target.defaultTerm)
+                    return 1;
+                return 0;
+            });
+
+            inferredRoles.sort(function(a, b) {
+                if (a.groupId < b.groupId) {
+                    return -1;
+                } else if (a.groupId > b.groupId) {
+                    return 1;
+                } else {
+                    if (a.target.defaultTerm < b.target.defaultTerm)
+                        return -1;
+                    if (a.target.defaultTerm > b.target.defaultTerm)
+                        return 1;
+                    return 0;
+                }
+            });
+
+            statedRoles.sort(function(a, b) {
+                if (a.groupId < b.groupId) {
+                    return -1;
+                } else if (a.groupId > b.groupId) {
+                    return 1;
+                } else {
+                    if (a.target.defaultTerm < b.target.defaultTerm)
+                        return -1;
+                    if (a.target.defaultTerm > b.target.defaultTerm)
+                        return 1;
+                    return 0;
+                }
+            });
+
+            var parentsHomeHtml = "";
+            if (panel.options.selectedView == "stated") {
+                $.each(statedParents, function(i, field) {
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    if (field.type.defaultTerm.lastIndexOf("(") > 0) {
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                    }
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
+                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
+                        parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm + "</span><br>";
+                    }
+                });
+            } else {
+                $.each(inferredParents, function(i, field) {
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    if (field.type.defaultTerm.lastIndexOf("(") > 0) {
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                    }
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
+                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
+                        parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm + "</span><br>";
+                    }
+                });
+            }
+            $('#home-parents-' + panel.divElement.id).html(parentsHomeHtml);
+
+            var rolesHomeHtml = "<p style='line-height: 100%;'>";
+            if (panel.options.selectedView == "stated") {
+                var lastGroup = 0;
+                var barHtml = "";
+                $.each(statedRoles, function(i, field) {
+                    if (!(lastGroup == field.groupId)) {
+                        rolesHomeHtml = rolesHomeHtml + "<br>";
+                        lastGroup = field.groupId;
+                        barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + getRandomColor() + "'>&nbsp;&nbsp;</span>";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + barHtml;
+                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    if (field.type.defaultTerm.lastIndexOf("(") > 0) {
+                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
+                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
+                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm + "</span><br>";
+                    }
+                });
+            } else {
+                var lastGroup = 0;
+                var barHtml = "";
+                $.each(inferredRoles, function(i, field) {
+                    if (!(lastGroup == field.groupId)) {
+                        rolesHomeHtml = rolesHomeHtml + "<br>";
+                        lastGroup = field.groupId;
+                        barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + getRandomColor() + "'>&nbsp;&nbsp;</span>";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + barHtml;
+                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    if (field.type.defaultTerm.lastIndexOf("(") > 0) {
+                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
+                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
+                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm + "</span><br>";
+                    }
+                });
+            }
+            rolesHomeHtml = rolesHomeHtml + "</p>";
+            $('#home-roles-' + panel.divElement.id).html(rolesHomeHtml);
+
             if (panel.options.selectedView == "stated") {
                 $('#' + panel.relsPId).find('.inferred-rel').each(function(i, val) {
                     $(val).toggle();
@@ -572,12 +707,12 @@ function conceptDetails(divElement, conceptId, options) {
             } else if (panel.options.selectedView != "all") {
                 // show all
             }
-            $('#' + panel.relsPId).find(".jqui-draggable").draggable({
+            $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").draggable({
                 appendTo: 'body',
                 helper: 'clone',
                 delay: 500
             });
-            $('#' + panel.relsPId).find(".jqui-draggable").tooltip({
+            $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
                 placement : 'left',
                 trigger: 'hover',
                 title: 'Drag this',
@@ -827,6 +962,15 @@ function cancelSubscription(divElementId1, divElementId2) {
     });
     d1.unsubscribe(d2);
     $(d2.divElement).find('.linker-button').popover('toggle');
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;
 }
 
 (function($) {
