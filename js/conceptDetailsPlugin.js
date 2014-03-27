@@ -431,7 +431,7 @@ function conceptDetails(divElement, conceptId, options) {
             })
 
             $.each(allDescriptions, function(i, field) {
-                if (panel.options.displayInactiveComponents || field.active == true) {
+                if (panel.options.displayInactiveDescriptions || field.active == true) {
                     var row = "";
                     var isFsn = false;
                     var isPreferred = false;
@@ -500,7 +500,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
 
                     row = row + "</tr>";
-                    if (!(includedInLanguage == false && panel.options.hideNotAcceptable) || panel.options.displayInactiveComponents) {
+                    if (!(includedInLanguage == false && panel.options.hideNotAcceptable) || panel.options.displayInactiveDescriptions) {
                         descDetailsHtml = descDetailsHtml + row;
                     }
                 }
@@ -549,6 +549,25 @@ function conceptDetails(divElement, conceptId, options) {
             relsDetailsHtml = relsDetailsHtml + "</tr></thead><tbody>";
 
             if (typeof firstMatch.relationships != "undefined") {
+                firstMatch.relationships.sort(function(a, b) {
+                    if (a.groupId < b.groupId) {
+                        return -1;
+                    } else if (a.groupId > b.groupId) {
+                        return 1;
+                    } else {
+                        if (a.type.conceptId == 116680003) {
+                            return -1;
+                        }
+                        if (b.type.conceptId == 116680003) {
+                            return 1;
+                        }
+                        if (a.target.defaultTerm < b.target.defaultTerm)
+                            return -1;
+                        if (a.target.defaultTerm > b.target.defaultTerm)
+                            return 1;
+                        return 0;
+                    }
+                });
                 $.each(firstMatch.relationships, function(i, field) {
                     //console.log(JSON.stringify(field));
                     if (field.active == true) {
@@ -579,6 +598,25 @@ function conceptDetails(divElement, conceptId, options) {
             }
 
             if (typeof firstMatch.statedRelationships != "undefined") {
+                firstMatch.statedRelationships.sort(function(a, b) {
+                    if (a.groupId < b.groupId) {
+                        return -1;
+                    } else if (a.groupId > b.groupId) {
+                        return 1;
+                    } else {
+                        if (a.type.conceptId == 116680003) {
+                            return -1;
+                        }
+                        if (b.type.conceptId == 116680003) {
+                            return 1;
+                        }
+                        if (a.target.defaultTerm < b.target.defaultTerm)
+                            return -1;
+                        if (a.target.defaultTerm > b.target.defaultTerm)
+                            return 1;
+                        return 0;
+                    }
+                });
                 $.each(firstMatch.statedRelationships, function(i, field) {
                     //console.log(JSON.stringify(field));
                     if (field.active == true) {
@@ -948,10 +986,10 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<div class="checkbox">';
         optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displayInactiveComponents == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveComponentsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_components">Display inactive components</span>';
+        if (panel.options.displayInactiveDescriptions == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
         } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveComponentsOption" checked> <span class="i18n" data-i18n-id="i18n_display_inactive_components">Display inactive components</span>';
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption" checked> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
         }
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
@@ -1007,7 +1045,7 @@ function conceptDetails(divElement, conceptId, options) {
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.displayChildren = $("#" + panel.divElement.id + "-childrenOption").is(':checked');
         panel.options.hideNotAcceptable = $("#" + panel.divElement.id + "-hideNotAcceptableOption").is(':checked');
-        panel.options.displayInactiveComponents = $("#" + panel.divElement.id + "-displayInactiveComponentsOption").is(':checked');
+        panel.options.displayInactiveDescriptions = $("#" + panel.divElement.id + "-displayInactiveDescriptionsOption").is(':checked');
         panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
     }
 }
