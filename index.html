@@ -72,6 +72,7 @@
             } ();
 
             function start() {
+                // Read parameters
                 var edition = QueryString.edition;
                 if (typeof edition == "undefined" || edition == null || edition == "") {
                     edition = "en-edition";
