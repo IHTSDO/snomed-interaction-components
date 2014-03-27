@@ -614,7 +614,7 @@ function conceptDetails(divElement, conceptId, options) {
             var parentsHomeHtml = "";
             if (panel.options.selectedView == "stated") {
                 $.each(statedParents, function(i, field) {
-                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     if (field.type.defaultTerm.lastIndexOf("(") > 0) {
                         parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
                     } else {
@@ -629,7 +629,7 @@ function conceptDetails(divElement, conceptId, options) {
                 });
             } else {
                 $.each(inferredParents, function(i, field) {
-                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     if (field.type.defaultTerm.lastIndexOf("(") > 0) {
                         parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
                     } else {
@@ -645,7 +645,7 @@ function conceptDetails(divElement, conceptId, options) {
             }
             $('#home-parents-' + panel.divElement.id).html(parentsHomeHtml);
 
-            var rolesHomeHtml = "<p style='line-height: 100%;'>";
+            var rolesHomeHtml = "<div style='line-height: 100%;'>";
             if (panel.options.selectedView == "stated") {
                 var lastGroup = 0;
                 var barHtml = "";
@@ -656,7 +656,7 @@ function conceptDetails(divElement, conceptId, options) {
                         barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + getRandomColor() + "'>&nbsp;&nbsp;</span>";
                     }
                     rolesHomeHtml = rolesHomeHtml + barHtml;
-                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     if (field.type.defaultTerm.lastIndexOf("(") > 0) {
                         rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
                     } else {
@@ -672,14 +672,16 @@ function conceptDetails(divElement, conceptId, options) {
             } else {
                 var lastGroup = 0;
                 var barHtml = "";
+                var barColor = "white";
                 $.each(inferredRoles, function(i, field) {
                     if (!(lastGroup == field.groupId)) {
-                        rolesHomeHtml = rolesHomeHtml + "<br>";
                         lastGroup = field.groupId;
-                        barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + getRandomColor() + "'>&nbsp;&nbsp;</span>";
+                        rolesHomeHtml = rolesHomeHtml + "<br>";
+                        barColor = getRandomColor();
+                        barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + barColor + "'>&nbsp;&nbsp;</span>";
                     }
                     rolesHomeHtml = rolesHomeHtml + barHtml;
-                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     if (field.type.defaultTerm.lastIndexOf("(") > 0) {
                         rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
                     } else {
@@ -693,7 +695,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
             }
-            rolesHomeHtml = rolesHomeHtml + "</p>";
+            rolesHomeHtml = rolesHomeHtml + "</div>";
             $('#home-roles-' + panel.divElement.id).html(rolesHomeHtml);
 
             if (panel.options.selectedView == "stated") {
