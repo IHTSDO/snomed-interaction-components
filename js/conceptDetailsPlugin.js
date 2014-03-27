@@ -438,18 +438,22 @@ function conceptDetails(divElement, conceptId, options) {
 
                     if (field.type.conceptId == "900000000000003001") {
                         isFsn = true;
-                        $.each(field.langMemberships, function(i, lm) {
-                            if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
-                                isPreferred = true;
-                            }
-                        });
+                        if (typeof field.langMemberships != "undefined") {
+                            $.each(field.langMemberships, function(i, lm) {
+                                if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
+                                    isPreferred = true;
+                                }
+                            });
+                        }
                     } else {
                         isFsn = false;
-                        $.each(field.langMemberships, function(i, lm) {
-                            if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
-                                isPreferred = true;
-                            }
-                        });
+                        if (typeof field.langMemberships != "undefined") {
+                            $.each(field.langMemberships, function (i, lm) {
+                                if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
+                                    isPreferred = true;
+                                }
+                            });
+                        }
                     }
                     row = "<tr class='";
                     if (isFsn) {
@@ -480,7 +484,6 @@ function conceptDetails(divElement, conceptId, options) {
                     if (panel.options.showIds == true) {
                         row = row + "<td>" + field.descriptionId + "</td>";
                     }
-                    console.log(field.term);
                     var includedInLanguage = false;
                     if (typeof field.langMemberships != "undefined") {
                         $.each(field.langMemberships, function(i, lang) {
@@ -645,6 +648,9 @@ function conceptDetails(divElement, conceptId, options) {
                         relsDetailsHtml = relsDetailsHtml + row;
                     }
                 });
+            }
+            if ((inferredParents.length + statedParents.length) == 0) {
+                relsDetailsHtml = relsDetailsHtml + "<tr><td colspan='4'><span class='text-muted'>No relationships</span></td></tr>";
             }
             relsDetailsHtml = relsDetailsHtml + "</tbody></table>";
             $('#' + panel.relsPId).html(relsDetailsHtml);
