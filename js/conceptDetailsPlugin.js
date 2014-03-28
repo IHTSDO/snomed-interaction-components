@@ -373,6 +373,10 @@ function conceptDetails(divElement, conceptId, options) {
             homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
             $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
 
+            if (!firstMatch.active) {
+                $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
+            }
+
             if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
                 $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
             }
