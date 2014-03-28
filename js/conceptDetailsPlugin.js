@@ -81,7 +81,7 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + '       <div class="row" style="margin-right: 20px"><span class="pull-right text-muted" id="home-' + panel.divElement.id + '-viewLabel"></span></div>';
         detailsHtml = detailsHtml + '       <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
         detailsHtml = detailsHtml + '       <div style="margin-left: 10%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-' + panel.divElement.id + '">Attributes</div>';
-        detailsHtml = detailsHtml + '       <div style="margin-left: 20%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Roles</div>';
+        detailsHtml = detailsHtml + '       <div style="margin-left: 20%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Relationships</div>';
         detailsHtml = detailsHtml + '    </div>';
         detailsHtml = detailsHtml + '    <div class="tab-pane fade" id="details-' + panel.divElement.id + '">';
         detailsHtml = detailsHtml + "       <div id='" + panel.attributesPId + "' class='panel panel-default'>";
@@ -787,7 +787,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
                 if (statedRoles.length == 0) {
-                    rolesHomeHtml = rolesHomeHtml + "<span class='text-muted'>No roles</span>";
+                    rolesHomeHtml = rolesHomeHtml + "<span class='text-muted'>No relationships</span>";
                 }
             } else {
                 var lastGroup = 0;
