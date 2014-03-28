@@ -469,9 +469,9 @@ function conceptDetails(divElement, conceptId, options) {
                     row = row + "'><td>";
 
                     if (isFsn) {
-                        row = row + '<span rel="tooltip-right" title="FSN">F</span>';
+                        row = row + '<span rel="tooltip-right" title="' + i18n_fsn + '">F</span>';
                     } else {
-                        row = row + '<span rel="tooltip-right" title="Synonym">S</span>';;
+                        row = row + '<span rel="tooltip-right" title="' + i18n_synonym + '">S</span>';
                     }
 
                     if (isPreferred) {
