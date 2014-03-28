@@ -468,17 +468,16 @@ function conceptDetails(divElement, conceptId, options) {
                     row = row + "'><td>";
 
                     if (isFsn) {
-                        row = row + '&Omicron;';
+                        row = row + '<span rel="tooltip-right" title="FSN">F</span>';
                     } else {
-                        row = row + '&omicron;';
+                        row = row + '<span rel="tooltip-right" title="Synonym">S</span>';;
                     }
 
                     if (isPreferred) {
-                        row = row + '&nbsp;<span class="glyphicon glyphicon-star-empty"></span>';
+                        row = row + '&nbsp;<span class="glyphicon glyphicon-star-empty" rel="tooltip-right" title="Preferred"></span>';
                     } else {
-                        row = row + '&nbsp;&#10004;</span>';
+                        row = row + '&nbsp;<span rel="tooltip-right" title="Acceptable">&#10004;</span></span>';
                     }
-
 
                     row = row + "&nbsp;&nbsp;&nbsp;" + field.term + "</td>";
                     if (panel.options.showIds == true) {
@@ -531,6 +530,8 @@ function conceptDetails(divElement, conceptId, options) {
                 helper: 'clone',
                 delay: 500
             });
+
+            $('#' + panel.descsPId).find("[rel=tooltip-right]").tooltip({ placement: 'right'});
 
             // load relationships panel and home parents/roles
             if (panel.options.selectedView == "inferred") {
