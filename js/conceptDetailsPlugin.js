@@ -787,7 +787,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
                 if (statedRoles.length == 0) {
-                    rolesHomeHtml = rolesHomeHtml + "<span class='text-muted'>No relationships</span>";
+                    rolesHomeHtml = rolesHomeHtml + "<span class='i18n text-muted' data-i18n-id='i18n_no_relationships'>No relationships</span>";
                 }
             } else {
                 var lastGroup = 0;
@@ -821,7 +821,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
                 if (inferredRoles.length == 0) {
-                    rolesHomeHtml = rolesHomeHtml + "<span class='text-muted'>No roles</span>";
+                    rolesHomeHtml = rolesHomeHtml + "<span class='i18n text-muted' data-i18n-id='i18n_no_relationships'>No relationships</span>";
                 }
             }
             rolesHomeHtml = rolesHomeHtml + "</div>";
