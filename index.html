@@ -129,7 +129,7 @@
                     initialize();
                 } else if (QueryString.perspective == "browsing") {
                     switchToBrowsing(cdValue1,cdValue2);
-                } else if (QueryString.perspective == "full_height") {
+                } else if (QueryString.perspective == "full") {
                     switchToFullHeight(cdValue1);
                 } else if (QueryString.perspective == "compare_concepts") {
                     switchToComparingConcepts(cdValue1,cdValue2);
@@ -350,7 +350,7 @@
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
                 $("#full-height-perspective").css({"display":"block"});
                 $("#responsive-perspective").css({"display":"none"});
-                $("#perspectiveLabel").html("Full height");
+                $("#perspectiveLabel").html("Full");
                 var fhOptions = jQuery.extend(true, {}, options);
                 fhOptions.subscribersMarker = false;
                 var tpt = new taxonomyPanel(document.getElementById("fh-taxonomy_canvas"), fhOptions);
@@ -468,7 +468,7 @@
                                 <span class="i18n" data-i18n-id="i18n_perspective">Perspective</span>:&nbsp;<span id="perspectiveLabel"><em>...</em></span> <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0);" onclick="switchToFullHeight(404684003);">Full height</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToFullHeight(404684003);">Full</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToBrowsing(404684003,404684003);">Browsing</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToComparingConcepts(404684003,404684003);">Comparing concepts</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToComparingTaxonomies(404684003);">Comparing hierarchy</a></li>
@@ -579,7 +579,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Full height Perspective -->
+            <!-- Full Perspective -->
             <div id="full-height-perspective" class="bperspective">
                 <div id="spliter-fh" class="row" style="width:100%; height: 91%; position: absolute;">
                     <div class="a panel panel-default" style="border-radius: 0px;">
