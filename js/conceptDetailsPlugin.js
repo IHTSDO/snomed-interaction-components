@@ -71,12 +71,12 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div class='panel-body' id='" + panel.divElement.id + "-panelBody'>";
         detailsHtml = detailsHtml + "<!-- Nav tabs -->";
-        detailsHtml = detailsHtml + '<ul class="nav nav-tabs">';
+        detailsHtml = detailsHtml + '<ul class="nav nav-tabs" id="details-tabs-' + panel.divElement.id + '">';
         detailsHtml = detailsHtml + '    <li class="active"><a href="#home-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;">Summary</a></li>';
         detailsHtml = detailsHtml + '    <li><a href="#details-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;">Details</a></li>';
         detailsHtml = detailsHtml + '</ul>';
         detailsHtml = detailsHtml + "<!-- Tab panes -->";
-        detailsHtml = detailsHtml + '<div class="tab-content">';
+        detailsHtml = detailsHtml + '<div class="tab-content" id="details-tab-content-' + panel.divElement.id + '">';
         detailsHtml = detailsHtml + '    <div class="tab-pane fade in active" id="home-' + panel.divElement.id + '" style="padding: 5px;">';
         detailsHtml = detailsHtml + '       <div class="row" style="margin-right: 20px"><span class="pull-right text-muted" id="home-' + panel.divElement.id + '-viewLabel"></span></div>';
         detailsHtml = detailsHtml + '       <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';

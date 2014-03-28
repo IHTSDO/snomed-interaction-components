@@ -150,60 +150,97 @@
                         steps: [
                             {
                                 element: "nothing",
-                                title: i18n_tour_step1_title,
-                                content: i18n_tour_step1_text,
+                                title: i18n_tour_step1_fh_title,
+                                content: i18n_tour_step1_fh_text,
                                 placement: "bottom",
                                 orphan: true,
                                 backdrop: false,
-                                onShow: function (tour) { switchToBrowsing(404684003,404684003) }
+                                onShow: function (tour) { switchToFullHeight(204351007) }
                             },
                             {
-                                element: "#bp-taxonomy_canvas",
+                                element: "#fh-tabs-pane",
                                 title: i18n_tour_step2_title,
                                 content: i18n_tour_step2_text,
                                 placement: "right",
                                 backdrop: true
                             },
                             {
-                                element: "#bp-search_canvas",
-                                title: i18n_tour_step3_title,
-                                content: i18n_tour_step3_text,
+                                element: "#fh-taxonomy_canvas-taxonomyConfigBar",
+                                title: i18n_tour_step5_title,
+                                content: i18n_tour_step5_text,
                                 placement: "bottom",
                                 backdrop: true
                             },
                             {
-                                element: "#details",
-                                title: i18n_tour_step4_title,
-                                content: i18n_tour_step4_text,
-                                placement: "top",
-                                backdrop: true
-                            },
-                            {
-                                element: "#bp-taxonomy_canvas-configButton",
-                                title: i18n_tour_step5_title,
-                                content: i18n_tour_step5_text,
+                                element: "#fh-taxonomy_canvas-treenode-404684003",
+                                title: i18n_tour_step10_title,
+                                content: i18n_tour_step10_text,
                                 placement: "right",
                                 backdrop: true
                             },
                             {
-                                element: "#bp-search_canvas-configButton",
+                                element: "#fh-taxonomy_canvas-treeicon-404684003",
+                                title: i18n_tour_step11_title,
+                                content: i18n_tour_step11_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#fh-tabs",
+                                title: i18n_tour_step2_5_title,
+                                content: i18n_tour_step2_5_text,
+                                placement: "bottom",
+                                backdrop: true,
+                                onNext: function (tour) { $('#fh-tabs li:eq(1) a').tab('show')  }
+                            },
+                            {
+                                element: "#fh-tabs-pane",
+                                title: i18n_tour_step3_title,
+                                content: i18n_tour_step3_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#fh-search_canvas-searchConfigBar",
                                 title: i18n_tour_step6_title,
                                 content: i18n_tour_step6_text,
+                                placement: "bottom",
+                                backdrop: true
+                            },
+                            {
+                                element: "#fh-search_canvas",
+                                title: i18n_tour_step12_title,
+                                content: i18n_tour_step12_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#fh-search_canvas-historyButton",
+                                title: i18n_tour_step13_title,
+                                content: i18n_tour_step13_text,
+                                placement: "left",
+                                backdrop: true,
+                                onNext: function (tour) { $('#fh-tabs li:eq(0) a').tab('show')  }
+                            },
+                            {
+                                element: "#fh-cd1_canvas",
+                                title: i18n_tour_step4_title,
+                                content: i18n_tour_step4_text,
                                 placement: "left",
                                 backdrop: true
                             },
                             {
-                                element: "#bp-cd1_canvas-configButton",
+                                element: "#fh-cd1_canvas-configButton",
                                 title: i18n_tour_step7_title,
                                 content: i18n_tour_step7_text,
-                                placement: "right",
+                                placement: "left",
                                 backdrop: true
                             },
-                            {
-                                element: "#bp-taxonomy_canvas-linkerButton",
+                            /*{
+                                element: "#fh-taxonomy_canvas-linkerButton",
                                 title: i18n_tour_step8_title,
                                 content: i18n_tour_step8_text,
-                                placement: "right",
+                                placement: "left",
                                 backdrop: true
                             },
                             {
@@ -212,42 +249,36 @@
                                 content: i18n_tour_step9_text,
                                 placement: "right",
                                 backdrop: true
-                            },
+                            },*/
                             {
-                                element: "#bp-taxonomy_canvas-treenode-404684003",
-                                title: i18n_tour_step10_title,
-                                content: i18n_tour_step10_text,
-                                placement: "right",
-                                backdrop: true
-                            },
-                            {
-                                element: "#bp-taxonomy_canvas-treeicon-404684003",
-                                title: i18n_tour_step11_title,
-                                content: i18n_tour_step11_text,
-                                placement: "right",
-                                backdrop: true
-                            },
-                            {
-                                element: "#bp-search_canvas",
-                                title: i18n_tour_step12_title,
-                                content: i18n_tour_step12_text,
+                                element: "#details-tabs-fh-cd1_canvas",
+                                title: i18n_tour_step13_1_title,
+                                content: i18n_tour_step13_1_text,
                                 placement: "bottom",
                                 backdrop: true
                             },
                             {
-                                element: "#bp-search_canvas-historyButton",
-                                title: i18n_tour_step13_title,
-                                content: i18n_tour_step13_text,
+                                element: "#fh-cd1_canvas-panelBody",
+                                title: i18n_tour_step13_2_title,
+                                content: i18n_tour_step13_2_text,
+                                placement: "left",
+                                backdrop: true,
+                                onNext: function (tour) { $('#details-tabs-fh-cd1_canvas li:eq(1) a').tab('show')  }
+                            },
+                            {
+                                element: "#fh-cd1_canvas-panelBody",
+                                title: i18n_tour_step13_3_title,
+                                content: i18n_tour_step13_3_text,
                                 placement: "left",
                                 backdrop: true
                             },
                             {
-                                element: "#bp-cd1_canvas-attributesClip",
+                                element: "#fh-cd1_canvas-attributesClip",
                                 title: i18n_tour_step14_title,
                                 content: i18n_tour_step14_text,
-                                placement: "top",
+                                placement: "left",
                                 backdrop: true,
-                                onHide: function (tour) { initialize() }
+                                onNext: function (tour) { initialize() }
                             },
                             {
                                 element: "nothing",
@@ -558,7 +589,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Comparing concepts -->
+            <!-- Comparing hierarchy -->
             <div id="comparing-taxonomies-perspective" class="bperspective">
                 <div id="comparing-taxonomies-wrapper" class="row" style="width:100%; height: 91%; position: absolute;">
                     <div class="" id="taxonomies-canvas-wrapper">
@@ -582,9 +613,9 @@
             <!-- Full Perspective -->
             <div id="full-height-perspective" class="bperspective">
                 <div id="spliter-fh" class="row" style="width:100%; height: 91%; position: absolute;">
-                    <div class="a panel panel-default" style="border-radius: 0px;">
+                    <div class="a panel panel-default" id="fh-tabs-pane" style="border-radius: 0px;">
                         <!-- Nav tabs -->
-                        <ul class="nav nav-tabs">
+                        <ul class="nav nav-tabs" id="fh-tabs">
                             <li class="active"><a href="#fh-taxonomy_canvas" data-toggle="tab">&nbsp;Taxonomy</a></li>
                             <li><a href="#fh-search_canvas" data-toggle="tab">Search</a></li>
                         </ul>
