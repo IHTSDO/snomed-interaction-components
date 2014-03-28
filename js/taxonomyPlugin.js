@@ -86,6 +86,10 @@ function taxonomyPanel(divElement, options) {
             $("#" + panel.divElement.id + "-linkerButton").hide();
         }
 
+        if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
+            $("#" + panel.divElement.id + "-subscribersMarker").remove();
+        }
+
         if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
             $("#" + panel.divElement.id + "-expandButton").hide();
             $("#" + panel.divElement.id + "-collapseButton").hide();

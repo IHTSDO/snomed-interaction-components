@@ -24,6 +24,7 @@
         <script type="text/javascript" src="lib/popover-extra-placements.js"></script>
         <link rel="stylesheet" href="css/popover-extra-placements.css">
         <link rel="stylesheet" href="css/sct-widgets.css">
+        <link rel="stylesheet" href="css/sct-diagram.css">
         <script src="lib/bootstrap-tour.min.js"></script>
         <script src="lib/jquery.i18n.properties-min-1.0.9.js"></script>
 
@@ -37,6 +38,8 @@
                 edition: "en-edition",
                 release: "v20140131",
                 showIds: false,
+                hideNotAcceptable: true,
+                displayInactiveDescriptions: false,
                 displaySynonyms: true,
                 selectedView: "inferred",
                 displayChildren: false,
@@ -44,16 +47,100 @@
                 closeButton: false,
                 collapseButton: false,
                 linkerButton: true,
+                subscribersMarker: true,
                 searchMode: "partialMatching",
-                searchLang: "english"
+                searchLang: "english",
+                diagrammingMarkupEnabled: false
             };
 
             var tours = {};
             var tour;
 
+            var QueryString = function () {
+                var query_string = {};
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i=0;i<vars.length;i++) {
+                    var pair = vars[i].split("=");
+                    if (typeof query_string[pair[0]] === "undefined") {
+                        query_string[pair[0]] = pair[1];
+                    } else if (typeof query_string[pair[0]] === "string") {
+                        var arr = [ query_string[pair[0]], pair[1] ];
+                        query_string[pair[0]] = arr;
+                    } else {
+                        query_string[pair[0]].push(pair[1]);
+                    }
+                }
+                return query_string;
+            } ();
+
             function start() {
+                // Read parameters
+                var edition = QueryString.edition;
+                if (typeof edition == "undefined" || edition == null || edition == "") {
+                    edition = "en-edition";
+                }
+                options.edition = edition;
+
+                var release = QueryString.release;
+                if (typeof release == "undefined" || release == null || release == "") {
+                    release = "v20140131";
+                }
+                options.release = release;
+
+                var diagrammingMarkupEnabled = QueryString.diagrammingMarkupEnabled;
+                if (typeof diagrammingMarkupEnabled == "undefined" || diagrammingMarkupEnabled == null || diagrammingMarkupEnabled == "") {
+                    diagrammingMarkupEnabled = false;
+                }
+                options.diagrammingMarkupEnabled = diagrammingMarkupEnabled;
+
+                var langRefset = QueryString.langRefset;
+                if (typeof langRefset == "undefined" || langRefset == null || langRefset == "") {
+                    langRefset = "900000000000509007";
+                }
+                options.langRefset = langRefset;
+
+                $("#editionLabel").html(edition + " " + release);
+
+                if (QueryString.ui_language == "en") {
+                    selectedLanguage = 'en_US';
+                    selectedFlag = 'img/flags/us.png';
+                } else if (QueryString.ui_language == "es") {
+                    selectedLanguage = 'es';
+                    selectedFlag = 'img/flags/es.png';
+                }  else if (QueryString.ui_language == "da") {
+                    selectedLanguage = 'da';
+                    selectedFlag = 'img/flags/dk.png';
+                }
+
                 switchLanguage(selectedLanguage, selectedFlag, false);
-                initialize();
+
+                var cdValue1 = QueryString.conceptId1;
+                if (typeof cdValue1 == "undefined" || cdValue1 == null || cdValue1 == "") {
+                    cdValue1 = 404684003;
+                }
+
+                var cdValue2 = QueryString.conceptId2;
+                if (typeof cdValue2 == "undefined" || cdValue2 == null || cdValue2 == "") {
+                    cdValue2 = 404684003;
+                }
+
+                if (QueryString.perspective == "home") {
+                    initialize();
+                } else if (QueryString.perspective == "browsing") {
+                    switchToBrowsing(cdValue1,cdValue2);
+                } else if (QueryString.perspective == "full") {
+                    switchToFullHeight(cdValue1);
+                } else if (QueryString.perspective == "compare_concepts") {
+                    switchToComparingConcepts(cdValue1,cdValue2);
+                } else if (QueryString.perspective == "compare_hierarchies") {
+                    switchToComparingTaxonomies(cdValue1);
+                } else if (QueryString.perspective == "responsive") {
+                    switchToResponsiveLayout(cdValue1,cdValue2)
+                } else {
+                    initialize();
+                }
+
                 $('#license-modal').modal('show');
             }
 
@@ -63,60 +150,97 @@
                         steps: [
                             {
                                 element: "nothing",
-                                title: i18n_tour_step1_title,
-                                content: i18n_tour_step1_text,
+                                title: i18n_tour_step1_fh_title,
+                                content: i18n_tour_step1_fh_text,
                                 placement: "bottom",
                                 orphan: true,
                                 backdrop: false,
-                                onShow: function (tour) { switchToBrowsing() }
+                                onShow: function (tour) { switchToFullHeight(204351007) }
                             },
                             {
-                                element: "#bp-taxonomy_canvas",
+                                element: "#fh-tabs-pane",
                                 title: i18n_tour_step2_title,
                                 content: i18n_tour_step2_text,
                                 placement: "right",
                                 backdrop: true
                             },
                             {
-                                element: "#bp-search_canvas",
-                                title: i18n_tour_step3_title,
-                                content: i18n_tour_step3_text,
+                                element: "#fh-taxonomy_canvas-taxonomyConfigBar",
+                                title: i18n_tour_step5_title,
+                                content: i18n_tour_step5_text,
                                 placement: "bottom",
                                 backdrop: true
                             },
                             {
-                                element: "#details",
-                                title: i18n_tour_step4_title,
-                                content: i18n_tour_step4_text,
-                                placement: "top",
-                                backdrop: true
-                            },
-                            {
-                                element: "#bp-taxonomy_canvas-configButton",
-                                title: i18n_tour_step5_title,
-                                content: i18n_tour_step5_text,
+                                element: "#fh-taxonomy_canvas-treenode-404684003",
+                                title: i18n_tour_step10_title,
+                                content: i18n_tour_step10_text,
                                 placement: "right",
                                 backdrop: true
                             },
                             {
-                                element: "#bp-search_canvas-configButton",
+                                element: "#fh-taxonomy_canvas-treeicon-404684003",
+                                title: i18n_tour_step11_title,
+                                content: i18n_tour_step11_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#fh-tabs",
+                                title: i18n_tour_step2_5_title,
+                                content: i18n_tour_step2_5_text,
+                                placement: "bottom",
+                                backdrop: true,
+                                onNext: function (tour) { $('#fh-tabs li:eq(1) a').tab('show')  }
+                            },
+                            {
+                                element: "#fh-tabs-pane",
+                                title: i18n_tour_step3_title,
+                                content: i18n_tour_step3_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#fh-search_canvas-searchConfigBar",
                                 title: i18n_tour_step6_title,
                                 content: i18n_tour_step6_text,
+                                placement: "bottom",
+                                backdrop: true
+                            },
+                            {
+                                element: "#fh-search_canvas",
+                                title: i18n_tour_step12_title,
+                                content: i18n_tour_step12_text,
+                                placement: "right",
+                                backdrop: true
+                            },
+                            {
+                                element: "#fh-search_canvas-historyButton",
+                                title: i18n_tour_step13_title,
+                                content: i18n_tour_step13_text,
+                                placement: "left",
+                                backdrop: true,
+                                onNext: function (tour) { $('#fh-tabs li:eq(0) a').tab('show')  }
+                            },
+                            {
+                                element: "#fh-cd1_canvas",
+                                title: i18n_tour_step4_title,
+                                content: i18n_tour_step4_text,
                                 placement: "left",
                                 backdrop: true
                             },
                             {
-                                element: "#bp-cd1_canvas-configButton",
+                                element: "#fh-cd1_canvas-configButton",
                                 title: i18n_tour_step7_title,
                                 content: i18n_tour_step7_text,
-                                placement: "right",
+                                placement: "left",
                                 backdrop: true
                             },
-                            {
-                                element: "#bp-taxonomy_canvas-linkerButton",
+                            /*{
+                                element: "#fh-taxonomy_canvas-linkerButton",
                                 title: i18n_tour_step8_title,
                                 content: i18n_tour_step8_text,
-                                placement: "right",
+                                placement: "left",
                                 backdrop: true
                             },
                             {
@@ -125,42 +249,36 @@
                                 content: i18n_tour_step9_text,
                                 placement: "right",
                                 backdrop: true
-                            },
+                            },*/
                             {
-                                element: "#bp-taxonomy_canvas-treenode-404684003",
-                                title: i18n_tour_step10_title,
-                                content: i18n_tour_step10_text,
-                                placement: "right",
-                                backdrop: true
-                            },
-                            {
-                                element: "#bp-taxonomy_canvas-treeicon-404684003",
-                                title: i18n_tour_step11_title,
-                                content: i18n_tour_step11_text,
-                                placement: "right",
-                                backdrop: true
-                            },
-                            {
-                                element: "#bp-search_canvas",
-                                title: i18n_tour_step12_title,
-                                content: i18n_tour_step12_text,
+                                element: "#details-tabs-fh-cd1_canvas",
+                                title: i18n_tour_step13_1_title,
+                                content: i18n_tour_step13_1_text,
                                 placement: "bottom",
                                 backdrop: true
                             },
                             {
-                                element: "#bp-search_canvas-historyButton",
-                                title: i18n_tour_step13_title,
-                                content: i18n_tour_step13_text,
+                                element: "#fh-cd1_canvas-panelBody",
+                                title: i18n_tour_step13_2_title,
+                                content: i18n_tour_step13_2_text,
+                                placement: "left",
+                                backdrop: true,
+                                onNext: function (tour) { $('#details-tabs-fh-cd1_canvas li:eq(1) a').tab('show')  }
+                            },
+                            {
+                                element: "#fh-cd1_canvas-panelBody",
+                                title: i18n_tour_step13_3_title,
+                                content: i18n_tour_step13_3_text,
                                 placement: "left",
                                 backdrop: true
                             },
                             {
-                                element: "#bp-cd1_canvas-attributesClip",
+                                element: "#fh-cd1_canvas-attributesClip",
                                 title: i18n_tour_step14_title,
                                 content: i18n_tour_step14_text,
-                                placement: "top",
+                                placement: "left",
                                 backdrop: true,
-                                onHide: function (tour) { initialize() }
+                                onNext: function (tour) { initialize() }
                             },
                             {
                                 element: "nothing",
@@ -194,21 +312,23 @@
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("<em>...</em>");
             }
-            function switchToBrowsing() {
+            function switchToBrowsing(cd1Value, cd2Value) {
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"block"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Browsing");
                 var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), options);
                 var spa = new searchPanel(document.getElementById("bp-search_canvas"), options);
-                var cdPanel1 = new conceptDetails(document.getElementById("bp-cd1_canvas"), "404684003", options);
+                var cdPanel1 = new conceptDetails(document.getElementById("bp-cd1_canvas"), cd1Value, options);
                 cdPanel1.setupCanvas();
-                var cdPanel2 = new conceptDetails(document.getElementById("bp-cd2_canvas"), "404684003", options);
+                var cdPanel2 = new conceptDetails(document.getElementById("bp-cd2_canvas"), cd2Value, options);
                 cdPanel2.setupCanvas();
                 tpt.subscribe(cdPanel1);
                 spa.subscribe(cdPanel2);
@@ -217,34 +337,36 @@
                 $('#details').split({orientation: 'vertical', limit: 20});
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
-            function switchToComparingConcepts() {
+            function switchToComparingConcepts(cd1Value, cd2Value) {
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"block"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Comparing concepts");
                 var spa = new searchPanel(document.getElementById("cc-search_canvas"), options);
-                var cdPanel1 = new conceptDetails(document.getElementById("cc-cd1_canvas"), "404684003", options);
+                var cdPanel1 = new conceptDetails(document.getElementById("cc-cd1_canvas"), cd1Value, options);
                 cdPanel1.setupCanvas();
-                var cdPanel2 = new conceptDetails(document.getElementById("cc-cd2_canvas"), "404684003", options);
+                var cdPanel2 = new conceptDetails(document.getElementById("cc-cd2_canvas"), cd2Value, options);
                 cdPanel2.setupCanvas();
                 spa.subscribe(cdPanel1);
                 $('#comparing-concepts-wrapper').split({orientation: 'horizontal'});
                 $('#comparing-concept-details').split({orientation: 'vertical'});
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
-            function switchToComparingTaxonomies() {
+            function switchToComparingTaxonomies(cd1Value) {
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"block"});
+                $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Comparing taxonomies");
                 var tx1 = new taxonomyPanel(document.getElementById("ct-tx1_canvas"), options);
                 var tx2 = new taxonomyPanel(document.getElementById("ct-tx2_canvas"), options);
                 var spa = new searchPanel(document.getElementById("ct-search_canvas"), options);
-                var cdPanel1 = new conceptDetails(document.getElementById("ct-cd1_canvas"), "404684003", options);
+                var cdPanel1 = new conceptDetails(document.getElementById("ct-cd1_canvas"), cd1Value, options);
                 cdPanel1.setupCanvas();
                 spa.subscribe(cdPanel1);
                 $('#comparing-taxonomies-wrapper').split({orientation: 'horizontal'});
@@ -252,19 +374,38 @@
                 $('#search-cd-wrapper').split({orientation: 'vertical'});
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
-
-            function switchToResponsiveLayout() {
+            function switchToFullHeight(cd1Value) {
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"block"});
+                $("#responsive-perspective").css({"display":"none"});
+                $("#perspectiveLabel").html("Full");
+                var fhOptions = jQuery.extend(true, {}, options);
+                fhOptions.subscribersMarker = false;
+                var tpt = new taxonomyPanel(document.getElementById("fh-taxonomy_canvas"), fhOptions);
+                var spa = new searchPanel(document.getElementById("fh-search_canvas"), fhOptions);
+                var cdPanel1 = new conceptDetails(document.getElementById("fh-cd1_canvas"), cd1Value, fhOptions);
+                cdPanel1.setupCanvas();
+                tpt.subscribe(cdPanel1);
+                spa.subscribe(cdPanel1);
+                $('#spliter-fh').split({orientation: 'vertical', limit: 20, position: '40%'});
+                switchLanguage(selectedLanguage, selectedFlag, false);
+            }
+            function switchToResponsiveLayout(cd1Value, cd2Value) {
+                $("#welcome-perspective").css({"display":"none"});
+                $("#browsing-perspective").css({"display":"none"});
+                $("#comparing-concepts-perspective").css({"display":"none"});
+                $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"block"});
                 $("#perspectiveLabel").html("Responsive");
                 var tpt = new taxonomyPanel(document.getElementById("rp-taxonomy_canvas"), options);
                 var spa = new searchPanel(document.getElementById("rp-search_canvas"), options);
-                var cdPanel1 = new conceptDetails(document.getElementById("rp-cd1_canvas"), "404684003", options);
+                var cdPanel1 = new conceptDetails(document.getElementById("rp-cd1_canvas"), cd1Value, options);
                 cdPanel1.setupCanvas();
-                var cdPanel2 = new conceptDetails(document.getElementById("rp-cd2_canvas"), "404684003", options);
+                var cdPanel2 = new conceptDetails(document.getElementById("rp-cd2_canvas"), cd2Value, options);
                 cdPanel2.setupCanvas();
                 tpt.subscribe(cdPanel1);
                 spa.subscribe(cdPanel2);
@@ -309,6 +450,14 @@
                     }
                 });
                 initTour();
+                $("#navBarBrand").tooltip().tooltip('destroy');
+                $("#navBarBrand").tooltip({
+                    placement : 'bottom',
+                    trigger: 'hover',
+                    title: i18n_go_back_home,
+                    animation: true,
+                    delay: 1000
+                });
             }
 
         </script>
@@ -328,7 +477,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                 </button>
-                <img class="pull-left hidden-xs hidden-sm" src="img/beta.gif"><a class="navbar-brand" href="javascript:void(0);" onclick="initialize();"><strong>
+                <img class="pull-left hidden-xs hidden-sm" src="img/beta.gif"><a class="navbar-brand" href="javascript:void(0);" onclick="initialize();" id="navBarBrand"><strong>
                      	&nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_app_name">IHTSDO SNOMED CT Browser</span></strong></a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -350,10 +499,11 @@
                                 <span class="i18n" data-i18n-id="i18n_perspective">Perspective</span>:&nbsp;<span id="perspectiveLabel"><em>...</em></span> <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0);" onclick="switchToBrowsing();">Browsing</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchToComparingConcepts();">Comparing concepts</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchToComparingTaxonomies();">Comparing hierarchy</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchToResponsiveLayout();">Responsive (tablets, phones)</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToFullHeight(404684003);">Full</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToBrowsing(404684003,404684003);">Browsing</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToComparingConcepts(404684003,404684003);">Comparing concepts</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToComparingTaxonomies(404684003);">Comparing hierarchy</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToResponsiveLayout(404684003,404684003);">Responsive (tablets, phones)</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -391,7 +541,7 @@
                     <h1><span class="i18n" data-i18n-id="i18n_welcome">Welcome</span></h1>
                     <p><span class="i18n" data-i18n-id="i18n_home1">This is a beta... a work in progress of ways to browse and search SNOMED CT as part of development within the IHTSDO Open Tooling Framework, by the IHTSDO and its development partners</span></p>
                     <p><span class="i18n" data-i18n-id="i18n_home2">Please select a SNOMED CT release and a perspective from the top menu to start, or...</span></p>
-                    <p><a class="btn btn-primary btn-lg" role="button" onclick="switchToBrowsing();"><span class="i18n" data-i18n-id="i18n_go_browsing">Go to the Browsing view</span></a>
+                    <p><a class="btn btn-primary btn-lg" role="button" onclick="switchToFullHeight(404684003);"><span class="i18n" data-i18n-id="i18n_go_browsing">Go to the Browsing view</span></a>
                         &nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_or">or</span>&nbsp;&nbsp;
                         <a class="btn btn-primary btn-lg" role="button" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_take_tour">take the Tour...</span></a></p>
                     <p><span class="i18n" data-i18n-id="i18n_home3">Also, please provide any feedback by emailing <a href="mailto:otf@ihtsdo.org?subject=Browser Feedback" target="_blank">otf@ihtsdo.org</a>. Your feedback is essential to the evolution and improvement of this service.</span></p>
@@ -400,7 +550,7 @@
                     <p><span class="i18n" data-i18n-id="i18n_home5">Don't be surprised if you see frequent changes. Similarly, please don't depend on this tool being available all the time whilst in beta, but please look around and try it out!</span></p>
                 </div>
                 <p><span class="i18n" data-i18n-id="i18n_home6"><span class="btn-success"><em>Releases</em></span> will allow the selection of SNOMED CT content from the International Edition or other extensions, with specific dates.</span></p>
-                <p><span class="i18n" data-i18n-id="i18n_home7"><span class="btn-primary"><em>Perspectives</em></span>  are pre-defined browsing layouts for specific purposes. Use the <a href="javascript:void(0);" onclick="switchToResponsiveLayout();">responsive perspective</a> for best results in tablets and phones.</span></p>
+                <p><span class="i18n" data-i18n-id="i18n_home7"><span class="btn-primary"><em>Perspectives</em></span>  are pre-defined browsing layouts for specific purposes. Use the <a href="javascript:void(0);" onclick="switchToResponsiveLayout(404684003,404684003);">responsive perspective</a> for best results in tablets and phones.</span></p>
             </div>
             <!-- Browsing Perspective -->
             <div id="browsing-perspective" class="bperspective">
@@ -439,7 +589,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Comparing concepts -->
+            <!-- Comparing hierarchy -->
             <div id="comparing-taxonomies-perspective" class="bperspective">
                 <div id="comparing-taxonomies-wrapper" class="row" style="width:100%; height: 91%; position: absolute;">
                     <div class="" id="taxonomies-canvas-wrapper">
@@ -460,6 +610,25 @@
                     </div>
                 </div>
             </div>
+            <!-- Full Perspective -->
+            <div id="full-height-perspective" class="bperspective">
+                <div id="spliter-fh" class="row" style="width:100%; height: 91%; position: absolute;">
+                    <div class="a panel panel-default" id="fh-tabs-pane" style="border-radius: 0px;">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" id="fh-tabs">
+                            <li class="active"><a href="#fh-taxonomy_canvas" data-toggle="tab">&nbsp;Taxonomy</a></li>
+                            <li><a href="#fh-search_canvas" data-toggle="tab">Search</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="fh-taxonomy_canvas" style="padding: 0px;margin: 0;"></div>
+                            <div class="tab-pane" id="fh-search_canvas" style="padding: 0px;margin: 0;"></div>
+                        </div>
+                    </div>
+                    <div class="" id="conceptDetails-fh">
+                        <div class="col-md-12" id="fh-cd1_canvas" style="padding: 0px;margin: 0;"></div>
+                    </div>
+                </div>
+            </div>
             <!-- Responsive Perspective -->
             <div id="responsive-perspective" class="bperspective">
                 <div id="comparing-taxonomies-wrapper3" class="row" style="width:100%; height: 91%; position: absolute;padding: 0px !important;margin: 0 !important;">
@@ -472,6 +641,7 @@
                 </div>
             </div>
         </div>
+        <!-- License agreement modal -->
          <div class="modal fade" id="license-modal" data-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">

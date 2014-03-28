@@ -54,7 +54,7 @@ function conceptDetails(divElement, conceptId, options) {
         panel.defaultTerm = "";
         $(divElement).html();
         // main panel
-        detailsHtml = "<div style='margin: 5px; height:98%; overflow:auto;' class='panel panel-default'>";
+        var detailsHtml = "<div style='margin: 5px; height:98%; overflow:auto;' class='panel panel-default'>";
         detailsHtml = detailsHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
         detailsHtml = detailsHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding:2px;position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         detailsHtml = detailsHtml + "<div class='row'>";
@@ -70,14 +70,30 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "<div class='panel-body' id='" + panel.divElement.id + "-panelBody'>";
-        detailsHtml = detailsHtml + "<div id='" + panel.attributesPId + "' class='panel panel-default'>";
-        detailsHtml = detailsHtml + "</div>";
-        detailsHtml = detailsHtml + "<div id='" + panel.descsPId + "' class='panel panel-default'>";
-        detailsHtml = detailsHtml + "</div>";
-        detailsHtml = detailsHtml + "<div id='" + panel.relsPId + "' class='panel panel-default'>";
-        detailsHtml = detailsHtml + "</div>";
-        detailsHtml = detailsHtml + "<div id='" + panel.childrenPId + "' class='panel panel-default' style='height:100px;overflow:auto;margin-bottom: 15px;'>";
-        detailsHtml = detailsHtml + "</div>";
+        detailsHtml = detailsHtml + "<!-- Nav tabs -->";
+        detailsHtml = detailsHtml + '<ul class="nav nav-tabs" id="details-tabs-' + panel.divElement.id + '">';
+        detailsHtml = detailsHtml + '    <li class="active"><a href="#home-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;"><span class="i18n" data-i18n-id="i18n_summary">Summary</span></a></li>';
+        detailsHtml = detailsHtml + '    <li><a href="#details-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;"><span class="i18n" data-i18n-id="i18n_details">Details</span></a></li>';
+        detailsHtml = detailsHtml + '</ul>';
+        detailsHtml = detailsHtml + "<!-- Tab panes -->";
+        detailsHtml = detailsHtml + '<div class="tab-content" id="details-tab-content-' + panel.divElement.id + '">';
+        detailsHtml = detailsHtml + '    <div class="tab-pane fade in active" id="home-' + panel.divElement.id + '" style="padding: 5px;">';
+        detailsHtml = detailsHtml + '       <div class="row" style="margin-right: 20px"><span class="pull-right text-muted" id="home-' + panel.divElement.id + '-viewLabel"></span></div>';
+        detailsHtml = detailsHtml + '       <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
+        detailsHtml = detailsHtml + '       <div style="margin-left: 10%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-' + panel.divElement.id + '">Attributes</div>';
+        detailsHtml = detailsHtml + '       <div style="margin-left: 20%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Relationships</div>';
+        detailsHtml = detailsHtml + '    </div>';
+        detailsHtml = detailsHtml + '    <div class="tab-pane fade" id="details-' + panel.divElement.id + '">';
+        detailsHtml = detailsHtml + "       <div id='" + panel.attributesPId + "' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "       </div>";
+        detailsHtml = detailsHtml + "       <div id='" + panel.descsPId + "' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "       </div>";
+        detailsHtml = detailsHtml + "       <div id='" + panel.relsPId + "' class='panel panel-default'>";
+        detailsHtml = detailsHtml + "       </div>";
+        detailsHtml = detailsHtml + "       <div id='" + panel.childrenPId + "' class='panel panel-default' style='height:100px;overflow:auto;margin-bottom: 15px;'>";
+        detailsHtml = detailsHtml + "       </div>";
+        detailsHtml = detailsHtml + '    </div>';
+        detailsHtml = detailsHtml + '</div>';
         detailsHtml = detailsHtml + "</div>";
         detailsHtml = detailsHtml + "</div>";
         // modal config panel
@@ -123,6 +139,10 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-linkerButton").hide();
         }
 
+        if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
+            $("#" + panel.divElement.id + "-subscribersMarker").remove();
+        }
+
         if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
             $("#" + panel.divElement.id + "-expandButton").hide();
             $("#" + panel.divElement.id + "-collapseButton").hide();
@@ -152,7 +172,7 @@ function conceptDetails(divElement, conceptId, options) {
                 placement: 'bottomRight',
                 html: true,
                 content: function() {
-                    historyHtml = '<div style="height:100px;overflow:auto;">';
+                    var historyHtml = '<div style="height:100px;overflow:auto;">';
                     historyHtml = historyHtml + '<table>';
                     var reversedHistory = panel.history.slice(0);
                     reversedHistory.reverse();
@@ -295,15 +315,12 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.updateCanvas = function() {
-        //console.log("UPDATE:" + panel.conceptId);
-        ////console.log(JSON.stringify(panel.options));
-//        $('#' + panel.attributesPId).html($('#' + panel.attributesPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-//        $('#' + panel.descsPId).html($('#' + panel.descsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-//        $('#' + panel.relsPId).html($('#' + panel.relsPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-//        $('#' + panel.childrenPId).html($('#' + panel.childrenPId).html() + "<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.attributesPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#home-attributes-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.descsPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.relsPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#home-parents-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#home-roles-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.childrenPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 
         // load attributes
@@ -321,7 +338,7 @@ function conceptDetails(divElement, conceptId, options) {
             var d = new Date();
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
-            attrHtml = "";
+            var attrHtml = "";
             attrHtml = attrHtml + "<table class='table table-default' >";
             attrHtml = attrHtml + "<tr><td class='jqui-droppable' data-concept-id='" + firstMatch.conceptId + "'>";
             attrHtml = attrHtml + "<h4>" + firstMatch.defaultTerm + "</h4>";
@@ -343,21 +360,33 @@ function conceptDetails(divElement, conceptId, options) {
 
             $('#' + panel.attributesPId).html(attrHtml);
 
+            // load home-attributes
+            var homeAttrHtml = "";
+            if (firstMatch.definitionStatus == "Primitive") {
+                homeAttrHtml = homeAttrHtml + "<h4 class='jqui-droppable'><strong>&nbsp;&nbsp;&nbsp;</strong>";
+            } else {
+                homeAttrHtml = homeAttrHtml + "<h4 class='jqui-droppable'><strong>&equiv;&nbsp;&nbsp;</strong>";
+            }
+            homeAttrHtml = homeAttrHtml + firstMatch.defaultTerm + "</h4>";
+            homeAttrHtml = homeAttrHtml + firstMatch.conceptId;
+            homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
+            $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
+
             if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
-                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
             }
 
-            $('#' + panel.attributesPId).find('.jqui-droppable').droppable({
+            $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find('.jqui-droppable').droppable({
                 drop: panel.handleDropEvent,
                 hoverClass: "bg-info"
             });
 
-            $('#' + panel.attributesPId).find(".jqui-draggable").draggable({
+            $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").draggable({
                 appendTo: 'body',
                 helper: 'clone',
                 delay: 10
             });
-            $('#' + panel.attributesPId).find(".jqui-draggable").tooltip({
+            $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
                 placement : 'left',
                 trigger: 'hover',
                 title: 'Drag this',
@@ -377,7 +406,7 @@ function conceptDetails(divElement, conceptId, options) {
             } else if (panel.options.langRefset == "554461000005103") {
                 languageName = "(DA)";
             }
-            descDetailsHtml = "<table class='table table-bordered' id = '" + panel.descsPId + "-table'>";
+            var descDetailsHtml = "<table class='table table-bordered' id = '" + panel.descsPId + "-table'>";
             descDetailsHtml = descDetailsHtml + "<thead><tr>";
             descDetailsHtml = descDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_term'>Term</span></th>";
             if (panel.options.showIds == true) {
@@ -402,42 +431,80 @@ function conceptDetails(divElement, conceptId, options) {
             })
 
             $.each(allDescriptions, function(i, field) {
-                if (field.active == true) {
+                if (panel.options.displayInactiveDescriptions || field.active == true) {
                     var row = "";
+                    var isFsn = false;
+                    var isPreferred = false;
+
                     if (field.type.conceptId == "900000000000003001") {
-                        $.each(field.langMemberships, function(i, lm) {
-                            if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
-                                row = "<tr class='fsn-row'>";
-                            }
-                        });
-                    } 
-                    if (row == "") {
-                        row = "<tr class='synonym-row'>";
+                        isFsn = true;
+                        if (typeof field.langMemberships != "undefined") {
+                            $.each(field.langMemberships, function(i, lm) {
+                                if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
+                                    isPreferred = true;
+                                }
+                            });
+                        }
+                    } else {
+                        isFsn = false;
+                        if (typeof field.langMemberships != "undefined") {
+                            $.each(field.langMemberships, function (i, lm) {
+                                if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
+                                    isPreferred = true;
+                                }
+                            });
+                        }
+                    }
+                    row = "<tr class='";
+                    if (isFsn) {
+                        row = row + " fsn-row";
+                    } else {
+                        row = row + " synonym-row";
+                    }
+                    if (!field.active) {
+                        row = row + " danger";
                     }
 
-                    row = row + "<td>" + field.term + "</td>";
+                    row = row + "'><td>";
+
+                    if (isFsn) {
+                        row = row + '<span rel="tooltip-right" title="FSN">F</span>';
+                    } else {
+                        row = row + '<span rel="tooltip-right" title="Synonym">S</span>';;
+                    }
+
+                    if (isPreferred) {
+                        row = row + '&nbsp;<span class="glyphicon glyphicon-star-empty" rel="tooltip-right" title="Preferred"></span>';
+                    } else {
+                        row = row + '&nbsp;<span rel="tooltip-right" title="Acceptable">&#10004;</span></span>';
+                    }
+
+                    row = row + "&nbsp;&nbsp;&nbsp;" + field.term + "</td>";
                     if (panel.options.showIds == true) {
                         row = row + "<td>" + field.descriptionId + "</td>";
                     }
-
                     var includedInLanguage = false;
-                    $.each(field.langMemberships, function(i, lang) {
-                        if (lang.refset.conceptId == panel.options.langRefset) {
-                            if (lang.acceptability.conceptId == "900000000000548007") {
-                                row = row + "<td><span class='i18n' data-i18n-id='i18n_preferred'>Preferred</span></td>";
-                            } else {
-                                row = row + "<td><span class='i18n' data-i18n-id='i18n_acceptable'>Acceptable</span></td>";
-                            }
+                    if (typeof field.langMemberships != "undefined") {
+                        $.each(field.langMemberships, function(i, lang) {
+                            if (lang.refset.conceptId == panel.options.langRefset) {
+                                if (lang.acceptability.conceptId == "900000000000548007") {
+                                    row = row + "<td><span class='i18n' data-i18n-id='i18n_preferred'>Preferred</span></td>";
+                                } else {
+                                    row = row + "<td><span class='i18n' data-i18n-id='i18n_acceptable'>Acceptable</span></td>";
+                                }
 
-                            includedInLanguage = true;
-                        }
-                    });
+                                includedInLanguage = true;
+                            }
+                        });
+                    }
                     if (includedInLanguage == false) {
                         row = row + "<td><span class='i18n' data-i18n-id='i18n_not_acceptable'>Not acceptable</span></td>";
                     }
 
                     row = row + "</tr>";
-                    descDetailsHtml = descDetailsHtml + row;
+                    if (!(includedInLanguage == false && panel.options.hideNotAcceptable) || panel.options.displayInactiveDescriptions) {
+                        descDetailsHtml = descDetailsHtml + row;
+                    }
                 }
             });
             descDetailsHtml = descDetailsHtml + "</tbody></table>";
@@ -463,9 +530,21 @@ function conceptDetails(divElement, conceptId, options) {
                 helper: 'clone',
                 delay: 500
             });
-            // load relationships panel
+
+            $('#' + panel.descsPId).find("[rel=tooltip-right]").tooltip({ placement: 'right'});
+
+            // load relationships panel and home parents/roles
+            if (panel.options.selectedView == "inferred") {
+                $('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+            } else {
+                $('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+            }
             panel.relsPId = divElement.id + "-rels-panel";
-            relsDetailsHtml = "<table class='table table-bordered'>";
+            var statedParents = [];
+            var inferredParents = [];
+            var statedRoles = [];
+            var inferredRoles = [];
+            var relsDetailsHtml = "<table class='table table-bordered'>";
             relsDetailsHtml = relsDetailsHtml + "<thead><tr>";
             relsDetailsHtml = relsDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_type'>Type</span></th>";
             relsDetailsHtml = relsDetailsHtml + "<th><span class='i18n' data-i18n-id='i18n_destination'>Destination</span></th>";
@@ -474,9 +553,33 @@ function conceptDetails(divElement, conceptId, options) {
             relsDetailsHtml = relsDetailsHtml + "</tr></thead><tbody>";
 
             if (typeof firstMatch.relationships != "undefined") {
+                firstMatch.relationships.sort(function(a, b) {
+                    if (a.groupId < b.groupId) {
+                        return -1;
+                    } else if (a.groupId > b.groupId) {
+                        return 1;
+                    } else {
+                        if (a.type.conceptId == 116680003) {
+                            return -1;
+                        }
+                        if (b.type.conceptId == 116680003) {
+                            return 1;
+                        }
+                        if (a.target.defaultTerm < b.target.defaultTerm)
+                            return -1;
+                        if (a.target.defaultTerm > b.target.defaultTerm)
+                            return 1;
+                        return 0;
+                    }
+                });
                 $.each(firstMatch.relationships, function(i, field) {
                     //console.log(JSON.stringify(field));
                     if (field.active == true) {
+                        if (field.type.conceptId == 116680003) {
+                            inferredParents.push(field);
+                        } else {
+                            inferredRoles.push(field);
+                        }
                         var row = "";
                         row = "<tr class='inferred-rel'>";
 
@@ -499,9 +602,33 @@ function conceptDetails(divElement, conceptId, options) {
             }
 
             if (typeof firstMatch.statedRelationships != "undefined") {
+                firstMatch.statedRelationships.sort(function(a, b) {
+                    if (a.groupId < b.groupId) {
+                        return -1;
+                    } else if (a.groupId > b.groupId) {
+                        return 1;
+                    } else {
+                        if (a.type.conceptId == 116680003) {
+                            return -1;
+                        }
+                        if (b.type.conceptId == 116680003) {
+                            return 1;
+                        }
+                        if (a.target.defaultTerm < b.target.defaultTerm)
+                            return -1;
+                        if (a.target.defaultTerm > b.target.defaultTerm)
+                            return 1;
+                        return 0;
+                    }
+                });
                 $.each(firstMatch.statedRelationships, function(i, field) {
                     //console.log(JSON.stringify(field));
                     if (field.active == true) {
+                        if (field.type.conceptId == 116680003) {
+                            statedParents.push(field);
+                        } else {
+                            statedRoles.push(field);
+                        }
                         var row = "";
                         row = "<tr class='stated-rel'>";
 
@@ -523,8 +650,186 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
             }
+            if ((inferredParents.length + statedParents.length) == 0) {
+                relsDetailsHtml = relsDetailsHtml + "<tr><td colspan='4'><span class='text-muted'>No relationships</span></td></tr>";
+            }
             relsDetailsHtml = relsDetailsHtml + "</tbody></table>";
             $('#' + panel.relsPId).html(relsDetailsHtml);
+
+            inferredParents.sort(function(a, b) {
+                if (a.target.defaultTerm < b.target.defaultTerm)
+                    return -1;
+                if (a.target.defaultTerm > b.target.defaultTerm)
+                    return 1;
+                return 0;
+            });
+
+            statedParents.sort(function(a, b) {
+                if (a.target.defaultTerm < b.target.defaultTerm)
+                    return -1;
+                if (a.target.defaultTerm > b.target.defaultTerm)
+                    return 1;
+                return 0;
+            });
+
+            inferredRoles.sort(function(a, b) {
+                if (a.groupId < b.groupId) {
+                    return -1;
+                } else if (a.groupId > b.groupId) {
+                    return 1;
+                } else {
+                    if (a.target.defaultTerm < b.target.defaultTerm)
+                        return -1;
+                    if (a.target.defaultTerm > b.target.defaultTerm)
+                        return 1;
+                    return 0;
+                }
+            });
+
+            statedRoles.sort(function(a, b) {
+                if (a.groupId < b.groupId) {
+                    return -1;
+                } else if (a.groupId > b.groupId) {
+                    return 1;
+                } else {
+                    if (a.target.defaultTerm < b.target.defaultTerm)
+                        return -1;
+                    if (a.target.defaultTerm > b.target.defaultTerm)
+                        return 1;
+                    return 0;
+                }
+            });
+
+            var parentsHomeHtml = "";
+            if (panel.options.selectedView == "stated") {
+                $.each(statedParents, function(i, field) {
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    if (field.type.defaultTerm.lastIndexOf("(") > 0) {
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                    }
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable";
+                    if (field.target.definitionStatus == "Primitive") {
+                        parentsHomeHtml = parentsHomeHtml + " sct-primitive-concept";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml + " sct-defined-concept";
+                    }
+                    parentsHomeHtml = parentsHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
+                        parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm + "</span><br>";
+                    }
+                });
+                if (statedParents.length == 0) {
+                    parentsHomeHtml = parentsHomeHtml + "<span class='text-muted'>No parents</span>";
+                }
+            } else {
+                $.each(inferredParents, function(i, field) {
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    if (field.type.defaultTerm.lastIndexOf("(") > 0) {
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                    }
+                    parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable";
+                    if (field.target.definitionStatus == "Primitive") {
+                        parentsHomeHtml = parentsHomeHtml + " sct-primitive-concept";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml + " sct-defined-concept";
+                    }
+                    parentsHomeHtml = parentsHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
+                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
+                        parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
+                    } else {
+                        parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm + "</span><br>";
+                    }
+                });
+                if (inferredParents.length == 0) {
+                    parentsHomeHtml = parentsHomeHtml + "<span class='text-muted'>No parents</span>";
+                }
+            }
+            if (!panel.options.diagrammingMarkupEnabled) {
+                parentsHomeHtml = panel.stripDiagrammingMarkup(parentsHomeHtml);
+            }
+            $('#home-parents-' + panel.divElement.id).html(parentsHomeHtml);
+
+            var rolesHomeHtml = "<div style='line-height: 100%;'>";
+            if (panel.options.selectedView == "stated") {
+                var lastGroup = 0;
+                var barHtml = "";
+                var barColor = "white";
+                $.each(statedRoles, function(i, field) {
+                    if (!(lastGroup == field.groupId)) {
+                        rolesHomeHtml = rolesHomeHtml + "<br>";
+                        lastGroup = field.groupId;
+                        barColor = getRandomColor();
+                        barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + barColor + "'>&nbsp;&nbsp;</span>";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + barHtml;
+                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable sct-attribute' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    if (field.type.defaultTerm.lastIndexOf("(") > 0) {
+                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable";
+                    if (field.target.definitionStatus == "Primitive") {
+                        rolesHomeHtml = rolesHomeHtml + " sct-primitive-concept";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml + " sct-defined-concept";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
+                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
+                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm + "</span><br>";
+                    }
+                });
+                if (statedRoles.length == 0) {
+                    rolesHomeHtml = rolesHomeHtml + "<span class='text-muted'>No relationships</span>";
+                }
+            } else {
+                var lastGroup = 0;
+                var barHtml = "";
+                var barColor = "white";
+                $.each(inferredRoles, function(i, field) {
+                    if (!(lastGroup == field.groupId)) {
+                        lastGroup = field.groupId;
+                        rolesHomeHtml = rolesHomeHtml + "<br>";
+                        barColor = getRandomColor();
+                        barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + barColor + "'>&nbsp;&nbsp;</span>";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + barHtml;
+                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable sct-attribute' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    if (field.type.defaultTerm.lastIndexOf("(") > 0) {
+                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable";
+                    if (field.target.definitionStatus == "Primitive") {
+                        rolesHomeHtml = rolesHomeHtml + " sct-primitive-concept";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml + " sct-defined-concept";
+                    }
+                    rolesHomeHtml = rolesHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
+                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
+                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
+                    } else {
+                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm + "</span><br>";
+                    }
+                });
+                if (inferredRoles.length == 0) {
+                    rolesHomeHtml = rolesHomeHtml + "<span class='text-muted'>No roles</span>";
+                }
+            }
+            rolesHomeHtml = rolesHomeHtml + "</div>";
+            if (!panel.options.diagrammingMarkupEnabled) {
+                rolesHomeHtml = panel.stripDiagrammingMarkup(rolesHomeHtml);
+            }
+            $('#home-roles-' + panel.divElement.id).html(rolesHomeHtml);
+
             if (panel.options.selectedView == "stated") {
                 $('#' + panel.relsPId).find('.inferred-rel').each(function(i, val) {
                     $(val).toggle();
@@ -536,12 +841,12 @@ function conceptDetails(divElement, conceptId, options) {
             } else if (panel.options.selectedView != "all") {
                 // show all
             }
-            $('#' + panel.relsPId).find(".jqui-draggable").draggable({
+            $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").draggable({
                 appendTo: 'body',
                 helper: 'clone',
                 delay: 500
             });
-            $('#' + panel.relsPId).find(".jqui-draggable").tooltip({
+            $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
                 placement : 'left',
                 trigger: 'hover',
                 title: 'Drag this',
@@ -610,6 +915,16 @@ function conceptDetails(divElement, conceptId, options) {
 //        });
     }
 
+    this.stripDiagrammingMarkup = function(htmlString) {
+        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-primitive-concept"), 'g'), "");
+        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-defined-concept"), 'g'), "");
+        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-attribute"), 'g'), "");
+        return htmlString;
+    }
+    this.escapeRegExp = function(str) {
+        return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    }
+
     this.setSubscription = function(subscriptionPanel) {
         panel.subscription = subscriptionPanel;
         $("#" + panel.divElement.id + "-subscribersMarker").css('color', subscriptionPanel.markerColor);
@@ -624,52 +939,69 @@ function conceptDetails(divElement, conceptId, options) {
 
     this.setupOptionsPanel = function() {
         optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
+
         optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="displaySynonyms"><span class="i18n" data-i18n-id="i18n_display_synonyms">Display synonyms</span></label>';
-        optionsHtml = optionsHtml + '<div class="radio">';
+        optionsHtml = optionsHtml + '<div class="checkbox">';
         optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displaySynonyms == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true checked>';
+        if (panel.options.displaySynonyms == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displaySynonymsOption"> <span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>';
         } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true>';
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displaySynonymsOption" checked> <span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>';
         }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>.';
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="radio">';
+
+        optionsHtml = optionsHtml + '<div class="checkbox">';
         optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displaySynonyms == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsNo" value=false>';
+        if (panel.options.showIds == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayIdsOption"> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>';
         } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsNo" value=false checked>';
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayIdsOption" checked> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>';
         }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_synonyms3">Only display FSN and preferred terms</span>.';
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.hideNotAcceptable == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        }
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.displayInactiveDescriptions == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption" checked> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
+        }
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.hideNotAcceptable == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
+        }
+        optionsHtml = optionsHtml + '</label>';
+        optionsHtml = optionsHtml + '</div>';
+
+        optionsHtml = optionsHtml + '<div class="checkbox">';
+        optionsHtml = optionsHtml + '<label>';
+        if (panel.options.diagrammingMarkupEnabled == false) {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption"> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Standard colors enabled</span>';
+        } else {
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption" checked> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Standard colors enabled</span>';
+        }
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="displayIds"><span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span></label>';
-        optionsHtml = optionsHtml + '<div class="radio">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.showIds == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsYes" value=true checked>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsYes" value=true>';
-        }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>.';
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="radio">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.showIds == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsNo" value=false>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsNo" value=false checked>';
-        }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_hide_ids">Hide Ids for all components</span>.';
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
+
         optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_rels_view">Relationships View</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
@@ -699,17 +1031,7 @@ function conceptDetails(divElement, conceptId, options) {
         }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displayChildren == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">Display children</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption" checked> <span class="i18n" data-i18n-id="i18n_display_children">Display children</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
+
         optionsHtml = optionsHtml + '<div class="form-group">';
         optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">Language Refset</span></label>';
         optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-langRefsetOption">';
@@ -740,13 +1062,13 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.readOptionsPanel = function() {
-        //console.log($('input[name=displaySynonyms]:checked', "#" + panel.divElement.id + "-options-form").val());
-        panel.options.displaySynonyms = ($('input[name=displaySynonyms]:checked', "#" + panel.divElement.id + "-options-form").val() == "true");
-        //console.log($('input[name=displayIds]:checked', "#" + panel.divElement.id + "-options-form").val());
-        panel.options.showIds = ($('input[name=displayIds]:checked', "#" + panel.divElement.id + "-options-form").val() == "true");
-        //console.log($("#" + panel.divElement.id + "-relsViewOption").val());
-        panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
+        panel.options.displaySynonyms = $("#" + panel.divElement.id + "-displaySynonymsOption").is(':checked');
+        panel.options.showIds = $("#" + panel.divElement.id + "-displayIdsOption").is(':checked');
         panel.options.displayChildren = $("#" + panel.divElement.id + "-childrenOption").is(':checked');
+        panel.options.hideNotAcceptable = $("#" + panel.divElement.id + "-hideNotAcceptableOption").is(':checked');
+        panel.options.displayInactiveDescriptions = $("#" + panel.divElement.id + "-displayInactiveDescriptionsOption").is(':checked');
+        panel.options.diagrammingMarkupEnabled = $("#" + panel.divElement.id + "-diagrammingMarkupEnabledOption").is(':checked');
+        panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
     }
 }
@@ -774,6 +1096,15 @@ function cancelSubscription(divElementId1, divElementId2) {
     });
     d1.unsubscribe(d2);
     $(d2.divElement).find('.linker-button').popover('toggle');
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;
 }
 
 (function($) {

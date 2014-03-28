@@ -205,6 +205,10 @@ function searchPanel(divElement, options) {
             $("#" + panel.divElement.id + "-linkerButton").hide();
         }
 
+        if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
+            $("#" + panel.divElement.id + "-subscribersMarker").remove();
+        }
+
         if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
             $("#" + panel.divElement.id + "-expandButton").hide();
             $("#" + panel.divElement.id + "-collapseButton").hide();
@@ -377,7 +381,7 @@ function searchPanel(divElement, options) {
 
         $("#" + panel.divElement.id + "-danishLangButton").click(function (event) {
             panel.options.searchLang = 'danish';
-            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_danish_stemmer'>Danish language stemmer</span>");
+            $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_danish_stemmer);
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
             if (searchTerm.length > 0) {
                 panel.search(searchTerm, true);
@@ -385,7 +389,7 @@ function searchPanel(divElement, options) {
         });
         $("#" + panel.divElement.id + "-englishLangButton").click(function (event) {
             panel.options.searchLang = 'english';
-            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_english_stemmer'>English language stemmer</span>");
+            $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_english_stemmer);
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
             if (searchTerm.length > 0) {
                 panel.search(searchTerm, true);
@@ -393,7 +397,7 @@ function searchPanel(divElement, options) {
         });
         $("#" + panel.divElement.id + "-spanishLangButton").click(function (event) {
             panel.options.searchLang = 'spanish';
-            $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_spanish_stemmer'>Spanish language stemmer</span>");
+            $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_spanish_stemmer);
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
             if (searchTerm.length > 0) {
                 panel.search(searchTerm, true);
