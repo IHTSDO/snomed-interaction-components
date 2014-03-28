@@ -914,14 +914,6 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
         }
-        // debug
-//        $.each(componentsRegistry, function(i, field) {
-//            console.log(field.divElement.id + " - " + field.type);
-//            if (field.type == "search") {
-//                field.subscribe(panel);
-//                panel.setSubscription(field);
-//            }
-//        });
     }
 
     this.stripDiagrammingMarkup = function(htmlString) {

@@ -705,3 +705,11 @@ $(document).keypress(function (event) {
         event.preventDefault();
     }
 });
+
+(function($) {
+    $.fn.addSearch = function(options) {
+        this.filter("div").each(function() {
+            var tx = new conceptDetails(this, options);
+        });
+    };
+}(jQuery));

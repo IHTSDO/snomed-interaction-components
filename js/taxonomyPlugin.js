@@ -525,3 +525,11 @@ function clearTaxonomyPanelSubscriptions(divElementId1) {
     d1.unsubscribeAll();
     $("#" + divElementId1).find('.linker-button').popover('toggle');
 }
+
+(function($) {
+    $.fn.addTaxonomy = function(options) {
+        this.filter("div").each(function() {
+            var tx = new conceptDetails(this, options);
+        });
+    };
+}(jQuery));
