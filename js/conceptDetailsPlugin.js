@@ -705,9 +705,9 @@ function conceptDetails(divElement, conceptId, options) {
                 $.each(statedParents, function(i, field) {
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     if (field.type.defaultTerm.lastIndexOf("(") > 0) {
-                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rArr;&nbsp;";
                     } else {
-                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rArr;&nbsp;";
                     }
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable";
                     if (field.target.definitionStatus == "Primitive") {
@@ -728,9 +728,9 @@ function conceptDetails(divElement, conceptId, options) {
                 $.each(inferredParents, function(i, field) {
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     if (field.type.defaultTerm.lastIndexOf("(") > 0) {
-                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rArr;&nbsp;";
                     } else {
-                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rArr;&nbsp;";
                     }
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable";
                     if (field.target.definitionStatus == "Primitive") {
@@ -957,16 +957,6 @@ function conceptDetails(divElement, conceptId, options) {
             optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayIdsOption"> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>';
         } else {
             optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayIdsOption" checked> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.hideNotAcceptable == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
         }
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
