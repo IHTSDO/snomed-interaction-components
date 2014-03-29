@@ -50,7 +50,8 @@
                 subscribersMarker: true,
                 searchMode: "partialMatching",
                 searchLang: "english",
-                diagrammingMarkupEnabled: false
+                diagrammingMarkupEnabled: false,
+                statusSearchFilter: "activeOnly"
             };
 
             var tours = {};
@@ -76,6 +77,10 @@
 
             function start() {
                 // Read parameters
+                if (typeof QueryString.dev != "undefined") {
+                    console.log("Using Dev Server...");
+                    options.serverUrl = "http://107.170.33.116:3000";
+                }
                 var edition = QueryString.edition;
                 if (typeof edition == "undefined" || edition == null || edition == "") {
                     edition = "en-edition";

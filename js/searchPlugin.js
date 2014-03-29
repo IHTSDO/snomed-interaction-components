@@ -74,6 +74,14 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-spanishLangButton'><span class='i18n' data-i18n-id='i18n_spanish_stemmer'>Spanish language stemmer</span></button></li>";
         searchHtml = searchHtml + "         </ul>";
         searchHtml = searchHtml + "     </li>";
+        searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
+        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-navStatusFilterLabel'></span> <b class='caret'></b></a>";
+        searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
+        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-activeOnlyButton'><span class='i18n' data-i18n-id='i18n_active_only'>Active components only</span></button></li>";
+        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-activeInactiveButton'><span class='i18n' data-i18n-id='i18n_active_and_inactive'>Active and inactive components</span></button></li>";
+        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-inactiveOnlyButton'><span class='i18n' data-i18n-id='i18n_inactive_only'>Inactive components only</span></button></li>";
+        searchHtml = searchHtml + "         </ul>";
+        searchHtml = searchHtml + "     </li>";
         /*searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
         searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span>: <span id='" + panel.divElement.id + "-navFiltersLabel'></span> <b class='caret'></b></a>";
         searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
@@ -403,6 +411,39 @@ function searchPanel(divElement, options) {
                 panel.search(searchTerm, true);
             }
         });
+
+        panel.updateStatusFilterLabel();
+
+        $("#" + panel.divElement.id + "-activeOnlyButton").click(function (event) {
+            panel.options.statusSearchFilter = 'activeOnly';
+            panel.updateStatusFilterLabel();
+        });
+
+        $("#" + panel.divElement.id + "-activeInactiveButton").click(function (event) {
+            panel.options.statusSearchFilter = 'activeAndInactive';
+            panel.updateStatusFilterLabel();
+        });
+
+        $("#" + panel.divElement.id + "-inactiveOnlyButton").click(function (event) {
+            panel.options.statusSearchFilter = 'inactiveOnly';
+            panel.updateStatusFilterLabel();
+        });
+
+    }
+
+    this.updateStatusFilterLabel = function() {
+        if (panel.options.statusSearchFilter == 'activeAndInactive') {
+            $("#" + panel.divElement.id + '-navStatusFilterLabel').html(i18n_active_and_inactive);
+        } else if (panel.options.statusSearchFilter == 'inactiveOnly') {
+            $("#" + panel.divElement.id + '-navStatusFilterLabel').html(i18n_inactive_only);
+        } else {
+            panel.options.statusSearchFilter = 'activeOnly';
+            $("#" + panel.divElement.id + '-navStatusFilterLabel').html(i18n_active_only);
+        }
+        var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+        if (searchTerm.length > 0) {
+            panel.search(searchTerm, true);
+        }
     }
 
     this.handlePanelDropEvent = function (event, ui) {
@@ -464,8 +505,11 @@ function searchPanel(divElement, options) {
 
                         }).done(function (result) {
                                 $.each(result.descriptions, function (i, field) {
-                                    console.log(i);
-                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
+                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+                                    if (!field.active || !field.conceptActive) {
+                                        resultsHtml = resultsHtml + " danger";
+                                    }
+                                    resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
                                 });
                                 $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
@@ -488,7 +532,11 @@ function searchPanel(divElement, options) {
                         }).done(function (result) {
                                 $.each(result, function (i, field) {
                                     console.log(i);
-                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+                                    if (!field.active || !field.conceptActive) {
+                                        resultsHtml = resultsHtml + " danger";
+                                    }
+                                    resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
                                 });
                                 $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
@@ -515,7 +563,7 @@ function searchPanel(divElement, options) {
                         t = t.toLowerCase();
                     }
                     var startTime = Date.now();
-                    xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=" + panel.options.searchLang,function (result) {
+                    xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=" + panel.options.searchLang + "&statusFilter=" + panel.options.statusSearchFilter,function (result) {
 
                     }).done(function (result) {
                             var endTime = Date.now();
@@ -546,7 +594,12 @@ function searchPanel(divElement, options) {
                                     });
                                 }
                                 $.each(matchedDescriptions, function (i, field) {
-                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row'><td class='col-md-6'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+                                    //console.log(field.active + " " + field.conceptActive);
+                                    if (field.active == false || field.conceptActive == false) {
+                                        resultsHtml = resultsHtml + " danger";
+                                    }
+                                    resultsHtml = resultsHtml + "'><td class='col-md-6'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
                                 });
                                 if (matchedDescriptions.length == 0) {
                                     resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";
