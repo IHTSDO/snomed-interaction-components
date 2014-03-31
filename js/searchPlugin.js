@@ -72,6 +72,7 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-danishLangButton'><span class='i18n' data-i18n-id='i18n_danish_stemmer'>Danish language stemmer</span></button></li>";
         searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-englishLangButton'><span class='i18n' data-i18n-id='i18n_english_stemmer'>English language stemmer</span></button></li>";
         searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-spanishLangButton'><span class='i18n' data-i18n-id='i18n_spanish_stemmer'>Spanish language stemmer</span></button></li>";
+        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-swedishLangButton'><span class='i18n' data-i18n-id='i18n_swedish_stemmer'>Swedish language stemmer</span></button></li>";
         searchHtml = searchHtml + "         </ul>";
         searchHtml = searchHtml + "     </li>";
         searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
@@ -406,6 +407,14 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-spanishLangButton").click(function (event) {
             panel.options.searchLang = 'spanish';
             $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_spanish_stemmer);
+            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+            if (searchTerm.length > 0) {
+                panel.search(searchTerm, true);
+            }
+        });
+        $("#" + panel.divElement.id + "-swedishLangButton").click(function (event) {
+            panel.options.searchLang = 'swedish';
+            $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_swedish_stemmer);
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
             if (searchTerm.length > 0) {
                 panel.search(searchTerm, true);
