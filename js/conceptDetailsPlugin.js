@@ -1050,6 +1050,11 @@ function conceptDetails(divElement, conceptId, options) {
         } else {
             optionsHtml = optionsHtml + '<option value="554461000005103">DA Language Refset</option>';
         }
+        if (panel.options.langRefset == "46011000052107") {
+            optionsHtml = optionsHtml + '<option value="46011000052107" selected>SV Language Refset</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="46011000052107">SV Language Refset</option>';
+        }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';
         optionsHtml = optionsHtml + '</form>';
