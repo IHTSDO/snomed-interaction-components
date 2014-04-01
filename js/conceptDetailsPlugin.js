@@ -82,6 +82,7 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + '       <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-' + panel.divElement.id + '">No parents</div>';
         detailsHtml = detailsHtml + '       <div style="margin-left: 10%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-' + panel.divElement.id + '">Attributes</div>';
         detailsHtml = detailsHtml + '       <div style="margin-left: 20%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-' + panel.divElement.id + '">Relationships</div>';
+        detailsHtml = detailsHtml + '       <div><span class="text-muted pull-right" id="footer-' + panel.divElement.id + '"></span></div>';
         detailsHtml = detailsHtml + '    </div>';
         detailsHtml = detailsHtml + '    <div class="tab-pane fade" id="details-' + panel.divElement.id + '">';
         detailsHtml = detailsHtml + "       <div id='" + panel.attributesPId + "' class='panel panel-default'>";
@@ -372,6 +373,10 @@ function conceptDetails(divElement, conceptId, options) {
             homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
             $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
 
+            if (!firstMatch.active) {
+                $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
+            }
+
             if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
                 $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
             }
@@ -468,9 +473,9 @@ function conceptDetails(divElement, conceptId, options) {
                     row = row + "'><td>";
 
                     if (isFsn) {
-                        row = row + '<span rel="tooltip-right" title="FSN">F</span>';
+                        row = row + '<span rel="tooltip-right" title="' + i18n_fsn + '">F</span>';
                     } else {
-                        row = row + '<span rel="tooltip-right" title="Synonym">S</span>';;
+                        row = row + '<span rel="tooltip-right" title="' + i18n_synonym + '">S</span>';
                     }
 
                     if (isPreferred) {
@@ -705,9 +710,9 @@ function conceptDetails(divElement, conceptId, options) {
                 $.each(statedParents, function(i, field) {
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     if (field.type.defaultTerm.lastIndexOf("(") > 0) {
-                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rArr;&nbsp;";
                     } else {
-                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rArr;&nbsp;";
                     }
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable";
                     if (field.target.definitionStatus == "Primitive") {
@@ -728,9 +733,9 @@ function conceptDetails(divElement, conceptId, options) {
                 $.each(inferredParents, function(i, field) {
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable text-warning' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     if (field.type.defaultTerm.lastIndexOf("(") > 0) {
-                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rArr;&nbsp;";
                     } else {
-                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
+                        parentsHomeHtml = parentsHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rArr;&nbsp;";
                     }
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable";
                     if (field.target.definitionStatus == "Primitive") {
@@ -787,7 +792,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
                 if (statedRoles.length == 0) {
-                    rolesHomeHtml = rolesHomeHtml + "<span class='text-muted'>No relationships</span>";
+                    rolesHomeHtml = rolesHomeHtml + "<span class='i18n text-muted' data-i18n-id='i18n_no_relationships'>No relationships</span>";
                 }
             } else {
                 var lastGroup = 0;
@@ -821,13 +826,21 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
                 if (inferredRoles.length == 0) {
-                    rolesHomeHtml = rolesHomeHtml + "<span class='text-muted'>No roles</span>";
+                    rolesHomeHtml = rolesHomeHtml + "<span class='i18n text-muted' data-i18n-id='i18n_no_relationships'>No relationships</span>";
                 }
             }
             rolesHomeHtml = rolesHomeHtml + "</div>";
             if (!panel.options.diagrammingMarkupEnabled) {
                 rolesHomeHtml = panel.stripDiagrammingMarkup(rolesHomeHtml);
             }
+
+            if (panel.options.diagrammingMarkupEnabled) {
+                $('#footer-' + panel.divElement.id).html('<a href="http://www.ihtsdo.org/fileadmin/user_upload/Docs_01/Publications/SNOMED_CT_Diagramming_Guideline.pdf" target="_blank">Read about the IHTSDO Diagramming Guideline</a>');
+            } else {
+                $('#footer-' + panel.divElement.id).html('');
+            }
+
+
             $('#home-roles-' + panel.divElement.id).html(rolesHomeHtml);
 
             if (panel.options.selectedView == "stated") {
@@ -905,14 +918,6 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
         }
-        // debug
-//        $.each(componentsRegistry, function(i, field) {
-//            console.log(field.divElement.id + " - " + field.type);
-//            if (field.type == "search") {
-//                field.subscribe(panel);
-//                panel.setSubscription(field);
-//            }
-//        });
     }
 
     this.stripDiagrammingMarkup = function(htmlString) {
@@ -963,16 +968,6 @@ function conceptDetails(divElement, conceptId, options) {
 
         optionsHtml = optionsHtml + '<div class="checkbox">';
         optionsHtml = optionsHtml + '<label>';
-        if (panel.options.hideNotAcceptable == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
         if (panel.options.displayInactiveDescriptions == false) {
             optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
         } else {
@@ -994,9 +989,9 @@ function conceptDetails(divElement, conceptId, options) {
         optionsHtml = optionsHtml + '<div class="checkbox">';
         optionsHtml = optionsHtml + '<label>';
         if (panel.options.diagrammingMarkupEnabled == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption"> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Standard colors enabled</span>';
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption"> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Guideline colors enabled</span>';
         } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption" checked> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Standard colors enabled</span>';
+            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption" checked> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Guideline colors enabled</span>';
         }
         optionsHtml = optionsHtml + '</label>';
         optionsHtml = optionsHtml + '</div>';
@@ -1054,6 +1049,11 @@ function conceptDetails(divElement, conceptId, options) {
             optionsHtml = optionsHtml + '<option value="554461000005103" selected>DA Language Refset</option>';
         } else {
             optionsHtml = optionsHtml + '<option value="554461000005103">DA Language Refset</option>';
+        }
+        if (panel.options.langRefset == "46011000052107") {
+            optionsHtml = optionsHtml + '<option value="46011000052107" selected>SV Language Refset</option>';
+        } else {
+            optionsHtml = optionsHtml + '<option value="46011000052107">SV Language Refset</option>';
         }
         optionsHtml = optionsHtml + '</select>';
         optionsHtml = optionsHtml + '</div>';

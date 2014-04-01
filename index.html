@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="css/jquery.splitter.css">
         <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css">
         <link rel="stylesheet" href="css/bootstrap.min.base.12.css">
-        <link rel="stylesheet" href="css/bootstrap-tour.min.css">
+        <link rel="stylesheet" href="css/bootstrap-tour.css">
         <script src="lib/bootstrap.min.js" type="text/javascript"></script>
         <script src="lib/jquery.ui.touch-punch.min.js"></script>
         <script type="text/javascript" src="lib/popover-extra-placements.js"></script>
@@ -50,7 +50,8 @@
                 subscribersMarker: true,
                 searchMode: "partialMatching",
                 searchLang: "english",
-                diagrammingMarkupEnabled: false
+                diagrammingMarkupEnabled: false,
+                statusSearchFilter: "activeOnly"
             };
 
             var tours = {};
@@ -76,6 +77,10 @@
 
             function start() {
                 // Read parameters
+                if (typeof QueryString.dev != "undefined") {
+                    console.log("Using Dev Server...");
+                    options.serverUrl = "http://107.170.33.116:3000";
+                }
                 var edition = QueryString.edition;
                 if (typeof edition == "undefined" || edition == null || edition == "") {
                     edition = "en-edition";
@@ -491,6 +496,7 @@
                                 <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');">International Edition 20140131</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131', '450828004');">Spanish Edition 20140131</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20140131', '554461000005103');">Danish Edition 20140131 (20131018DA)</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('Swedish Edition 20131130', 'sv-edition', 'v20131130', '46011000052107');">Swedish Edition 20131130</a></li>
                             </ul>
                         </li>
                         <li class="navbar-text"></li>
