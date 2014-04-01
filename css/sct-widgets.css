@@ -109,3 +109,11 @@ i:active { background-color: #428bca; }
     -moz-border-radius:6px 0 6px 6px;
     border-radius:6px 0 6px 6px;
 }
+
+.unobtrusive-icon {
+    color: #e3e3e3;
+}
+
+.unobtrusive-icon:hover {
+    color: dodgerblue;
+}
