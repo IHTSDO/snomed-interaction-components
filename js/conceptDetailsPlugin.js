@@ -356,7 +356,7 @@ function conceptDetails(divElement, conceptId, options) {
                 attrHtml = attrHtml + ", <span class='i18n' data-i18n-id='i18n_inactive'>Inactive</span>";
             }
             attrHtml = attrHtml + "</td>";
-            attrHtml = attrHtml + "<td><span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "' id='" + panel.divElement.id + "-attributesClip'></span></td>";
+            attrHtml = attrHtml + "<td><span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "' id='" + panel.divElement.id + "-attributesClip'></span></td>";
             var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>" + firstMatch.effectiveTime + "</td><td style='padding: 3px;'>" + firstMatch.module + "</td></tr></table>"
             attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button></td>';
             attrHtml = attrHtml + "</tr></table>";
@@ -372,7 +372,7 @@ function conceptDetails(divElement, conceptId, options) {
             }
             homeAttrHtml = homeAttrHtml + firstMatch.defaultTerm + "</h4>";
             homeAttrHtml = homeAttrHtml + firstMatch.conceptId;
-            homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
+            homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
             $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
 
             if (!firstMatch.active) {
@@ -595,9 +595,9 @@ function conceptDetails(divElement, conceptId, options) {
                         row = "<tr class='inferred-rel'>";
 
                         row = row + "<td>" + field.type.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
+                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
                         row = row + "<td>" + field.target.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
+                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
                         row = row + "<td>" + field.groupId + "</td>";
                         if (field.charType.conceptId == "900000000000010007") {
                             row = row + "<td><span class='i18n' data-i18n-id='i18n_stated'>Stated</span>";
@@ -647,9 +647,9 @@ function conceptDetails(divElement, conceptId, options) {
                         row = "<tr class='stated-rel'>";
 
                         row = row + "<td>" + field.type.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
+                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
                         row = row + "<td>" + field.target.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
+                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
                         row = row + "<td>" + field.groupId + "</td>";
 
                         if (field.charType.conceptId == "900000000000010007") {
