@@ -604,8 +604,8 @@ function conceptDetails(divElement, conceptId, options) {
                         } else {
                             row = row + "<td><span class='i18n' data-i18n-id='i18n_other'>Other</span>";
                         }
-                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>Module</th></tr>";
-                        moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.modifier + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
+                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>TypeId</th><th style='padding: 3px;'>TargetId</th><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>Module</th></tr>";
+                        moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.type.conceptId + "</td><td style='padding: 3px;'>" + field.target.conceptId + "</td><td style='padding: 3px;'>" + field.modifier + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
                         row = row + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
                         row = row + "</td></tr>";
                         relsDetailsHtml = relsDetailsHtml + row;

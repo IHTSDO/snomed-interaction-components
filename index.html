@@ -31,6 +31,7 @@
         <script type="text/javascript">
             var selectedLanguage = 'en_US';
             var selectedFlag = 'img/flags/us.png';
+            var currentPerspective = "home";
 
             var options = {
                 serverUrl: "http://browser.ihtsdotools.org:3000",
@@ -133,14 +134,19 @@
                 if (QueryString.perspective == "home") {
                     initialize();
                 } else if (QueryString.perspective == "browsing") {
+                    currentPerspective = "browsing";
                     switchToBrowsing(cdValue1,cdValue2);
                 } else if (QueryString.perspective == "full") {
+                    currentPerspective = "full";
                     switchToFullHeight(cdValue1);
                 } else if (QueryString.perspective == "compare_concepts") {
+                    currentPerspective = "compare_concepts";
                     switchToComparingConcepts(cdValue1,cdValue2);
                 } else if (QueryString.perspective == "compare_hierarchies") {
+                    currentPerspective = "compare_hierarchies";
                     switchToComparingTaxonomies(cdValue1);
                 } else if (QueryString.perspective == "responsive") {
+                    currentPerspective = "responsive";
                     switchToResponsiveLayout(cdValue1,cdValue2)
                 } else {
                     initialize();
@@ -313,6 +319,7 @@
                 }
             }
             function initialize() {
+                currentPerspective = "home";
                 $("#welcome-perspective").css({"display":"block"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
@@ -322,6 +329,7 @@
                 $("#perspectiveLabel").html("<em>...</em>");
             }
             function switchToBrowsing(cd1Value, cd2Value) {
+                currentPerspective = "browsing";
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"block"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
@@ -343,6 +351,7 @@
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
             function switchToComparingConcepts(cd1Value, cd2Value) {
+                currentPerspective = "compare_concepts";
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"block"});
@@ -361,6 +370,7 @@
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
             function switchToComparingTaxonomies(cd1Value) {
+                currentPerspective = "compare_hierarchies";
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
@@ -380,6 +390,7 @@
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
             function switchToFullHeight(cd1Value) {
+                currentPerspective = "full";
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
@@ -399,6 +410,7 @@
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
             function switchToResponsiveLayout(cd1Value, cd2Value) {
+                currentPerspective = "responsive";
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
                 $("#comparing-concepts-perspective").css({"display":"none"});
@@ -420,12 +432,32 @@
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
 
+            function reloadCurrentPerspective() {
+                var cdValue1 = 404684003;
+                var cdValue2 = 404684003;
+                if (currentPerspective == "home") {
+                    initialize();
+                } else if (currentPerspective == "browsing") {
+                    switchToBrowsing(cdValue1,cdValue2);
+                } else if (currentPerspective == "full") {
+                    switchToFullHeight(cdValue1);
+                } else if (currentPerspective == "compare_concepts") {
+                    switchToComparingConcepts(cdValue1,cdValue2);
+                } else if (currentPerspective == "compare_hierarchies") {
+                    switchToComparingTaxonomies(cdValue1);
+                } else if (currentPerspective == "responsive") {
+                    switchToResponsiveLayout(cdValue1,cdValue2)
+                } else {
+                    currentPerspective = "home"
+                    initialize();
+                }
+            }
+
             function switchRelease(label, edition, release, langRefset) {
                 options.edition = edition;
                 options.release = release;
                 options.langRefset = langRefset;
                 $("#editionLabel").html(label);
-                initialize();
             }
 
             function switchLanguage(language, flagPng, fade) {
@@ -493,10 +525,10 @@
                                 <span class="i18n" data-i18n-id="i18n_release">Release</span>:&nbsp;<span id="editionLabel">International Edition 20140131</span> <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');">International Edition 20140131</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131', '450828004');">Spanish Edition 20140131</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20140131', '554461000005103');">Danish Edition 20140131 (20131018DA)</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Swedish Edition 20131130', 'sv-edition', 'v20131130', '46011000052107');">Swedish Edition 20131130</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');reloadCurrentPerspective();">International Edition 20140131</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131', '450828004');reloadCurrentPerspective();">Spanish Edition 20140131</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20140131', '554461000005103');reloadCurrentPerspective();">Danish Edition 20140131 (20131018DA)</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('Swedish Edition 20131130', 'sv-edition', 'v20131130', '46011000052107');reloadCurrentPerspective();">Swedish Edition 20131130</a></li>
                             </ul>
                         </li>
                         <li class="navbar-text"></li>
@@ -547,7 +579,11 @@
                     <h1><span class="i18n" data-i18n-id="i18n_welcome">Welcome</span></h1>
                     <p><span class="i18n" data-i18n-id="i18n_home1">This is a beta... a work in progress of ways to browse and search SNOMED CT as part of development within the IHTSDO Open Tooling Framework, by the IHTSDO and its development partners</span></p>
                     <p><span class="i18n" data-i18n-id="i18n_home2">Please select a SNOMED CT release and a perspective from the top menu to start, or...</span></p>
-                    <p><a class="btn btn-primary btn-lg" role="button" onclick="switchToFullHeight(404684003);"><span class="i18n" data-i18n-id="i18n_go_browsing">Go to the Browsing view</span></a>
+                    <p>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003);"><img src="img/flags/us.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Terms and UI in English</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131', '450828004');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003);"><img src="img/flags/es.png">&nbsp;&nbsp;&nbsp;Ir al Navegador...</span><br><span class="small">Términos e interfaz en Español</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20140131', '554461000005103');switchLanguage('da', 'img/flags/dk.png', true);switchToFullHeight(404684003);"><img src="img/flags/dk.png">&nbsp;&nbsp;&nbsp;G&aring; til browser-siden</span><br><span class="small">Terms and UI in Danish</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Swedish Edition 20131130', 'sv-edition', 'v20131130', '46011000052107');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003);"><img src="img/flags/se.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Terms in Swedish, UI in English</span></a>
                         &nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_or">or</span>&nbsp;&nbsp;
                         <a class="btn btn-primary btn-lg" role="button" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_take_tour">take the Tour...</span></a></p>
                     <p><span class="i18n" data-i18n-id="i18n_home3">Also, please provide any feedback by emailing <a href="mailto:otf@ihtsdo.org?subject=Browser Feedback" target="_blank">otf@ihtsdo.org</a>. Your feedback is essential to the evolution and improvement of this service.</span></p>
