@@ -357,6 +357,8 @@ function conceptDetails(divElement, conceptId, options) {
             }
             attrHtml = attrHtml + "</td>";
             attrHtml = attrHtml + "<td><span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "' id='" + panel.divElement.id + "-attributesClip'></span></td>";
+            var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>Module</th></tr><tr><td style='padding: 3px;'>" + firstMatch.effectiveTime + "</td><td style='padding: 3px;'>" + firstMatch.module + "</td></tr></table>"
+            attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button></td>';
             attrHtml = attrHtml + "</tr></table>";
 
             $('#' + panel.attributesPId).html(attrHtml);
@@ -493,9 +495,9 @@ function conceptDetails(divElement, conceptId, options) {
                         $.each(field.langMemberships, function(i, lang) {
                             if (lang.refset.conceptId == panel.options.langRefset) {
                                 if (lang.acceptability.conceptId == "900000000000548007") {
-                                    row = row + "<td><span class='i18n' data-i18n-id='i18n_preferred'>Preferred</span></td>";
+                                    row = row + "<td><span class='i18n' data-i18n-id='i18n_preferred'>Preferred</span>";
                                 } else {
-                                    row = row + "<td><span class='i18n' data-i18n-id='i18n_acceptable'>Acceptable</span></td>";
+                                    row = row + "<td><span class='i18n' data-i18n-id='i18n_acceptable'>Acceptable</span>";
                                 }
 
                                 includedInLanguage = true;
@@ -503,10 +505,12 @@ function conceptDetails(divElement, conceptId, options) {
                         });
                     }
                     if (includedInLanguage == false) {
-                        row = row + "<td><span class='i18n' data-i18n-id='i18n_not_acceptable'>Not acceptable</span></td>";
+                        row = row + "<td><span class='i18n' data-i18n-id='i18n_not_acceptable'>Not acceptable</span>";
                     }
-
-                    row = row + "</tr>";
+                    var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>DescriptionId</th><th style='padding: 3px;'>Type</th><th style='padding: 3px;'>LangCode</th><th style='padding: 3px;'>ICS</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>Module</th></tr>";
+                    moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.descriptionId + "</td><td style='padding: 3px;'>" + panel.removeSemtag(field.type.defaultTerm) + "</td><td style='padding: 3px;'>" + field.lang + "</td><td style='padding: 3px;'>" + panel.removeSemtag(field.ics.defaultTerm) + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
+                    row = row + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
+                    row = row + "</td></tr>";
                     if (!(includedInLanguage == false && panel.options.hideNotAcceptable) || panel.options.displayInactiveDescriptions) {
                         descDetailsHtml = descDetailsHtml + row;
                     }
@@ -594,13 +598,16 @@ function conceptDetails(divElement, conceptId, options) {
                         row = row + "<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
                         row = row + "<td>" + field.groupId + "</td>";
                         if (field.charType.conceptId == "900000000000010007") {
-                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'><span class='i18n' data-i18n-id='i18n_stated'>Stated</span></div></td>";
+                            row = row + "<td><span class='i18n' data-i18n-id='i18n_stated'>Stated</span>";
                         } else if (field.charType.conceptId == "900000000000011006") {
-                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'><span class='i18n' data-i18n-id='i18n_inferred'>Inferred</span></div></td>";
+                            row = row + "<td><span class='i18n' data-i18n-id='i18n_inferred'>Inferred</span>";
                         } else {
-                            row = row + "<td><span class='i18n' data-i18n-id='i18n_other'>Other</span></td>";
+                            row = row + "<td><span class='i18n' data-i18n-id='i18n_other'>Other</span>";
                         }
-                        row = row + "</tr>";
+                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>TypeId</th><th style='padding: 3px;'>TargetId</th><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>Module</th></tr>";
+                        moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.type.conceptId + "</td><td style='padding: 3px;'>" + field.target.conceptId + "</td><td style='padding: 3px;'>" + field.modifier + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
+                        row = row + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
+                        row = row + "</td></tr>";
                         relsDetailsHtml = relsDetailsHtml + row;
                     }
                 });
@@ -644,13 +651,16 @@ function conceptDetails(divElement, conceptId, options) {
                         row = row + "<td>" + field.groupId + "</td>";
 
                         if (field.charType.conceptId == "900000000000010007") {
-                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'><span class='i18n' data-i18n-id='i18n_stated'>Stated</span></div></td>";
+                            row = row + "<td><span class='i18n' data-i18n-id='i18n_stated'>Stated</span>";
                         } else if (field.charType.conceptId == "900000000000011006") {
-                            row = row + "<td><div class='' data-concept-id='" + field.charType.conceptId + "' data-term='" + field.charType.defaultTerm + "'><span class='i18n' data-i18n-id='i18n_inferred'>Inferred</span></div></td>";
+                            row = row + "<td><span class='i18n' data-i18n-id='i18n_inferred'>Inferred</span>";
                         } else {
-                            row = row + "<td><span class='i18n' data-i18n-id='i18n_other'>Other</span></td>";
+                            row = row + "<td><span class='i18n' data-i18n-id='i18n_other'>Other</span>";
                         }
-                        row = row + "</tr>";
+                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>Module</th></tr>";
+                        moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.modifier + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
+                        row = row + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
+                        row = row + "</td></tr>";
                         relsDetailsHtml = relsDetailsHtml + row;
                     }
                 });
@@ -773,11 +783,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                     rolesHomeHtml = rolesHomeHtml + barHtml;
                     rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable sct-attribute' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
-                    if (field.type.defaultTerm.lastIndexOf("(") > 0) {
-                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
-                    } else {
-                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
-                    }
+                    rolesHomeHtml = rolesHomeHtml+ panel.removeSemtag(field.type.defaultTerm) + "</span>&nbsp&rarr;&nbsp;";
                     rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable";
                     if (field.target.definitionStatus == "Primitive") {
                         rolesHomeHtml = rolesHomeHtml + " sct-primitive-concept";
@@ -785,11 +791,7 @@ function conceptDetails(divElement, conceptId, options) {
                         rolesHomeHtml = rolesHomeHtml + " sct-defined-concept";
                     }
                     rolesHomeHtml = rolesHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
-                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
-                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
-                    } else {
-                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm + "</span><br>";
-                    }
+                    rolesHomeHtml = rolesHomeHtml + panel.removeSemtag(field.target.defaultTerm) + "</span><br>";
                 });
                 if (statedRoles.length == 0) {
                     rolesHomeHtml = rolesHomeHtml + "<span class='i18n text-muted' data-i18n-id='i18n_no_relationships'>No relationships</span>";
@@ -807,11 +809,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                     rolesHomeHtml = rolesHomeHtml + barHtml;
                     rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable sct-attribute' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
-                    if (field.type.defaultTerm.lastIndexOf("(") > 0) {
-                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm.substr(0, field.type.defaultTerm.lastIndexOf("(")-1) + "</span>&nbsp&rarr;&nbsp;";
-                    } else {
-                        rolesHomeHtml = rolesHomeHtml+ field.type.defaultTerm + "</span>&nbsp&rarr;&nbsp;";
-                    }
+                    rolesHomeHtml = rolesHomeHtml+ panel.removeSemtag(field.type.defaultTerm) + "</span>&nbsp&rarr;&nbsp;";
                     rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable";
                     if (field.target.definitionStatus == "Primitive") {
                         rolesHomeHtml = rolesHomeHtml + " sct-primitive-concept";
@@ -819,11 +817,7 @@ function conceptDetails(divElement, conceptId, options) {
                         rolesHomeHtml = rolesHomeHtml + " sct-defined-concept";
                     }
                     rolesHomeHtml = rolesHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
-                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
-                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
-                    } else {
-                        rolesHomeHtml = rolesHomeHtml + field.target.defaultTerm + "</span><br>";
-                    }
+                    rolesHomeHtml = rolesHomeHtml + panel.removeSemtag(field.target.defaultTerm) + "</span><br>";
                 });
                 if (inferredRoles.length == 0) {
                     rolesHomeHtml = rolesHomeHtml + "<span class='i18n text-muted' data-i18n-id='i18n_no_relationships'>No relationships</span>";
@@ -842,6 +836,9 @@ function conceptDetails(divElement, conceptId, options) {
 
 
             $('#home-roles-' + panel.divElement.id).html(rolesHomeHtml);
+
+            $('.more-fields-button').disableTextSelect();
+            $('.more-fields-button').popover();
 
             if (panel.options.selectedView == "stated") {
                 $('#' + panel.relsPId).find('.inferred-rel').each(function(i, val) {
@@ -1070,6 +1067,14 @@ function conceptDetails(divElement, conceptId, options) {
         panel.options.diagrammingMarkupEnabled = $("#" + panel.divElement.id + "-diagrammingMarkupEnabledOption").is(':checked');
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
+    }
+
+    this.removeSemtag = function(term) {
+        if (term.lastIndexOf("(") > 0) {
+            return term.substr(0, term.lastIndexOf("(")-1)
+        } else {
+            return term;
+        }
     }
 }
 
