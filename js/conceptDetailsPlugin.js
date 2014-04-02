@@ -356,8 +356,8 @@ function conceptDetails(divElement, conceptId, options) {
                 attrHtml = attrHtml + ", <span class='i18n' data-i18n-id='i18n_inactive'>Inactive</span>";
             }
             attrHtml = attrHtml + "</td>";
-            attrHtml = attrHtml + "<td><span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "' id='" + panel.divElement.id + "-attributesClip'></span></td>";
-            var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>Module</th></tr><tr><td style='padding: 3px;'>" + firstMatch.effectiveTime + "</td><td style='padding: 3px;'>" + firstMatch.module + "</td></tr></table>"
+            attrHtml = attrHtml + "<td><span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "' id='" + panel.divElement.id + "-attributesClip'></span></td>";
+            var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>" + firstMatch.effectiveTime + "</td><td style='padding: 3px;'>" + firstMatch.module + "</td></tr></table>"
             attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button></td>';
             attrHtml = attrHtml + "</tr></table>";
 
@@ -372,7 +372,7 @@ function conceptDetails(divElement, conceptId, options) {
             }
             homeAttrHtml = homeAttrHtml + firstMatch.defaultTerm + "</h4>";
             homeAttrHtml = homeAttrHtml + firstMatch.conceptId;
-            homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
+            homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
             $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
 
             if (!firstMatch.active) {
@@ -480,8 +480,10 @@ function conceptDetails(divElement, conceptId, options) {
                         row = row + '<span rel="tooltip-right" title="' + i18n_synonym + '">S</span>';
                     }
 
-                    if (isPreferred) {
+                    if (isPreferred && isFsn) {
                         row = row + '&nbsp;<span class="glyphicon glyphicon-star-empty" rel="tooltip-right" title="Preferred"></span>';
+                    } else if (isPreferred && !isFsn) {
+                        row = row + '&nbsp;<span class="glyphicon glyphicon-star" rel="tooltip-right" title="Preferred"></span>';
                     } else {
                         row = row + '&nbsp;<span rel="tooltip-right" title="Acceptable">&#10004;</span></span>';
                     }
@@ -507,7 +509,7 @@ function conceptDetails(divElement, conceptId, options) {
                     if (includedInLanguage == false) {
                         row = row + "<td><span class='i18n' data-i18n-id='i18n_not_acceptable'>Not acceptable</span>";
                     }
-                    var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>DescriptionId</th><th style='padding: 3px;'>Type</th><th style='padding: 3px;'>LangCode</th><th style='padding: 3px;'>ICS</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>Module</th></tr>";
+                    var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>DescriptionId</th><th style='padding: 3px;'>Type</th><th style='padding: 3px;'>Language</th><th style='padding: 3px;'>Case Significance</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
                     moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.descriptionId + "</td><td style='padding: 3px;'>" + panel.removeSemtag(field.type.defaultTerm) + "</td><td style='padding: 3px;'>" + field.lang + "</td><td style='padding: 3px;'>" + panel.removeSemtag(field.ics.defaultTerm) + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
                     row = row + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
                     row = row + "</td></tr>";
@@ -593,9 +595,9 @@ function conceptDetails(divElement, conceptId, options) {
                         row = "<tr class='inferred-rel'>";
 
                         row = row + "<td>" + field.type.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
+                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
                         row = row + "<td>" + field.target.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
+                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
                         row = row + "<td>" + field.groupId + "</td>";
                         if (field.charType.conceptId == "900000000000010007") {
                             row = row + "<td><span class='i18n' data-i18n-id='i18n_stated'>Stated</span>";
@@ -604,7 +606,7 @@ function conceptDetails(divElement, conceptId, options) {
                         } else {
                             row = row + "<td><span class='i18n' data-i18n-id='i18n_other'>Other</span>";
                         }
-                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>TypeId</th><th style='padding: 3px;'>TargetId</th><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>Module</th></tr>";
+                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>TypeId</th><th style='padding: 3px;'>TargetId</th><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
                         moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.type.conceptId + "</td><td style='padding: 3px;'>" + field.target.conceptId + "</td><td style='padding: 3px;'>" + field.modifier + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
                         row = row + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
                         row = row + "</td></tr>";
@@ -645,9 +647,9 @@ function conceptDetails(divElement, conceptId, options) {
                         row = "<tr class='stated-rel'>";
 
                         row = row + "<td>" + field.type.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
+                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
                         row = row + "<td>" + field.target.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-paperclip' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
+                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
                         row = row + "<td>" + field.groupId + "</td>";
 
                         if (field.charType.conceptId == "900000000000010007") {
@@ -657,7 +659,7 @@ function conceptDetails(divElement, conceptId, options) {
                         } else {
                             row = row + "<td><span class='i18n' data-i18n-id='i18n_other'>Other</span>";
                         }
-                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>Module</th></tr>";
+                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
                         moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.modifier + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
                         row = row + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
                         row = row + "</td></tr>";

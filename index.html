@@ -34,7 +34,7 @@
             var currentPerspective = "home";
 
             var options = {
-                serverUrl: "http://browser.ihtsdotools.org:3000",
+                serverUrl: "http://browser.ihtsdotools.org/api",
                 //serverUrl: "http://107.170.33.116:3000",
                 edition: "en-edition",
                 release: "v20140131",
@@ -80,7 +80,7 @@
                 // Read parameters
                 if (typeof QueryString.dev != "undefined") {
                     console.log("Using Dev Server...");
-                    options.serverUrl = "http://107.170.33.116:3000";
+                    options.serverUrl = "http://107.170.33.116/api";
                 }
                 var edition = QueryString.edition;
                 if (typeof edition == "undefined" || edition == null || edition == "") {
@@ -400,6 +400,7 @@
                 $("#perspectiveLabel").html("Full");
                 var fhOptions = jQuery.extend(true, {}, options);
                 fhOptions.subscribersMarker = false;
+                fhOptions.linkerButton = false;
                 var tpt = new taxonomyPanel(document.getElementById("fh-taxonomy_canvas"), fhOptions);
                 var spa = new searchPanel(document.getElementById("fh-search_canvas"), fhOptions);
                 var cdPanel1 = new conceptDetails(document.getElementById("fh-cd1_canvas"), cd1Value, fhOptions);
