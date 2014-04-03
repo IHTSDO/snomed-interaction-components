@@ -405,6 +405,16 @@ function taxonomyPanel(divElement, options) {
             });
     }
 
+    this.setToConcept = function(conceptId, term) {
+        $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=inferred", function(result) {
+            // done
+        }).done(function(result) {
+            panel.setupParents(result, {conceptId: conceptId, defaultTerm: term});
+        }).fail(function() {
+        });
+    }
+
     this.handleDropEvent = function(event, ui) {
         var draggable = ui.draggable;
 
@@ -418,16 +428,9 @@ function taxonomyPanel(divElement, options) {
                 panel.options.selectedView = "inferred";
             }
             if (typeof conceptId != "undefined") {
-                $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-                $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=inferred", function(result) {
-                    // done
-                }).done(function(result) {
-                    $(ui.helper).remove(); //destroy clone
-                    panel.setupParents(result, {conceptId: conceptId, defaultTerm: term});
-                }).fail(function() {
-                    $(ui.helper).remove(); //destroy clone
-                });
+                panel.setToConcept(conceptId, term);
             }
+            $(ui.helper).remove(); //destroy clone
         }
 
 
