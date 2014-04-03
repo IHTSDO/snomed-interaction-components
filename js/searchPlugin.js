@@ -30,7 +30,7 @@ function searchPanel(divElement, options) {
 
     this.history = [];
     this.setupCanvas = function () {
-        searchHtml = "<div style='margin: 5px; height:95%;overflow:auto;' class='panel panel-default'>";
+        var searchHtml = "<div style='margin: 5px; height:95%;overflow:auto;' class='panel panel-default'>";
         searchHtml = searchHtml + "<div class='panel-heading'>";
         searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
         searchHtml = searchHtml + "<div class='row'>";
@@ -338,7 +338,7 @@ function searchPanel(divElement, options) {
                 placement: 'bottomRight',
                 html: true,
                 content: function () {
-                    linkerHtml = '<div class="text-center text-muted"><em><span class="i18n" data-i18n-id="i18n_drag_to_link">Drag to link with other panels</span><br>';
+                    var linkerHtml = '<div class="text-center text-muted"><em><span class="i18n" data-i18n-id="i18n_drag_to_link">Drag to link with other panels</span><br>';
                     if (panel.subscribers.length == 1) {
                         linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
                     } else {
@@ -610,9 +610,6 @@ function searchPanel(divElement, options) {
                                     }
                                     resultsHtml = resultsHtml + "'><td class='col-md-6'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
                                 });
-                                if (matchedDescriptions.length == 0) {
-                                    resultsHtml = resultsHtml + "<tr><td><em>No results</em></td></tr>";
-                                }
                                 $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                                 $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
                                     appendTo: 'body',
