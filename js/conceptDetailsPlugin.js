@@ -447,6 +447,7 @@ function conceptDetails(divElement, conceptId, options) {
                     var row = "";
                     var isFsn = false;
                     var isPreferred = false;
+                    var isAcceptable = false;
 
                     if (field.type.conceptId == "900000000000003001") {
                         isFsn = true;
@@ -454,6 +455,8 @@ function conceptDetails(divElement, conceptId, options) {
                             $.each(field.langMemberships, function(i, lm) {
                                 if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
                                     isPreferred = true;
+                                } else if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000549004") {
+                                    isAcceptable = true;
                                 }
                             });
                         }
@@ -463,6 +466,8 @@ function conceptDetails(divElement, conceptId, options) {
                             $.each(field.langMemberships, function (i, lm) {
                                 if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
                                     isPreferred = true;
+                                } else if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000549004") {
+                                    isAcceptable = true;
                                 }
                             });
                         }
@@ -489,8 +494,10 @@ function conceptDetails(divElement, conceptId, options) {
                         row = row + '&nbsp;<span class="glyphicon glyphicon-star-empty" rel="tooltip-right" title="Preferred"></span>';
                     } else if (isPreferred && !isFsn) {
                         row = row + '&nbsp;<span class="glyphicon glyphicon-star" rel="tooltip-right" title="Preferred"></span>';
-                    } else {
+                    } else if (isAcceptable){
                         row = row + '&nbsp;<span rel="tooltip-right" title="Acceptable">&#10004;</span></span>';
+                    } else {
+                        row = row + '&nbsp;&nbsp;&nbsp;';
                     }
 
                     row = row + "&nbsp;&nbsp;&nbsp;" + field.term + "</td>";
