@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-function taxonomyPanel(divElement, options) {
+function taxonomyPanel(divElement, conceptId, options) {
     var nodeCount = 0;
     var panel = this;
     this.subscribers = [];
@@ -201,7 +201,7 @@ function taxonomyPanel(divElement, options) {
             lastParent = parent;
             treeHtml = treeHtml + "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
             treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
-            treeHtml = treeHtml + '<span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span>';
+            treeHtml = treeHtml + '<a href="#" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
             treeHtml = treeHtml + "</li>";
         });
         if (parents.length > 0) {
@@ -210,7 +210,7 @@ function taxonomyPanel(divElement, options) {
         treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 15px;'>";
         treeHtml = treeHtml + "<li data-concept-id='" + focusConcept.conceptId + "' data-term='" + focusConcept.defaultTerm + "' class='treeLabel'>";
         treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + focusConcept.conceptId + "'></i></button>";
-        treeHtml = treeHtml + '<span data-concept-id="' + focusConcept.conceptId + '" data-term="' + focusConcept.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + focusConcept.conceptId + '">' + focusConcept.defaultTerm + "</span>";
+        treeHtml = treeHtml + '<a href="#" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + focusConcept.conceptId + '" data-term="' + focusConcept.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + focusConcept.conceptId + '">' + focusConcept.defaultTerm + "</span></a>";
         treeHtml = treeHtml + "</li>";
         treeHtml = treeHtml + "</ul>";
         if (parents.length > 0) {
@@ -318,7 +318,7 @@ function taxonomyPanel(divElement, options) {
                 if (field.active == true) {
                     nodeHtml = nodeHtml + "<li data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "' class='treeLabel'>";
                     nodeHtml = nodeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' id='" + panel.divElement.id + "-treeicon-" + field.conceptId + "'></i></button>";
-                    nodeHtml = nodeHtml + '<span class="jqui-draggable treeLabel selectable-row" data-concept-id="' + field.conceptId + '" data-term="' + field.defaultTerm + '" id="' + panel.divElement.id + '-treenode-' + field.conceptId + '">' + field.defaultTerm + '</span>';
+                    nodeHtml = nodeHtml + '<a href="#" style="color: inherit;text-decoration: inherit;"><span class="jqui-draggable treeLabel selectable-row" data-concept-id="' + field.conceptId + '" data-term="' + field.defaultTerm + '" id="' + panel.divElement.id + '-treenode-' + field.conceptId + '">' + field.defaultTerm + '</span></a>';
                     listIconIds.push(field.conceptId);
                 }
             });
@@ -357,7 +357,7 @@ function taxonomyPanel(divElement, options) {
                     $.each(parents, function(i, parent) {
                         var parentLiHtml = "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
                         parentLiHtml = parentLiHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
-                        parentLiHtml = parentLiHtml + '<span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span>';
+                        parentLiHtml = parentLiHtml + '<a href="#" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
                         parentLiHtml = parentLiHtml + "</li>";
                         parentsStrs.push(parentLiHtml);
                         if (firstParent == "empty") {
@@ -405,6 +405,16 @@ function taxonomyPanel(divElement, options) {
             });
     }
 
+    this.setToConcept = function(conceptId, term) {
+        $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=inferred", function(result) {
+            // done
+        }).done(function(result) {
+            panel.setupParents(result, {conceptId: conceptId, defaultTerm: term});
+        }).fail(function() {
+        });
+    }
+
     this.handleDropEvent = function(event, ui) {
         var draggable = ui.draggable;
 
@@ -418,16 +428,9 @@ function taxonomyPanel(divElement, options) {
                 panel.options.selectedView = "inferred";
             }
             if (typeof conceptId != "undefined") {
-                $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-                $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=inferred", function(result) {
-                    // done
-                }).done(function(result) {
-                    $(ui.helper).remove(); //destroy clone
-                    panel.setupParents(result, {conceptId: conceptId, defaultTerm: term});
-                }).fail(function() {
-                    $(ui.helper).remove(); //destroy clone
-                });
+                panel.setToConcept(conceptId, term);
             }
+            $(ui.helper).remove(); //destroy clone
         }
 
 
@@ -512,7 +515,21 @@ function taxonomyPanel(divElement, options) {
     }
 
     this.setupCanvas();
-    this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
+    if (!conceptId || conceptId == 138875005) {
+        this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
+    } else {
+        if (xhr != null) {
+            xhr.abort();
+            console.log("aborting call...");
+        }
+        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
+
+        }).done(function(result) {
+           panel.setToConcept(conceptId, result.defaultTerm);
+        }).fail(function() {
+            console.log("Error");
+        });
+    }
 }
 
 function clearTaxonomyPanelSubscriptions(divElementId1) {

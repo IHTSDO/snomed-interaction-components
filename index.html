@@ -131,23 +131,33 @@
                     cdValue2 = 404684003;
                 }
 
+                var txValue1 = QueryString.conceptIdTx1;
+                if (typeof txValue1 == "undefined" || txValue1 == null || txValue1 == "") {
+                    txValue1 = 138875005;
+                }
+
+                var txValue2 = QueryString.conceptIdTx2;
+                if (typeof txValue2 == "undefined" || txValue2 == null || txValue2 == "") {
+                    txValue2 = 138875005;
+                }
+
                 if (QueryString.perspective == "home") {
                     initialize();
                 } else if (QueryString.perspective == "browsing") {
                     currentPerspective = "browsing";
-                    switchToBrowsing(cdValue1,cdValue2);
+                    switchToBrowsing(cdValue1,cdValue2,txValue1);
                 } else if (QueryString.perspective == "full") {
                     currentPerspective = "full";
-                    switchToFullHeight(cdValue1);
+                    switchToFullHeight(cdValue1,txValue1);
                 } else if (QueryString.perspective == "compare_concepts") {
                     currentPerspective = "compare_concepts";
                     switchToComparingConcepts(cdValue1,cdValue2);
                 } else if (QueryString.perspective == "compare_hierarchies") {
                     currentPerspective = "compare_hierarchies";
-                    switchToComparingTaxonomies(cdValue1);
+                    switchToComparingTaxonomies(cdValue1,txValue1,txValue2);
                 } else if (QueryString.perspective == "responsive") {
                     currentPerspective = "responsive";
-                    switchToResponsiveLayout(cdValue1,cdValue2)
+                    switchToResponsiveLayout(cdValue1,cdValue2,txValue1)
                 } else {
                     initialize();
                 }
@@ -328,7 +338,7 @@
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("<em>...</em>");
             }
-            function switchToBrowsing(cd1Value, cd2Value) {
+            function switchToBrowsing(cd1Value, cd2Value, txValue1) {
                 currentPerspective = "browsing";
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"block"});
@@ -337,7 +347,7 @@
                 $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Browsing");
-                var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), options);
+                var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), txValue1, options);
                 var spa = new searchPanel(document.getElementById("bp-search_canvas"), options);
                 var cdPanel1 = new conceptDetails(document.getElementById("bp-cd1_canvas"), cd1Value, options);
                 cdPanel1.setupCanvas();
@@ -369,7 +379,7 @@
                 $('#comparing-concept-details').split({orientation: 'vertical'});
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
-            function switchToComparingTaxonomies(cd1Value) {
+            function switchToComparingTaxonomies(cd1Value, txValue1, txValue2) {
                 currentPerspective = "compare_hierarchies";
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
@@ -378,8 +388,8 @@
                 $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Comparing taxonomies");
-                var tx1 = new taxonomyPanel(document.getElementById("ct-tx1_canvas"), options);
-                var tx2 = new taxonomyPanel(document.getElementById("ct-tx2_canvas"), options);
+                var tx1 = new taxonomyPanel(document.getElementById("ct-tx1_canvas"), txValue1, options);
+                var tx2 = new taxonomyPanel(document.getElementById("ct-tx2_canvas"), txValue2, options);
                 var spa = new searchPanel(document.getElementById("ct-search_canvas"), options);
                 var cdPanel1 = new conceptDetails(document.getElementById("ct-cd1_canvas"), cd1Value, options);
                 cdPanel1.setupCanvas();
@@ -389,7 +399,7 @@
                 $('#search-cd-wrapper').split({orientation: 'vertical'});
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
-            function switchToFullHeight(cd1Value) {
+            function switchToFullHeight(cd1Value, txValue1) {
                 currentPerspective = "full";
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
@@ -401,7 +411,7 @@
                 var fhOptions = jQuery.extend(true, {}, options);
                 fhOptions.subscribersMarker = false;
                 fhOptions.linkerButton = false;
-                var tpt = new taxonomyPanel(document.getElementById("fh-taxonomy_canvas"), fhOptions);
+                var tpt = new taxonomyPanel(document.getElementById("fh-taxonomy_canvas"), txValue1, fhOptions);
                 var spa = new searchPanel(document.getElementById("fh-search_canvas"), fhOptions);
                 var cdPanel1 = new conceptDetails(document.getElementById("fh-cd1_canvas"), cd1Value, fhOptions);
                 cdPanel1.setupCanvas();
@@ -410,7 +420,7 @@
                 $('#spliter-fh').split({orientation: 'vertical', limit: 20, position: '40%'});
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
-            function switchToResponsiveLayout(cd1Value, cd2Value) {
+            function switchToResponsiveLayout(cd1Value, cd2Value, txValue1) {
                 currentPerspective = "responsive";
                 $("#welcome-perspective").css({"display":"none"});
                 $("#browsing-perspective").css({"display":"none"});
@@ -419,7 +429,7 @@
                 $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"block"});
                 $("#perspectiveLabel").html("Responsive");
-                var tpt = new taxonomyPanel(document.getElementById("rp-taxonomy_canvas"), options);
+                var tpt = new taxonomyPanel(document.getElementById("rp-taxonomy_canvas"), txValue1, options);
                 var spa = new searchPanel(document.getElementById("rp-search_canvas"), options);
                 var cdPanel1 = new conceptDetails(document.getElementById("rp-cd1_canvas"), cd1Value, options);
                 cdPanel1.setupCanvas();
@@ -436,18 +446,20 @@
             function reloadCurrentPerspective() {
                 var cdValue1 = 404684003;
                 var cdValue2 = 404684003;
+                var txValue1 = 138875005;
+                var txValue2 = 138875005;
                 if (currentPerspective == "home") {
                     initialize();
                 } else if (currentPerspective == "browsing") {
-                    switchToBrowsing(cdValue1,cdValue2);
+                    switchToBrowsing(cdValue1,cdValue2,txValue1);
                 } else if (currentPerspective == "full") {
-                    switchToFullHeight(cdValue1);
+                    switchToFullHeight(cdValue1,txValue1);
                 } else if (currentPerspective == "compare_concepts") {
                     switchToComparingConcepts(cdValue1,cdValue2);
                 } else if (currentPerspective == "compare_hierarchies") {
-                    switchToComparingTaxonomies(cdValue1);
+                    switchToComparingTaxonomies(cdValue1,txValue1,txValue2);
                 } else if (currentPerspective == "responsive") {
-                    switchToResponsiveLayout(cdValue1,cdValue2)
+                    switchToResponsiveLayout(cdValue1,cdValue2,txValue1)
                 } else {
                     currentPerspective = "home"
                     initialize();
