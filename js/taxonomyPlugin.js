@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-function taxonomyPanel(divElement, options) {
+function taxonomyPanel(divElement, conceptId, options) {
     var nodeCount = 0;
     var panel = this;
     this.subscribers = [];
@@ -515,7 +515,21 @@ function taxonomyPanel(divElement, options) {
     }
 
     this.setupCanvas();
-    this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
+    if (!conceptId || conceptId == 138875005) {
+        this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept"});
+    } else {
+        if (xhr != null) {
+            xhr.abort();
+            console.log("aborting call...");
+        }
+        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
+
+        }).done(function(result) {
+           panel.setToConcept(conceptId, result.defaultTerm);
+        }).fail(function() {
+            console.log("Error");
+        });
+    }
 }
 
 function clearTaxonomyPanelSubscriptions(divElementId1) {
