@@ -618,9 +618,11 @@ function searchPanel(divElement, options) {
                                 });
                                 $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                     $.each(panel.subscribers, function (i, field) {
-//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                        //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
                                         field.conceptId = $(event.target).attr('data-concept-id');
                                         field.updateCanvas();
+                                        lastClickedSctid = $(event.target).attr('data-concept-id');
+                                        lastClickTime = Date.now();
                                     });
                                 });
                             }
