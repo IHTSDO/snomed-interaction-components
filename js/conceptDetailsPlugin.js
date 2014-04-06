@@ -75,6 +75,7 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + '<ul class="nav nav-tabs" id="details-tabs-' + panel.divElement.id + '">';
         detailsHtml = detailsHtml + '    <li class="active"><a href="#home-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;"><span class="i18n" data-i18n-id="i18n_summary">Summary</span></a></li>';
         detailsHtml = detailsHtml + '    <li><a href="#details-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;"><span class="i18n" data-i18n-id="i18n_details">Details</span></a></li>';
+        detailsHtml = detailsHtml + '    <li id="diagram-tab"><a href="#diagram-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;" id="diagram-tab-link-' + panel.divElement.id + '"><span class="i18n" data-i18n-id="i18n_diagram">Diagram</span></a></li>';
         detailsHtml = detailsHtml + '</ul>';
         detailsHtml = detailsHtml + "<!-- Tab panes -->";
         detailsHtml = detailsHtml + '<div class="tab-content" id="details-tab-content-' + panel.divElement.id + '">';
@@ -94,6 +95,9 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "       </div>";
         detailsHtml = detailsHtml + "       <div id='" + panel.childrenPId + "' class='panel panel-default' style='height:100px;overflow:auto;margin-bottom: 15px;'>";
         detailsHtml = detailsHtml + "       </div>";
+        detailsHtml = detailsHtml + '    </div>';
+        detailsHtml = detailsHtml + '    <div class="tab-pane fade" id="diagram-' + panel.divElement.id + '">';
+        detailsHtml = detailsHtml + '       <div id="diagram-canvas-' + panel.divElement.id + '" style="position: relative; width: 1000px;"></div>';
         detailsHtml = detailsHtml + '    </div>';
         detailsHtml = detailsHtml + '</div>';
         detailsHtml = detailsHtml + "</div>";
@@ -328,6 +332,7 @@ function conceptDetails(divElement, conceptId, options) {
         $('#home-parents-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#home-roles-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.childrenPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 
         // load attributes
         if (xhr != null) {
@@ -740,9 +745,9 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable";
                     if (field.target.definitionStatus == "Primitive") {
-                        parentsHomeHtml = parentsHomeHtml + " sct-primitive-concept";
+                        parentsHomeHtml = parentsHomeHtml + " sct-primitive-concept-compact";
                     } else {
-                        parentsHomeHtml = parentsHomeHtml + " sct-defined-concept";
+                        parentsHomeHtml = parentsHomeHtml + " sct-defined-concept-compact";
                     }
                     parentsHomeHtml = parentsHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";                    if (field.target.defaultTerm.lastIndexOf("(") > 0) {
                         parentsHomeHtml = parentsHomeHtml + field.target.defaultTerm.substr(0, field.target.defaultTerm.lastIndexOf("(")-1) + "</span><br>";
@@ -763,9 +768,9 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                     parentsHomeHtml = parentsHomeHtml + "<span class='jqui-draggable";
                     if (field.target.definitionStatus == "Primitive") {
-                        parentsHomeHtml = parentsHomeHtml + " sct-primitive-concept";
+                        parentsHomeHtml = parentsHomeHtml + " sct-primitive-concept-compact";
                     } else {
-                        parentsHomeHtml = parentsHomeHtml + " sct-defined-concept";
+                        parentsHomeHtml = parentsHomeHtml + " sct-defined-concept-compact";
                     }
                     parentsHomeHtml = parentsHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
                     if (field.target.defaultTerm.lastIndexOf("(") > 0) {
@@ -796,13 +801,13 @@ function conceptDetails(divElement, conceptId, options) {
                         barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + barColor + "'>&nbsp;&nbsp;</span>";
                     }
                     rolesHomeHtml = rolesHomeHtml + barHtml;
-                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable sct-attribute' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable sct-attribute-compact' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     rolesHomeHtml = rolesHomeHtml+ panel.removeSemtag(field.type.defaultTerm) + "</span>&nbsp&rarr;&nbsp;";
                     rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable";
                     if (field.target.definitionStatus == "Primitive") {
-                        rolesHomeHtml = rolesHomeHtml + " sct-primitive-concept";
+                        rolesHomeHtml = rolesHomeHtml + " sct-primitive-concept-compact";
                     } else {
-                        rolesHomeHtml = rolesHomeHtml + " sct-defined-concept";
+                        rolesHomeHtml = rolesHomeHtml + " sct-defined-concept-compact";
                     }
                     rolesHomeHtml = rolesHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
                     rolesHomeHtml = rolesHomeHtml + panel.removeSemtag(field.target.defaultTerm) + "</span><br>";
@@ -822,13 +827,13 @@ function conceptDetails(divElement, conceptId, options) {
                         barHtml = "&nbsp;&nbsp;&nbsp;<span style='background-color: " + barColor + "'>&nbsp;&nbsp;</span>";
                     }
                     rolesHomeHtml = rolesHomeHtml + barHtml;
-                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable sct-attribute' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
+                    rolesHomeHtml = rolesHomeHtml + "&nbsp;<span class='jqui-draggable sct-attribute-compact' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'>";
                     rolesHomeHtml = rolesHomeHtml+ panel.removeSemtag(field.type.defaultTerm) + "</span>&nbsp&rarr;&nbsp;";
                     rolesHomeHtml = rolesHomeHtml + "<span class='jqui-draggable";
                     if (field.target.definitionStatus == "Primitive") {
-                        rolesHomeHtml = rolesHomeHtml + " sct-primitive-concept";
+                        rolesHomeHtml = rolesHomeHtml + " sct-primitive-concept-compact";
                     } else {
-                        rolesHomeHtml = rolesHomeHtml + " sct-defined-concept";
+                        rolesHomeHtml = rolesHomeHtml + " sct-defined-concept-compact";
                     }
                     rolesHomeHtml = rolesHomeHtml + "' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'>";
                     rolesHomeHtml = rolesHomeHtml + panel.removeSemtag(field.target.defaultTerm) + "</span><br>";
@@ -850,6 +855,20 @@ function conceptDetails(divElement, conceptId, options) {
 
 
             $('#home-roles-' + panel.divElement.id).html(rolesHomeHtml);
+
+            if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
+                $("#diagram-canvas-" + panel.divElement.id).html("");
+                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+            }
+
+            $("#diagram-tab-link-" + panel.divElement.id).click(function (e) {
+                $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                setTimeout(function () {
+                    $("#diagram-canvas-" + panel.divElement.id).html("");
+                    drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+                }, 1000)
+
+            });
 
             $('.more-fields-button').disableTextSelect();
             $('.more-fields-button').popover();
@@ -933,9 +952,9 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.stripDiagrammingMarkup = function(htmlString) {
-        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-primitive-concept"), 'g'), "");
-        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-defined-concept"), 'g'), "");
-        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-attribute"), 'g'), "");
+        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-primitive-concept-compact"), 'g'), "");
+        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-defined-concept-compact"), 'g'), "");
+        htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-attribute-compact"), 'g'), "");
         return htmlString;
     }
     this.escapeRegExp = function(str) {
