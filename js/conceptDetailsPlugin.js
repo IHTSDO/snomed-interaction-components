@@ -97,7 +97,9 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + "       </div>";
         detailsHtml = detailsHtml + '    </div>';
         detailsHtml = detailsHtml + '    <div class="tab-pane fade" id="diagram-' + panel.divElement.id + '">';
+        detailsHtml = detailsHtml + '       <div class="row" style="margin-right: 20px"><span class="pull-right text-muted" id="home-' + panel.divElement.id + '-diagram-viewLabel"></span></div>';
         detailsHtml = detailsHtml + '       <div id="diagram-canvas-' + panel.divElement.id + '" style="position: relative; width: 1000px;"></div>';
+        //detailsHtml = detailsHtml + '       <div><span class="text-muted pull-right"><a href="http://www.ihtsdo.org/fileadmin/user_upload/Docs_01/Publications/SNOMED_CT_Diagramming_Guideline.pdf" target="_blank">Read about the IHTSDO Diagramming Guideline</a></span></div>';
         detailsHtml = detailsHtml + '    </div>';
         detailsHtml = detailsHtml + '</div>';
         detailsHtml = detailsHtml + "</div>";
@@ -564,8 +566,10 @@ function conceptDetails(divElement, conceptId, options) {
             // load relationships panel and home parents/roles
             if (panel.options.selectedView == "inferred") {
                 $('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+                $('#home-' + panel.divElement.id + '-diagram-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
             } else {
                 $('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+                $('#home-' + panel.divElement.id + '-diagram-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
             }
             panel.relsPId = divElement.id + "-rels-panel";
             var statedParents = [];

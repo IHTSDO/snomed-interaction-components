@@ -93,7 +93,7 @@ function drawConceptDiagram (concept, div, options) {
         connectElements(svg, circle2, groupNode, 'center', 'left');
         var conjunctionNode = drawConjunctionNode(svg, x + 55, y);
         connectElements(svg, groupNode, conjunctionNode, 'right', 'left');
-        $.each(svgAttrModel, function(i, relationship) {
+        $.each(svgAttrModel, function(m, relationship) {
             if (relationship.groupId == i) {
                 if (relationship.target.definitionStatus == "Primitive") {
                     sctClass = "sct-primitive-concept";
