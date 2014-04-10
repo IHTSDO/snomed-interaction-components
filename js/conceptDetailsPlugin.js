@@ -375,7 +375,7 @@ function conceptDetails(divElement, conceptId, options) {
             attrHtml = attrHtml + "</td>";
             attrHtml = attrHtml + "<td><span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "'  ='" + firstMatch.defaultTerm + "' id='" + panel.divElement.id + "-attributesClip'></span></td>";
             var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>" + firstMatch.effectiveTime + "</td><td style='padding: 3px;'>" + firstMatch.module + "</td></tr></table>"
-            attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button></td>';
+            attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button></td>';
             attrHtml = attrHtml + "</tr></table>";
 
             $('#' + panel.attributesPId).html(attrHtml);
@@ -458,31 +458,26 @@ function conceptDetails(divElement, conceptId, options) {
                 if (panel.options.displayInactiveDescriptions || field.active == true) {
                     var row = "";
                     var isFsn = false;
+                    var isSynonym = false;
+                    var isDefinition = false;
                     var isPreferred = false;
                     var isAcceptable = false;
 
                     if (field.type.conceptId == "900000000000003001") {
                         isFsn = true;
-                        if (typeof field.langMemberships != "undefined") {
-                            $.each(field.langMemberships, function(i, lm) {
-                                if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
-                                    isPreferred = true;
-                                } else if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000549004") {
-                                    isAcceptable = true;
-                                }
-                            });
-                        }
-                    } else {
-                        isFsn = false;
-                        if (typeof field.langMemberships != "undefined") {
-                            $.each(field.langMemberships, function (i, lm) {
-                                if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
-                                    isPreferred = true;
-                                } else if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000549004") {
-                                    isAcceptable = true;
-                                }
-                            });
-                        }
+                    } else if (field.type.conceptId == "900000000000013009") {
+                        isSynonym = true;
+                    } else if (field.type.conceptId == "900000000000550004") {
+                        isDefinition = true;
+                    }
+                    if (typeof field.langMemberships != "undefined") {
+                        $.each(field.langMemberships, function(i, lm) {
+                            if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
+                                isPreferred = true;
+                            } else if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000549004") {
+                                isAcceptable = true;
+                            }
+                        });
                     }
                     row = "<tr class='";
                     if (isFsn) {
@@ -498,8 +493,10 @@ function conceptDetails(divElement, conceptId, options) {
 
                     if (isFsn) {
                         row = row + '<span rel="tooltip-right" title="' + i18n_fsn + '">F</span>';
-                    } else {
+                    } else if (isSynonym) {
                         row = row + '<span rel="tooltip-right" title="' + i18n_synonym + '">S</span>';
+                    } else if (isDefinition) {
+                        row = row + '<span rel="tooltip-right" title="' + i18n_definition + '">D</span>';
                     }
 
                     if (isPreferred && isFsn) {
