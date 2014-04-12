@@ -25,6 +25,7 @@ function jiraPlugin(divElement, conceptId, options) {
     this.history = [];
     this.subscription = null;
     var xhr = null;
+    var issueTypeXhr = null;
     var xhrChildren = null;
 
     componentLoaded = false;
@@ -297,79 +298,166 @@ function jiraPlugin(divElement, conceptId, options) {
         $('#' + panel.relsPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.childrenPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 
+
+        var container = $('#' + panel.divElement.id + "-panelBody");
+        container.html("");
+        //MAIN WRAPPER
+        var mainWrapper = $(document.createElement("div"));
+        mainWrapper.addClass("col-md-12");
+
+        //CREATE ROW CONTAING PROJECT FORM GROUP
+        var toolBarRow = $(document.createElement("div"));
+        toolBarRow.addClass("row");
+        toolBarRow.css("margin-bottom", "10px");
+        var toolbarCol = $(document.createElement("div"));
+        toolbarCol.addClass("col-xs-12");
+
+
+        //CREATE ROW FOR ACTIVE CONCEPT
+        var conceptRow = $(document.createElement("div"));
+        conceptRow.addClass("row");
+        conceptRow.css("margin-bottom", "10px");
+        var conceptCol = $(document.createElement("div"));
+        conceptCol.addClass("col-xs-12");
+        conceptRow.append(conceptCol);
+
+        var conceptPlaceHolder = $(document.createElement("h4"));
+        conceptPlaceHolder.addClass('jqui-droppable');
+        conceptPlaceHolder.addClass('ui-droppable');
+        conceptPlaceHolder.css("height", "40px");
+        conceptPlaceHolder.css("border", "1px solid red");
+        conceptPlaceHolder.css("border-radius", "4px");
+
+        conceptCol.append(conceptPlaceHolder);
+
+        //CREATE ISSUE BUTTON
+        var createIssueButton = $(document.createElement("button"));
+        createIssueButton.addClass("btn btn-default pull-right");
+        createIssueButton.html("Create Issue");
+        createIssueButton.attr("data-toggle", "modal");
+        createIssueButton.attr("data-target", "#createIssueModal");
+        createIssueButton.attr("disabled", "disabled");
+
+        mainWrapper.append(toolBarRow);
+        mainWrapper.append(conceptRow);
+        mainWrapper.append(createIssueButton);
+        mainWrapper.css("padding-top", "10px");
+        mainWrapper.css("padding-bottom", "10px");
+
+        var container = $('#' + panel.divElement.id + "-panelBody");
+        container.append(mainWrapper);
+        $(createIssueModal).appendTo("body");
+
+        //CREATE ISSUE MODAL CREATE BUTTON
+        $('#crete_issue_button').click(function () {
+            var summary = $('#create_issue_summary').val();
+            var validationFaild = false;
+            if (!summary || summary === '' || summary.trim() === '') {
+                console.log('empty summary');
+                validationFaild = true;
+                $('#summary_form_group').addClass('has-error');
+                $('#summary_form_group').keyup(function () {
+                    $('#summary_form_group').removeClass("has-error")
+                });
+            }
+            console.log($('#create_issue_summary').val());
+            if (!validationFaild) {
+
+                var newIssue = {};
+
+                var newIssue = {
+                    'fields': {
+                        project: {id: $('#create_issue_projects').val()},
+                        summary: summary,
+                        issuetype: {id:$('#create_issue_issue_types').val()}
+                    }
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    data: newIssue,
+                    url: options.serverUrl + '/jira/issues',
+                    dataType: 'JSON'
+                }).done(function (response) {
+                    // Check for successful (blank) response
+                    if (response.msg === '') {
+
+                    }
+                    else {
+                       console.log(response);
+                    }
+                });
+            }
+        });
+
+
+        var projects = new Array();
+
+        var currentConceptId = '';
+        conceptPlaceHolder.droppable({
+            drop: function (event, ui) {
+                var draggable = ui.draggable;
+                //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
+                if (draggable.attr('data-concept-id')) {
+                    console.log("OK : " + draggable.attr('data-concept-id') + ' ' + draggable.attr('data-term'));
+                    conceptPlaceHolder.html(draggable.attr('data-concept-id') + ' ' + draggable.attr('data-term'));
+                    createIssueButton.removeAttr("disabled");
+                    currentConceptId = draggable.attr('data-concept-id');
+                    $('#create_issue_conceptid').attr("disabled", "disabled")
+                    $('#create_issue_conceptid').val(currentConceptId);
+                }
+            },
+            hoverClass: "bg-info"
+        });
+
         // load attributes
         if (xhr != null) {
             xhr.abort();
             console.log("aborting call...");
         }
+        // load attributes
+        if (issueTypeXhr != null) {
+            issueTypeXhr.abort();
+            console.log("aborting call...");
+        }
+
+        issueTypeXhr = $.getJSON(options.serverUrl + "/jira/issueTypes", function (result) {
+
+        }).done(function (result) {
+            console.log(result);
+            result.forEach(function (issueType) {
+                var issueTypeOption = $(document.createElement("option"));
+                issueTypeOption.attr("value", issueType.id);
+                issueTypeOption.html(issueType.name);
+                $('#create_issue_issue_types').append(issueTypeOption);
+            });
+
+        }).fail(function () {
+            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+        });
+
+
         xhr = $.getJSON(options.serverUrl + "/jira/projects", function (result) {
 
         }).done(function (result) {
             console.log(result);
-
-            //MAIN WRAPPER
-            var mainWrapper = $(document.createElement("div"));
-            mainWrapper.addClass("col-md-12");
-
-            var toolBarRow = $(document.createElement("div"));
-            toolBarRow.addClass("row");
-            toolBarRow.css("margin-bottom", "10px");
-            var toolbarCol = $(document.createElement("div"));
-            toolbarCol.addClass("col-xs-12");
-
-            //CREATE ISSUE BUTTON
-            var createIssueButton = $(document.createElement("button"));
-            createIssueButton.addClass("btn btn-default pull-right");
-            createIssueButton.html("Create Issue");
-            createIssueButton.attr("data-toggle", "modal");
-            createIssueButton.attr("data-target", "#createIssueModal");
-
-
-            //PROJECT FORMGROUP
-            var projectListFG = $(document.createElement("div"));
-            projectListFG.addClass("form-group");
-
-            //PROJECT LABEL
-            var projectListLabel = $(document.createElement("label"));
-            projectListLabel.addClass("control-label")
-            projectListLabel.html("Projects")
-
-            //PROJECT LIST
-            var projectsList = $(document.createElement("select"));
-            projectsList.addClass("form-control")
-
             result.forEach(function (project) {
                 var projectOption = $(document.createElement("option"));
                 projectOption.attr("value", project.id);
                 projectOption.html(project.key + ' ' + project.name);
-                projectsList.append(projectOption);
+                projects.push(project);
+                $('#create_issue_projects').append(projectOption);
             });
-            projectListFG.append(projectListLabel);
-            projectListFG.append(projectsList);
-            toolbarCol.append(projectListFG);
-            toolbarCol.append(createIssueButton);
-            toolBarRow.append(toolbarCol);
 
-            var contentBody = document.createElement("div");
-            var test = $(contentBody);
-            var span = $(document.createElement("span"));
-            span.html(result)
-            test.append(span);
-
-            mainWrapper.append(toolBarRow);
-            mainWrapper.append(test);
-            mainWrapper.css("padding-top", "10px");
-            mainWrapper.css("padding-bottom", "10px");
-
-            var container = $('#' + panel.divElement.id + "-panelBody");
-            container.append(mainWrapper);
-            $(createIssueModal).appendTo("body");
         }).fail(function () {
             $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
         });
+
     }
 
+    this.createIssue = function () {
 
+    }
     var createIssueModal = '<div class="modal fade" id="createIssueModal">' +
         '<div class="modal-dialog">' +
         '<div class="modal-content">' +
@@ -378,15 +466,30 @@ function jiraPlugin(divElement, conceptId, options) {
         '           <h4 class="modal-title">Modal title</h4>' +
         '       </div>' +
         '       <div class="modal-body" id="createIssueModalContent">' +
-        '<form id="createIssueForm" name="createIssueForm">}' +
-        '<div class="form-group">' +
-        '<input type="text">' +
-        '</div>' +
+        '<form id="createIssueForm" name="createIssueForm" class="css-form">' +
+        '   <div class="form-group">' +
+        '       <label class="control-label">Project</label>' +
+        '       <select class="form-control" id="create_issue_projects">' +
+        '       </select>' +
+        '   </div>' +
+        '   <div class="form-group">' +
+        '       <label class="control-label">Concpet ID</label>' +
+        '       <input type="text" class="form-control" id="create_issue_conceptid">' +
+        '   </div>' +
+        '   <div class="form-group" id="summary_form_group">' +
+        '       <label class="control-label" for="create_issue_summary">Summary</label>' +
+        '       <input type="text" class="form-control" required="required" id="create_issue_summary">' +
+        '   </div>' +
+        '   <div class="form-group">' +
+        '       <label class="control-label">Project</label>' +
+        '       <select class="form-control" id="create_issue_issue_types">' +
+        '       </select>' +
+        '   </div>' +
         '</form>' +
         '       </div>' +
         '       <div class="modal-footer">' +
         '           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
-        '           <button type="button" class="btn btn-primary">Save changes</button>' +
+        '           <button type="button" class="btn btn-primary" id="crete_issue_button">Create issue</button>' +
         '       </div>' +
         '   </div>' +
         ' </div>' +
