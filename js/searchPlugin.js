@@ -83,38 +83,16 @@ function searchPanel(divElement, options) {
         searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-inactiveOnlyButton'><span class='i18n' data-i18n-id='i18n_inactive_only'>Inactive components only</span></button></li>";
         searchHtml = searchHtml + "         </ul>";
         searchHtml = searchHtml + "     </li>";
-      /*searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span>: <span id='" + panel.divElement.id + "-navFiltersLabel'></span> <b class='caret'></b></a>";
-        searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
-        searchHtml = searchHtml + "             <li class='dropdown-submenu'> <a tabindex='-1' href='javascript:void(0);'><span class='i18n' data-i18n-id='i18n_filter_semtag'>Filter by Semantic Tag</span></a></li>";
-        searchHtml = searchHtml + "         </ul>";
-        searchHtml = searchHtml + "     </li>";*/
         searchHtml = searchHtml + " </ul>";
         searchHtml = searchHtml + "</nav></div>";
         searchHtml = searchHtml + "<div class='panel panel-default' style='height:70%;overflow:auto;margin-bottom: 15px;min-height: 300px;' id='" + panel.divElement.id + "-resultsScrollPane'>";
         searchHtml = searchHtml + '<div id="' + panel.divElement.id + '-searchBar"></div>';
+        searchHtml = searchHtml + '<div id="' + panel.divElement.id + '-searchFilters"></div>';
         searchHtml = searchHtml + "<table id='" + panel.divElement.id + "-resultsTable' class='table table-bordered'>";
         searchHtml = searchHtml + "</table>";
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div>";
         searchHtml = searchHtml + "</div>";
-        // modal semtags panel
-        searchHtml = searchHtml + "<div class='modal fade' id='" + panel.divElement.id + "-configModal'>";
-        searchHtml = searchHtml + "<div class='modal-dialog'>";
-        searchHtml = searchHtml + "<div class='modal-content'>";
-        searchHtml = searchHtml + "<div class='modal-header'>";
-        searchHtml = searchHtml + "<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>";
-        searchHtml = searchHtml + "<h4 class='modal-title'><span class='i18n' data-i18n-id='i18n_options'>Filter by Semantic Tags</span></h4>";
-        searchHtml = searchHtml + "</div>";
-        searchHtml = searchHtml + "<div class='modal-body' id='" + panel.divElement.id + "-modal-body'>";
-        searchHtml = searchHtml + "</div>";
-        searchHtml = searchHtml + "<div class='modal-footer'>";
-        searchHtml = searchHtml + "<button type='button' class='btn btn-danger' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_cancel'>Cancel</span></button>";
-        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-apply-button' type='button' class='btn btn-success' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_apply_changes'>Apply changes</span></button>";
-        searchHtml = searchHtml + "</div>";
-        searchHtml = searchHtml + "</div><!-- /.modal-content -->";
-        searchHtml = searchHtml + "</div><!-- /.modal-dialog -->";
-        searchHtml = searchHtml + "</div><!-- /.modal -->";
         $(divElement).html(searchHtml);
         $('#' + panel.divElement.id + '-searchBox').keyup(function () {
             clearTimeout(thread);
@@ -413,7 +391,13 @@ function searchPanel(divElement, options) {
 
     this.search = function (t, skipTo, returnLimit, forceSearch) {
         if (typeof panel.options.searchMode == "undefined") {
-            panel.options.searchMode = "regex";
+            panel.options.searchMode = "partialMatching";
+        }
+        if (typeof panel.options.semTagFilter == "undefined") {
+            panel.options.semTagFilter = "none";
+        }
+        if (typeof panel.options.langFilter == "undefined") {
+            panel.options.langFilter = "none";
         }
 
         if (typeof forceSearch == "undefined") {
@@ -438,6 +422,7 @@ function searchPanel(divElement, options) {
                 panel.history.push({searchTerm: t, time: time});
                 //t = t.charAt(0).toUpperCase() + t.slice(1);
                 //console.log("Capitalized t: " + t);
+                $('#' + panel.divElement.id + '-searchFilters').html("");
                 if (skipTo == 0) {
                     $('#' + panel.divElement.id + '-resultsTable').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
                 } else {
@@ -516,7 +501,14 @@ function searchPanel(divElement, options) {
                         t = t.toLowerCase();
                     }
                     var startTime = Date.now();
-                    xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=" + panel.options.searchLang + "&statusFilter=" + panel.options.statusSearchFilter + "&skipTo=" + skipTo + "&returnLimit=" + returnLimit,function (result) {
+                    var searchUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=" + panel.options.searchLang + "&statusFilter=" + panel.options.statusSearchFilter + "&skipTo=" + skipTo + "&returnLimit=" + returnLimit;
+                    if (panel.options.semTagFilter != "none") {
+                        searchUrl = searchUrl + "&semanticFilter=" + panel.options.semTagFilter;
+                    }
+                    if (panel.options.langFilter != "none") {
+                        searchUrl = searchUrl + "&langFilter=" + panel.options.langFilter;
+                    }
+                    xhr = $.getJSON(searchUrl,function (result) {
 
                     }).done(function (result) {
                             $('#' + panel.divElement.id + '-resultsTable').find('.more-row').remove();
@@ -534,6 +526,42 @@ function searchPanel(divElement, options) {
                                 resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                                 $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                             } else {
+                                var searchFiltersHtml = "<span class='pull right'><a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#" + panel.divElement.id + "-searchFiltersPanel'>Filters</a>";
+                                if (panel.options.semTagFilter != "none") {
+                                    searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.semTagFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-semtag'>&times;</a></span>&nbsp;&nbsp;";
+                                }
+                                if (panel.options.langFilter != "none") {
+                                    searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.langFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>&nbsp;&nbsp;";
+                                }
+                                searchFiltersHtml = searchFiltersHtml + "</span><div id='" + panel.divElement.id + "-searchFiltersPanel' class='panel-collapse collapse'>";
+                                searchFiltersHtml = searchFiltersHtml + "<div class='tree'><ul><li><a>Filter results by Language</a><ul>";
+                                for(var key in result.filters.lang) {
+                                    searchFiltersHtml = searchFiltersHtml + "<li><a class='lang-link' href='javascript:void(0);' data-lang='" + key + "'>" + key + " (" + result.filters.lang[key] + ")</a></li>";
+                                }
+                                searchFiltersHtml = searchFiltersHtml + "</ul></li></ul>";
+                                searchFiltersHtml = searchFiltersHtml + "<ul><li><a>Filter results by Semantic Tag</a><ul>";
+                                for(var key in result.filters.semTag) {
+                                    searchFiltersHtml = searchFiltersHtml + "<li><a class='semtag-link' href='javascript:void(0);' data-semtag='" + key + "'>" + key + " (" + result.filters.semTag[key] + ")</a></li>";
+                                }
+                                searchFiltersHtml = searchFiltersHtml + "</ul></li></ul></div>";
+                                $('#' + panel.divElement.id + '-searchBar').html($('#' + panel.divElement.id + '-searchBar').html() + searchFiltersHtml);
+                                $("#" + panel.divElement.id + '-searchBar').find('.semtag-link').click(function (event) {
+                                    panel.options.semTagFilter = $(event.target).attr('data-semtag');
+                                    panel.search(t, 0, returnLimit, true);
+                                });
+                                $("#" + panel.divElement.id + '-searchBar').find('.lang-link').click(function (event) {
+                                    panel.options.langFilter = $(event.target).attr('data-lang');
+                                    panel.search(t, 0, returnLimit, true);
+                                });
+                                $("#" + panel.divElement.id + '-searchBar').find('.remove-semtag').click(function (event) {
+                                    panel.options.semTagFilter = "none";
+                                    panel.search(t, 0, returnLimit, true);
+                                });
+                                $("#" + panel.divElement.id + '-searchBar').find('.remove-lang').click(function (event) {
+                                    panel.options.langFilter = "none";
+                                    panel.search(t, 0, returnLimit, true);
+                                });
+
                                 if (panel.options.searchMode == "regex") {
                                     matchedDescriptions.sort(function (a, b) {
                                         if (a.term.length < b.term.length)
