@@ -415,6 +415,10 @@ function searchPanel(divElement, options) {
                 $('#' + panel.divElement.id + '-typeIcon').removeClass('text-danger');
                 $('#' + panel.divElement.id + '-typeIcon').addClass('glyphicon-ok');
                 $('#' + panel.divElement.id + '-typeIcon').addClass('text-success');
+                if (t != lastT) {
+                    panel.options.semTagFilter = "none";
+                    panel.options.langFilter = "none";
+                }
                 lastT = t;
                 //console.log(t);
                 var d = new Date();
