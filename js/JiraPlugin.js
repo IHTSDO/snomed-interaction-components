@@ -28,6 +28,7 @@ function jiraPlugin(divElement, conceptId, options) {
     var issueTypeXhr = null;
     var xhrChildren = null;
 
+
     componentLoaded = false;
     $.each(componentsRegistry, function (i, field) {
         if (field.divElement.id == panel.divElement.id) {
@@ -37,7 +38,6 @@ function jiraPlugin(divElement, conceptId, options) {
     if (componentLoaded == false) {
         componentsRegistry.push(panel);
     }
-
 
     this.getConceptId = function () {
         return this.conceptId;
@@ -255,6 +255,58 @@ function jiraPlugin(divElement, conceptId, options) {
 
         panel.updateCanvas();
         panel.setupOptionsPanel();
+
+
+        // load attributes
+        if (xhr != null) {
+            xhr.abort();
+            console.log("aborting call...");
+        }
+        // load attributes
+        if (issueTypeXhr != null) {
+            issueTypeXhr.abort();
+            console.log("aborting call...");
+        }
+        //LOAD ISSUE TYPES
+        issueTypeXhr = $.getJSON(options.serverUrl + "/jira/issueTypes", function (result) {
+
+        }).done(function (result) {
+            console.log("issue types loaded")
+            result.forEach(function (issueType) {
+                var issueTypeOption = $(document.createElement("option"));
+                issueTypeOption.attr("value", issueType.id);
+                issueTypeOption.html(issueType.name);
+                $('#create_issue_issue_types').append(issueTypeOption);
+            });
+
+        }).fail(function () {
+            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+        });
+
+        var projects = $("#create_issue_projects");
+        var opitions_default_projects = $("#opitions_default_projects");
+        //INITIALIZE PROJECT OPTIONS
+        xhr = $.getJSON(options.serverUrl + "/jira/projects", function (result) {
+
+        }).done(function (result) {
+            console.log("Projects loaded")
+            result.forEach(function (project) {
+                var projectOption = $(document.createElement("option"));
+                projectOption.attr("value", project.id);
+                projectOption.html(project.key + ' - ' + project.name);
+                opitions_default_projects.append(projectOption);
+                var projectOption = $(document.createElement("option"));
+                projectOption.attr("value", project.id);
+                projectOption.html(project.key + ' - ' + project.name);
+                projects.append(projectOption);
+
+            });
+            opitions_default_projects.val(options.defaultProjectId);
+            projects.val(options.defaultProjectId);
+        }).fail(function () {
+            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+        });
+
     }
 
     this.handleDropEvent = function (event, ui) {
@@ -284,6 +336,45 @@ function jiraPlugin(divElement, conceptId, options) {
         }
 
 
+    }
+
+    function searchConceptIssues(issuesListGroup, currentConceptId) {
+//LOADING LIST ITEM
+        var issueLoadingListItem = $(document.createElement("a"));
+        issuesListGroup.html("");
+        var loadingSpan = $(document.createElement("span"));
+        loadingSpan.addClass("glyphicon");
+        loadingSpan.addClass("glyphicon-refresh");
+        loadingSpan.addClass("icon-spin");
+
+        issueLoadingListItem.addClass("list-group-item");
+        issueLoadingListItem.attr("href", "#");
+        issueLoadingListItem.append(loadingSpan);
+        issueLoadingListItem.append(" Loading concept issues.");
+
+        issuesListGroup.append(issueLoadingListItem);
+
+        issueTypeXhr = $.getJSON(options.serverUrl + "/jira/issues/" + options.defaultProjectName + '/' + currentConceptId, function (result) {
+
+        }).done(function (result) {
+            issuesListGroup.html("");
+            if (result.total > 0) {
+                result.issues.forEach(function (issue) {
+                    console.log(JSON.stringify(issue));
+                    var issueListItem = $(document.createElement("a"));
+                    issueListItem.addClass("list-group-item");
+                    issueListItem.attr("href", "#");
+                    issueListItem.html(issue.fields.summary);
+
+                    issuesListGroup.append(issueListItem);
+                });
+            } else {
+                issueLoadingListItem.html("No issues found for selected concept");
+                issuesListGroup.append(issueLoadingListItem);
+            }
+        }).fail(function () {
+            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+        });
     }
 
     this.updateCanvas = function () {
@@ -330,6 +421,22 @@ function jiraPlugin(divElement, conceptId, options) {
 
         conceptCol.append(conceptPlaceHolder);
 
+
+        //CREATE ROW FOR CONCEPT ISSUES
+        var concpetIssuesRow = $(document.createElement("div"));
+        concpetIssuesRow.addClass("row");
+
+        concpetIssuesRow.css("margin-bottom", "10px");
+        var conceptIssueColumn = $(document.createElement("div"));
+        conceptIssueColumn.addClass("col-xs-12");
+
+        var issuesListGroup = $(document.createElement("div"));
+        issuesListGroup.addClass("list-group");
+
+        conceptIssueColumn.append(issuesListGroup);
+        concpetIssuesRow.append(conceptIssueColumn);
+
+
         //CREATE ISSUE BUTTON
         var createIssueButton = $(document.createElement("button"));
         createIssueButton.addClass("btn btn-default pull-right");
@@ -340,13 +447,16 @@ function jiraPlugin(divElement, conceptId, options) {
 
         mainWrapper.append(toolBarRow);
         mainWrapper.append(conceptRow);
+        mainWrapper.append(concpetIssuesRow);
         mainWrapper.append(createIssueButton);
         mainWrapper.css("padding-top", "10px");
         mainWrapper.css("padding-bottom", "10px");
 
+
+        //CONTROLLER FUNCTIONS
         var container = $('#' + panel.divElement.id + "-panelBody");
         container.append(mainWrapper);
-        $(createIssueModal).appendTo("body");
+        $(createIssueModal).appendTo($(divElement));
 
         //CREATE ISSUE MODAL CREATE BUTTON
         $('#crete_issue_button').click(function () {
@@ -369,7 +479,8 @@ function jiraPlugin(divElement, conceptId, options) {
                     'fields': {
                         project: {id: $('#create_issue_projects').val()},
                         summary: summary,
-                        issuetype: {id:$('#create_issue_issue_types').val()}
+                        issuetype: {id: $('#create_issue_issue_types').val()},
+                        customfield_10570: parseFloat($('#create_issue_conceptid').val())
                     }
                 }
 
@@ -379,19 +490,11 @@ function jiraPlugin(divElement, conceptId, options) {
                     url: options.serverUrl + '/jira/issues',
                     dataType: 'JSON'
                 }).done(function (response) {
-                    // Check for successful (blank) response
-                    if (response.msg === '') {
-
-                    }
-                    else {
-                       console.log(response);
-                    }
+                    searchConceptIssues(issuesListGroup, currentConceptId);
+                    $("#createIssueModal").modal('hide');
                 });
             }
         });
-
-
-        var projects = new Array();
 
         var currentConceptId = '';
         conceptPlaceHolder.droppable({
@@ -405,52 +508,10 @@ function jiraPlugin(divElement, conceptId, options) {
                     currentConceptId = draggable.attr('data-concept-id');
                     $('#create_issue_conceptid').attr("disabled", "disabled")
                     $('#create_issue_conceptid').val(currentConceptId);
+                    searchConceptIssues(issuesListGroup, currentConceptId);
                 }
             },
             hoverClass: "bg-info"
-        });
-
-        // load attributes
-        if (xhr != null) {
-            xhr.abort();
-            console.log("aborting call...");
-        }
-        // load attributes
-        if (issueTypeXhr != null) {
-            issueTypeXhr.abort();
-            console.log("aborting call...");
-        }
-
-        issueTypeXhr = $.getJSON(options.serverUrl + "/jira/issueTypes", function (result) {
-
-        }).done(function (result) {
-            console.log(result);
-            result.forEach(function (issueType) {
-                var issueTypeOption = $(document.createElement("option"));
-                issueTypeOption.attr("value", issueType.id);
-                issueTypeOption.html(issueType.name);
-                $('#create_issue_issue_types').append(issueTypeOption);
-            });
-
-        }).fail(function () {
-            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
-        });
-
-
-        xhr = $.getJSON(options.serverUrl + "/jira/projects", function (result) {
-
-        }).done(function (result) {
-            console.log(result);
-            result.forEach(function (project) {
-                var projectOption = $(document.createElement("option"));
-                projectOption.attr("value", project.id);
-                projectOption.html(project.key + ' ' + project.name);
-                projects.push(project);
-                $('#create_issue_projects').append(projectOption);
-            });
-
-        }).fail(function () {
-            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
         });
 
     }
@@ -461,9 +522,9 @@ function jiraPlugin(divElement, conceptId, options) {
     var createIssueModal = '<div class="modal fade" id="createIssueModal">' +
         '<div class="modal-dialog">' +
         '<div class="modal-content">' +
-        '<div class="modal-header">' +
-        '         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-        '           <h4 class="modal-title">Modal title</h4>' +
+        '       <div class="modal-header">' +
+        '           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+        '           <h4 class="modal-title">Create Issue</h4>' +
         '       </div>' +
         '       <div class="modal-body" id="createIssueModalContent">' +
         '<form id="createIssueForm" name="createIssueForm" class="css-form">' +
@@ -474,7 +535,7 @@ function jiraPlugin(divElement, conceptId, options) {
         '   </div>' +
         '   <div class="form-group">' +
         '       <label class="control-label">Concpet ID</label>' +
-        '       <input type="text" class="form-control" id="create_issue_conceptid">' +
+        '       <input type="number" class="form-control" id="create_issue_conceptid">' +
         '   </div>' +
         '   <div class="form-group" id="summary_form_group">' +
         '       <label class="control-label" for="create_issue_summary">Summary</label>' +
@@ -509,131 +570,36 @@ function jiraPlugin(divElement, conceptId, options) {
 
 
     this.setupOptionsPanel = function () {
-        optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="displaySynonyms"><span class="i18n" data-i18n-id="i18n_display_synonyms">Display synonyms</span></label>';
-        optionsHtml = optionsHtml + '<div class="radio">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displaySynonyms == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true checked>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsYes" value=true>';
-        }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>.';
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="radio">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displaySynonyms == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsNo" value=false>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displaySynonyms" id="' + panel.divElement.id + '-displaySynonymsNo" value=false checked>';
-        }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_synonyms3">Only display FSN and preferred terms</span>.';
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="displayIds"><span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span></label>';
-        optionsHtml = optionsHtml + '<div class="radio">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.showIds == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsYes" value=true checked>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsYes" value=true>';
-        }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>.';
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="radio">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.showIds == true) {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsNo" value=false>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="radio" name="displayIds" id="' + panel.divElement.id + '-displayIdsNo" value=false checked>';
-        }
-        optionsHtml = optionsHtml + '<span class="i18n" data-i18n-id="i18n_hide_ids">Hide Ids for all components</span>.';
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_rels_view">Relationships View</span></label>';
-        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
-        if (typeof i18n_inferred == "undefined") {
-            i18n_inferred = "Inferred";
-        }
-        if (typeof i18n_stated == "undefined") {
-            i18n_stated = "Stated";
-        }
-        if (typeof i18n_all == "undefined") {
-            i18n_all = "All";
-        }
-        if (panel.options.selectedView == "stated") {
-            optionsHtml = optionsHtml + '<option value="stated" selected>' + i18n_stated + '</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="stated">' + i18n_stated + '</option>';
-        }
-        if (panel.options.selectedView == "inferred") {
-            optionsHtml = optionsHtml + '<option value="inferred" selected>' + i18n_inferred + '</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="inferred">' + i18n_inferred + '</option>';
-        }
-        if (panel.options.selectedView == "all") {
-            optionsHtml = optionsHtml + '<option value="all" selected>' + i18n_all + '</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="all">' + i18n_all + '</option>';
-        }
-        optionsHtml = optionsHtml + '</select>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displayChildren == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption"> <span class="i18n" data-i18n-id="i18n_display_children">Display children</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-childrenOption" checked> <span class="i18n" data-i18n-id="i18n_display_children">Display children</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">Language Refset</span></label>';
-        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-langRefsetOption">';
-        if (panel.options.langRefset == "900000000000508004") {
-            optionsHtml = optionsHtml + '<option value="900000000000508004" selected>GB Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="900000000000508004">GB Language Refset</option>';
-        }
-        if (panel.options.langRefset == "900000000000509007") {
-            optionsHtml = optionsHtml + '<option value="900000000000509007" selected>US Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="900000000000509007">US Language Refset</option>';
-        }
-        if (panel.options.langRefset == "450828004") {
-            optionsHtml = optionsHtml + '<option value="450828004" selected>ES Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="450828004">ES Language Refset</option>';
-        }
-        if (panel.options.langRefset == "554461000005103") {
-            optionsHtml = optionsHtml + '<option value="554461000005103" selected>DA Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="554461000005103">DA Language Refset</option>';
-        }
-        optionsHtml = optionsHtml + '</select>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</form>';
-        $("#" + panel.divElement.id + "-modal-body").html(optionsHtml);
+        //DEFAULT PROJECT ROW
+        var defaultProjectRow = $(document.createElement("div"));
+        var defaultProjectCol = $(document.createElement("div"));
+        defaultProjectCol.addClass("form-group");
+        var defaultProjectLabel = $(document.createElement("label"));
+        defaultProjectLabel.html("Default Project");
+
+        var projectSelect = $(document.createElement("select"));
+        projectSelect.addClass("form-control");
+        projectSelect.attr("id", "opitions_default_projects");
+
+        projectSelect.on("change", function (element) {
+
+        });
+
+        defaultProjectCol.append(defaultProjectLabel);
+        defaultProjectCol.append(projectSelect);
+
+        defaultProjectRow.append(defaultProjectCol);
+
+
+        $("#" + panel.divElement.id + "-modal-body").append(defaultProjectRow);
     }
 
     this.readOptionsPanel = function () {
-        //console.log($('input[name=displaySynonyms]:checked', "#" + panel.divElement.id + "-options-form").val());
-        panel.options.displaySynonyms = ($('input[name=displaySynonyms]:checked', "#" + panel.divElement.id + "-options-form").val() == "true");
-        //console.log($('input[name=displayIds]:checked', "#" + panel.divElement.id + "-options-form").val());
-        panel.options.showIds = ($('input[name=displayIds]:checked', "#" + panel.divElement.id + "-options-form").val() == "true");
-        //console.log($("#" + panel.divElement.id + "-relsViewOption").val());
-        panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
-        panel.options.displayChildren = $("#" + panel.divElement.id + "-childrenOption").is(':checked');
-        panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
+        var projects = $("#create_issue_projects");
+        var opitions_default_projects = $("#opitions_default_projects");
+        options.defaultProjectId = opitions_default_projects.val();
+        opitions_default_projects.val(options.defaultProjectId);
+        projects.val(options.defaultProjectId);
     }
 }
 
