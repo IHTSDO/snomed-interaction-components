@@ -53,7 +53,8 @@ function searchPanel(divElement, options) {
         if (typeof i18n_search_placeholder == "undefined") {
             i18n_search_placeholder = "Search...";
         }
-        searchHtml = searchHtml + '<input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="' + i18n_search_placeholder + '" autocomplete="off">';
+        searchHtml = searchHtml + '<br><div class="btn-group" style="width: 100%;"><input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="' + i18n_search_placeholder + '" autocomplete="off">';
+        searchHtml = searchHtml + '<span id="'+ panel.divElement.id + '-clearButton" class="searchclear glyphicon glyphicon-remove-circle"></span></div>';
         searchHtml = searchHtml + '</div>';
         searchHtml = searchHtml + '</form>';
         searchHtml = searchHtml + "<div id='" + panel.divElement.id + "-searchConfigBar' style='margin-bottom: 10px;'><nav class='navbar navbar-default' role='navigation' style='min-height: 28px;border-radius: 0px;border-bottom: 1px lightgray solid;'>";
@@ -108,6 +109,7 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
         $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
         $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-clearButton").disableTextSelect();
         $("#" + panel.divElement.id + "-expandButton").hide();
         $("#" + panel.divElement.id + "-subscribersMarker").hide();
 
@@ -200,6 +202,19 @@ function searchPanel(divElement, options) {
             if (searchTerm.length > 0) {
                 panel.search(searchTerm + " ",0,100,false);
             }
+        });
+        $("#" + panel.divElement.id + "-clearButton").click(function () {
+            panel.options.semTagFilter = "none";
+            panel.options.langFilter = "none";
+            $('#' + panel.divElement.id + '-searchBox').val('');
+            $('#' + panel.divElement.id + '-searchFilters').html("");
+            $('#' + panel.divElement.id + '-resultsTable').html("");
+            $('#' + panel.divElement.id + '-searchBar').html("");
+            $('#' + panel.divElement.id + '-typeIcon').removeClass('glyphicon-ok');
+            $('#' + panel.divElement.id + '-typeIcon').removeClass('text-success');
+            $('#' + panel.divElement.id + '-typeIcon').addClass('glyphicon-remove');
+            $('#' + panel.divElement.id + '-typeIcon').addClass('text-danger');
+            lastT = "";
         });
         $("#" + panel.divElement.id + "-historyButton").click(function (event) {
             $("#" + panel.divElement.id + "-historyButton").popover({
