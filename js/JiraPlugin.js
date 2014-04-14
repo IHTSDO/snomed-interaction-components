@@ -594,7 +594,7 @@ function jiraPlugin(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-modal-body").append(defaultProjectRow);
     }
 
-    this.readOptionsPanel = function () {
+     this.readOptionsPanel = function () {
         var projects = $("#create_issue_projects");
         var opitions_default_projects = $("#opitions_default_projects");
         options.defaultProjectId = opitions_default_projects.val();
