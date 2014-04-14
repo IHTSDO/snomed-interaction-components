@@ -178,7 +178,6 @@ function conceptDetails(divElement, conceptId, options) {
         });
 
         $('#' + panel.divElement.id).click(function(event) {
-            console.log($(event.target));
             if (!$(event.target).hasClass('glyphicon')) {
                 $('#' + panel.divElement.id).find('.more-fields-button').popover('hide');
             }
