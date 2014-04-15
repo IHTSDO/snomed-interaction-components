@@ -166,6 +166,7 @@
                 }
 
                 $('#license-modal').modal('show');
+                verifyDate(release)
             }
 
             function initTour() {
@@ -470,10 +471,31 @@
             }
 
             function switchRelease(label, edition, release, langRefset) {
+                verifyDate(release);
                 options.edition = edition;
                 options.release = release;
                 options.langRefset = langRefset;
                 $("#editionLabel").html(label);
+            }
+
+            function verifyDate(release) {
+                var now = new Date()
+                //console.log(release.substring(1, 5) + " " +  release.substring(5, 7) + " " +  release.substring(7, 9));
+                var releaseDate = new Date(release.substring(1, 5), release.substring(5, 7)-1, release.substring(7, 9));
+                var diff = now - releaseDate;
+                diff = Math.round(diff/1000/60/60/24);
+                //console.log("Dates: " + now + " " + releaseDate + " " + diff);
+                if (diff > 180 ) {
+                    //console.log("Alert! outadated...");
+                    var alertHtml = '<div class="alert alert-danger" id="outdated-alert">';
+                    alertHtml = alertHtml + '<a href="#" class="close" data-dismiss="alert">&times;</a>';
+                    alertHtml = alertHtml + '<strong>Warning!</strong> the release you are browsing is more than 6 months old.';
+                    alertHtml = alertHtml + '</div>';
+                    $("#alert-section").html(alertHtml);
+                    $("#outdated-alert").alert();
+                } else {
+                    $("#alert-section").html("");
+                }
             }
 
             function switchLanguage(language, flagPng, fade) {
@@ -542,8 +564,8 @@
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');reloadCurrentPerspective();">International Edition 20140131</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131', '450828004');reloadCurrentPerspective();">Spanish Edition 20140131</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20140131', '554461000005103');reloadCurrentPerspective();">Danish Edition 20140131 (20131018DA)</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140430', '450828004');reloadCurrentPerspective();">Spanish Edition 20140430</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20131018', '554461000005103');reloadCurrentPerspective();">Danish Edition 20131018</a></li>
                                 <li><a href="javascript:void(0);" onclick="switchRelease('Swedish Edition 20131130', 'sv-edition', 'v20131130', '46011000052107');reloadCurrentPerspective();">Swedish Edition 20131130</a></li>
                             </ul>
                         </li>
@@ -553,11 +575,11 @@
                                 <span class="i18n" data-i18n-id="i18n_perspective">Perspective</span>:&nbsp;<span id="perspectiveLabel"><em>...</em></span> <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0);" onclick="switchToFullHeight(404684003);">Full</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchToBrowsing(404684003,404684003);">Browsing</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchToComparingConcepts(404684003,404684003);">Comparing concepts</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchToComparingTaxonomies(404684003);">Comparing hierarchy</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchToResponsiveLayout(404684003,404684003);">Responsive (tablets, phones)</a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToFullHeight(404684003);"><span class="i18n" data-i18n-id="i18n_full_perspective">Full</span></a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToBrowsing(404684003,404684003);"><span class="i18n" data-i18n-id="i18n_browsing_perspective">Browsing</span></a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToComparingConcepts(404684003,404684003);"><span class="i18n" data-i18n-id="i18n_comp_concepts_perspective">Comparing concepts</span></a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToComparingTaxonomies(404684003);"><span class="i18n" data-i18n-id="i18n_comp_hier_perspective">Comparing hierarchy</span></a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToResponsiveLayout(404684003,404684003);"><span class="i18n" data-i18n-id="i18n_responsive_perspective">Responsive (tablets, phones)</span></a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -588,6 +610,8 @@
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
+        <div id="alert-section">
+        </div>
         <div class="container-fluid" style="height: 100%">
             <!-- Welcome Perspective -->
             <div id="welcome-perspective"  class="bperspective">
@@ -597,8 +621,8 @@
                     <p><span class="i18n" data-i18n-id="i18n_home2">Please select a SNOMED CT release and a perspective from the top menu to start, or...</span></p>
                     <p>
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003);"><img src="img/flags/us.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Terms and UI in English</span></a>
-                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20140131', 'es-edition', 'v20140131', '450828004');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003);"><img src="img/flags/es.png">&nbsp;&nbsp;&nbsp;Ir al Navegador...</span><br><span class="small">Términos e interfaz en Español</span></a>
-                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20140131', '554461000005103');switchLanguage('da', 'img/flags/dk.png', true);switchToFullHeight(404684003);"><img src="img/flags/dk.png">&nbsp;&nbsp;&nbsp;G&aring; til browser-siden</span><br><span class="small">Terms and UI in Danish</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20131031', 'es-edition', 'v20140430', '450828004');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003);"><img src="img/flags/es.png">&nbsp;&nbsp;&nbsp;Ir al Navegador...</span><br><span class="small">Términos e interfaz en Español</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20131018', '554461000005103');switchLanguage('da', 'img/flags/dk.png', true);switchToFullHeight(404684003);"><img src="img/flags/dk.png">&nbsp;&nbsp;&nbsp;G&aring; til browser-siden</span><br><span class="small">Terms and UI in Danish</span></a>
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Swedish Edition 20131130', 'sv-edition', 'v20131130', '46011000052107');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003);"><img src="img/flags/se.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Terms in Swedish, UI in English</span></a>
                         &nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_or">or</span>&nbsp;&nbsp;
                         <a class="btn btn-primary btn-lg" role="button" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_take_tour">take the Tour...</span></a></p>
@@ -743,7 +767,6 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-        
         <!-- Google Analytics script -->
         <script>
 			  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

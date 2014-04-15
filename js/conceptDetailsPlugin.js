@@ -76,6 +76,7 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + '    <li class="active"><a href="#home-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;"><span class="i18n" data-i18n-id="i18n_summary">Summary</span></a></li>';
         detailsHtml = detailsHtml + '    <li><a href="#details-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;"><span class="i18n" data-i18n-id="i18n_details">Details</span></a></li>';
         detailsHtml = detailsHtml + '    <li id="diagram-tab"><a href="#diagram-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;" id="diagram-tab-link-' + panel.divElement.id + '"><span class="i18n" data-i18n-id="i18n_diagram">Diagram</span></a></li>';
+        detailsHtml = detailsHtml + '    <li><a href="#refsets-' + panel.divElement.id + '" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;"><span class="i18n" data-i18n-id="i18n_refsets">Refsets</span></a></li>';
         detailsHtml = detailsHtml + '</ul>';
         detailsHtml = detailsHtml + "<!-- Tab panes -->";
         detailsHtml = detailsHtml + '<div class="tab-content" id="details-tab-content-' + panel.divElement.id + '">';
@@ -100,6 +101,8 @@ function conceptDetails(divElement, conceptId, options) {
         detailsHtml = detailsHtml + '       <div class="row" style="margin-right: 20px"><span class="pull-right text-muted" id="home-' + panel.divElement.id + '-diagram-viewLabel"></span></div>';
         detailsHtml = detailsHtml + '       <div id="diagram-canvas-' + panel.divElement.id + '" style="position: relative; width: 1000px;"></div>';
         //detailsHtml = detailsHtml + '       <div><span class="text-muted pull-right"><a href="http://www.ihtsdo.org/fileadmin/user_upload/Docs_01/Publications/SNOMED_CT_Diagramming_Guideline.pdf" target="_blank">Read about the IHTSDO Diagramming Guideline</a></span></div>';
+        detailsHtml = detailsHtml + '    </div>';
+        detailsHtml = detailsHtml + '    <div class="tab-pane fade" id="refsets-' + panel.divElement.id + '">';
         detailsHtml = detailsHtml + '    </div>';
         detailsHtml = detailsHtml + '</div>';
         detailsHtml = detailsHtml + "</div>";
@@ -172,6 +175,12 @@ function conceptDetails(divElement, conceptId, options) {
             //} else {
             $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
             //}
+        });
+
+        $('#' + panel.divElement.id).click(function(event) {
+            if (!$(event.target).hasClass('glyphicon')) {
+                $('#' + panel.divElement.id).find('.more-fields-button').popover('hide');
+            }
         });
 
         $("#" + panel.divElement.id + "-historyButton").click(function(event) {
@@ -323,6 +332,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.updateCanvas = function() {
+        $('.more-fields-button').popover('hide');
         if (conceptRequested == panel.conceptId) {
             return;
         }
@@ -335,6 +345,7 @@ function conceptDetails(divElement, conceptId, options) {
         $('#home-roles-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.childrenPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#refsets-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 
         // load attributes
         if (xhr != null) {
@@ -368,9 +379,9 @@ function conceptDetails(divElement, conceptId, options) {
                 attrHtml = attrHtml + ", <span class='i18n' data-i18n-id='i18n_inactive'>Inactive</span>";
             }
             attrHtml = attrHtml + "</td>";
-            attrHtml = attrHtml + "<td><span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "'  ='" + firstMatch.defaultTerm + "' id='" + panel.divElement.id + "-attributesClip'></span></td>";
+            attrHtml = attrHtml + "<td><span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "'  data-term='" + firstMatch.defaultTerm + "' id='" + panel.divElement.id + "-attributesClip'></span></td>";
             var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>" + firstMatch.effectiveTime + "</td><td style='padding: 3px;'>" + firstMatch.module + "</td></tr></table>"
-            attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button></td>';
+            attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button></td>';
             attrHtml = attrHtml + "</tr></table>";
 
             $('#' + panel.attributesPId).html(attrHtml);
@@ -378,13 +389,13 @@ function conceptDetails(divElement, conceptId, options) {
             // load home-attributes
             var homeAttrHtml = "";
             if (firstMatch.definitionStatus == "Primitive") {
-                homeAttrHtml = homeAttrHtml + "<h4 class='jqui-droppable'><strong>&nbsp;&nbsp;&nbsp;</strong>";
+                homeAttrHtml = homeAttrHtml + '<h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '">&nbsp;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">';
             } else {
-                homeAttrHtml = homeAttrHtml + "<h4 class='jqui-droppable'><strong>&equiv;&nbsp;&nbsp;</strong>";
+                homeAttrHtml = homeAttrHtml + '<h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '">&equiv;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">';
             }
-            homeAttrHtml = homeAttrHtml + firstMatch.defaultTerm + "</h4>";
+            homeAttrHtml = homeAttrHtml + firstMatch.defaultTerm + "</span></h4>";
             homeAttrHtml = homeAttrHtml + firstMatch.conceptId;
-            homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
+            //homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
             $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
 
             if (!firstMatch.active) {
@@ -453,31 +464,26 @@ function conceptDetails(divElement, conceptId, options) {
                 if (panel.options.displayInactiveDescriptions || field.active == true) {
                     var row = "";
                     var isFsn = false;
+                    var isSynonym = false;
+                    var isDefinition = false;
                     var isPreferred = false;
                     var isAcceptable = false;
 
                     if (field.type.conceptId == "900000000000003001") {
                         isFsn = true;
-                        if (typeof field.langMemberships != "undefined") {
-                            $.each(field.langMemberships, function(i, lm) {
-                                if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
-                                    isPreferred = true;
-                                } else if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000549004") {
-                                    isAcceptable = true;
-                                }
-                            });
-                        }
-                    } else {
-                        isFsn = false;
-                        if (typeof field.langMemberships != "undefined") {
-                            $.each(field.langMemberships, function (i, lm) {
-                                if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
-                                    isPreferred = true;
-                                } else if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000549004") {
-                                    isAcceptable = true;
-                                }
-                            });
-                        }
+                    } else if (field.type.conceptId == "900000000000013009") {
+                        isSynonym = true;
+                    } else if (field.type.conceptId == "900000000000550004") {
+                        isDefinition = true;
+                    }
+                    if (typeof field.langMemberships != "undefined") {
+                        $.each(field.langMemberships, function(i, lm) {
+                            if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000548007") {
+                                isPreferred = true;
+                            } else if (lm.refset.conceptId == panel.options.langRefset && lm.acceptability.conceptId == "900000000000549004") {
+                                isAcceptable = true;
+                            }
+                        });
                     }
                     row = "<tr class='";
                     if (isFsn) {
@@ -493,8 +499,10 @@ function conceptDetails(divElement, conceptId, options) {
 
                     if (isFsn) {
                         row = row + '<span rel="tooltip-right" title="' + i18n_fsn + '">F</span>';
-                    } else {
+                    } else if (isSynonym) {
                         row = row + '<span rel="tooltip-right" title="' + i18n_synonym + '">S</span>';
+                    } else if (isDefinition) {
+                        row = row + '<span rel="tooltip-right" title="' + i18n_definition + '">D</span>';
                     }
 
                     if (isPreferred && isFsn) {
@@ -618,7 +626,7 @@ function conceptDetails(divElement, conceptId, options) {
                         row = row + "<td>" + field.type.defaultTerm + "&nbsp";
                         row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
                         row = row + "<td>" + field.target.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
+                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'></span></td>";
                         row = row + "<td>" + field.groupId + "</td>";
                         if (field.charType.conceptId == "900000000000010007") {
                             row = row + "<td><span class='i18n' data-i18n-id='i18n_stated'>Stated</span>";
@@ -670,7 +678,7 @@ function conceptDetails(divElement, conceptId, options) {
                         row = row + "<td>" + field.type.defaultTerm + "&nbsp";
                         row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
                         row = row + "<td>" + field.target.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'</span></td>";
+                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'></span></td>";
                         row = row + "<td>" + field.groupId + "</td>";
 
                         if (field.charType.conceptId == "900000000000010007") {
@@ -860,6 +868,137 @@ function conceptDetails(divElement, conceptId, options) {
 
             $('#home-roles-' + panel.divElement.id).html(rolesHomeHtml);
 
+
+            // Load Refsets info
+            var refsetsHtml = "";
+
+            if (firstMatch.memberships) {
+                var simpleFound = false;
+                var simpleRefsetsHtml = "<table class='table table-bordered'>";
+                simpleRefsetsHtml = simpleRefsetsHtml + "<thead><tr>";
+                simpleRefsetsHtml = simpleRefsetsHtml + "<th><span class='i18n' data-i18n-id='i18n_simple_refset_memberships'>Simple Refsets Memberships</span></th>";
+                simpleRefsetsHtml = simpleRefsetsHtml + "</tr></thead><tbody>";
+                $.each(firstMatch.memberships, function (i, field) {
+                    if (field.type == "SIMPLE_REFSET") {
+                        simpleFound = true;
+                        simpleRefsetsHtml = simpleRefsetsHtml + "<tr class='";
+                        if (!field.active) {
+                            simpleRefsetsHtml = simpleRefsetsHtml + " danger";
+                        }
+                        simpleRefsetsHtml = simpleRefsetsHtml + "'><td>" + field.refset.defaultTerm;
+                        simpleRefsetsHtml = simpleRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.refset.conceptId + "' data-term='" + field.refset.defaultTerm + "'></span>";
+                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
+                        moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.refset.conceptId + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
+                        simpleRefsetsHtml = simpleRefsetsHtml + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
+                        simpleRefsetsHtml = simpleRefsetsHtml + "</td></tr>";
+                    }
+                });
+                if (!simpleFound) {
+                    simpleRefsetsHtml = simpleRefsetsHtml + "<tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>"
+                    simpleRefsetsHtml = simpleRefsetsHtml + "</tbody></table>";
+                } else {
+                    simpleRefsetsHtml = simpleRefsetsHtml + "</tbody></table>";
+                    refsetsHtml = refsetsHtml + simpleRefsetsHtml;
+                }
+
+                var simpleMapFound = false;
+                // collapse <button data-toggle='collapse' href='#simpleMapTable'>X</button><div class='collapse' id='simpleMapTable'>
+                var simpleMapRefsetsHtml = "<table class='table table-bordered'>";
+                simpleMapRefsetsHtml = simpleMapRefsetsHtml + "<thead><tr>";
+                simpleMapRefsetsHtml = simpleMapRefsetsHtml + "<th><span class='i18n' data-i18n-id='i18n_simple_map_refset_name'>Simple Map Refset name</span></th>";
+                simpleMapRefsetsHtml = simpleMapRefsetsHtml + "<th><span class='i18n' data-i18n-id='i18n_target_code'>Target code</span></th>";
+                simpleMapRefsetsHtml = simpleMapRefsetsHtml + "</tr></thead><tbody>";
+                $.each(firstMatch.memberships, function (i, field) {
+                    if (field.type == "SIMPLEMAP") {
+                        simpleMapFound = true;
+                        simpleMapRefsetsHtml = simpleMapRefsetsHtml + "<tr class='";
+                        if (!field.active) {
+                            simpleMapRefsetsHtml = simpleMapRefsetsHtml + " danger";
+                        }
+                        simpleMapRefsetsHtml = simpleMapRefsetsHtml + "'><td>" + field.refset.defaultTerm;
+                        simpleMapRefsetsHtml = simpleMapRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.refset.conceptId + "' data-term='" + field.refset.defaultTerm + "'></span></td>";
+                        simpleMapRefsetsHtml = simpleMapRefsetsHtml + "<td>" + field.otherValue;
+                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
+                        moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.refset.conceptId + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
+                        simpleMapRefsetsHtml = simpleMapRefsetsHtml + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
+                        simpleMapRefsetsHtml = simpleMapRefsetsHtml + "</td></tr>";
+                    }
+                });
+                if (!simpleMapFound) {
+                    simpleMapRefsetsHtml = simpleMapRefsetsHtml + "<tr><td colspan='2'><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>"
+                    simpleMapRefsetsHtml = simpleMapRefsetsHtml + "</tbody></table>";
+                } else {
+                    simpleMapRefsetsHtml = simpleMapRefsetsHtml + "</tbody></table>";
+                    refsetsHtml = refsetsHtml + simpleMapRefsetsHtml;
+                }
+
+                var attributeValueFound = false;
+                var attributeValueRefsetsHtml = "<table class='table table-bordered'>";
+                attributeValueRefsetsHtml = attributeValueRefsetsHtml + "<thead><tr>";
+                attributeValueRefsetsHtml = attributeValueRefsetsHtml + "<th><span class='i18n' data-i18n-id='i18n_attribute_value_refset_name'>Attribute Value Refset name</span></th>";
+                attributeValueRefsetsHtml = attributeValueRefsetsHtml + "<th><span class='i18n' data-i18n-id='i18n_value'>Value</span></th>";
+                attributeValueRefsetsHtml = attributeValueRefsetsHtml + "</tr></thead><tbody>";
+                $.each(firstMatch.memberships, function (i, field) {
+                    if (field.type == "ATTRIBUTE_VALUE") {
+                        attributeValueFound = true;
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "<tr class='";
+                        if (!field.active) {
+                            attributeValueRefsetsHtml = attributeValueRefsetsHtml + " danger";
+                        }
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "'><td>" + field.refset.defaultTerm;
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.refset.conceptId + "' data-term='" + field.refset.defaultTerm + "'></span></td>";
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "<td>" + field.cidValue.defaultTerm;
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.cidValue.conceptId + "' data-term='" + field.cidValue.defaultTerm + "'></span>";
+                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
+                        moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.refset.conceptId + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "</td></tr>";
+                    }
+                });
+                if (!attributeValueFound) {
+                    attributeValueRefsetsHtml = attributeValueRefsetsHtml + "<tr><td colspan='2'><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>"
+                    attributeValueRefsetsHtml = attributeValueRefsetsHtml + "</tbody></table>";
+                } else {
+                    attributeValueRefsetsHtml = attributeValueRefsetsHtml + "</tbody></table>";
+                    refsetsHtml = refsetsHtml + attributeValueRefsetsHtml;
+                }
+
+                var associationFound = false;
+                var associationRefsetsHtml = "<table class='table table-bordered'>";
+                associationRefsetsHtml = associationRefsetsHtml + "<thead><tr>";
+                associationRefsetsHtml = associationRefsetsHtml + "<th><span class='i18n' data-i18n-id='i18n_association_refset_name'>Association Refset name</span></th>";
+                associationRefsetsHtml = associationRefsetsHtml + "<th><span class='i18n' data-i18n-id='i18n_value'>Value</span></th>";
+                associationRefsetsHtml = associationRefsetsHtml + "</tr></thead><tbody>";
+                $.each(firstMatch.memberships, function (i, field) {
+                    if (field.type == "ASSOCIATION") {
+                        associationFound = true;
+                        associationRefsetsHtml = associationRefsetsHtml + "<tr class='";
+                        if (!field.active) {
+                            associationRefsetsHtml = associationRefsetsHtml + " danger";
+                        }
+                        associationRefsetsHtml = associationRefsetsHtml + "'><td>" + field.refset.defaultTerm;
+                        associationRefsetsHtml = associationRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.refset.conceptId + "' data-term='" + field.refset.defaultTerm + "'></span></td>";
+                        associationRefsetsHtml = associationRefsetsHtml + "<td>" + field.cidValue.defaultTerm;
+                        associationRefsetsHtml = associationRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.cidValue.conceptId + "' data-term='" + field.cidValue.defaultTerm + "'></span>";
+                        var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
+                        moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.refset.conceptId + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
+                        associationRefsetsHtml = associationRefsetsHtml + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
+                        associationRefsetsHtml = associationRefsetsHtml + "</td></tr>";
+                    }
+                });
+                if (!associationFound) {
+                    associationRefsetsHtml = associationRefsetsHtml + "<tr><td colspan='2'><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>"
+                    associationRefsetsHtml = associationRefsetsHtml + "</tbody></table>";
+                } else {
+                    associationRefsetsHtml = associationRefsetsHtml + "</tbody></table>";
+                    refsetsHtml = refsetsHtml + associationRefsetsHtml;
+                }
+
+            }
+
+            $('#refsets-' + panel.divElement.id).html(refsetsHtml);
+
+
             if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
                 $("#diagram-canvas-" + panel.divElement.id).html("");
                 drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
@@ -888,7 +1027,7 @@ function conceptDetails(divElement, conceptId, options) {
             } else if (panel.options.selectedView != "all") {
                 // show all
             }
-            $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").draggable({
+            $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id + ',#refsets-' + panel.divElement.id).find(".jqui-draggable").draggable({
                 appendTo: 'body',
                 helper: 'clone',
                 delay: 500
