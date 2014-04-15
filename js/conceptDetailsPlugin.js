@@ -389,13 +389,13 @@ function conceptDetails(divElement, conceptId, options) {
             // load home-attributes
             var homeAttrHtml = "";
             if (firstMatch.definitionStatus == "Primitive") {
-                homeAttrHtml = homeAttrHtml + "<h4 class='jqui-droppable'><strong>&nbsp;&nbsp;&nbsp;</strong>";
+                homeAttrHtml = homeAttrHtml + '<h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '">&nbsp;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">';
             } else {
-                homeAttrHtml = homeAttrHtml + "<h4 class='jqui-droppable'><strong>&equiv;&nbsp;&nbsp;</strong>";
+                homeAttrHtml = homeAttrHtml + '<h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '">&equiv;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">';
             }
-            homeAttrHtml = homeAttrHtml + firstMatch.defaultTerm + "</h4>";
+            homeAttrHtml = homeAttrHtml + firstMatch.defaultTerm + "</span></h4>";
             homeAttrHtml = homeAttrHtml + firstMatch.conceptId;
-            homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
+            //homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
             $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
 
             if (!firstMatch.active) {
