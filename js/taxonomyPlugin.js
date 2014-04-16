@@ -425,12 +425,15 @@ function taxonomyPanel(divElement, conceptId, options) {
             });
     }
 
-    this.setToConcept = function(conceptId, term) {
+    this.setToConcept = function(conceptId, term, definitionStatus) {
         $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=inferred", function(result) {
             // done
         }).done(function(result) {
-            panel.setupParents(result, {conceptId: conceptId, defaultTerm: term, definitionStatus: "Primitive"});
+            if (definitionStatus != "Primitive" && definitionStatus != "Fully defined") {
+                definitionStatus = "Primitive";
+            }
+            panel.setupParents(result, {conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus});
         }).fail(function() {
         });
     }
@@ -444,11 +447,12 @@ function taxonomyPanel(divElement, conceptId, options) {
         } else {
             var conceptId = draggable.attr('data-concept-id');
             var term = draggable.attr('data-term');
+            var definitionStatus = draggable.attr('data-def-status');
             if (panel.options.selectedView == "undefined") {
                 panel.options.selectedView = "inferred";
             }
             if (typeof conceptId != "undefined") {
-                panel.setToConcept(conceptId, term);
+                panel.setToConcept(conceptId, term, definitionStatus);
             }
             $(ui.helper).remove(); //destroy clone
         }
