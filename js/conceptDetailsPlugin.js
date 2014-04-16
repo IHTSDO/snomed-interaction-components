@@ -423,9 +423,9 @@ function conceptDetails(divElement, conceptId, options) {
                 delay: 10
             });
             $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
-                placement : 'left',
+                placement : 'left auto',
                 trigger: 'hover',
-                title: 'Drag this',
+                title: i18n_drag_this,
                 animation: true,
                 delay: 500
             });
@@ -1089,9 +1089,9 @@ function conceptDetails(divElement, conceptId, options) {
                 delay: 500
             });
             $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
-                placement : 'left',
+                placement : 'left auto',
                 trigger: 'hover',
-                title: 'Drag this',
+                title: i18n_drag_this,
                 animation: true,
                 delay: 500
             });
