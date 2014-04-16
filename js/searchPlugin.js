@@ -487,8 +487,7 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
 
                         }).done(function (result) {
-                                $.each(result, function (i, field) {
-                                    console.log(i);
+                                $.each(result.matches, function (i, field) {
                                     resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
                                     if (field.active == false || field.conceptActive == false) {
                                         resultsHtml = resultsHtml + " danger";
