@@ -364,8 +364,14 @@ function conceptDetails(divElement, conceptId, options) {
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
             var attrHtml = "";
             attrHtml = attrHtml + "<table class='table table-default' >";
-            attrHtml = attrHtml + "<tr><td class='jqui-droppable' data-concept-id='" + firstMatch.conceptId + "'>";
-            attrHtml = attrHtml + "<h4>" + firstMatch.defaultTerm + "</h4>";
+            attrHtml = attrHtml + "<tr><td>";
+            attrHtml = attrHtml + "<h4>"
+            if (firstMatch.definitionStatus == "Primitive") {
+                attrHtml = attrHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '" data-def-status="' + firstMatch.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+            } else {
+                attrHtml = attrHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '" data-def-status="' + firstMatch.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+            }
+            attrHtml = attrHtml + "<span class='jqui-droppable'>" + firstMatch.defaultTerm + "</span></h4>";
             attrHtml = attrHtml + "<br>SCTID: " + firstMatch.conceptId;
 
             if (firstMatch.definitionStatus == "Primitive") {
@@ -379,7 +385,6 @@ function conceptDetails(divElement, conceptId, options) {
                 attrHtml = attrHtml + ", <span class='i18n' data-i18n-id='i18n_inactive'>Inactive</span>";
             }
             attrHtml = attrHtml + "</td>";
-            attrHtml = attrHtml + "<td><span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "'  data-term='" + firstMatch.defaultTerm + "' id='" + panel.divElement.id + "-attributesClip'></span></td>";
             var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>" + firstMatch.effectiveTime + "</td><td style='padding: 3px;'>" + firstMatch.module + "</td></tr></table>"
             attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button></td>';
             attrHtml = attrHtml + "</tr></table>";
@@ -389,17 +394,18 @@ function conceptDetails(divElement, conceptId, options) {
             // load home-attributes
             var homeAttrHtml = "";
             if (firstMatch.definitionStatus == "Primitive") {
-                homeAttrHtml = homeAttrHtml + '<h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '">&nbsp;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">';
+                homeAttrHtml = homeAttrHtml + '<h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '" data-def-status="' + firstMatch.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">';
             } else {
-                homeAttrHtml = homeAttrHtml + '<h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '">&equiv;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">';
+                homeAttrHtml = homeAttrHtml + '<h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '" data-def-status="' + firstMatch.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">';
             }
             homeAttrHtml = homeAttrHtml + firstMatch.defaultTerm + "</span></h4>";
             homeAttrHtml = homeAttrHtml + firstMatch.conceptId;
-            //homeAttrHtml = homeAttrHtml + "&nbsp;&nbsp;&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + firstMatch.conceptId + "' data-term='" + firstMatch.defaultTerm + "'></span>";
             $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
 
             if (!firstMatch.active) {
                 $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
+            } else {
+                $('#home-attributes-' + panel.divElement.id).css("background-color", "white");
             }
 
             if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
@@ -417,9 +423,9 @@ function conceptDetails(divElement, conceptId, options) {
                 delay: 10
             });
             $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
-                placement : 'left',
+                placement : 'left auto',
                 trigger: 'hover',
-                title: 'Drag this',
+                title: i18n_drag_this,
                 animation: true,
                 delay: 500
             });
@@ -623,10 +629,20 @@ function conceptDetails(divElement, conceptId, options) {
                         var row = "";
                         row = "<tr class='inferred-rel'>";
 
-                        row = row + "<td>" + field.type.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
-                        row = row + "<td>" + field.target.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'></span></td>";
+                        row = row + "<td>";
+                        if (field.type.definitionStatus == "Primitive") {
+                            row = row + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.type.conceptId + '" data-term="' + field.type.defaultTerm + '" data-def-status="' + field.type.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                        } else {
+                            row = row + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.type.conceptId + '" data-term="' + field.type.defaultTerm + '" data-def-status="' + field.type.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                        }
+                        row = row + field.type.defaultTerm + "</td>";
+                        row = row + "<td>";
+                        if (field.target.definitionStatus == "Primitive") {
+                            row = row + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.target.conceptId + '" data-term="' + field.target.defaultTerm + '" data-def-status="' + field.target.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                        } else {
+                            row = row + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.target.conceptId + '" data-term="' + field.target.defaultTerm + '" data-def-status="' + field.target.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                        }
+                        row = row + field.target.defaultTerm + "</td>";
                         row = row + "<td>" + field.groupId + "</td>";
                         if (field.charType.conceptId == "900000000000010007") {
                             row = row + "<td><span class='i18n' data-i18n-id='i18n_stated'>Stated</span>";
@@ -675,10 +691,20 @@ function conceptDetails(divElement, conceptId, options) {
                         var row = "";
                         row = "<tr class='stated-rel'>";
 
-                        row = row + "<td>" + field.type.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.type.conceptId + "' data-term='" + field.type.defaultTerm + "'></span></td>";
-                        row = row + "<td>" + field.target.defaultTerm + "&nbsp";
-                        row = row + "<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.target.conceptId + "' data-term='" + field.target.defaultTerm + "'></span></td>";
+                        row = row + "<td>";
+                        if (field.type.definitionStatus == "Primitive") {
+                            row = row + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.type.conceptId + '" data-term="' + field.type.defaultTerm + '" data-def-status="' + field.type.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                        } else {
+                            row = row + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.type.conceptId + '" data-term="' + field.type.defaultTerm + '" data-def-status="' + field.type.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                        }
+                        row = row + field.type.defaultTerm + "</td>";
+                        row = row + "<td>";
+                        if (field.target.definitionStatus == "Primitive") {
+                            row = row + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.target.conceptId + '" data-term="' + field.target.defaultTerm + '" data-def-status="' + field.target.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                        } else {
+                            row = row + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.target.conceptId + '" data-term="' + field.target.defaultTerm + '" data-def-status="' + field.target.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                        }
+                        row = row + field.target.defaultTerm + "</td>";
                         row = row + "<td>" + field.groupId + "</td>";
 
                         if (field.charType.conceptId == "900000000000010007") {
@@ -885,8 +911,13 @@ function conceptDetails(divElement, conceptId, options) {
                         if (!field.active) {
                             simpleRefsetsHtml = simpleRefsetsHtml + " danger";
                         }
-                        simpleRefsetsHtml = simpleRefsetsHtml + "'><td>" + field.refset.defaultTerm;
-                        simpleRefsetsHtml = simpleRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.refset.conceptId + "' data-term='" + field.refset.defaultTerm + "'></span>";
+                        simpleRefsetsHtml = simpleRefsetsHtml + "'><td>";
+                        if (field.refset.definitionStatus == "Primitive") {
+                            simpleRefsetsHtml = simpleRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.refset.conceptId + '" data-term="' + field.refset.defaultTerm + '" data-def-status="' + field.refset.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                        } else {
+                            simpleRefsetsHtml = simpleRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.refset.conceptId + '" data-term="' + field.refset.defaultTerm + '" data-def-status="' + field.refset.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                        }
+                        simpleRefsetsHtml = simpleRefsetsHtml + field.refset.defaultTerm + "</td>";
                         var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
                         moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.refset.conceptId + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
                         simpleRefsetsHtml = simpleRefsetsHtml + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
@@ -915,8 +946,13 @@ function conceptDetails(divElement, conceptId, options) {
                         if (!field.active) {
                             simpleMapRefsetsHtml = simpleMapRefsetsHtml + " danger";
                         }
-                        simpleMapRefsetsHtml = simpleMapRefsetsHtml + "'><td>" + field.refset.defaultTerm;
-                        simpleMapRefsetsHtml = simpleMapRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.refset.conceptId + "' data-term='" + field.refset.defaultTerm + "'></span></td>";
+                        simpleMapRefsetsHtml = simpleMapRefsetsHtml + "'><td>";
+                        if (field.refset.definitionStatus == "Primitive") {
+                            simpleMapRefsetsHtml = simpleMapRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.refset.conceptId + '" data-term="' + field.refset.defaultTerm + '" data-def-status="' + field.refset.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                        } else {
+                            simpleMapRefsetsHtml = simpleMapRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.refset.conceptId + '" data-term="' + field.refset.defaultTerm + '" data-def-status="' + field.refset.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                        }
+                        simpleMapRefsetsHtml = simpleMapRefsetsHtml + field.refset.defaultTerm + "</td>";
                         simpleMapRefsetsHtml = simpleMapRefsetsHtml + "<td>" + field.otherValue;
                         var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
                         moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.refset.conceptId + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
@@ -945,10 +981,20 @@ function conceptDetails(divElement, conceptId, options) {
                         if (!field.active) {
                             attributeValueRefsetsHtml = attributeValueRefsetsHtml + " danger";
                         }
-                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "'><td>" + field.refset.defaultTerm;
-                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.refset.conceptId + "' data-term='" + field.refset.defaultTerm + "'></span></td>";
-                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "<td>" + field.cidValue.defaultTerm;
-                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.cidValue.conceptId + "' data-term='" + field.cidValue.defaultTerm + "'></span>";
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "'><td>";
+                        if (field.refset.definitionStatus == "Primitive") {
+                            attributeValueRefsetsHtml = attributeValueRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.refset.conceptId + '" data-term="' + field.refset.defaultTerm + '" data-def-status="' + field.refset.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                        } else {
+                            attributeValueRefsetsHtml = attributeValueRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.refset.conceptId + '" data-term="' + field.refset.defaultTerm + '" data-def-status="' + field.refset.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                        }
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + field.refset.defaultTerm + "</td>";
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + "<td>";
+                        if (field.cidValue.definitionStatus == "Primitive") {
+                            attributeValueRefsetsHtml = attributeValueRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.cidValue.conceptId + '" data-term="' + field.cidValue.defaultTerm + '" data-def-status="' + field.cidValue.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                        } else {
+                            attributeValueRefsetsHtml = attributeValueRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.cidValue.conceptId + '" data-term="' + field.cidValue.defaultTerm + '" data-def-status="' + field.cidValue.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                        }
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + field.cidValue.defaultTerm + "</td>";
                         var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
                         moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.refset.conceptId + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
                         attributeValueRefsetsHtml = attributeValueRefsetsHtml + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
@@ -976,10 +1022,20 @@ function conceptDetails(divElement, conceptId, options) {
                         if (!field.active) {
                             associationRefsetsHtml = associationRefsetsHtml + " danger";
                         }
-                        associationRefsetsHtml = associationRefsetsHtml + "'><td>" + field.refset.defaultTerm;
-                        associationRefsetsHtml = associationRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.refset.conceptId + "' data-term='" + field.refset.defaultTerm + "'></span></td>";
-                        associationRefsetsHtml = associationRefsetsHtml + "<td>" + field.cidValue.defaultTerm;
-                        associationRefsetsHtml = associationRefsetsHtml + "&nbsp;<span class='jqui-draggable glyphicon glyphicon-map-marker' data-concept-id='" + field.cidValue.conceptId + "' data-term='" + field.cidValue.defaultTerm + "'></span>";
+                        associationRefsetsHtml = associationRefsetsHtml + "'><td>";
+                        if (field.refset.definitionStatus == "Primitive") {
+                            associationRefsetsHtml = associationRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.refset.conceptId + '" data-term="' + field.refset.defaultTerm + '" data-def-status="' + field.refset.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                        } else {
+                            associationRefsetsHtml = associationRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.refset.conceptId + '" data-term="' + field.refset.defaultTerm + '" data-def-status="' + field.refset.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                        }
+                        associationRefsetsHtml = associationRefsetsHtml + field.refset.defaultTerm + "</td>";
+                        associationRefsetsHtml = associationRefsetsHtml + "<td>";
+                        if (field.cidValue.definitionStatus == "Primitive") {
+                            attributeValueRefsetsHtml = attributeValueRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.cidValue.conceptId + '" data-term="' + field.cidValue.defaultTerm + '" data-def-status="' + field.cidValue.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                        } else {
+                            attributeValueRefsetsHtml = attributeValueRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.cidValue.conceptId + '" data-term="' + field.cidValue.defaultTerm + '" data-def-status="' + field.cidValue.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                        }
+                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + field.cidValue.defaultTerm + "</td>";
                         var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
                         moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.refset.conceptId + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
                         associationRefsetsHtml = associationRefsetsHtml + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
@@ -1033,9 +1089,9 @@ function conceptDetails(divElement, conceptId, options) {
                 delay: 500
             });
             $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
-                placement : 'left',
+                placement : 'left auto',
                 trigger: 'hover',
-                title: 'Drag this',
+                title: i18n_drag_this,
                 animation: true,
                 delay: 500
             });

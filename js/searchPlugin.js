@@ -224,7 +224,7 @@ function searchPanel(divElement, options) {
                 content: function () {
                     historyHtml = '<div style="height:100px;overflow:auto;">';
                     if (panel.history.length == 0) {
-                        historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em><span class="i18n" data-i18n-id="i18n_no_search_terms">No search terms yet...</span></em></div>';
+                        historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em>'+ i18n_no_search_terms + '</span>...</em></div>';
                     }
                     historyHtml = historyHtml + '<table>';
                     var reversedHistory = panel.history.slice(0);
@@ -487,8 +487,7 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
 
                         }).done(function (result) {
-                                $.each(result, function (i, field) {
-                                    console.log(i);
+                                $.each(result.matches, function (i, field) {
                                     resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
                                     if (field.active == false || field.conceptActive == false) {
                                         resultsHtml = resultsHtml + " danger";
@@ -545,7 +544,7 @@ function searchPanel(divElement, options) {
                                 resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                                 $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                             } else {
-                                var searchFiltersHtml = "<span class='pull right'><a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#" + panel.divElement.id + "-searchFiltersPanel'>Filters</a>";
+                                var searchFiltersHtml = "<span class='pull right'><a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#" + panel.divElement.id + "-searchFiltersPanel'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span></a>";
                                 if (panel.options.semTagFilter != "none") {
                                     searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.semTagFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-semtag'>&times;</a></span>&nbsp;&nbsp;";
                                 }
