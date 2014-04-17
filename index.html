@@ -144,6 +144,12 @@
                     txValue2 = 138875005;
                 }
 
+                var acceptLicense = QueryString.acceptLicense;
+                if (typeof acceptLicense == "undefined" || acceptLicense == null || acceptLicense == "") {
+                    acceptLicense = false;
+                }
+                options.acceptLicense = (acceptLicense == "true");
+
                 if (QueryString.perspective == "home") {
                     initialize();
                 } else if (QueryString.perspective == "browsing") {
@@ -164,8 +170,10 @@
                 } else {
                     initialize();
                 }
+                if (!options.acceptLicense) {
+                    $('#license-modal').modal('show');
+                }
 
-                $('#license-modal').modal('show');
                 verifyDate(release)
             }
 
