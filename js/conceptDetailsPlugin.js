@@ -386,10 +386,20 @@ function conceptDetails(divElement, conceptId, options) {
             }
             attrHtml = attrHtml + "</td>";
             var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>" + firstMatch.effectiveTime + "</td><td style='padding: 3px;'>" + firstMatch.module + "</td></tr></table>"
-            attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button></td>';
+            attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
+            var linkHtml = "<form><input class='form-control' id='share-field-" + panel.divElement.id +"' value='http://browser.ihtsdotools.org/index.html?perspective=full&conceptId1=" + panel.conceptId  +"'></form><br>Copy the concept link (e.g. CTRL-C) to save and share a reference to this concept.";
+            attrHtml = attrHtml + '&nbsp;<button type="button" id="share-link-' + panel.divElement.id + '" class="btn btn-link unobtrusive-icon pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + linkHtml + '" data-html="true"><i class="glyphicon glyphicon-share-alt"></i></button></td>';
+
             attrHtml = attrHtml + "</tr></table>";
 
             $('#' + panel.attributesPId).html(attrHtml);
+            $('#' + 'share-link-' + panel.divElement.id).disableTextSelect();
+            $('#' + 'share-link-' + panel.divElement.id).popover();
+            $('#' + 'share-link-' + panel.divElement.id).click(function(event) {
+                setTimeout(function () {
+                    $('#' + 'share-field-' + panel.divElement.id).select();
+                },300);
+            });
 
             // load home-attributes
             var homeAttrHtml = "";
