@@ -386,10 +386,19 @@ function conceptDetails(divElement, conceptId, options) {
             }
             attrHtml = attrHtml + "</td>";
             var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>" + firstMatch.effectiveTime + "</td><td style='padding: 3px;'>" + firstMatch.module + "</td></tr></table>"
-            attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button></td>';
+            attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
+            var linkHtml = "<form><input class='form-control' id='share-field-" + panel.divElement.id +"' value='" + document.URL.split("?")[0].split("#")[0] +  "?perspective=full&conceptId1=" + panel.conceptId  +"'></form><br>Copy the concept link (e.g. CTRL-C) to save and share a reference to this concept.";
+            attrHtml = attrHtml + '&nbsp;<button type="button" id="share-link-' + panel.divElement.id + '" class="btn btn-link more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + linkHtml + '" data-html="true"><i class="glyphicon glyphicon-share-alt"></i></button></td>';
+
             attrHtml = attrHtml + "</tr></table>";
 
             $('#' + panel.attributesPId).html(attrHtml);
+            $('#' + 'share-link-' + panel.divElement.id).disableTextSelect();
+            $('#' + 'share-link-' + panel.divElement.id).click(function(event) {
+                setTimeout(function () {
+                    $('#' + 'share-field-' + panel.divElement.id).select();
+                },300);
+            });
 
             // load home-attributes
             var homeAttrHtml = "";
@@ -399,7 +408,8 @@ function conceptDetails(divElement, conceptId, options) {
                 homeAttrHtml = homeAttrHtml + '<h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '" data-def-status="' + firstMatch.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">';
             }
             homeAttrHtml = homeAttrHtml + firstMatch.defaultTerm + "</span></h4>";
-            homeAttrHtml = homeAttrHtml + firstMatch.conceptId;
+            homeAttrHtml = homeAttrHtml + "<h5>SCTID: " + firstMatch.conceptId + "</h5>";
+            homeAttrHtml = homeAttrHtml + '<div id="home-descriptions-' + panel.divElement.id + '"></div>';
             $('#home-attributes-' + panel.divElement.id).html(homeAttrHtml);
 
             if (!firstMatch.active) {
@@ -466,8 +476,13 @@ function conceptDetails(divElement, conceptId, options) {
                 return 0;
             })
 
+            var homeDescriptionsHtml = "";
             $.each(allDescriptions, function(i, field) {
                 if (panel.options.displayInactiveDescriptions || field.active == true) {
+                    if (homeDescriptionsHtml != "") {
+                        homeDescriptionsHtml = homeDescriptionsHtml + "<br>";
+                    }
+                    homeDescriptionsHtml = homeDescriptionsHtml + "&nbsp;&nbsp;&nbsp;&nbsp;" + field.term;
                     var row = "";
                     var isFsn = false;
                     var isSynonym = false;
@@ -553,6 +568,10 @@ function conceptDetails(divElement, conceptId, options) {
             });
             descDetailsHtml = descDetailsHtml + "</tbody></table>";
             $('#' + panel.descsPId).html(descDetailsHtml);
+            if (panel.options.displaySynonyms) {
+                $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
+            }
+
             if (panel.options.displaySynonyms != true) { // hide synonyms
                 $('#' + panel.descsPId).find('.synonym-row').each(function(i, val) {
                     $(val).toggle();
