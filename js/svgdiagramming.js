@@ -118,8 +118,9 @@ function connectElements(svg, div1, div2, side1, side2, endMarker) {
     if (endMarker == null) endMarker = "BlackTriangle";
 
     polyline1 = svg.polyline([[originX, originY],
-        [originX, destinationY], [destinationX, destinationY]]
-            , {id: 'poly1', fill: 'none', stroke: 'black', strokeWidth: 2, 'marker-end': 'url(#' + endMarker + ')'});
+            [originX, destinationY], [destinationX, destinationY]]
+        , {id: 'poly1', fill: 'none', stroke: 'black', strokeWidth: 2, 'marker-end': 'url(#' + endMarker + ')'});
+
 }
 
 function loadDefs(svg) {
@@ -133,6 +134,11 @@ function loadDefs(svg) {
         viewBox: '0 0 22 20', refX: '0', refY: '10', markerUnits: 'strokeWidth', markerWidth: '8', markerHeight: '8', 
         fill: 'white',stroke: 'black', strokeWidth: 2});
     svg.path(clearTriangle, 'M 0 0 L 20 10 L 0 20 z');
+
+    lineMarker = svg.marker(defs, 'LineMarker', 0, 0, 20, 20, {
+        viewBox: '0 0 22 20', refX: '0', refY: '10', markerUnits: 'strokeWidth', markerWidth: '8', markerHeight: '8',
+        fill: 'white',stroke: 'black', strokeWidth: 2});
+    svg.path(lineMarker, 'M 0 10 L 20 10');
 }
 
 function drawAttributeGroupNode(svg, x, y) {
