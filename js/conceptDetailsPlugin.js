@@ -480,10 +480,12 @@ function conceptDetails(divElement, conceptId, options) {
             var homeDescriptionsHtml = "";
             $.each(allDescriptions, function(i, field) {
                 if (panel.options.displayInactiveDescriptions || field.active == true) {
-                    if (homeDescriptionsHtml != "") {
-                        homeDescriptionsHtml = homeDescriptionsHtml + "<br>";
+                    if (field.active == "true") {
+                        if (homeDescriptionsHtml != "") {
+                            homeDescriptionsHtml = homeDescriptionsHtml + "<br>";
+                        }
+                        homeDescriptionsHtml = homeDescriptionsHtml + "&nbsp;&nbsp;&nbsp;&nbsp;" + field.term;
                     }
-                    homeDescriptionsHtml = homeDescriptionsHtml + "&nbsp;&nbsp;&nbsp;&nbsp;" + field.term;
                     var row = "";
                     var isFsn = false;
                     var isSynonym = false;
