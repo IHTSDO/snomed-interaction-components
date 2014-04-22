@@ -51,7 +51,7 @@ function drawConceptDiagram (concept, div, options) {
     connectElements(svg, rect1, circle1, 'bottom-50', 'left');
     x = x + 55;
     var circle2 = drawConjunctionNode(svg, x, y);
-    connectElements(svg, circle1, circle2, 'right', 'left');
+    connectElements(svg, circle1, circle2, 'right', 'left', 'LineMarker');
     x = x + 40;
     // load stated parents
     sctClass = "sct-defined-concept";
