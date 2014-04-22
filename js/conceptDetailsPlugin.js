@@ -387,7 +387,8 @@ function conceptDetails(divElement, conceptId, options) {
             attrHtml = attrHtml + "</td>";
             var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>" + firstMatch.effectiveTime + "</td><td style='padding: 3px;'>" + firstMatch.module + "</td></tr></table>"
             attrHtml = attrHtml + '<td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
-            var linkHtml = "<form><input class='form-control' id='share-field-" + panel.divElement.id +"' value='" + document.URL.split("?")[0].split("#")[0] +  "?perspective=full&conceptId1=" + panel.conceptId  +"'></form><br>Copy the concept link (e.g. CTRL-C) to save and share a reference to this concept.";
+            var linkHtml = "<form><input class='form-control' id='share-field-" + panel.divElement.id +"' value='" + document.URL.split("?")[0].split("#")[0] +  "?perspective=full&conceptId1=" + panel.conceptId +"'></form><br>Copy the concept link (e.g. CTRL-C) to save and share a reference to this concept.";
+            // additional data to include release info in link  +"&edition=" + options.edition  +"&release=" + options.release
             attrHtml = attrHtml + '&nbsp;<button type="button" id="share-link-' + panel.divElement.id + '" class="btn btn-link more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + linkHtml + '" data-html="true"><i class="glyphicon glyphicon-share-alt"></i></button></td>';
 
             attrHtml = attrHtml + "</tr></table>";
@@ -1050,11 +1051,11 @@ function conceptDetails(divElement, conceptId, options) {
                         associationRefsetsHtml = associationRefsetsHtml + field.refset.defaultTerm + "</td>";
                         associationRefsetsHtml = associationRefsetsHtml + "<td>";
                         if (field.cidValue.definitionStatus == "Primitive") {
-                            attributeValueRefsetsHtml = attributeValueRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.cidValue.conceptId + '" data-term="' + field.cidValue.defaultTerm + '" data-def-status="' + field.cidValue.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
+                            associationRefsetsHtml = associationRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.cidValue.conceptId + '" data-term="' + field.cidValue.defaultTerm + '" data-def-status="' + field.cidValue.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
                         } else {
-                            attributeValueRefsetsHtml = attributeValueRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.cidValue.conceptId + '" data-term="' + field.cidValue.defaultTerm + '" data-def-status="' + field.cidValue.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
+                            associationRefsetsHtml = associationRefsetsHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + field.cidValue.conceptId + '" data-term="' + field.cidValue.defaultTerm + '" data-def-status="' + field.cidValue.definitionStatus + '">&equiv;</span></a>&nbsp;&nbsp;';
                         }
-                        attributeValueRefsetsHtml = attributeValueRefsetsHtml + field.cidValue.defaultTerm + "</td>";
+                        associationRefsetsHtml = associationRefsetsHtml + field.cidValue.defaultTerm + "</td>";
                         var moreDetailsHtml = "<table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>";
                         moreDetailsHtml = moreDetailsHtml + "<tr><td style='padding: 3px;'>" + field.refset.conceptId + "</td><td style='padding: 3px;'>" + field.effectiveTime + "</td><td style='padding: 3px;'>" + field.module + "</td></tr></table>"
                         associationRefsetsHtml = associationRefsetsHtml + '<button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="' + moreDetailsHtml + '" data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>';
