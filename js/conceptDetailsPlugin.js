@@ -480,7 +480,7 @@ function conceptDetails(divElement, conceptId, options) {
             var homeDescriptionsHtml = "";
             $.each(allDescriptions, function(i, field) {
                 if (panel.options.displayInactiveDescriptions || field.active == true) {
-                    if (field.active == "true") {
+                    if (field.active == true) {
                         if (homeDescriptionsHtml != "") {
                             homeDescriptionsHtml = homeDescriptionsHtml + "<br>";
                         }
