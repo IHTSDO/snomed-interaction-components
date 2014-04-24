@@ -364,7 +364,11 @@ function conceptDetails(divElement, conceptId, options) {
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
             var attrHtml = "";
             attrHtml = attrHtml + "<table class='table table-default' >";
-            attrHtml = attrHtml + "<tr><td>";
+            attrHtml = attrHtml + "<tr ";
+            if (firstMatch.effectiveTime == panel.options.highlightByEffectiveTime) {
+                attrHtml = attrHtml + "class = 'highlightEffectiveTime'";
+            }
+            attrHtml = attrHtml + "><td>";
             attrHtml = attrHtml + "<h4>"
             if (firstMatch.definitionStatus == "Primitive") {
                 attrHtml = attrHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="' + firstMatch.conceptId + '" data-term="' + firstMatch.defaultTerm + '" data-def-status="' + firstMatch.definitionStatus + '">&nbsp;</span></a>&nbsp;&nbsp;';
@@ -519,6 +523,10 @@ function conceptDetails(divElement, conceptId, options) {
                         row = row + " danger";
                     }
 
+                    if (field.effectiveTime == panel.options.highlightByEffectiveTime) {
+                        row = row + " highlightEffectiveTime";
+                    }
+
                     row = row + "'><td>";
 
                     if (isFsn) {
@@ -649,7 +657,11 @@ function conceptDetails(divElement, conceptId, options) {
                             inferredRoles.push(field);
                         }
                         var row = "";
-                        row = "<tr class='inferred-rel'>";
+                        row = "<tr class='inferred-rel";
+                        if (field.effectiveTime == panel.options.highlightByEffectiveTime) {
+                            row = row + " highlightEffectiveTime";
+                        }
+                        row = row + "'>";
 
                         row = row + "<td>";
                         if (field.type.definitionStatus == "Primitive") {
@@ -711,7 +723,11 @@ function conceptDetails(divElement, conceptId, options) {
                             statedRoles.push(field);
                         }
                         var row = "";
-                        row = "<tr class='stated-rel'>";
+                        row = "<tr class='stated-rel";
+                        if (field.effectiveTime == panel.options.highlightByEffectiveTime) {
+                            row = row + " highlightEffectiveTime";
+                        }
+                        row = row + "'>";
 
                         row = row + "<td>";
                         if (field.type.definitionStatus == "Primitive") {
