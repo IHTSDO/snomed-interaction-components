@@ -194,3 +194,8 @@ i:active { background-color: #428bca; }
     cursor: pointer;
     color: #ccc;
 }
+
+.highlightEffectiveTime {
+    border: 2px solid blue;
+    border-style:dashed;
+}

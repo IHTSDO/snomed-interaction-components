@@ -316,9 +316,9 @@ function taxonomyPanel(divElement, conceptId, options) {
         }).done(function(result) {
             var nodeHtml = "<ul style='list-style-type: none; padding-left: 15px;'>";
             result.sort(function(a, b) {
-                if (a.defaultTerm < b.defaultTerm)
+                if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
                     return -1;
-                if (a.defaultTerm > b.defaultTerm)
+                if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
                     return 1;
                 return 0;
             })
