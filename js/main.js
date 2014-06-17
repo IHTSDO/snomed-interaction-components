@@ -19,8 +19,6 @@ window.ATL_JQ_PAGE_PROPS = $.extend(window.ATL_JQ_PAGE_PROPS, {
     // ==== we add the code below to set the field values ====
     fieldValues: {
         summary : 'enter a brief summary of the requirement',
-        description : 'Requirements should be entered here as user stories. A user story is first represented with the simple format/nAs a <type of user>, I want <some goal> [so that <some reason>].
-
-',
+        description : 'Requirements should be entered here as user stories - as a <type of user>, I want <some goal> [so that <some reason>]',
     }                  
 });
