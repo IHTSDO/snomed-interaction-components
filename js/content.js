@@ -25,7 +25,7 @@ xhr.onreadystatechange = function () {
         	{
             	output += '<h4><font color=' +color+'>' + items[key].status + '</font></h4> <p>' + items[key].description + '</p>';
                 output += '<dl class=dl-horizontal> <dt class=text-muted> Next Deployment Date</dt> <dd><strong>' + items[key].nextdate + '</strong> </dd>';
-                output += '<dt class=text-muted>Deployment Content</dt> <dd><strong><a href="https://jira.ihtsdotools.org/issues/?jql=project%20%3D%20BROWSE%20AND%20resolution%20%3D%20Unresolved%20AND%20fixVersion%20%3D%20' + items[key].nextversionname + '%20ORDER%20BY%20priority%20DESC" target=_blank>content list</a></strong> </dd><br>';
+                output += '<dt class=text-muted>Deployment Content</dt> <dd><strong><a href="https://jira.ihtsdotools.org/browse/BROWSE/fixforversion/' + items[key].nextversionid + '/?selectedTab=com.atlassian.jira.jira-projects-plugin:version-summary-panel" target=_blank>content list</a></strong> </dd><br>';
         	}
         }
         output += ''
