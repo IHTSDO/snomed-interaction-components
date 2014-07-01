@@ -551,8 +551,32 @@
 
         </script>
         <style>
-
-
+            .ribbon {
+                background-color: #a00;
+                overflow: hidden;
+                white-space: nowrap;
+                position: absolute;
+                left: -47px;
+                top: 22px;
+                -webkit-transform: rotate(-45deg);
+                -moz-transform: rotate(-45deg);
+                -ms-transform: rotate(-45deg);
+                -o-transform: rotate(-45deg);
+                transform: rotate(-45deg);
+            }
+            .ribbon span {
+                border: 1px solid #faa;
+                color: #fff;
+                display: block;
+                font: bold 100% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                margin: 1px 0;
+                padding: 3px 70px;
+                text-align: center;
+                text-decoration: none;
+            }
+            .navbar-brand {
+                margin-left: 50px;
+            }
         </style>
     </head>
     <body onLoad="start();" style="height: 100%; display: block;">
@@ -566,7 +590,8 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                 </button>
-                <img class="pull-left hidden-xs hidden-sm" src="img/beta.gif"><a class="navbar-brand" href="javascript:void(0);" onclick="initialize();" id="navBarBrand"><strong>
+                <div class="ribbon"><span>Beta</span></div>
+                <a class="navbar-brand" href="javascript:void(0);" onclick="initialize();" id="navBarBrand"><strong>
                      	&nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_app_name">IHTSDO SNOMED CT Browser</span></strong></a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -781,6 +806,10 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+        
+        <!-- JIRA feedback script -->
+        <script type="text/javascript" src="https://jira.ihtsdotools.org/s/d41d8cd98f00b204e9800998ecf8427e/en_US-dgb2l9-1988229788/6256/5/1.4.7/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?collectorId=9215d950"></script>
+        
         <!-- Google Analytics script -->
         <script>
 			  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
