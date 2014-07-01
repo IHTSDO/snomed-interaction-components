@@ -374,6 +374,15 @@ function searchPanel(divElement, options) {
     }
 
     this.updateStatusFilterLabel = function() {
+        if (typeof i18n_active_and_inactive == "undefined") {
+            i18n_active_and_inactive = 'Active and Inactive';
+        }
+        if (typeof i18n_inactive_only == "undefined") {
+            i18n_inactive_only = 'Inactive Only';
+        }
+        if (typeof i18n_active_only == "undefined") {
+            i18n_active_only = 'Active Only';
+        }
         if (panel.options.statusSearchFilter == 'activeAndInactive') {
             $("#" + panel.divElement.id + '-navStatusFilterLabel').html(i18n_active_and_inactive);
         } else if (panel.options.statusSearchFilter == 'inactiveOnly') {
@@ -707,6 +716,24 @@ function searchPanel(divElement, options) {
         if (typeof panel.options.searchMode == "undefined") {
             panel.options.searchMode = "partialMatching";
         }
+        if (typeof i18n_search_examp_1 == "undefined") {
+            i18n_search_examp_1 = 'Example 1';
+        }
+        if (typeof i18n_search_examp_2 == "undefined") {
+            i18n_search_examp_2 = 'Example 2';
+        }
+        if (typeof i18n_search_examp_3 == "undefined") {
+            i18n_search_examp_3 = 'Example 3';
+        }
+        if (typeof i18n_regex_search_mode == "undefined") {
+            i18n_regex_search_mode = 'Regex';
+        }
+        if (typeof i18n_partial_match_search_mode == "undefined") {
+            i18n_partial_match_search_mode = 'Partial';
+        }
+        if (typeof i18n_full_text_search_mode == "undefined") {
+            i18n_full_text_search_mode = 'Full';
+        }
         if (panel.options.searchMode == "regex") {
             $("#" + panel.divElement.id + '-searchExample').html("<span class='i18n text-muted' data-i18n-id='i18n_search_examp_1'>" + i18n_search_examp_1  +  "</span> ");
             $("#" + panel.divElement.id + '-navSearchModeLabel').html("<span class='i18n' data-i18n-id='i18n_regex_search_mode'>" + i18n_regex_search_mode  +  "</span>");
@@ -720,6 +747,15 @@ function searchPanel(divElement, options) {
 
         if (typeof panel.options.searchLang == "undefined") {
             panel.options.searchLang = "english";
+        }
+        if (typeof i18n_danish_stemmer == "undefined") {
+            i18n_danish_stemmer = 'Danish Stemmer';
+        }
+        if (typeof i18n_english_stemmer == "undefined") {
+            i18n_english_stemmer = 'English Stemmer';
+        }
+        if (typeof i18n_spanish_stemmer == "undefined") {
+            i18n_spanish_stemmer = 'Spanish Stemmer';
         }
         if (panel.options.searchLang == "danish") {
             $("#" + panel.divElement.id + '-navLanguageLabel').html("<span class='i18n' data-i18n-id='i18n_danish_stemmer'>" + i18n_danish_stemmer  +  "</span>");

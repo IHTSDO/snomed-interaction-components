@@ -8,28 +8,28 @@
 		<meta name="author" content="IHTSDO">
 		<link rel="icon" type="image/png"  href="favicon.ico">
 
-        <script src="lib/jquery-2.1.0.min.js" type="text/javascript"></script>
-        <script src="lib/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
-        <script src="lib/jquery.svg.js"></script>
-        <script type="text/javascript" src="lib/jquery.splitter-0.14.0.js"></script>
+        <script src="external-libs/jquery-2.1.0.min.js" type="text/javascript"></script>
+        <script src="external-libs/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
+        <script src="external-libs/jquery.svg.js"></script>
+        <script type="text/javascript" src="external-libs/jquery.splitter-0.14.0.js"></script>
         <script src="js/svgdiagramming.js" type="text/javascript"></script>
         <script src="js/drawConceptDiagram.js" type="text/javascript"></script>
         <script src="js/searchPlugin.js" type="text/javascript"></script>
         <script src="js/taxonomyPlugin.js" type="text/javascript"></script>
         <script src="js/conceptDetailsPlugin.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/jquery.splitter.css">
-        <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css">
-        <link rel="stylesheet" href="css/bootstrap.min.base.12.css">
-        <link rel="stylesheet" href="css/bootstrap-tour.css">
-        <script src="lib/bootstrap.min.js" type="text/javascript"></script>
-        <script src="lib/jquery.ui.touch-punch.min.js"></script>
-        <script type="text/javascript" src="lib/popover-extra-placements.js"></script>
-        <link rel="stylesheet" href="css/popover-extra-placements.css">
+        <link rel="stylesheet" href="external-css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="external-css/jquery.splitter.css">
+        <link rel="stylesheet" href="external-css/jquery-ui-1.10.4.custom.min.css">
+        <link rel="stylesheet" href="external-css/bootstrap.min.base.12.css">
+        <link rel="stylesheet" href="external-css/bootstrap-tour.css">
+        <script src="external-libs/bootstrap.min.js" type="text/javascript"></script>
+        <script src="external-libs/jquery.ui.touch-punch.min.js"></script>
+        <script type="text/javascript" src="external-libs/popover-extra-placements.js"></script>
+        <link rel="stylesheet" href="external-css/popover-extra-placements.css">
         <link rel="stylesheet" href="css/sct-widgets.css">
         <link rel="stylesheet" href="css/sct-diagram.css">
-        <script src="lib/bootstrap-tour.min.js"></script>
-        <script src="lib/jquery.i18n.properties-min-1.0.9.js"></script>
+        <script src="external-libs/bootstrap-tour.min.js"></script>
+        <script src="external-libs/jquery.i18n.properties-min-1.0.9.js"></script>
 
         <script type="text/javascript">
             var selectedLanguage = 'en_US';
@@ -59,8 +59,6 @@
                 highlightByEffectiveTime: "false"
             };
 
-            var tours = {};
-            var tour;
 
             var QueryString = function () {
                 var query_string = {};
@@ -172,174 +170,16 @@
                     initialize();
                 }
                 if (!options.acceptLicense) {
-                    $('#license-modal').modal('show');
+                    //$('#license-modal').modal('show');
                 }
 
                 verifyDate(release)
             }
 
             function initTour() {
-                if (typeof  tours[selectedLanguage]  == "undefined") {
-                    tours[selectedLanguage] = new Tour({
-                        steps: [
-                            {
-                                element: "nothing",
-                                title: i18n_tour_step1_fh_title,
-                                content: i18n_tour_step1_fh_text,
-                                placement: "bottom",
-                                orphan: true,
-                                backdrop: false,
-                                onShow: function (tour) { switchToFullHeight(204351007) }
-                            },
-                            {
-                                element: "#fh-tabs-pane",
-                                title: i18n_tour_step2_title,
-                                content: i18n_tour_step2_text,
-                                placement: "right",
-                                backdrop: true
-                            },
-                            {
-                                element: "#fh-taxonomy_canvas-taxonomyConfigBar",
-                                title: i18n_tour_step5_title,
-                                content: i18n_tour_step5_text,
-                                placement: "bottom",
-                                backdrop: true
-                            },
-                            {
-                                element: "#fh-taxonomy_canvas-treenode-404684003",
-                                title: i18n_tour_step10_title,
-                                content: i18n_tour_step10_text,
-                                placement: "right",
-                                backdrop: true
-                            },
-                            {
-                                element: "#fh-taxonomy_canvas-treeicon-404684003",
-                                title: i18n_tour_step11_title,
-                                content: i18n_tour_step11_text,
-                                placement: "right",
-                                backdrop: true
-                            },
-                            {
-                                element: "#fh-tabs",
-                                title: i18n_tour_step2_5_title,
-                                content: i18n_tour_step2_5_text,
-                                placement: "bottom",
-                                backdrop: true,
-                                onNext: function (tour) { $('#fh-tabs li:eq(1) a').tab('show')  }
-                            },
-                            {
-                                element: "#fh-tabs-pane",
-                                title: i18n_tour_step3_title,
-                                content: i18n_tour_step3_text,
-                                placement: "right",
-                                backdrop: true
-                            },
-                            {
-                                element: "#fh-search_canvas-searchConfigBar",
-                                title: i18n_tour_step6_title,
-                                content: i18n_tour_step6_text,
-                                placement: "bottom",
-                                backdrop: true
-                            },
-                            {
-                                element: "#fh-search_canvas",
-                                title: i18n_tour_step12_title,
-                                content: i18n_tour_step12_text,
-                                placement: "right",
-                                backdrop: true
-                            },
-                            {
-                                element: "#fh-search_canvas-historyButton",
-                                title: i18n_tour_step13_title,
-                                content: i18n_tour_step13_text,
-                                placement: "left",
-                                backdrop: true,
-                                onNext: function (tour) { $('#fh-tabs li:eq(0) a').tab('show')  }
-                            },
-                            {
-                                element: "#fh-cd1_canvas",
-                                title: i18n_tour_step4_title,
-                                content: i18n_tour_step4_text,
-                                placement: "left",
-                                backdrop: true
-                            },
-                            {
-                                element: "#fh-cd1_canvas-configButton",
-                                title: i18n_tour_step7_title,
-                                content: i18n_tour_step7_text,
-                                placement: "left",
-                                backdrop: true
-                            },
-                            /*{
-                                element: "#fh-taxonomy_canvas-linkerButton",
-                                title: i18n_tour_step8_title,
-                                content: i18n_tour_step8_text,
-                                placement: "left",
-                                backdrop: true
-                            },
-                            {
-                                element: "#bp-taxonomy_canvas-subscribersMarker",
-                                title: i18n_tour_step9_title,
-                                content: i18n_tour_step9_text,
-                                placement: "right",
-                                backdrop: true
-                            },*/
-                            {
-                                element: "#details-tabs-fh-cd1_canvas",
-                                title: i18n_tour_step13_1_title,
-                                content: i18n_tour_step13_1_text,
-                                placement: "bottom",
-                                backdrop: true
-                            },
-                            {
-                                element: "#fh-cd1_canvas-panelBody",
-                                title: i18n_tour_step13_2_title,
-                                content: i18n_tour_step13_2_text,
-                                placement: "left",
-                                backdrop: true,
-                                onNext: function (tour) { $('#details-tabs-fh-cd1_canvas li:eq(1) a').tab('show')  }
-                            },
-                            {
-                                element: "#fh-cd1_canvas-panelBody",
-                                title: i18n_tour_step13_3_title,
-                                content: i18n_tour_step13_3_text,
-                                placement: "left",
-                                backdrop: true
-                            },
-                            {
-                                element: "#fh-cd1_canvas-attributesClip",
-                                title: i18n_tour_step14_title,
-                                content: i18n_tour_step14_text,
-                                placement: "left",
-                                backdrop: true,
-                                onNext: function (tour) { initialize() }
-                            },
-                            {
-                                element: "nothing",
-                                title: i18n_tour_step15_title,
-                                content: i18n_tour_step15_text,
-                                placement: "bottom",
-                                orphan: true,
-                                backdrop: true
-                            }
-                        ],
-                        storage: false,
-                        debug: false,
-                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« " + i18n_tour_prev + "</button><span data-role='separator'>|</span><button class='btn btn-default' data-role='next'>" + i18n_tour_next + " »</button><button class='btn btn-default' data-role='end'>" + i18n_tour_end_tour + "</button></div></div>"
-                    });
-                    tour = tours[selectedLanguage];
-                    tour.init();
-                } else {
-                    tour = tours[selectedLanguage];
-                }
             }
 
             function tourStart() {
-                if (tour.ended()) {
-                    tour.restart();
-                } else {
-                    tour.start();
-                }
             }
             function initialize() {
                 currentPerspective = "home";
@@ -493,7 +333,7 @@
             }
 
             function verifyDate(release) {
-                var now = new Date()
+                var now = new Date();
                 //console.log(release.substring(1, 5) + " " +  release.substring(5, 7) + " " +  release.substring(7, 9));
                 var releaseDate = new Date(release.substring(1, 5), release.substring(5, 7)-1, release.substring(7, 9));
                 var diff = now - releaseDate;
@@ -513,40 +353,6 @@
             }
 
             function switchLanguage(language, flagPng, fade) {
-                selectedLanguage = language;
-                selectedFlag = flagPng;
-                $("#nav-selected-flag").html('<img src="' + flagPng + '">');
-                $("#nav-selected-flag-modal").html('<img src="' + flagPng + '">');
-                jQuery.i18n.properties({
-                    name:'Languages',
-                    path:'i18n/',
-                    mode:'both',
-                    language:language
-                });
-                $( ".i18n" ).each(function( index ) {
-                    var translation = jQuery.i18n.prop($(this).attr('data-i18n-id'));
-                    if (translation != "[" + $(this).attr('data-i18n-id') + "]") {
-                        if (fade) {
-                            $(this).fadeOut("slow", function(){
-                                $(this).html(translation);
-                                $(this).fadeIn("slow");
-                            });
-                        } else {
-                            $(this).html(translation);
-                        }
-                    } else {
-                        console.log($(this).attr('data-i18n-id') + " = " + $(this).html());
-                    }
-                });
-                initTour();
-                $("#navBarBrand").tooltip().tooltip('destroy');
-                $("#navBarBrand").tooltip({
-                    placement : 'bottom',
-                    trigger: 'hover',
-                    title: i18n_go_back_home,
-                    animation: true,
-                    delay: 1000
-                });
             }
 
         </script>

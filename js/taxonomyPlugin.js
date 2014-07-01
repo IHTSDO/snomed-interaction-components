@@ -105,6 +105,9 @@ function taxonomyPanel(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-expandButton").show();
             $("#" + panel.divElement.id + "-collapseButton").hide();
         });
+        if (typeof i18n_panel_options == "undefined") {
+            i18n_panel_options = 'Options';
+        }
         $("#" + panel.divElement.id + "-configButton").tooltip({
             placement : 'left',
             trigger: 'hover',

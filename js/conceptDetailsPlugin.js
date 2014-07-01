@@ -437,6 +437,9 @@ function conceptDetails(divElement, conceptId, options) {
                 helper: 'clone',
                 delay: 10
             });
+            if (typeof i18n_drag_this == "undefined") {
+                i18n_drag_this = "Drag this";
+            }
             $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
                 placement : 'left auto',
                 trigger: 'hover',
@@ -528,6 +531,16 @@ function conceptDetails(divElement, conceptId, options) {
                     }
 
                     row = row + "'><td>";
+
+                    if (typeof i18n_fsn == "undefined") {
+                        i18n_fsn = "F";
+                    }
+                    if (typeof i18n_synonym == "undefined") {
+                        i18n_synonym = "S";
+                    }
+                    if (typeof i18n_definition == "undefined") {
+                        i18n_definition = "D";
+                    }
 
                     if (isFsn) {
                         row = row + '<span rel="tooltip-right" title="' + i18n_fsn + '">F</span>';
