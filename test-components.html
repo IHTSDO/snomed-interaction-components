@@ -13,7 +13,8 @@
         <script src="external-libs/jquery.svg.js"></script>
         <script type="text/javascript" src="external-libs/handlebars-v1.3.0.js"></script>
         <script type="text/javascript" src="external-libs/jquery.splitter-0.14.0.js"></script>
-        <script src="js/svgdiagramming.js" type="text/javascript"></script>
+        <script src="external-libs/base64.js" type="text/javascript"></script>
+        <script src="js/svgdiagrammingv2.js" type="text/javascript"></script>
         <script src="js/drawConceptDiagram.js" type="text/javascript"></script>
         <script src="js/searchPlugin.js" type="text/javascript"></script>
         <script src="js/taxonomyPlugin.js" type="text/javascript"></script>
@@ -38,8 +39,8 @@
             var currentPerspective = "home";
 
             var options = {
-                serverUrl: "http://browser.ihtsdotools.org/api",
-                //serverUrl: "http://107.170.33.116:3000",
+                //serverUrl: "http://browser.ihtsdotools.org/api",
+                serverUrl: "http://107.170.33.116:3000/snomed",
                 edition: "en-edition",
                 release: "v20140131",
                 showIds: false,
@@ -467,7 +468,7 @@
                     <p><span class="i18n" data-i18n-id="i18n_home2">Please select a SNOMED CT release and a perspective from the top menu to start, or...</span></p>
                     <p>
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003);"><img src="img/flags/us.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Terms and UI in English</span></a>
-                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20131031', 'es-edition', 'v20140430', '450828004');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003);"><img src="img/flags/es.png">&nbsp;&nbsp;&nbsp;Ir al Navegador...</span><br><span class="small">Términos e interfaz en Español</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20140604', 'es-edition', 'v20140604', '450828004');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003);"><img src="img/flags/es.png">&nbsp;&nbsp;&nbsp;Ir al Navegador...</span><br><span class="small">Términos e interfaz en Español</span></a>
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20131018', '554461000005103');switchLanguage('da', 'img/flags/dk.png', true);switchToFullHeight(404684003);"><img src="img/flags/dk.png">&nbsp;&nbsp;&nbsp;G&aring; til browser-siden</span><br><span class="small">Terms and UI in Danish</span></a>
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Swedish Edition 20131130', 'sv-edition', 'v20131130', '46011000052107');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003);"><img src="img/flags/se.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Terms in Swedish, UI in English</span></a>
                         &nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_or">or</span>&nbsp;&nbsp;
