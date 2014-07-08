@@ -119,3 +119,21 @@ function drawConceptDiagram (concept, div, options) {
     $(div).prepend($("<a href-lang='image/svg+xml' href='data:image/svg+xml;base64,\n"+b64+"' download='diagram.svg'>Download</a>"));
 
 }
+
+function saveAsPng(svg) {
+    //Create PNG Image
+    //Get the svg
+    //Create the canvas element
+    var canvas = document.createElement('canvas');
+    canvas.id = "canvas";
+    document.body.appendChild(canvas);
+
+    //Load the canvas element with our svg
+    canvg(document.getElementById('canvas'), svg);
+
+    //Save the svg to png
+    Canvas2Image.saveAsPNG(canvas);
+
+    //Clear the canvas
+    canvas.width = canvas.width;
+}
