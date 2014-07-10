@@ -480,11 +480,20 @@ function searchPanel(divElement, options) {
 
                         }).done(function (result) {
                                 $.each(result.descriptions, function (i, field) {
-                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
                                     if (field.active === false || field.conceptActive == false) {
-                                        resultsHtml = resultsHtml + " danger";
+                                        if (panel.options.statusSearchFilter == "inactiveOnly" ||
+                                            panel.options.statusSearchFilter == "activeAndInactive") {
+                                            resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+                                            resultsHtml = resultsHtml + " danger";
+                                            resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
+                                        }
+                                    } else {
+                                        if (panel.options.statusSearchFilter == "activeOnly" ||
+                                            panel.options.statusSearchFilter == "activeAndInactive") {
+                                            resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+                                            resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
+                                        }
                                     }
-                                    resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
                                 });
                                 $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
