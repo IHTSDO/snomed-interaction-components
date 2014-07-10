@@ -1,0 +1,56 @@
+{{#if_eq options.selectedView "stated"}}
+    {{#each statedParents}}
+        <span class='jqui-draggable text-warning' data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
+            {{#if_gr type.defaultTerm 0}}
+                {{substr type.defaultTerm 0}}
+            {{else}}
+                {{type.defaultTerm}}
+            {{/if_gr}}
+        </span>&nbsp;&rArr;&nbsp;
+
+        {{#if_eq target.definitionStatus "Primitive"}}
+            <span class='jqui-draggable sct-primitive-concept-compact' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+        {{else}}
+            <span class='jqui-draggable sct-defined-concept-compact' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+        {{/if_eq}}
+
+        {{#if_gr target.defaultTerm 0}}
+            {{substr target.defaultTerm 0}}
+        {{else}}
+            {{target.defaultTerm}}
+        {{/if_gr}}
+
+        </span>
+        <br>
+    {{/each}}
+    {{#if_eq statedParents.length 0}}
+        <span class='text-muted'>No parents</span>
+    {{/if_eq}}
+{{else}}
+    {{#each inferredParents}}
+        <span class='jqui-draggable text-warning' data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
+            {{#if_gr type.defaultTerm 0}}
+                {{substr type.defaultTerm 0}}
+            {{else}}
+                {{type.defaultTerm}}
+            {{/if_gr}}
+        </span>&nbsp;&rArr;&nbsp;
+
+        {{#if_eq target.definitionStatus "Primitive"}}
+            <span class='jqui-draggable sct-primitive-concept-compact' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+        {{else}}
+            <span class='jqui-draggable sct-defined-concept-compact' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+        {{/if_eq}}
+
+        {{#if_gr target.defaultTerm 0}}
+            {{substr target.defaultTerm 0}}
+        {{else}}
+            {{target.defaultTerm}}
+        {{/if_gr}}
+
+        </span><br>
+    {{/each}}
+    {{#if_eq inferredParents.length 0}}
+        <span class='text-muted'>No parents</span>
+    {{/if_eq}}
+{{/if_eq}}

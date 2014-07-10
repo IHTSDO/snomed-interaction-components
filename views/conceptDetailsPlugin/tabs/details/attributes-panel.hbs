@@ -1,0 +1,39 @@
+<table class='table table-default' >
+    <tr
+        {{#if_eq firstMatch.effectiveTime options.highlightByEffectiveTime}}
+        class = 'highlightEffectiveTime'
+        {{/if_eq}}
+            >
+        <td>
+            <h4>
+                {{#if_eq firstMatch.definitionStatus "Primitive"}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                {{else}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                {{/if_eq}}
+
+                <span class='jqui-droppable'>{{firstMatch.defaultTerm}}</span>
+            </h4>
+            <br>SCTID: {{firstMatch.conceptId}}
+
+            {{#if_eq firstMatch.definitionStatus "Primitive"}}
+                , <span class='i18n' data-i18n-id='i18n_primitive'>Primitive</span>
+            {{else}}
+                , <span class='i18n' data-i18n-id='i18n_fully_defined'>Fully defined</span>
+            {{/if_eq}}
+
+            {{#if_eq firstMatch.active true}}
+                , <span class='i18n' data-i18n-id='i18n_active'>Active</span>
+            {{else}}
+                , <span class='i18n' data-i18n-id='i18n_inactive'>Inactive</span>
+            {{/if_eq}}
+        </td>
+        <td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                <table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>{{firstMatch.effectiveTime}}</td><td style='padding: 3px;'>{{firstMatch.module}}</td></tr></table>
+                " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
+            &nbsp;<button type="button" id="share-link-{{divElementId}}" class="btn btn-link more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                    <form><input class='form-control' id='share-field-{{divElementId}}' value='{{dataContentValue}}?perspective=full&conceptId1={{conceptId}}'></form><br>Copy the concept link (e.g. CTRL-C) to save and share a reference to this concept.
+                    " data-html="true"><i class="glyphicon glyphicon-share-alt"></i></button></td>
+
+    </tr>
+</table>
