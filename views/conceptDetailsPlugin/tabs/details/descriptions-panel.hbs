@@ -11,9 +11,6 @@
 
     {{#each allDescriptions}}
         {{#if ../options.displayInactiveDescriptions}}
-            {{console type.conceptId}}
-            {{console active}}
-            {{console effectiveTime}}
             <tr class='{{#if_eq type.conceptId "900000000000003001"}} fsn-row{{else}} synonym-row{{/if_eq}}{{#if active}}{{else}} danger{{/if}}{{#if_eq effectiveTime ../../options.highlightByEffectiveTime}} highlightEffectiveTime{{/if_eq}}'>
                 <td>
                     {{#if_eq type.conceptId "900000000000003001"}}
@@ -170,6 +167,12 @@
                 </tr>
             {{/if}}
         {{/if}}
+        {{included false}}
+        {{#each langMemberships}}
+            {{#if_eq refset.conceptId ../../options.langRefset}}
+                {{included true}}
+            {{/if_eq}}
+        {{/each}}
         {{#included "get"}}
             {{#if ../../options.hideNotAcceptable}}
                 {{#if ../../../options.displayInactiveDescriptions}}
