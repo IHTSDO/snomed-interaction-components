@@ -380,63 +380,63 @@ function taxonomyPanel(divElement, conceptId, options) {
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(parents) {
             // done
         }).done(function(parents) {
-                if (parents.length > 0) {
-                    var firstParent = "empty";
-                    var parentsStrs = [];
-                    $.each(parents, function(i, parent) {
-                        var parentLiHtml = "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
-                        parentLiHtml = parentLiHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
-                        if (parent.definitionStatus == "Primitive") {
-                            parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
-                        } else {
-                            parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
-                        }
-                        parentLiHtml = parentLiHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
-                        parentLiHtml = parentLiHtml + "</li>";
-                        parentsStrs.push(parentLiHtml);
-                        if (firstParent == "empty") {
-                            firstParent = parent.conceptId;
-                        }
-                    });
+            if (parents.length > 0) {
+                var firstParent = "empty";
+                var parentsStrs = [];
+                $.each(parents, function(i, parent) {
+                    var parentLiHtml = "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
+                    parentLiHtml = parentLiHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
+                    if (parent.definitionStatus == "Primitive") {
+                        parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
+                    } else {
+                        parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
+                    }
+                    parentLiHtml = parentLiHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
+                    parentLiHtml = parentLiHtml + "</li>";
+                    parentsStrs.push(parentLiHtml);
+                    if (firstParent == "empty") {
+                        firstParent = parent.conceptId;
+                    }
+                });
 
-                    var staticChildren = topUl.children().slice(0);
-                    topUl.append(parentsStrs[0]);
-                    $('#' + panel.divElement.id + '-treenode-' + firstParent).closest('li').append("<ul id='parent-ul-id-" + firstParent + "' style='list-style-type: none; padding-left: 15px;'></ul>");
-                    var newMainChild;
-                    $.each(staticChildren, function(i, child) {
-                        if ($(child).attr('data-concept-id') == conceptId) {
-                            newMainChild = $(child);
-                            var newUl = $('#' + panel.divElement.id + '-treenode-' + firstParent).closest('li').find('ul:first');
-                            newUl.append($(child));
-                            $(child).find('i:first').removeClass("glyphicon-chevron-up");
-                            $(child).find('i:first').addClass("glyphicon-chevron-down");
-                        }
-                    });
-                    $.each(staticChildren, function(i, child) {
-                        if ($(child).attr('data-concept-id') != conceptId) {
-                            $.each($(child).children(), function(i, subchild) {
-                                if ($(subchild).is('ul')) {
-                                    newMainChild.append(subchild);
-                                }
-                            });
-                            $('#' + panel.divElement.id + '-treenode-' +$(child).attr('data-concept-id')).closest('li').remove();
-                        }
-                    });
-                    $.each(parentsStrs, function(i, parentsStr) {
-                        if (parentsStr != parentsStrs[0]) {
-                            topUl.prepend(parentsStr);
-                        }
-                    });
-                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
-                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
-                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-chevron-down");
-                } else {
-                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
-                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
-                    $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-chevron-up");
-                }
-            }).fail(function() {
-            });
+                var staticChildren = topUl.children().slice(0);
+                topUl.append(parentsStrs[0]);
+                $('#' + panel.divElement.id + '-treenode-' + firstParent).closest('li').append("<ul id='parent-ul-id-" + firstParent + "' style='list-style-type: none; padding-left: 15px;'></ul>");
+                var newMainChild;
+                $.each(staticChildren, function(i, child) {
+                    if ($(child).attr('data-concept-id') == conceptId) {
+                        newMainChild = $(child);
+                        var newUl = $('#' + panel.divElement.id + '-treenode-' + firstParent).closest('li').find('ul:first');
+                        newUl.append($(child));
+                        $(child).find('i:first').removeClass("glyphicon-chevron-up");
+                        $(child).find('i:first').addClass("glyphicon-chevron-down");
+                    }
+                });
+                $.each(staticChildren, function(i, child) {
+                    if ($(child).attr('data-concept-id') != conceptId) {
+                        $.each($(child).children(), function(i, subchild) {
+                            if ($(subchild).is('ul')) {
+                                newMainChild.append(subchild);
+                            }
+                        });
+                        $('#' + panel.divElement.id + '-treenode-' +$(child).attr('data-concept-id')).closest('li').remove();
+                    }
+                });
+                $.each(parentsStrs, function(i, parentsStr) {
+                    if (parentsStr != parentsStrs[0]) {
+                        topUl.prepend(parentsStr);
+                    }
+                });
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-chevron-down");
+            } else {
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-chevron-up");
+            }
+        }).fail(function() {
+        });
     }
 
     this.setToConcept = function(conceptId, term, definitionStatus) {
@@ -564,7 +564,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
 
         }).done(function(result) {
-           panel.setToConcept(conceptId, result.defaultTerm);
+            panel.setToConcept(conceptId, result.defaultTerm);
         }).fail(function() {
             console.log("Error");
         });

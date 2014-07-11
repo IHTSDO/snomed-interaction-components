@@ -1,0 +1,16 @@
+<ul style='list-style-type: none; padding-left: 15px;'>
+    {{#each result}}
+        {{#if active}}
+            <li data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' class='treeLabel'>
+            <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' id='{{../../divElementId}}-treeicon-{{conceptId}}'></i></button>
+            {{#if_eq definitionStatus "Primitive"}}
+                <span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;
+            {{else}}
+                <span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;
+            {{/if_eq}}
+            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="jqui-draggable treeLabel selectable-row" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span></a>
+            {{push conceptId}}
+        {{/if}}
+    {{/each}}
+    </li>
+</ul>
