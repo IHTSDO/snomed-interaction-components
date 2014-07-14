@@ -3,3 +3,4 @@
 /target/sct-components/nbproject/private/
 .idea
 node_modules
+*.iml
