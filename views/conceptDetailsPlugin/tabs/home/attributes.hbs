@@ -1,7 +1,7 @@
 {{#if_eq firstMatch.definitionStatus "Primitive"}}
-    <h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">
+    <h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event)" class="badge alert-warning"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;<span ondrop="dropC(event)" ondragover="allowDrop(event)">
 {{else}}
-    <h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;<span class="jqui-droppable">
+    <h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event)" class="badge alert-warning"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;<span ondrop="dropC(event)" ondragover="allowDrop(event)">
 {{/if_eq}}
 {{firstMatch.defaultTerm}}
 </span></h4>

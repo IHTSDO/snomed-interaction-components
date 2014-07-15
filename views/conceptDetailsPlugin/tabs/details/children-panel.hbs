@@ -11,7 +11,7 @@
 </div>
 {{#each childrenResult}}
     {{#if active}}
-        <tr><td class='jqui-draggable' data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>{{defaultTerm}}</td></tr>
+        <tr><td draggable="true" ondragstart="drag(event)" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>{{defaultTerm}}</td></tr>
     {{/if}}
 {{/each}}
 </tbody>

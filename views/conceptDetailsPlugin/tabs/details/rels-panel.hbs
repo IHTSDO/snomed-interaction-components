@@ -28,17 +28,17 @@
                             '>
                     <td>
                         {{#if_eq type.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event)" class="badge alert-warning"  data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event)" class="badge alert-warning"  data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{type.defaultTerm}}
                     </td>
                     <td>
                         {{#if_eq target.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event)" class="badge alert-warning"  data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event)" class="badge alert-warning"  data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{target.defaultTerm}}</td>
                     <td>{{groupId}}</td>
@@ -78,16 +78,16 @@
                             '>
                     <td>
                         {{#if_eq type.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event)" class="badge alert-warning"  data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event)" class="badge alert-warning"  data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{type.defaultTerm}}</td>
                     <td>
                         {{#if_eq target.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event)" class="badge alert-warning"  data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event)" class="badge alert-warning"  data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{target.defaultTerm}}</td>
                     <td>{{groupId}}</td>

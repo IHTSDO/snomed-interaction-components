@@ -1,0 +1,12 @@
+{{#each result.matches}}
+    <tr class='resultRow selectable-row{{#if_eq active false}}danger{{else}}{{#if_eq conceptActive false}}danger{{/if_eq}}{{/if_eq}}'>
+        <td class='col-md-7'>
+            <div draggable="true" ondragstart="drag(event)" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
+            </div>
+        </td>
+        <td class='text-muted small-text col-md-5 result-item'  data-concept-id='{{conceptId}}' data-term='{{term}}'>
+            {{fsn}}
+        </td>
+    </tr>
+{{/each}}

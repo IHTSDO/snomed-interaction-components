@@ -3,6 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+function dropT(event, ui) {
+    var draggable = ui.draggable;
+
+    if (!draggable.attr('data-concept-id')) {
+        //console.log("ignore");
+    } else {
+        var conceptId = draggable.attr('data-concept-id');
+        var term = draggable.attr('data-term');
+        var definitionStatus = draggable.attr('data-def-status');
+        if (panel.options.selectedView == "undefined") {
+            panel.options.selectedView = "inferred";
+        }
+        if (typeof conceptId != "undefined") {
+            panel.setToConcept(conceptId, term, definitionStatus);
+        }
+        $(ui.helper).remove(); //destroy clone
+    }
+
+
+    if (!draggable.attr('data-panel')) {
+        //console.log("ignore");
+    } else {
+        //console.log("OK : " + draggable.attr('data-panel'));
+        $.each(componentsRegistry, function(i, field) {
+            if (field.divElement.id == draggable.attr('data-panel')) {
+                if (field.type == "concept-details") {
+                    panel.subscribe(field);
+                }
+            }
+        });
+    }
+}
 
 function taxonomyPanel(divElement, conceptId, options) {
     var nodeCount = 0;
@@ -30,40 +62,28 @@ function taxonomyPanel(divElement, conceptId, options) {
     this.history = [];
 
     this.setupCanvas = function() {
-//        var taxonomyHtml = "<div style='height:100%;margin: 5px; overflow:auto;' class='panel panel-default' id='" + panel.divElement.id + "-mainPanel'>";
-//        taxonomyHtml = taxonomyHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<div class='row'>";
-//        taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong><span class='i18n' data-i18n-id='i18n_taxonomy'>Taxonomy</span></strong></div>";
-//        taxonomyHtml = taxonomyHtml + "<div class='col-md-6 text-right'>";
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-resetButton' class='btn btn-link' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-repeat'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-expandButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-full'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-closeButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-remove'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "</div>";
-//        taxonomyHtml = taxonomyHtml + "</div>";
-//        taxonomyHtml = taxonomyHtml + "</div>";
-//        taxonomyHtml = taxonomyHtml + "<div id='" + panel.divElement.id + "-taxonomyConfigBar' style='margin-bottom: 10px;'><nav class='navbar navbar-default' role='navigation' style='min-height: 28px;border-radius: 0px;border-bottom: 1px lightgray solid;'>";
-//        taxonomyHtml = taxonomyHtml + " <ul class='nav navbar-nav navbar-left'>";
-//        taxonomyHtml = taxonomyHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-//        taxonomyHtml = taxonomyHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-txViewLabel'></span> <b class='caret'></b></a>";
-//        taxonomyHtml = taxonomyHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
-//        taxonomyHtml = taxonomyHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-inferredViewButton'><span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span></button></li>";
-//        taxonomyHtml = taxonomyHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-statedViewButton'><span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span></button></li>";
-//        taxonomyHtml = taxonomyHtml + "         </ul>";
-//        taxonomyHtml = taxonomyHtml + "     </li>";
-//        taxonomyHtml = taxonomyHtml + " </ul>";
-//        taxonomyHtml = taxonomyHtml + "</nav></div>";
-//        taxonomyHtml = taxonomyHtml + "<div class='panel-body' style='height:100%' id='" + panel.divElement.id + "-panelBody'>";
-//        taxonomyHtml = taxonomyHtml + "</div>";
-//        taxonomyHtml = taxonomyHtml + "</div>";
-//        $(divElement).html(taxonomyHtml);
         var context = {
             divElementId: panel.divElement.id
-        }
-        $.get("views/taxonomyPlugin/taxonomyPlugin-main.hbs").then(function (src) {
+        };
+        $.get("views/taxonomyPlugin/main.hbs").then(function (src) {
+            Handlebars.registerHelper('console', function (something){
+                console.log(something);
+            });
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if(a > b)
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            });
+
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
             $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
@@ -206,124 +226,146 @@ function taxonomyPanel(divElement, conceptId, options) {
     }
 
     this.setupParents = function(parents, focusConcept) {
-        var treeHtml = "<div style='height:100%;margin-bottom: 15px;'>";
-        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 5px;'>";
         var lastParent;
-        $.each(parents, function(i, parent) {
+        $.each(parents, function(i, parent){
             lastParent = parent;
-            treeHtml = treeHtml + "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
-            treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
-            if (parent.definitionStatus == "Primitive") {
-                treeHtml = treeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
-            } else {
-                treeHtml = treeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
-            }
-            treeHtml = treeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
-            treeHtml = treeHtml + "</li>";
         });
-        if (parents.length > 0) {
-            treeHtml = treeHtml.slice(0, -5);
-        }
-        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 15px;'>";
-        treeHtml = treeHtml + "<li data-concept-id='" + focusConcept.conceptId + "' data-term='" + focusConcept.defaultTerm + "' class='treeLabel'>";
-        treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + focusConcept.conceptId + "'></i></button>";
-        if (focusConcept.definitionStatus == "Primitive") {
-            treeHtml = treeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
-        } else {
-            treeHtml = treeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
-        }
-        treeHtml = treeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + focusConcept.conceptId + '" data-term="' + focusConcept.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + focusConcept.conceptId + '">' + focusConcept.defaultTerm + "</span></a>";
-        treeHtml = treeHtml + "</li>";
-        treeHtml = treeHtml + "</ul>";
-        if (parents.length > 0) {
-            treeHtml = treeHtml + "</li>";
-        }
-        treeHtml = treeHtml + "</ul>";
-        treeHtml = treeHtml + "</div>";
-        $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
+//
+//        var treeHtml = "<div style='height:100%;margin-bottom: 15px;'>";
+//        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 5px;'>";
+//        $.each(parents, function(i, parent) {
+//            lastParent = parent;
+//            treeHtml = treeHtml + "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
+//            treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
+//            if (parent.definitionStatus == "Primitive") {
+//                treeHtml = treeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
+//            } else {
+//                treeHtml = treeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
+//            }
+//            treeHtml = treeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
+//            treeHtml = treeHtml + "</li>";
+//        });
+//        if (parents.length > 0) {
+//            treeHtml = treeHtml.slice(0, -5);
+//        }
+//        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 15px;'>";
+//        treeHtml = treeHtml + "<li data-concept-id='" + focusConcept.conceptId + "' data-term='" + focusConcept.defaultTerm + "' class='treeLabel'>";
+//        treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + focusConcept.conceptId + "'></i></button>";
+//        if (focusConcept.definitionStatus == "Primitive") {
+//            treeHtml = treeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
+//        } else {
+//            treeHtml = treeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
+//        }
+//        treeHtml = treeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + focusConcept.conceptId + '" data-term="' + focusConcept.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + focusConcept.conceptId + '">' + focusConcept.defaultTerm + "</span></a>";
+//        treeHtml = treeHtml + "</li>";
+//        treeHtml = treeHtml + "</ul>";
+//        if (parents.length > 0) {
+//            treeHtml = treeHtml + "</li>";
+//        }
+//        treeHtml = treeHtml + "</ul>";
+//        treeHtml = treeHtml + "</div>";
+//        $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
 
-        $(".treeButton").disableTextSelect();
+        $.get("views/taxonomyPlugin/body/parents.hbs").then(function (src) {
+            var context = {
+                parents: parents,
+                focusConcept: focusConcept,
+                divElementId: panel.divElement.id
+            };
+            Handlebars.registerHelper('slice', function (a, b) {
+                $("#" + panel.divElement.id + "-panelBody").html($("#" + panel.divElement.id + "-panelBody").html().slice(a, b));
+            });
 
-        $('.jqui-draggable').draggable({
-            appendTo: 'body',
-            helper: 'clone',
-            delay: 500
-        });
-        $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
-        $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
-            if ($(event.target).hasClass("treeLabel")) {
-                var selectedId = $(event.target).attr('data-concept-id');
-                var selectedLabel = $(event.target).attr('data-term');
-                if (typeof selectedId != "undefined") {
-                    console.log(panel.options.selectedView);
-                    $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
-                        // done
-                    }).done(function(result) {
-                        panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive"});
-                    }).fail(function() {
-                    });
+            var template = Handlebars.compile(src);
+            $("#" + panel.divElement.id + "-panelBody").html(template(context));
+
+            $(".treeButton").disableTextSelect();
+
+            $('.jqui-draggable').draggable({
+                appendTo: 'body',
+                helper: 'clone',
+                delay: 500
+            });
+
+
+            $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
+            $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
+                if ($(event.target).hasClass("treeLabel")) {
+                    var selectedId = $(event.target).attr('data-concept-id');
+                    var selectedLabel = $(event.target).attr('data-term');
+                    if (typeof selectedId != "undefined") {
+                        console.log(panel.options.selectedView);
+                        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
+                            // done
+                        }).done(function(result) {
+                            panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive"});
+                        }).fail(function() {
+                        });
+                    }
                 }
-            }
-        });
-        $("#" + panel.divElement.id + "-panelBody").unbind("click");
-        $("#" + panel.divElement.id + "-panelBody").click(function(event) {
-            if ($(event.target).hasClass("treeButton")) {
-                var conceptId = $(event.target).closest("li").attr('data-concept-id');
-                var iconId = panel.divElement.id + "-treeicon-" + conceptId;
-                event.preventDefault();
-                if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
-                    //console.log("close");
-                    $(event.target).closest("li").find("ul").remove();
-                    $("#" + iconId).removeClass("glyphicon-chevron-down");
-                    $("#" + iconId).addClass("glyphicon-chevron-right");
-                } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
-                    //console.log("open");
-                    $("#" + iconId).removeClass("glyphicon-chevron-right");
-                    $("#" + iconId).addClass("glyphicon-refresh");
-                    $("#" + iconId).addClass("icon-spin");
-                    panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
-                } else if ($("#" + iconId).hasClass("glyphicon-chevron-up")){
-                    $("#" + iconId).removeClass("glyphicon-chevron-up");
-                    $("#" + iconId).addClass("glyphicon-refresh");
-                    $("#" + iconId).addClass("icon-spin");
-                    panel.wrapInParents($(event.target).closest("li").attr('data-concept-id'), $(event.target).closest("li"));
-                } else if ($("#" + iconId).hasClass("glyphicon-minus")){
-                    $("#" + iconId).removeClass("glyphicon-minus");
-                    $("#" + iconId).addClass("glyphicon-chevron-right");
+            });
+            $("#" + panel.divElement.id + "-panelBody").unbind("click");
+            $("#" + panel.divElement.id + "-panelBody").click(function(event) {
+                if ($(event.target).hasClass("treeButton")) {
+                    var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                    var iconId = panel.divElement.id + "-treeicon-" + conceptId;
+                    event.preventDefault();
+                    if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
+                        //console.log("close");
+                        $(event.target).closest("li").find("ul").remove();
+                        $("#" + iconId).removeClass("glyphicon-chevron-down");
+                        $("#" + iconId).addClass("glyphicon-chevron-right");
+                    } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
+                        //console.log("open");
+                        $("#" + iconId).removeClass("glyphicon-chevron-right");
+                        $("#" + iconId).addClass("glyphicon-refresh");
+                        $("#" + iconId).addClass("icon-spin");
+                        panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                    } else if ($("#" + iconId).hasClass("glyphicon-chevron-up")){
+                        $("#" + iconId).removeClass("glyphicon-chevron-up");
+                        $("#" + iconId).addClass("glyphicon-refresh");
+                        $("#" + iconId).addClass("icon-spin");
+                        panel.wrapInParents($(event.target).closest("li").attr('data-concept-id'), $(event.target).closest("li"));
+                    } else if ($("#" + iconId).hasClass("glyphicon-minus")){
+                        $("#" + iconId).removeClass("glyphicon-minus");
+                        $("#" + iconId).addClass("glyphicon-chevron-right");
+                    }
+
+                } else if ($(event.target).hasClass("treeLabel")) {
+                    var selectedId = $(event.target).attr('data-concept-id');
+                    if (typeof selectedId != "undefined") {
+                        $.each(panel.subscribers, function(i, suscriberPanel) {
+                            if (suscriberPanel.conceptId != selectedId) {
+                                suscriberPanel.conceptId = selectedId;
+                                suscriberPanel.updateCanvas();
+                            }
+                        });
+                    }
                 }
 
-            } else if ($(event.target).hasClass("treeLabel")) {
-                var selectedId = $(event.target).attr('data-concept-id');
-                if (typeof selectedId != "undefined") {
-                    $.each(panel.subscribers, function(i, suscriberPanel) {
-                        if (suscriberPanel.conceptId != selectedId) {
-                            suscriberPanel.conceptId = selectedId;
-                            suscriberPanel.updateCanvas();
-                        }
-                    });
-                }
-            }
+            });
 
+            var iconId = panel.divElement.id + "-treeicon-" + focusConcept.conceptId;
+            $("#" + iconId).removeClass("glyphicon-chevron-right");
+            $("#" + iconId).addClass("glyphicon-refresh");
+            $("#" + iconId).addClass("icon-spin");
+            //console.log("getChildren..." + focusConcept.conceptId);
+            panel.getChildren(focusConcept.conceptId);
         });
 
-        var iconId = panel.divElement.id + "-treeicon-" + focusConcept.conceptId;
-        $("#" + iconId).removeClass("glyphicon-chevron-right");
-        $("#" + iconId).addClass("glyphicon-refresh");
-        $("#" + iconId).addClass("icon-spin");
-        //console.log("getChildren..." + focusConcept.conceptId);
-        panel.getChildren(focusConcept.conceptId);
-    }
+
+    };
 
     this.getChildren = function(conceptId) {
         if (typeof panel.options.selectedView == "undefined") {
             panel.options.selectedView = "inferred";
         }
 
-        if (panel.options.selectedView == "inferred") {
-            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
-        } else {
-            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
-        }
+//        if (panel.options.selectedView == "inferred") {
+//            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+//        } else {
+//            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+//        }
 
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
@@ -334,7 +376,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
                     return 1;
                 return 0;
-            })
+            });
             //console.log(JSON.stringify(result));
             var listIconIds = [];
             $.each(result, function(i, field) {
@@ -346,12 +388,13 @@ function taxonomyPanel(divElement, conceptId, options) {
                     } else {
                         nodeHtml = nodeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
                     }
-                    nodeHtml = nodeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="jqui-draggable treeLabel selectable-row" data-concept-id="' + field.conceptId + '" data-term="' + field.defaultTerm + '" id="' + panel.divElement.id + '-treenode-' + field.conceptId + '">' + field.defaultTerm + '</span></a>';
+                    nodeHtml = nodeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" data-concept-id="' + field.conceptId + '" data-term="' + field.defaultTerm + '" id="' + panel.divElement.id + '-treenode-' + field.conceptId + '">' + field.defaultTerm + '</span></a>';
                     listIconIds.push(field.conceptId);
                 }
             });
             nodeHtml = nodeHtml + "</li>";
             nodeHtml = nodeHtml + "</ul>";
+
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
             if (result.length > 0) {
@@ -370,7 +413,20 @@ function taxonomyPanel(divElement, conceptId, options) {
                     revert: false
                 });
             });
+//            $.get("views/taxonomyPlugin/body/children.hbs").then(function (src) {
+//                var context = {
+//                    result: result,
+//                    divElementId: panel.divElement.id
+//                };
+//                Handlebars.registerHelper('push', function (element){
+//                    listIconIds.push(element);
+//                });
+//                var template = Handlebars.compile(src);
+//
+//            });
         }).fail(function() {
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
         });
     }
@@ -391,7 +447,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                     } else {
                         parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
                     }
-                    parentLiHtml = parentLiHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
+                    parentLiHtml = parentLiHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
                     parentLiHtml = parentLiHtml + "</li>";
                     parentsStrs.push(parentLiHtml);
                     if (firstParent == "empty") {

@@ -1,0 +1,23 @@
+{{#if_eq selectedView "inferred"}}
+   <span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>
+{{else}}
+    <span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>
+{{/if_eq}}
+
+<ul style='list-style-type: none; padding-left: 15px;'>
+    {{#each result}}
+        {{#if active}}
+            <li data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' class='treeLabel'>
+                <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' id='{{panel.divElement.id}}-treeicon-{{conceptId}}'></i></button>
+                {{#if_eq definitionStatus "Primitive"}}
+                    <span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;
+                {{else}}
+                    <span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;
+                {{/if_eq}}
+                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" id="{{panel.divElement.id}}-treenode-{{conceptId}}">{{defaultTerm}}</span></a>
+                {{push conceptId}}
+            </li>
+        {{/if}}
+    {{/each}}
+</ul>
+

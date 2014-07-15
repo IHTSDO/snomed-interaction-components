@@ -8,7 +8,7 @@
                 {{else}}
                     <span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;
                 {{/if_eq}}
-                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" class="jqui-draggable treeLabel selectable-row" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span></a>
+                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span></a>
             </li>
         {{/each}}
         {{#if_gr parents.length 0}}
@@ -16,14 +16,13 @@
         {{/if_gr}}
         <ul style='list-style-type: none; padding-left: 15px;'>
             <li data-concept-id='{{focusConcept.conceptId}}' data-term='{{focusConcept.defaultTerm}}' class='treeLabel'>
-                {{console focusConcept}}
                 <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='{{divElementId}}-treeicon-{{focusConcept.conceptId}}'></i></button>
                 {{#if_eq focusConcept.definitionStatus "Primitive"}}
                     <span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;
                 {{else}}
                     <span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;
                 {{/if_eq}}
-                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}" class="jqui-draggable treeLabel selectable-row" id="{{divElementId}}-treenode-{{focusConcept.conceptId}}">{{focusConcept.defaultTerm}}</span></a>
+                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}" draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" id="{{divElementId}}-treenode-{{focusConcept.conceptId}}">{{focusConcept.defaultTerm}}</span></a>
             </li>
         </ul>
         {{#if_gr parents.length 0}}

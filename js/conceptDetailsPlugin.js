@@ -8,6 +8,57 @@ $(function() {
     });
     $('.noSelect').disableTextSelect(); //No text selection on elements with a class of 'noSelect'
 });
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev, id) {
+    $.each(ev.target.attributes, function (){
+        if (this.name.substr(0, 4) == "data"){
+            ev.dataTransfer.setData(this.name.substr(5), this.value);
+        }
+    });
+    ev.dataTransfer.setData("divElementId", id);
+}
+
+function dropC(ev) {
+    ev.preventDefault();
+    var conceptId = ev.dataTransfer.getData("concept-id");
+    var panelD = ev.dataTransfer.getData("panel");
+    var divElementID = ev.dataTransfer.getData("divElementId");
+    var panelAct;
+    $.each(componentsRegistry, function (i, field){
+        if (field.id == divElementID){
+            panelAct = field;
+        }
+    });
+    //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
+    if (!conceptId) {
+        if (!panelD) {
+            //console.log("ignore");
+        } else {
+            //console.log("OK : " + draggable.attr('data-panel'));
+            $.each(componentsRegistry, function(i, field) {
+                if (field.divElement.id == panelD) {
+                    if (field.type == "search" || field.type == "taxonomy") {
+                        field.subscribe(panelAct);
+                    }
+                }
+            });
+        }
+    } else {
+        if (panelAct.conceptId != conceptId) {
+            if ($.contains($("#" + panelAct.divElement.id).get(0), $(draggable).get(0))) {
+                draggable.remove();
+            }
+            panelAct.conceptId = conceptId;
+            panelAct.updateCanvas();
+        }
+    }
+    //ev.target.appendChild(document.getElementById(data));
+}
+
 function conceptDetails(divElement, conceptId, options) {
 
     if (typeof componentsRegistry == "undefined") {
@@ -76,11 +127,13 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                var s = a.lastIndexOf("(");
-                if(s > b)
-                    return opts.fn(this);
-                else
-                    return opts.inverse(this);
+                if (a){
+                    var s = a.lastIndexOf("(");
+                    if(s > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
             });
             Handlebars.registerHelper('substr', function (string, start){
                 var l = string.lastIndexOf("(") - 1;
@@ -328,6 +381,48 @@ function conceptDetails(divElement, conceptId, options) {
         });
     }
 
+    this.allowDrop = function(ev) {
+        ev.preventDefault();
+    }
+
+    this.drag = function(ev) {
+        var attr = {
+            conceptId: $(ev.target).attr('data-concept-id'),
+            panel: $(ev.target).attr('data-panel')
+        };
+        ev.dataTransfer.setData("conceptId", attr.conceptId);
+        ev.dataTransfer.setData("panel", attr.panel);
+        console.log($(ev.target).get(0));
+    }
+
+    this.drop = function(ev) {
+        ev.preventDefault();
+        var conceptId = ev.dataTransfer.getData("conceptId");
+        var panelD = ev.dataTransfer.getData("panel");
+        if (conceptId) {
+            if (panelD) {
+            } else {
+                $.each(componentsRegistry, function(i, field) {
+                    if (field.divElement.id == panelD) {
+                        if (field.type == "search" || field.type == "taxonomy") {
+                            field.subscribe(panel);
+                        }
+                    }
+                });
+            }
+        } else {
+            console.log(panel);
+            if (panel.conceptId != conceptId) {
+                if ($.contains($("#" + panel.divElement.id).get(0), $(draggable).get(0))) {
+                    draggable.remove();
+                }
+                panel.conceptId = conceptId;
+                panel.updateCanvas();
+            }
+        }
+        //ev.target.appendChild(document.getElementById(data));
+    }
+
     this.handleDropEvent = function(event, ui) {
         var draggable = ui.draggable;
         //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
@@ -408,6 +503,7 @@ function conceptDetails(divElement, conceptId, options) {
             // load home-attributes
             $.get("views/conceptDetailsPlugin/tabs/home/attributes.hbs").then(function (src) {
                 var context = {
+                    panel: panel,
                     firstMatch: firstMatch,
                     divElementId: panel.divElement.id
                 };
@@ -561,25 +657,25 @@ function conceptDetails(divElement, conceptId, options) {
                     return 0;
                 }
             });
-                firstMatch.statedRelationships.sort(function(a, b) {
-                    if (a.groupId < b.groupId) {
+            firstMatch.statedRelationships.sort(function(a, b) {
+                if (a.groupId < b.groupId) {
+                    return -1;
+                } else if (a.groupId > b.groupId) {
+                    return 1;
+                } else {
+                    if (a.type.conceptId == 116680003) {
                         return -1;
-                    } else if (a.groupId > b.groupId) {
-                        return 1;
-                    } else {
-                        if (a.type.conceptId == 116680003) {
-                            return -1;
-                        }
-                        if (b.type.conceptId == 116680003) {
-                            return 1;
-                        }
-                        if (a.target.defaultTerm < b.target.defaultTerm)
-                            return -1;
-                        if (a.target.defaultTerm > b.target.defaultTerm)
-                            return 1;
-                        return 0;
                     }
-                });
+                    if (b.type.conceptId == 116680003) {
+                        return 1;
+                    }
+                    if (a.target.defaultTerm < b.target.defaultTerm)
+                        return -1;
+                    if (a.target.defaultTerm > b.target.defaultTerm)
+                        return 1;
+                    return 0;
+                }
+            });
             $.get("views/conceptDetailsPlugin/tabs/details/rels-panel.hbs").then(function (src) {
                 var context = {
                     firstMatch: firstMatch,

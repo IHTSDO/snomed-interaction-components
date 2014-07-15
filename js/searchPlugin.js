@@ -32,8 +32,20 @@ function searchPanel(divElement, options) {
     this.setupCanvas = function () {
         var context = {
             divElementId: panel.divElement.id
-        }
-        $.get("views/searchPlugin/searchPlugin-main.hbs").then(function (src) {
+        };
+        $.get("views/searchPlugin/main.hbs").then(function (src) {
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('console', function (something){
+                console.log(something);
+            });
+
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
             $('#' + panel.divElement.id + '-searchBox').keyup(function () {
@@ -313,74 +325,7 @@ function searchPanel(divElement, options) {
             });
             $("#" + panel.divElement.id + "-partialMatchingButton").click();
         });
-//        var searchHtml = "<div style='margin: 5px; height:95%;' class='panel panel-default'>";
-//        searchHtml = searchHtml + "<div class='panel-heading'>";
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
-//        searchHtml = searchHtml + "<div class='row'>";
-//        searchHtml = searchHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong><span class='i18n' data-i18n-id='i18n_search'>Search</span></span></strong></div>";
-//        searchHtml = searchHtml + "<div class='col-md-4 text-right'>";
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>"
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-historyButton' class='btn btn-link history-button' style='padding:2px'><i class='glyphicon glyphicon-time'></i></button>"
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-expandButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-full'></i></button>"
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-closeButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-remove'></i></button>"
-//        searchHtml = searchHtml + "</div>";
-//        searchHtml = searchHtml + "</div>";
-//        searchHtml = searchHtml + "</div>";
-//        searchHtml = searchHtml + "<div class='panel-body' style='height:86%' id='" + panel.divElement.id + "-panelBody'>";
-//        searchHtml = searchHtml + '<form>';
-//        searchHtml = searchHtml + '<div class="form-group" style="margin-bottom: 2px;">';
-//        searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox">';
-//        searchHtml = searchHtml + '<span class="i18n" data-i18n-id="i18n_type_3_chars">Type at least 3 characters</span> <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i> <span id="' + panel.divElement.id + '-searchExample"></span></label>';
-//        if (typeof i18n_search_placeholder == "undefined") {
-//            i18n_search_placeholder = "Search...";
-//        }
-//        searchHtml = searchHtml + '<br><div class="btn-group" style="width: 100%;"><input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="' + i18n_search_placeholder + '" autocomplete="off">';
-//        searchHtml = searchHtml + '<span id="'+ panel.divElement.id + '-clearButton" class="searchclear glyphicon glyphicon-remove-circle"></span></div>';
-//        searchHtml = searchHtml + '</div>';
-//        searchHtml = searchHtml + '</form>';
-//        searchHtml = searchHtml + "<div id='" + panel.divElement.id + "-searchConfigBar' style='margin-bottom: 10px;'><nav class='navbar navbar-default' role='navigation' style='min-height: 28px;border-radius: 0px;border-bottom: 1px lightgray solid;'>";
-//        searchHtml = searchHtml + " <ul class='nav navbar-nav navbar-left'>";
-//        searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-//        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-navSearchModeLabel'></span> <b class='caret'></b></a>";
-//        searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-fullTextButton'><span class='i18n' data-i18n-id='i18n_full_text_search_mode'>Full text search mode</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-partialMatchingButton'><span class='i18n' data-i18n-id='i18n_partial_match_search_mode'>Partial matching search mode</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-regexButton'><span class='i18n' data-i18n-id='i18n_regex_search_mode'>Regular Expressions search mode</span></button></li>";
-//        searchHtml = searchHtml + "         </ul>";
-//        searchHtml = searchHtml + "     </li>";
-//        searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-//        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-navLanguageLabel'></span> <b class='caret'></b></a>";
-//        searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-danishLangButton'><span class='i18n' data-i18n-id='i18n_danish_stemmer'>Danish language stemmer</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-englishLangButton'><span class='i18n' data-i18n-id='i18n_english_stemmer'>English language stemmer</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-spanishLangButton'><span class='i18n' data-i18n-id='i18n_spanish_stemmer'>Spanish language stemmer</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-swedishLangButton'><span class='i18n' data-i18n-id='i18n_swedish_stemmer'>Swedish language stemmer</span></button></li>";
-//        searchHtml = searchHtml + "         </ul>";
-//        searchHtml = searchHtml + "     </li>";
-//        searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-//        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-navStatusFilterLabel'></span> <b class='caret'></b></a>";
-//        searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-activeOnlyButton'><span class='i18n' data-i18n-id='i18n_active_only'>Active components only</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-activeInactiveButton'><span class='i18n' data-i18n-id='i18n_active_and_inactive'>Active and inactive components</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-inactiveOnlyButton'><span class='i18n' data-i18n-id='i18n_inactive_only'>Inactive components only</span></button></li>";
-//        searchHtml = searchHtml + "         </ul>";
-//        searchHtml = searchHtml + "     </li>";
-//        searchHtml = searchHtml + " </ul>";
-//        searchHtml = searchHtml + "</nav></div>";
-//        searchHtml = searchHtml + "<div class='panel panel-default' style='height:70%;overflow:auto;margin-bottom: 15px;min-height: 300px;' id='" + panel.divElement.id + "-resultsScrollPane'>";
-//        searchHtml = searchHtml + '<div id="' + panel.divElement.id + '-searchBar"></div>';
-//        searchHtml = searchHtml + '<div id="' + panel.divElement.id + '-searchFilters"></div>';
-//        searchHtml = searchHtml + "<table id='" + panel.divElement.id + "-resultsTable' class='table table-bordered'>";
-//        searchHtml = searchHtml + "</table>";
-//        searchHtml = searchHtml + "</div>";
-//        searchHtml = searchHtml + "</div>";
-//        searchHtml = searchHtml + "</div>";
-//        $(divElement).html(searchHtml);
-
-
-    }
+    };
 
     this.updateStatusFilterLabel = function() {
         if (typeof i18n_active_and_inactive == "undefined") {
@@ -409,9 +354,9 @@ function searchPanel(divElement, options) {
     this.handlePanelDropEvent = function (event, ui) {
         var draggable = ui.draggable;
         if (!draggable.attr('data-panel')) {
-//console.log("ignore");
+            //console.log("ignore");
         } else {
-//console.log("OK : " + draggable.attr('data-panel'));
+            //console.log("OK : " + draggable.attr('data-panel'));
             $.each(componentsRegistry, function (i, field) {
                 if (field.divElement.id == draggable.attr('data-panel')) {
                     if (field.type == "concept-details") {
@@ -465,7 +410,7 @@ function searchPanel(divElement, options) {
                 } else {
                     $('#' + panel.divElement.id + '-resultsTable').find('.more-row').html("<td colspan='2' class='text-center'><i class='glyphicon glyphicon-refresh icon-spin'></i>&nbsp;&nbsp;</td>");
                 }
-                resultsHtml = "";
+                var resultsHtml = "";
                 if (xhr != null) {
                     xhr.abort();
                     console.log("aborting call...");
@@ -479,23 +424,13 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
                         }).done(function (result) {
-                                $.each(result.descriptions, function (i, field) {
-                                    if (field.active === false || field.conceptActive == false) {
-                                        if (panel.options.statusSearchFilter == "inactiveOnly" ||
-                                            panel.options.statusSearchFilter == "activeAndInactive") {
-                                            resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-                                            resultsHtml = resultsHtml + " danger";
-                                            resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
-                                        }
-                                    } else {
-                                        if (panel.options.statusSearchFilter == "activeOnly" ||
-                                            panel.options.statusSearchFilter == "activeAndInactive") {
-                                            resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-                                            resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
-                                        }
-                                    }
-                                });
-                                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                            $.get("views/searchPlugin/body/0.hbs").then(function (src) {
+                                var context = {
+                                    result: result
+                                };
+                                var template = Handlebars.compile(src);
+
+                                $('#' + panel.divElement.id + '-resultsTable').html(template(context));
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                                 $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
                                     appendTo: 'body',
@@ -504,24 +439,39 @@ function searchPanel(divElement, options) {
                                 });
                                 $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                     $.each(panel.subscribers, function (i, field) {
-//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                        //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
                                         field.conceptId = $(event.target).attr('data-concept-id');
                                         field.updateCanvas();
                                     });
                                 });
                             });
+//                            $.each(result.descriptions, function (i, field) {
+//                                if (field.active === false || field.conceptActive == false) {
+//                                    if (panel.options.statusSearchFilter == "inactiveOnly" ||
+//                                        panel.options.statusSearchFilter == "activeAndInactive") {
+//                                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+//                                        resultsHtml = resultsHtml + " danger";
+//                                        resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
+//                                    }
+//                                } else {
+//                                    if (panel.options.statusSearchFilter == "activeOnly" ||
+//                                        panel.options.statusSearchFilter == "activeAndInactive") {
+//                                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+//                                        resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
+//                                    }
+//                                }
+//                            });
+                        });
                     } else if (t.substr(-2, 1) == "1") {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
 
                         }).done(function (result) {
-                                $.each(result.matches, function (i, field) {
-                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-                                    if (field.active == false || field.conceptActive == false) {
-                                        resultsHtml = resultsHtml + " danger";
-                                    }
-                                    resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
-                                });
-                                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                            $.get("views/searchPlugin/body/0.hbs").then(function (src) {
+                                var context = {
+                                    result: result
+                                };
+                                var template = Handlebars.compile(src);
+                                $('#' + panel.divElement.id + '-resultsTable').html(template(context));
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                                 $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
                                     appendTo: 'body',
@@ -530,12 +480,20 @@ function searchPanel(divElement, options) {
                                 });
                                 $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                     $.each(panel.subscribers, function (i, field) {
-//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                        //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
                                         field.conceptId = $(event.target).attr('data-concept-id');
                                         field.updateCanvas();
                                     });
                                 });
                             });
+//                            $.each(result.matches, function (i, field) {
+//                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+//                                if (field.active == false || field.conceptActive == false) {
+//                                    resultsHtml = resultsHtml + " danger";
+//                                }
+//                                resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+//                            });
+                        });
                     } else {
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                         $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
@@ -556,109 +514,143 @@ function searchPanel(divElement, options) {
                     xhr = $.getJSON(searchUrl,function (result) {
 
                     }).done(function (result) {
-                            $('#' + panel.divElement.id + '-resultsTable').find('.more-row').remove();
-                            var endTime = Date.now();
-                            var elapsed = (endTime - startTime)/1000;
-                            if (result.details) {
-                                var searchComment = "<span class='text-muted'>" + result.details.total + " matches found in " + elapsed + " seconds.</span>";
-                            }
-                            $('#' + panel.divElement.id + '-searchBar').html(searchComment);
-                            xhr = null;
-                            var matchedDescriptions = result.matches;
-                            //console.log(JSON.stringify(result));
+                        $('#' + panel.divElement.id + '-resultsTable').find('.more-row').remove();
+                        var endTime = Date.now();
+                        var elapsed = (endTime - startTime)/1000;
+                        $.get("views/searchPlugin/body/bar.hbs").then(function (src) {
+                            var context = {
+                                result: result,
+                                elapsed: elapsed,
+                                divElementId: panel.divElement.id,
+                                options: panel.options
+                            };
+                            var template = Handlebars.compile(src);
+                            $('#' + panel.divElement.id + '-searchBar').html(template(context));
+                            $("#" + panel.divElement.id + '-searchBar').find('.semtag-link').click(function (event) {
+                                panel.options.semTagFilter = $(event.target).attr('data-semtag');
+                                panel.search(t, 0, returnLimit, true);
+                            });
+                            $("#" + panel.divElement.id + '-searchBar').find('.lang-link').click(function (event) {
+                                panel.options.langFilter = $(event.target).attr('data-lang');
+                                panel.search(t, 0, returnLimit, true);
+                            });
+                            $("#" + panel.divElement.id + '-searchBar').find('.remove-semtag').click(function (event) {
+                                panel.options.semTagFilter = "none";
+                                panel.search(t, 0, returnLimit, true);
+                            });
+                            $("#" + panel.divElement.id + '-searchBar').find('.remove-lang').click(function (event) {
+                                panel.options.langFilter = "none";
+                                panel.search(t, 0, returnLimit, true);
+                            });
+                        });
+                        if (result.details) {
+                            var searchComment = "<span class='text-muted'>" + result.details.total + " matches found in " + elapsed + " seconds.</span>";
+                        }
+                        $('#' + panel.divElement.id + '-searchBar').html(searchComment);
+                        xhr = null;
+                        var matchedDescriptions = result.matches;
+                        //console.log(JSON.stringify(result));
+                        var remaining = result.details.total - (skipTo + returnLimit);
 
-                            if (!matchedDescriptions || matchedDescriptions.length <= 0) {
-                                resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
-                                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                            } else {
-                                var searchFiltersHtml = "<span class='pull right'><a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#" + panel.divElement.id + "-searchFiltersPanel'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span></a>";
-                                if (panel.options.semTagFilter != "none") {
-                                    searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.semTagFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-semtag'>&times;</a></span>&nbsp;&nbsp;";
-                                }
-                                if (panel.options.langFilter != "none") {
-                                    searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.langFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>&nbsp;&nbsp;";
-                                }
-                                searchFiltersHtml = searchFiltersHtml + "</span><div id='" + panel.divElement.id + "-searchFiltersPanel' class='panel-collapse collapse'>";
-                                searchFiltersHtml = searchFiltersHtml + "<div class='tree'><ul><li><a>Filter results by Language</a><ul>";
-                                for(var key in result.filters.lang) {
-                                    searchFiltersHtml = searchFiltersHtml + "<li><a class='lang-link' href='javascript:void(0);' data-lang='" + key + "'>" + key + " (" + result.filters.lang[key] + ")</a></li>";
-                                }
-                                searchFiltersHtml = searchFiltersHtml + "</ul></li></ul>";
-                                searchFiltersHtml = searchFiltersHtml + "<ul><li><a>Filter results by Semantic Tag</a><ul>";
-                                for(var key in result.filters.semTag) {
-                                    searchFiltersHtml = searchFiltersHtml + "<li><a class='semtag-link' href='javascript:void(0);' data-semtag='" + key + "'>" + key + " (" + result.filters.semTag[key] + ")</a></li>";
-                                }
-                                searchFiltersHtml = searchFiltersHtml + "</ul></li></ul></div>";
-                                $('#' + panel.divElement.id + '-searchBar').html($('#' + panel.divElement.id + '-searchBar').html() + searchFiltersHtml);
-                                $("#" + panel.divElement.id + '-searchBar').find('.semtag-link').click(function (event) {
-                                    panel.options.semTagFilter = $(event.target).attr('data-semtag');
-                                    panel.search(t, 0, returnLimit, true);
-                                });
-                                $("#" + panel.divElement.id + '-searchBar').find('.lang-link').click(function (event) {
-                                    panel.options.langFilter = $(event.target).attr('data-lang');
-                                    panel.search(t, 0, returnLimit, true);
-                                });
-                                $("#" + panel.divElement.id + '-searchBar').find('.remove-semtag').click(function (event) {
-                                    panel.options.semTagFilter = "none";
-                                    panel.search(t, 0, returnLimit, true);
-                                });
-                                $("#" + panel.divElement.id + '-searchBar').find('.remove-lang').click(function (event) {
-                                    panel.options.langFilter = "none";
-                                    panel.search(t, 0, returnLimit, true);
-                                });
-
-                                if (panel.options.searchMode == "regex") {
-                                    matchedDescriptions.sort(function (a, b) {
-                                        if (a.term.length < b.term.length)
-                                            return -1;
-                                        if (a.term.length > b.term.length)
-                                            return 1;
-                                        return 0;
-                                    });
-                                }
-                                $.each(matchedDescriptions, function (i, field) {
-                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-                                    //console.log(field.active + " " + field.conceptActive);
-                                    if (field.active == false || field.conceptActive == false) {
-                                        resultsHtml = resultsHtml + " danger";
-                                    }
-                                    resultsHtml = resultsHtml + "'><td class='col-md-6'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
-                                });
-                                var remaining = result.details.total - (skipTo + returnLimit);
-                                if (remaining > 0) {
-                                    resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='" + panel.divElement.id + "-more'>Load " + returnLimit +  " more (" + remaining + " remaining on server)</button></td></tr>"
-                                } else {
-                                    resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center text-muted'>All " + result.details.total + " results are displayed</td></tr>"
-                                }
-                                if (skipTo == 0) {
-                                    $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                                } else {
-                                    $('#' + panel.divElement.id + '-resultsTable').append(resultsHtml);
-                                }
-
-                                $("#" + panel.divElement.id + "-more").click(function (event) {
-                                    panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
-                                });
-
-                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                                    appendTo: 'body',
-                                    helper: 'clone',
-                                    delay: 500
-                                });
-                                $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                                    $.each(panel.subscribers, function (i, field) {
-                                        //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                        field.conceptId = $(event.target).attr('data-concept-id');
-                                        field.updateCanvas();
-                                        lastClickedSctid = $(event.target).attr('data-concept-id');
-                                        lastClickTime = Date.now();
-                                    });
-                                });
-                            }
-                        }).fail(function () {
+                        if (!matchedDescriptions || matchedDescriptions.length <= 0) {
                             resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                             $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                        } else {
+//                            var searchFiltersHtml = "<span class='pull right'><a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#" + panel.divElement.id + "-searchFiltersPanel'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span></a>";
+//                            if (panel.options.semTagFilter != "none") {
+//                                searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.semTagFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-semtag'>&times;</a></span>&nbsp;&nbsp;";
+//                            }
+//                            if (panel.options.langFilter != "none") {
+//                                searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.langFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>&nbsp;&nbsp;";
+//                            }
+//                            searchFiltersHtml = searchFiltersHtml + "</span><div id='" + panel.divElement.id + "-searchFiltersPanel' class='panel-collapse collapse'>";
+//                            searchFiltersHtml = searchFiltersHtml + "<div class='tree'><ul><li><a>Filter results by Language</a><ul>";
+//                            for(var key in result.filters.lang) {
+//                                searchFiltersHtml = searchFiltersHtml + "<li><a class='lang-link' href='javascript:void(0);' data-lang='" + key + "'>" + key + " (" + result.filters.lang[key] + ")</a></li>";
+//                            }
+//                            searchFiltersHtml = searchFiltersHtml + "</ul></li></ul>";
+//                            searchFiltersHtml = searchFiltersHtml + "<ul><li><a>Filter results by Semantic Tag</a><ul>";
+//                            for(var key in result.filters.semTag) {
+//                                searchFiltersHtml = searchFiltersHtml + "<li><a class='semtag-link' href='javascript:void(0);' data-semtag='" + key + "'>" + key + " (" + result.filters.semTag[key] + ")</a></li>";
+//                            }
+//                            searchFiltersHtml = searchFiltersHtml + "</ul></li></ul></div>";
+                            //$('#' + panel.divElement.id + '-searchBar').html($('#' + panel.divElement.id + '-searchBar').html() + searchFiltersHtml);
+                            if (panel.options.searchMode == "regex") {
+                                result.matches.sort(function (a, b) {
+                                    if (a.term.length < b.term.length)
+                                        return -1;
+                                    if (a.term.length > b.term.length)
+                                        return 1;
+                                    return 0;
+                                });
+                            }
+                            $.each(matchedDescriptions, function (i, field) {
+                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+                                //console.log(field.active + " " + field.conceptActive);
+                                if (field.active == false || field.conceptActive == false) {
+                                    resultsHtml = resultsHtml + " danger";
+                                }
+                                resultsHtml = resultsHtml + "'><td class='col-md-6'><div draggable='true' ondragstart='drag(event)' class='result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+                            });
+                            if (remaining > 0) {
+                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='" + panel.divElement.id + "-more'>Load " + returnLimit +  " more (" + remaining + " remaining on server)</button></td></tr>"
+                            } else {
+                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center text-muted'>All " + result.details.total + " results are displayed</td></tr>"
+                            }
+                        }
+                        $.get("views/searchPlugin/body/default.hbs").then(function (src) {
+                            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                                if (a){
+                                    if(a > parseInt(b))
+                                        return opts.fn(this);
+                                    else
+                                        return opts.inverse(this);
+                                }
+                            });
+                            Handlebars.registerHelper('if_gre', function(a,b, opts) {
+                                if (a){
+                                    if(parseInt(a) >= b)
+                                        return opts.fn(this);
+                                    else
+                                        return opts.inverse(this);
+                                }
+                            });
+                            var context = {
+                                result: result,
+                                divElementId: panel.divElement.id,
+                                remaining: remaining,
+                                returnLimit: returnLimit
+                            };
+                            var template = Handlebars.compile(src);
+                            console.log(template(context));
+                            $("#" + panel.divElement.id + "-more").click(function (event) {
+                                panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
+                            });
+                            if (skipTo == 0) {
+                                $('#' + panel.divElement.id + '-resultsTable').html(template(context));
+                            } else {
+                                $('#' + panel.divElement.id + '-resultsTable').append(template(context));
+                            }
+                            $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+                                appendTo: 'body',
+                                helper: 'clone',
+                                delay: 500
+                            });
+                            $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
+                                $.each(panel.subscribers, function (i, field) {
+                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                    field.conceptId = $(event.target).attr('data-concept-id');
+                                    field.updateCanvas();
+                                    lastClickedSctid = $(event.target).attr('data-concept-id');
+                                    lastClickTime = Date.now();
+                                });
+                            });
                         });
+
+                    }).fail(function () {
+                        resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
+                        $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                    });
                 }
             }
         }

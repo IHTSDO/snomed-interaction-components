@@ -21,9 +21,9 @@
             <tr class='{{#if active}}{{else}}danger{{/if}}'>
                 <td>
                     {{#if_eq refset.definitionStatus "Primitive"}}
-                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                     {{else}}
-                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                     {{/if_eq}}
                     {{refset.defaultTerm}}
                 </td>
@@ -39,9 +39,9 @@
             {{#if_eq type "SIMPLEMAP"}}
                 <tr class='{{#if active}}{{else}}danger{{/if}}'><td>
                 {{#if_eq refset.definitionStatus "Primitive"}}
-                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                 {{else}}
-                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                 {{/if_eq}}
                 {{refset.defaultTerm}}</td>
                 <td>{{otherValue}}
@@ -59,17 +59,17 @@
                 <tr class='{{#if active}}{{else}}danger{{/if}}'>
                     <td>
                         {{#if_eq refset.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{refset.defaultTerm}}
                     </td>
                     <td>
                         {{#if_eq cidValue.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{cidValue.defaultTerm}}</td>
                         <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
@@ -87,17 +87,17 @@
                 <tr class='{{#if active}}{{else}}danger{{/if}}'>
                     <td>
                         {{#if_eq refset.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{refset.defaultTerm}}
                     </td>
                     <td>
                         {{#if_eq cidValue.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning jqui-draggable"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event)" class="badge alert-warning"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{cidValue.defaultTerm}}</td>
                             <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
