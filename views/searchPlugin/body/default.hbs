@@ -1,13 +1,11 @@
 {{#if result.matches}}
     {{#if_gre "0" result.matches.length}}
-        {{console "a"}}
         <tr><td class='text-muted'>No results</td></tr>
     {{else}}
-        {{console "ab"}}
         {{#each result.matches}}
             <tr class='resultRow selectable-row{{#if_eq active false}} danger{{else}}{{#if_eq conceptActive false}} danger{{/if_eq}}{{/if_eq}}'>
                 <td class='col-md-6'>
-                    <div draggable='true' ondragstart='drag(event)' class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                    <div draggable='true' ondragstart="drag(event, '{{../divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
                         <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
                     </div>
                 </td>

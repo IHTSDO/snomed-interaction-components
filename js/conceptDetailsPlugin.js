@@ -9,56 +9,6 @@ $(function() {
     $('.noSelect').disableTextSelect(); //No text selection on elements with a class of 'noSelect'
 });
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-
-function drag(ev, id) {
-    $.each(ev.target.attributes, function (){
-        if (this.name.substr(0, 4) == "data"){
-            ev.dataTransfer.setData(this.name.substr(5), this.value);
-        }
-    });
-    ev.dataTransfer.setData("divElementId", id);
-}
-
-function dropC(ev) {
-    ev.preventDefault();
-    var conceptId = ev.dataTransfer.getData("concept-id");
-    var panelD = ev.dataTransfer.getData("panel");
-    var divElementID = ev.dataTransfer.getData("divElementId");
-    var panelAct;
-    $.each(componentsRegistry, function (i, field){
-        if (field.id == divElementID){
-            panelAct = field;
-        }
-    });
-    //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
-    if (!conceptId) {
-        if (!panelD) {
-            //console.log("ignore");
-        } else {
-            //console.log("OK : " + draggable.attr('data-panel'));
-            $.each(componentsRegistry, function(i, field) {
-                if (field.divElement.id == panelD) {
-                    if (field.type == "search" || field.type == "taxonomy") {
-                        field.subscribe(panelAct);
-                    }
-                }
-            });
-        }
-    } else {
-        if (panelAct.conceptId != conceptId) {
-            if ($.contains($("#" + panelAct.divElement.id).get(0), $(draggable).get(0))) {
-                draggable.remove();
-            }
-            panelAct.conceptId = conceptId;
-            panelAct.updateCanvas();
-        }
-    }
-    //ev.target.appendChild(document.getElementById(data));
-}
-
 function conceptDetails(divElement, conceptId, options) {
 
     if (typeof componentsRegistry == "undefined") {
@@ -118,92 +68,92 @@ function conceptDetails(divElement, conceptId, options) {
         $.get("views/conceptDetailsPlugin/main.hbs").then(function (src) {
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                if (opts != "undefined") {
-                    if(a == b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                if (a){
-                    var s = a.lastIndexOf("(");
-                    if(s > b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('substr', function (string, start){
-                var l = string.lastIndexOf("(") - 1;
-                return string.substr(start, l);
-            });
-            Handlebars.registerHelper('push', function (element, array){
-                array.push(element);
-                // return ;
-            });
-            Handlebars.registerHelper('removeSemtag', function (term){
-                return panel.removeSemtag(term);
-            });
-            Handlebars.registerHelper('lastIndexOf', function (term, pos){
-                return term.lastIndexOf(pos);
-            });
-            Handlebars.registerHelper('console', function (something){
-                console.log(something);
-            });
-            Handlebars.registerHelper('eqLastGroup', function (a, opts){
-                if(!a == panel.lastGroup)
-                    return opts.fn(this);
-                else
-                    return opts.inverse(this);
-            });
-            Handlebars.registerHelper('setLastGroup', function (a){
-                 panel.lastGroup = a;
-            });
-            Handlebars.registerHelper('getRandomColor' , function (){
-                return getRandomColor();
-            });
-            Handlebars.registerHelper('lastColor', function (a) {
-                if (a == "get") {
-                    return panel.color;
-                }else {
-                    panel.color = a;
-                }
-            });
-            Handlebars.registerHelper('preferred', function (a, opts) {
-                if (a == "get") {
-                    if (panel.preferred) {
-                        return opts.fn(this);
-                    }else{
-                        return opts.inverse(this);
-                    }
-                }else {
-                    panel.preferred = a;
-                }
-            });
-            Handlebars.registerHelper('acceptable', function (a, opts) {
-                if (a == "get") {
-                    if (panel.acceptable) {
-                        return opts.fn(this);
-                    }else{
-                        return opts.inverse(this);
-                    }
-                }else {
-                    panel.acceptable = a;
-                }
-            });
-            Handlebars.registerHelper('included', function (a, opts) {
-                if (a == "get") {
-                    if (panel.included) {
-                        return opts.fn(this);
-                    }else{
-                        return opts.inverse(this);
-                    }
-                }else {
-                    panel.included = a;
-                }
-            });
+//            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+//                if (opts != "undefined") {
+//                    if(a == b)
+//                        return opts.fn(this);
+//                    else
+//                        return opts.inverse(this);
+//                }
+//            });
+//            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+//                if (a){
+//                    var s = a.lastIndexOf("(");
+//                    if(s > b)
+//                        return opts.fn(this);
+//                    else
+//                        return opts.inverse(this);
+//                }
+//            });
+//            Handlebars.registerHelper('substr', function (string, start){
+//                var l = string.lastIndexOf("(") - 1;
+//                return string.substr(start, l);
+//            });
+//            Handlebars.registerHelper('push', function (element, array){
+//                array.push(element);
+//                // return ;
+//            });
+//            Handlebars.registerHelper('removeSemtag', function (term){
+//                return panel.removeSemtag(term);
+//            });
+//            Handlebars.registerHelper('lastIndexOf', function (term, pos){
+//                return term.lastIndexOf(pos);
+//            });
+//            Handlebars.registerHelper('console', function (something){
+//                console.log(something);
+//            });
+//            Handlebars.registerHelper('eqLastGroup', function (a, opts){
+//                if(!a == panel.lastGroup)
+//                    return opts.fn(this);
+//                else
+//                    return opts.inverse(this);
+//            });
+//            Handlebars.registerHelper('setLastGroup', function (a){
+//                 panel.lastGroup = a;
+//            });
+//            Handlebars.registerHelper('getRandomColor' , function (){
+//                return getRandomColor();
+//            });
+//            Handlebars.registerHelper('lastColor', function (a) {
+//                if (a == "get") {
+//                    return panel.color;
+//                }else {
+//                    panel.color = a;
+//                }
+//            });
+//            Handlebars.registerHelper('preferred', function (a, opts) {
+//                if (a == "get") {
+//                    if (panel.preferred) {
+//                        return opts.fn(this);
+//                    }else{
+//                        return opts.inverse(this);
+//                    }
+//                }else {
+//                    panel.preferred = a;
+//                }
+//            });
+//            Handlebars.registerHelper('acceptable', function (a, opts) {
+//                if (a == "get") {
+//                    if (panel.acceptable) {
+//                        return opts.fn(this);
+//                    }else{
+//                        return opts.inverse(this);
+//                    }
+//                }else {
+//                    panel.acceptable = a;
+//                }
+//            });
+//            Handlebars.registerHelper('included', function (a, opts) {
+//                if (a == "get") {
+//                    if (panel.included) {
+//                        return opts.fn(this);
+//                    }else{
+//                        return opts.inverse(this);
+//                    }
+//                }else {
+//                    panel.included = a;
+//                }
+//            });
 
             $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
             $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
@@ -345,19 +295,19 @@ function conceptDetails(divElement, conceptId, options) {
                 panel.updateCanvas();
             });
 
-            $("#" + panel.divElement.id + "-linkerButton").draggable({
-                cancel: false,
-                appendTo: 'body',
-                helper: 'clone',
-                delay: 500
-            });
+//            $("#" + panel.divElement.id + "-linkerButton").draggable({
+//                cancel: false,
+//                appendTo: 'body',
+//                helper: 'clone',
+//                delay: 500
+//            });
 
-            $(".resizable").resizable();
+//            $(".resizable").resizable();
 
-            $('#' + panel.divElement.id + '-panelHeading').droppable({
-                drop: panel.handleDropEvent,
-                hoverClass: "bg-info"
-            });
+//            $('#' + panel.divElement.id + '-panelHeading').droppable({
+//                drop: panel.handleDropEvent,
+//                hoverClass: "bg-info"
+//            });
 
             $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
                 $("#" + panel.divElement.id + "-linkerButton").popover({
@@ -379,48 +329,6 @@ function conceptDetails(divElement, conceptId, options) {
             panel.updateCanvas();
             panel.setupOptionsPanel();
         });
-    }
-
-    this.allowDrop = function(ev) {
-        ev.preventDefault();
-    }
-
-    this.drag = function(ev) {
-        var attr = {
-            conceptId: $(ev.target).attr('data-concept-id'),
-            panel: $(ev.target).attr('data-panel')
-        };
-        ev.dataTransfer.setData("conceptId", attr.conceptId);
-        ev.dataTransfer.setData("panel", attr.panel);
-        console.log($(ev.target).get(0));
-    }
-
-    this.drop = function(ev) {
-        ev.preventDefault();
-        var conceptId = ev.dataTransfer.getData("conceptId");
-        var panelD = ev.dataTransfer.getData("panel");
-        if (conceptId) {
-            if (panelD) {
-            } else {
-                $.each(componentsRegistry, function(i, field) {
-                    if (field.divElement.id == panelD) {
-                        if (field.type == "search" || field.type == "taxonomy") {
-                            field.subscribe(panel);
-                        }
-                    }
-                });
-            }
-        } else {
-            console.log(panel);
-            if (panel.conceptId != conceptId) {
-                if ($.contains($("#" + panel.divElement.id).get(0), $(draggable).get(0))) {
-                    draggable.remove();
-                }
-                panel.conceptId = conceptId;
-                panel.updateCanvas();
-            }
-        }
-        //ev.target.appendChild(document.getElementById(data));
     }
 
     this.handleDropEvent = function(event, ui) {
@@ -484,6 +392,14 @@ function conceptDetails(divElement, conceptId, options) {
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
             $.get("views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs").then(function (src) {
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
                 var context = {
                     firstMatch: firstMatch,
                     divElementId: panel.divElement.id,
@@ -502,6 +418,14 @@ function conceptDetails(divElement, conceptId, options) {
 
             // load home-attributes
             $.get("views/conceptDetailsPlugin/tabs/home/attributes.hbs").then(function (src) {
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
                 var context = {
                     panel: panel,
                     firstMatch: firstMatch,
@@ -519,16 +443,16 @@ function conceptDetails(divElement, conceptId, options) {
                     $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
                 }
 
-                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find('.jqui-droppable').droppable({
-                    drop: panel.handleDropEvent,
-                    hoverClass: "bg-info"
-                });
+//                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find('.jqui-droppable').droppable({
+//                    drop: panel.handleDropEvent,
+//                    hoverClass: "bg-info"
+//                });
 
-                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").draggable({
-                    appendTo: 'body',
-                    helper: 'clone',
-                    delay: 10
-                });
+//                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").draggable({
+//                    appendTo: 'body',
+//                    helper: 'clone',
+//                    delay: 10
+//                });
                 if (typeof i18n_drag_this == "undefined") {
                     i18n_drag_this = "Drag this";
                 }
@@ -583,6 +507,50 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             $.get("views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs").then(function (src) {
+                Handlebars.registerHelper('removeSemtag', function (term){
+                    return panel.removeSemtag(term);
+                });
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
+                Handlebars.registerHelper('preferred', function (a, opts) {
+                    if (a == "get") {
+                        if (panel.preferred) {
+                            return opts.fn(this);
+                        }else{
+                            return opts.inverse(this);
+                        }
+                    }else {
+                        panel.preferred = a;
+                    }
+                });
+                Handlebars.registerHelper('acceptable', function (a, opts) {
+                    if (a == "get") {
+                        if (panel.acceptable) {
+                            return opts.fn(this);
+                        }else{
+                            return opts.inverse(this);
+                        }
+                    }else {
+                        panel.acceptable = a;
+                    }
+                });
+                Handlebars.registerHelper('included', function (a, opts) {
+                    if (a == "get") {
+                        if (panel.included) {
+                            return opts.fn(this);
+                        }else{
+                            return opts.inverse(this);
+                        }
+                    }else {
+                        panel.included = a;
+                    }
+                });
                 var context = {
                     options: panel.options,
                     languageName: languageName,
@@ -612,11 +580,11 @@ function conceptDetails(divElement, conceptId, options) {
                         $(val).toggle();
                     });
                 });
-                $('#' + panel.descsPId).find(".jqui-draggable").draggable({
-                    appendTo: 'body',
-                    helper: 'clone',
-                    delay: 500
-                });
+//                $('#' + panel.descsPId).find(".jqui-draggable").draggable({
+//                    appendTo: 'body',
+//                    helper: 'clone',
+//                    delay: 500
+//                });
 
                 $('#' + panel.descsPId).find("[rel=tooltip-right]").tooltip({ placement: 'right'});
             });
@@ -677,6 +645,18 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             $.get("views/conceptDetailsPlugin/tabs/details/rels-panel.hbs").then(function (src) {
+                Handlebars.registerHelper('push', function (element, array){
+                    array.push(element);
+                    // return ;
+                });
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
                 var context = {
                     firstMatch: firstMatch,
                     inferredParents: panel.inferredParents,
@@ -733,6 +713,27 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             $.get("views/conceptDetailsPlugin/tabs/home/parents.hbs").then(function (src) {
+                Handlebars.registerHelper('substr', function (string, start){
+                    var l = string.lastIndexOf("(") - 1;
+                    return string.substr(start, l);
+                });
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
+                Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                    if (a){
+                        var s = a.lastIndexOf("(");
+                        if(s > b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
                 var context = {
                     statedParents: panel.statedParents,
                     inferredParents: panel.inferredParents,
@@ -746,6 +747,36 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             $.get("views/conceptDetailsPlugin/tabs/home/roles.hbs").then(function (src) {
+                Handlebars.registerHelper('eqLastGroup', function (a, opts){
+                    if(!a == panel.lastGroup)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                });
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
+                Handlebars.registerHelper('removeSemtag', function (term){
+                    return panel.removeSemtag(term);
+                });
+                Handlebars.registerHelper('setLastGroup', function (a){
+                    panel.lastGroup = a;
+                });
+                Handlebars.registerHelper('lastColor', function (a) {
+                    if (a == "get") {
+                        return panel.color;
+                    }else {
+                        panel.color = a;
+                    }
+                });
+                Handlebars.registerHelper('getRandomColor' , function (){
+                    return getRandomColor();
+                });
                 var context = {
                     options: options,
                     statedRoles: panel.statedRoles,
@@ -761,6 +792,14 @@ function conceptDetails(divElement, conceptId, options) {
 
 
             $.get("views/conceptDetailsPlugin/tabs/refset.hbs").then(function (src) {
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
                 var context = {
                     firstMatch: firstMatch
                 };
@@ -795,11 +834,11 @@ function conceptDetails(divElement, conceptId, options) {
                 } else if (panel.options.selectedView != "all") {
                     // show all
                 }
-                $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id + ',#refsets-' + panel.divElement.id).find(".jqui-draggable").draggable({
-                    appendTo: 'body',
-                    helper: 'clone',
-                    delay: 500
-                });
+//                $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id + ',#refsets-' + panel.divElement.id).find(".jqui-draggable").draggable({
+//                    appendTo: 'body',
+//                    helper: 'clone',
+//                    delay: 500
+//                });
                 $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
                     placement : 'left auto',
                     trigger: 'hover',
@@ -845,11 +884,11 @@ function conceptDetails(divElement, conceptId, options) {
                     };
                     var template = Handlebars.compile(src);
                     $('#' + panel.childrenPId).html(template(context));
-                    $('#' + panel.childrenPId).find(".jqui-draggable").draggable({
-                        appendTo: 'body',
-                        helper: 'clone',
-                        delay: 500
-                    });
+//                    $('#' + panel.childrenPId).find(".jqui-draggable").draggable({
+//                        appendTo: 'body',
+//                        helper: 'clone',
+//                        delay: 500
+//                    });
                 });
 
             }).fail(function() {
@@ -1052,6 +1091,52 @@ function getRandomColor() {
         color += letters[Math.round(Math.random() * 15)];
     }
     return color;
+}
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev, id) {
+    $.each(ev.target.attributes, function (){
+        if (this.name.substr(0, 4) == "data"){
+            ev.dataTransfer.setData(this.name.substr(5), this.value);
+        }
+    });
+    ev.dataTransfer.setData("divElementId", id);
+}
+
+function dropC(ev, id) {
+    ev.preventDefault();
+    var conceptId = ev.dataTransfer.getData("concept-id");
+    var panelD = ev.dataTransfer.getData("panel");
+    var divElementID = id;
+    var panelAct;
+    $.each(componentsRegistry, function (i, field){
+        if (field.divElement.id == divElementID){
+            panelAct = field;
+        }
+    });
+    if (!conceptId) {
+        if (!panelD) {
+        } else {
+            $.each(componentsRegistry, function(i, field) {
+                if (field.divElement.id == panelD) {
+                    if (field.type == "search" || field.type == "taxonomy") {
+                        field.subscribe(panelAct);
+                    }
+                }
+            });
+        }
+    } else {
+        if (panelAct.conceptId != conceptId) {
+//            if ($.contains($("#" + panelAct.divElement.id).get(0), $(draggable).get(0))) {
+//                draggable.remove();
+//            }
+            panelAct.conceptId = conceptId;
+            panelAct.updateCanvas();
+        }
+    }
 }
 
 (function($) {

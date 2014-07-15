@@ -34,18 +34,6 @@ function searchPanel(divElement, options) {
             divElementId: panel.divElement.id
         };
         $.get("views/searchPlugin/main.hbs").then(function (src) {
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                if (opts != "undefined") {
-                    if(a == b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('console', function (something){
-                console.log(something);
-            });
-
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
             $('#' + panel.divElement.id + '-searchBox').keyup(function () {
@@ -138,16 +126,16 @@ function searchPanel(divElement, options) {
                 delay: 1000
             });
 
-            $("#" + panel.divElement.id + "-linkerButton").draggable({
-                cancel: false,
-                appendTo: 'body',
-                helper: 'clone',
-                delay: 500
-            });
-            $("#" + panel.divElement.id + "-linkerButton").droppable({
-                drop: panel.handlePanelDropEvent,
-                hoverClass: "bg-info"
-            });
+//            $("#" + panel.divElement.id + "-linkerButton").draggable({
+//                cancel: false,
+//                appendTo: 'body',
+//                helper: 'clone',
+//                delay: 500
+//            });
+//            $("#" + panel.divElement.id + "-linkerButton").droppable({
+//                drop: panel.handlePanelDropEvent,
+//                hoverClass: "bg-info"
+//            });
             $("#" + panel.divElement.id + "-apply-button").click(function () {
                 panel.readOptionsPanel();
                 var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
@@ -425,6 +413,14 @@ function searchPanel(divElement, options) {
 
                         }).done(function (result) {
                             $.get("views/searchPlugin/body/0.hbs").then(function (src) {
+                                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                    if (opts != "undefined") {
+                                        if(a == b)
+                                            return opts.fn(this);
+                                        else
+                                            return opts.inverse(this);
+                                    }
+                                });
                                 var context = {
                                     result: result
                                 };
@@ -432,11 +428,11 @@ function searchPanel(divElement, options) {
 
                                 $('#' + panel.divElement.id + '-resultsTable').html(template(context));
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
-                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                                    appendTo: 'body',
-                                    helper: 'clone',
-                                    delay: 500
-                                });
+//                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+//                                    appendTo: 'body',
+//                                    helper: 'clone',
+//                                    delay: 500
+//                                });
                                 $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                     $.each(panel.subscribers, function (i, field) {
                                         //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
@@ -466,18 +462,26 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
 
                         }).done(function (result) {
-                            $.get("views/searchPlugin/body/0.hbs").then(function (src) {
+                            $.get("views/searchPlugin/body/1.hbs").then(function (src) {
+                                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                    if (opts != "undefined") {
+                                        if(a == b)
+                                            return opts.fn(this);
+                                        else
+                                            return opts.inverse(this);
+                                    }
+                                });
                                 var context = {
                                     result: result
                                 };
                                 var template = Handlebars.compile(src);
                                 $('#' + panel.divElement.id + '-resultsTable').html(template(context));
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
-                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                                    appendTo: 'body',
-                                    helper: 'clone',
-                                    delay: 500
-                                });
+//                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+//                                    appendTo: 'body',
+//                                    helper: 'clone',
+//                                    delay: 500
+//                                });
                                 $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                     $.each(panel.subscribers, function (i, field) {
                                         //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
@@ -518,6 +522,14 @@ function searchPanel(divElement, options) {
                         var endTime = Date.now();
                         var elapsed = (endTime - startTime)/1000;
                         $.get("views/searchPlugin/body/bar.hbs").then(function (src) {
+                            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                if (opts != "undefined") {
+                                    if(a == b)
+                                        return opts.fn(this);
+                                    else
+                                        return opts.inverse(this);
+                                }
+                            });
                             var context = {
                                 result: result,
                                 elapsed: elapsed,
@@ -552,10 +564,10 @@ function searchPanel(divElement, options) {
                         //console.log(JSON.stringify(result));
                         var remaining = result.details.total - (skipTo + returnLimit);
 
-                        if (!matchedDescriptions || matchedDescriptions.length <= 0) {
-                            resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
-                            $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                        } else {
+//                        if (!matchedDescriptions || matchedDescriptions.length <= 0) {
+//                            resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
+//                            $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+//                        } else {
 //                            var searchFiltersHtml = "<span class='pull right'><a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#" + panel.divElement.id + "-searchFiltersPanel'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span></a>";
 //                            if (panel.options.semTagFilter != "none") {
 //                                searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.semTagFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-semtag'>&times;</a></span>&nbsp;&nbsp;";
@@ -584,21 +596,29 @@ function searchPanel(divElement, options) {
                                     return 0;
                                 });
                             }
-                            $.each(matchedDescriptions, function (i, field) {
-                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-                                //console.log(field.active + " " + field.conceptActive);
-                                if (field.active == false || field.conceptActive == false) {
-                                    resultsHtml = resultsHtml + " danger";
-                                }
-                                resultsHtml = resultsHtml + "'><td class='col-md-6'><div draggable='true' ondragstart='drag(event)' class='result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
-                            });
-                            if (remaining > 0) {
-                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='" + panel.divElement.id + "-more'>Load " + returnLimit +  " more (" + remaining + " remaining on server)</button></td></tr>"
-                            } else {
-                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center text-muted'>All " + result.details.total + " results are displayed</td></tr>"
-                            }
-                        }
+//                            $.each(matchedDescriptions, function (i, field) {
+//                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+//                                //console.log(field.active + " " + field.conceptActive);
+//                                if (field.active == false || field.conceptActive == false) {
+//                                    resultsHtml = resultsHtml + " danger";
+//                                }
+//                                resultsHtml = resultsHtml + "'><td class='col-md-6'><div draggable='true' ondragstart='drag(event)' class='result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+//                            });
+//                            if (remaining > 0) {
+//                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='" + panel.divElement.id + "-more'>Load " + returnLimit +  " more (" + remaining + " remaining on server)</button></td></tr>"
+//                            } else {
+//                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center text-muted'>All " + result.details.total + " results are displayed</td></tr>"
+//                            }
+//                        }
                         $.get("views/searchPlugin/body/default.hbs").then(function (src) {
+                            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                if (opts != "undefined") {
+                                    if(a == b)
+                                        return opts.fn(this);
+                                    else
+                                        return opts.inverse(this);
+                                }
+                            });
                             Handlebars.registerHelper('if_gr', function(a,b, opts) {
                                 if (a){
                                     if(a > parseInt(b))
@@ -622,20 +642,20 @@ function searchPanel(divElement, options) {
                                 returnLimit: returnLimit
                             };
                             var template = Handlebars.compile(src);
-                            console.log(template(context));
-                            $("#" + panel.divElement.id + "-more").click(function (event) {
-                                panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
-                            });
+
                             if (skipTo == 0) {
                                 $('#' + panel.divElement.id + '-resultsTable').html(template(context));
                             } else {
                                 $('#' + panel.divElement.id + '-resultsTable').append(template(context));
                             }
-                            $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                                appendTo: 'body',
-                                helper: 'clone',
-                                delay: 500
+                            $("#" + panel.divElement.id + "-more").click(function (event) {
+                                panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
                             });
+//                            $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+//                                appendTo: 'body',
+//                                helper: 'clone',
+//                                delay: 500
+//                            });
                             $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                 $.each(panel.subscribers, function (i, field) {
                                     //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));

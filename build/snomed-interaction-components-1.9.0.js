@@ -8,6 +8,57 @@ $(function() {
     });
     $('.noSelect').disableTextSelect(); //No text selection on elements with a class of 'noSelect'
 });
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev, id) {
+    $.each(ev.target.attributes, function (){
+        if (this.name.substr(0, 4) == "data"){
+            ev.dataTransfer.setData(this.name.substr(5), this.value);
+        }
+    });
+    ev.dataTransfer.setData("divElementId", id);
+}
+
+function dropC(ev) {
+    ev.preventDefault();
+    var conceptId = ev.dataTransfer.getData("concept-id");
+    var panelD = ev.dataTransfer.getData("panel");
+    var divElementID = ev.dataTransfer.getData("divElementId");
+    var panelAct;
+    $.each(componentsRegistry, function (i, field){
+        if (field.id == divElementID){
+            panelAct = field;
+        }
+    });
+    //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
+    if (!conceptId) {
+        if (!panelD) {
+            //console.log("ignore");
+        } else {
+            //console.log("OK : " + draggable.attr('data-panel'));
+            $.each(componentsRegistry, function(i, field) {
+                if (field.divElement.id == panelD) {
+                    if (field.type == "search" || field.type == "taxonomy") {
+                        field.subscribe(panelAct);
+                    }
+                }
+            });
+        }
+    } else {
+        if (panelAct.conceptId != conceptId) {
+            if ($.contains($("#" + panelAct.divElement.id).get(0), $(draggable).get(0))) {
+                draggable.remove();
+            }
+            panelAct.conceptId = conceptId;
+            panelAct.updateCanvas();
+        }
+    }
+    //ev.target.appendChild(document.getElementById(data));
+}
+
 function conceptDetails(divElement, conceptId, options) {
 
     if (typeof componentsRegistry == "undefined") {
@@ -76,11 +127,13 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                var s = a.lastIndexOf("(");
-                if(s > b)
-                    return opts.fn(this);
-                else
-                    return opts.inverse(this);
+                if (a){
+                    var s = a.lastIndexOf("(");
+                    if(s > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
             });
             Handlebars.registerHelper('substr', function (string, start){
                 var l = string.lastIndexOf("(") - 1;
@@ -328,6 +381,48 @@ function conceptDetails(divElement, conceptId, options) {
         });
     }
 
+    this.allowDrop = function(ev) {
+        ev.preventDefault();
+    }
+
+    this.drag = function(ev) {
+        var attr = {
+            conceptId: $(ev.target).attr('data-concept-id'),
+            panel: $(ev.target).attr('data-panel')
+        };
+        ev.dataTransfer.setData("conceptId", attr.conceptId);
+        ev.dataTransfer.setData("panel", attr.panel);
+        console.log($(ev.target).get(0));
+    }
+
+    this.drop = function(ev) {
+        ev.preventDefault();
+        var conceptId = ev.dataTransfer.getData("conceptId");
+        var panelD = ev.dataTransfer.getData("panel");
+        if (conceptId) {
+            if (panelD) {
+            } else {
+                $.each(componentsRegistry, function(i, field) {
+                    if (field.divElement.id == panelD) {
+                        if (field.type == "search" || field.type == "taxonomy") {
+                            field.subscribe(panel);
+                        }
+                    }
+                });
+            }
+        } else {
+            console.log(panel);
+            if (panel.conceptId != conceptId) {
+                if ($.contains($("#" + panel.divElement.id).get(0), $(draggable).get(0))) {
+                    draggable.remove();
+                }
+                panel.conceptId = conceptId;
+                panel.updateCanvas();
+            }
+        }
+        //ev.target.appendChild(document.getElementById(data));
+    }
+
     this.handleDropEvent = function(event, ui) {
         var draggable = ui.draggable;
         //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
@@ -408,6 +503,7 @@ function conceptDetails(divElement, conceptId, options) {
             // load home-attributes
             $.get("views/conceptDetailsPlugin/tabs/home/attributes.hbs").then(function (src) {
                 var context = {
+                    panel: panel,
                     firstMatch: firstMatch,
                     divElementId: panel.divElement.id
                 };
@@ -561,25 +657,25 @@ function conceptDetails(divElement, conceptId, options) {
                     return 0;
                 }
             });
-                firstMatch.statedRelationships.sort(function(a, b) {
-                    if (a.groupId < b.groupId) {
+            firstMatch.statedRelationships.sort(function(a, b) {
+                if (a.groupId < b.groupId) {
+                    return -1;
+                } else if (a.groupId > b.groupId) {
+                    return 1;
+                } else {
+                    if (a.type.conceptId == 116680003) {
                         return -1;
-                    } else if (a.groupId > b.groupId) {
-                        return 1;
-                    } else {
-                        if (a.type.conceptId == 116680003) {
-                            return -1;
-                        }
-                        if (b.type.conceptId == 116680003) {
-                            return 1;
-                        }
-                        if (a.target.defaultTerm < b.target.defaultTerm)
-                            return -1;
-                        if (a.target.defaultTerm > b.target.defaultTerm)
-                            return 1;
-                        return 0;
                     }
-                });
+                    if (b.type.conceptId == 116680003) {
+                        return 1;
+                    }
+                    if (a.target.defaultTerm < b.target.defaultTerm)
+                        return -1;
+                    if (a.target.defaultTerm > b.target.defaultTerm)
+                        return 1;
+                    return 0;
+                }
+            });
             $.get("views/conceptDetailsPlugin/tabs/details/rels-panel.hbs").then(function (src) {
                 var context = {
                     firstMatch: firstMatch,
@@ -1148,8 +1244,20 @@ function searchPanel(divElement, options) {
     this.setupCanvas = function () {
         var context = {
             divElementId: panel.divElement.id
-        }
+        };
         $.get("views/searchPlugin/main.hbs").then(function (src) {
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('console', function (something){
+                console.log(something);
+            });
+
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
             $('#' + panel.divElement.id + '-searchBox').keyup(function () {
@@ -1429,74 +1537,7 @@ function searchPanel(divElement, options) {
             });
             $("#" + panel.divElement.id + "-partialMatchingButton").click();
         });
-//        var searchHtml = "<div style='margin: 5px; height:95%;' class='panel panel-default'>";
-//        searchHtml = searchHtml + "<div class='panel-heading'>";
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
-//        searchHtml = searchHtml + "<div class='row'>";
-//        searchHtml = searchHtml + "<div class='col-md-8' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong><span class='i18n' data-i18n-id='i18n_search'>Search</span></span></strong></div>";
-//        searchHtml = searchHtml + "<div class='col-md-4 text-right'>";
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>"
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-historyButton' class='btn btn-link history-button' style='padding:2px'><i class='glyphicon glyphicon-time'></i></button>"
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-expandButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-full'></i></button>"
-//        searchHtml = searchHtml + "<button id='" + panel.divElement.id + "-closeButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-remove'></i></button>"
-//        searchHtml = searchHtml + "</div>";
-//        searchHtml = searchHtml + "</div>";
-//        searchHtml = searchHtml + "</div>";
-//        searchHtml = searchHtml + "<div class='panel-body' style='height:86%' id='" + panel.divElement.id + "-panelBody'>";
-//        searchHtml = searchHtml + '<form>';
-//        searchHtml = searchHtml + '<div class="form-group" style="margin-bottom: 2px;">';
-//        searchHtml = searchHtml + '<label for="' + panel.divElement.id + '-searchBox">';
-//        searchHtml = searchHtml + '<span class="i18n" data-i18n-id="i18n_type_3_chars">Type at least 3 characters</span> <i class="glyphicon glyphicon-remove text-danger" id="' + panel.divElement.id + '-typeIcon"></i> <span id="' + panel.divElement.id + '-searchExample"></span></label>';
-//        if (typeof i18n_search_placeholder == "undefined") {
-//            i18n_search_placeholder = "Search...";
-//        }
-//        searchHtml = searchHtml + '<br><div class="btn-group" style="width: 100%;"><input type="search" class="form-control" id="' + panel.divElement.id + '-searchBox" placeholder="' + i18n_search_placeholder + '" autocomplete="off">';
-//        searchHtml = searchHtml + '<span id="'+ panel.divElement.id + '-clearButton" class="searchclear glyphicon glyphicon-remove-circle"></span></div>';
-//        searchHtml = searchHtml + '</div>';
-//        searchHtml = searchHtml + '</form>';
-//        searchHtml = searchHtml + "<div id='" + panel.divElement.id + "-searchConfigBar' style='margin-bottom: 10px;'><nav class='navbar navbar-default' role='navigation' style='min-height: 28px;border-radius: 0px;border-bottom: 1px lightgray solid;'>";
-//        searchHtml = searchHtml + " <ul class='nav navbar-nav navbar-left'>";
-//        searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-//        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-navSearchModeLabel'></span> <b class='caret'></b></a>";
-//        searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-fullTextButton'><span class='i18n' data-i18n-id='i18n_full_text_search_mode'>Full text search mode</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-partialMatchingButton'><span class='i18n' data-i18n-id='i18n_partial_match_search_mode'>Partial matching search mode</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-regexButton'><span class='i18n' data-i18n-id='i18n_regex_search_mode'>Regular Expressions search mode</span></button></li>";
-//        searchHtml = searchHtml + "         </ul>";
-//        searchHtml = searchHtml + "     </li>";
-//        searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-//        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-navLanguageLabel'></span> <b class='caret'></b></a>";
-//        searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-danishLangButton'><span class='i18n' data-i18n-id='i18n_danish_stemmer'>Danish language stemmer</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-englishLangButton'><span class='i18n' data-i18n-id='i18n_english_stemmer'>English language stemmer</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-spanishLangButton'><span class='i18n' data-i18n-id='i18n_spanish_stemmer'>Spanish language stemmer</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-swedishLangButton'><span class='i18n' data-i18n-id='i18n_swedish_stemmer'>Swedish language stemmer</span></button></li>";
-//        searchHtml = searchHtml + "         </ul>";
-//        searchHtml = searchHtml + "     </li>";
-//        searchHtml = searchHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-//        searchHtml = searchHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-navStatusFilterLabel'></span> <b class='caret'></b></a>";
-//        searchHtml = searchHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-activeOnlyButton'><span class='i18n' data-i18n-id='i18n_active_only'>Active components only</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-activeInactiveButton'><span class='i18n' data-i18n-id='i18n_active_and_inactive'>Active and inactive components</span></button></li>";
-//        searchHtml = searchHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-inactiveOnlyButton'><span class='i18n' data-i18n-id='i18n_inactive_only'>Inactive components only</span></button></li>";
-//        searchHtml = searchHtml + "         </ul>";
-//        searchHtml = searchHtml + "     </li>";
-//        searchHtml = searchHtml + " </ul>";
-//        searchHtml = searchHtml + "</nav></div>";
-//        searchHtml = searchHtml + "<div class='panel panel-default' style='height:70%;overflow:auto;margin-bottom: 15px;min-height: 300px;' id='" + panel.divElement.id + "-resultsScrollPane'>";
-//        searchHtml = searchHtml + '<div id="' + panel.divElement.id + '-searchBar"></div>';
-//        searchHtml = searchHtml + '<div id="' + panel.divElement.id + '-searchFilters"></div>';
-//        searchHtml = searchHtml + "<table id='" + panel.divElement.id + "-resultsTable' class='table table-bordered'>";
-//        searchHtml = searchHtml + "</table>";
-//        searchHtml = searchHtml + "</div>";
-//        searchHtml = searchHtml + "</div>";
-//        searchHtml = searchHtml + "</div>";
-//        $(divElement).html(searchHtml);
-
-
-    }
+    };
 
     this.updateStatusFilterLabel = function() {
         if (typeof i18n_active_and_inactive == "undefined") {
@@ -1525,9 +1566,9 @@ function searchPanel(divElement, options) {
     this.handlePanelDropEvent = function (event, ui) {
         var draggable = ui.draggable;
         if (!draggable.attr('data-panel')) {
-//console.log("ignore");
+            //console.log("ignore");
         } else {
-//console.log("OK : " + draggable.attr('data-panel'));
+            //console.log("OK : " + draggable.attr('data-panel'));
             $.each(componentsRegistry, function (i, field) {
                 if (field.divElement.id == draggable.attr('data-panel')) {
                     if (field.type == "concept-details") {
@@ -1581,7 +1622,7 @@ function searchPanel(divElement, options) {
                 } else {
                     $('#' + panel.divElement.id + '-resultsTable').find('.more-row').html("<td colspan='2' class='text-center'><i class='glyphicon glyphicon-refresh icon-spin'></i>&nbsp;&nbsp;</td>");
                 }
-                resultsHtml = "";
+                var resultsHtml = "";
                 if (xhr != null) {
                     xhr.abort();
                     console.log("aborting call...");
@@ -1595,23 +1636,13 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
                         }).done(function (result) {
-                                $.each(result.descriptions, function (i, field) {
-                                    if (field.active === false || field.conceptActive == false) {
-                                        if (panel.options.statusSearchFilter == "inactiveOnly" ||
-                                            panel.options.statusSearchFilter == "activeAndInactive") {
-                                            resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-                                            resultsHtml = resultsHtml + " danger";
-                                            resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
-                                        }
-                                    } else {
-                                        if (panel.options.statusSearchFilter == "activeOnly" ||
-                                            panel.options.statusSearchFilter == "activeAndInactive") {
-                                            resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-                                            resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
-                                        }
-                                    }
-                                });
-                                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                            $.get("views/searchPlugin/body/0.hbs").then(function (src) {
+                                var context = {
+                                    result: result
+                                };
+                                var template = Handlebars.compile(src);
+
+                                $('#' + panel.divElement.id + '-resultsTable').html(template(context));
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                                 $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
                                     appendTo: 'body',
@@ -1620,24 +1651,39 @@ function searchPanel(divElement, options) {
                                 });
                                 $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                     $.each(panel.subscribers, function (i, field) {
-//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                        //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
                                         field.conceptId = $(event.target).attr('data-concept-id');
                                         field.updateCanvas();
                                     });
                                 });
                             });
+//                            $.each(result.descriptions, function (i, field) {
+//                                if (field.active === false || field.conceptActive == false) {
+//                                    if (panel.options.statusSearchFilter == "inactiveOnly" ||
+//                                        panel.options.statusSearchFilter == "activeAndInactive") {
+//                                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+//                                        resultsHtml = resultsHtml + " danger";
+//                                        resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
+//                                    }
+//                                } else {
+//                                    if (panel.options.statusSearchFilter == "activeOnly" ||
+//                                        panel.options.statusSearchFilter == "activeAndInactive") {
+//                                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+//                                        resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
+//                                    }
+//                                }
+//                            });
+                        });
                     } else if (t.substr(-2, 1) == "1") {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
 
                         }).done(function (result) {
-                                $.each(result.matches, function (i, field) {
-                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-                                    if (field.active == false || field.conceptActive == false) {
-                                        resultsHtml = resultsHtml + " danger";
-                                    }
-                                    resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
-                                });
-                                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                            $.get("views/searchPlugin/body/0.hbs").then(function (src) {
+                                var context = {
+                                    result: result
+                                };
+                                var template = Handlebars.compile(src);
+                                $('#' + panel.divElement.id + '-resultsTable').html(template(context));
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                                 $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
                                     appendTo: 'body',
@@ -1646,12 +1692,20 @@ function searchPanel(divElement, options) {
                                 });
                                 $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                     $.each(panel.subscribers, function (i, field) {
-//console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                        //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
                                         field.conceptId = $(event.target).attr('data-concept-id');
                                         field.updateCanvas();
                                     });
                                 });
                             });
+//                            $.each(result.matches, function (i, field) {
+//                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+//                                if (field.active == false || field.conceptActive == false) {
+//                                    resultsHtml = resultsHtml + " danger";
+//                                }
+//                                resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+//                            });
+                        });
                     } else {
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                         $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
@@ -1672,109 +1726,142 @@ function searchPanel(divElement, options) {
                     xhr = $.getJSON(searchUrl,function (result) {
 
                     }).done(function (result) {
-                            $('#' + panel.divElement.id + '-resultsTable').find('.more-row').remove();
-                            var endTime = Date.now();
-                            var elapsed = (endTime - startTime)/1000;
-                            if (result.details) {
-                                var searchComment = "<span class='text-muted'>" + result.details.total + " matches found in " + elapsed + " seconds.</span>";
-                            }
-                            $('#' + panel.divElement.id + '-searchBar').html(searchComment);
-                            xhr = null;
-                            var matchedDescriptions = result.matches;
-                            //console.log(JSON.stringify(result));
+                        $('#' + panel.divElement.id + '-resultsTable').find('.more-row').remove();
+                        var endTime = Date.now();
+                        var elapsed = (endTime - startTime)/1000;
+                        $.get("views/searchPlugin/body/bar.hbs").then(function (src) {
+                            var context = {
+                                result: result,
+                                elapsed: elapsed,
+                                divElementId: panel.divElement.id,
+                                options: panel.options
+                            };
+                            var template = Handlebars.compile(src);
+                            $('#' + panel.divElement.id + '-searchBar').html(template(context));
+                            $("#" + panel.divElement.id + '-searchBar').find('.semtag-link').click(function (event) {
+                                panel.options.semTagFilter = $(event.target).attr('data-semtag');
+                                panel.search(t, 0, returnLimit, true);
+                            });
+                            $("#" + panel.divElement.id + '-searchBar').find('.lang-link').click(function (event) {
+                                panel.options.langFilter = $(event.target).attr('data-lang');
+                                panel.search(t, 0, returnLimit, true);
+                            });
+                            $("#" + panel.divElement.id + '-searchBar').find('.remove-semtag').click(function (event) {
+                                panel.options.semTagFilter = "none";
+                                panel.search(t, 0, returnLimit, true);
+                            });
+                            $("#" + panel.divElement.id + '-searchBar').find('.remove-lang').click(function (event) {
+                                panel.options.langFilter = "none";
+                                panel.search(t, 0, returnLimit, true);
+                            });
+                        });
+                        if (result.details) {
+                            var searchComment = "<span class='text-muted'>" + result.details.total + " matches found in " + elapsed + " seconds.</span>";
+                        }
+                        $('#' + panel.divElement.id + '-searchBar').html(searchComment);
+                        xhr = null;
+                        var matchedDescriptions = result.matches;
+                        //console.log(JSON.stringify(result));
+                        var remaining = result.details.total - (skipTo + returnLimit);
 
-                            if (!matchedDescriptions || matchedDescriptions.length <= 0) {
-                                resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
-                                $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                            } else {
-                                var searchFiltersHtml = "<span class='pull right'><a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#" + panel.divElement.id + "-searchFiltersPanel'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span></a>";
-                                if (panel.options.semTagFilter != "none") {
-                                    searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.semTagFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-semtag'>&times;</a></span>&nbsp;&nbsp;";
-                                }
-                                if (panel.options.langFilter != "none") {
-                                    searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.langFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>&nbsp;&nbsp;";
-                                }
-                                searchFiltersHtml = searchFiltersHtml + "</span><div id='" + panel.divElement.id + "-searchFiltersPanel' class='panel-collapse collapse'>";
-                                searchFiltersHtml = searchFiltersHtml + "<div class='tree'><ul><li><a>Filter results by Language</a><ul>";
-                                for(var key in result.filters.lang) {
-                                    searchFiltersHtml = searchFiltersHtml + "<li><a class='lang-link' href='javascript:void(0);' data-lang='" + key + "'>" + key + " (" + result.filters.lang[key] + ")</a></li>";
-                                }
-                                searchFiltersHtml = searchFiltersHtml + "</ul></li></ul>";
-                                searchFiltersHtml = searchFiltersHtml + "<ul><li><a>Filter results by Semantic Tag</a><ul>";
-                                for(var key in result.filters.semTag) {
-                                    searchFiltersHtml = searchFiltersHtml + "<li><a class='semtag-link' href='javascript:void(0);' data-semtag='" + key + "'>" + key + " (" + result.filters.semTag[key] + ")</a></li>";
-                                }
-                                searchFiltersHtml = searchFiltersHtml + "</ul></li></ul></div>";
-                                $('#' + panel.divElement.id + '-searchBar').html($('#' + panel.divElement.id + '-searchBar').html() + searchFiltersHtml);
-                                $("#" + panel.divElement.id + '-searchBar').find('.semtag-link').click(function (event) {
-                                    panel.options.semTagFilter = $(event.target).attr('data-semtag');
-                                    panel.search(t, 0, returnLimit, true);
-                                });
-                                $("#" + panel.divElement.id + '-searchBar').find('.lang-link').click(function (event) {
-                                    panel.options.langFilter = $(event.target).attr('data-lang');
-                                    panel.search(t, 0, returnLimit, true);
-                                });
-                                $("#" + panel.divElement.id + '-searchBar').find('.remove-semtag').click(function (event) {
-                                    panel.options.semTagFilter = "none";
-                                    panel.search(t, 0, returnLimit, true);
-                                });
-                                $("#" + panel.divElement.id + '-searchBar').find('.remove-lang').click(function (event) {
-                                    panel.options.langFilter = "none";
-                                    panel.search(t, 0, returnLimit, true);
-                                });
-
-                                if (panel.options.searchMode == "regex") {
-                                    matchedDescriptions.sort(function (a, b) {
-                                        if (a.term.length < b.term.length)
-                                            return -1;
-                                        if (a.term.length > b.term.length)
-                                            return 1;
-                                        return 0;
-                                    });
-                                }
-                                $.each(matchedDescriptions, function (i, field) {
-                                    resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-                                    //console.log(field.active + " " + field.conceptActive);
-                                    if (field.active == false || field.conceptActive == false) {
-                                        resultsHtml = resultsHtml + " danger";
-                                    }
-                                    resultsHtml = resultsHtml + "'><td class='col-md-6'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
-                                });
-                                var remaining = result.details.total - (skipTo + returnLimit);
-                                if (remaining > 0) {
-                                    resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='" + panel.divElement.id + "-more'>Load " + returnLimit +  " more (" + remaining + " remaining on server)</button></td></tr>"
-                                } else {
-                                    resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center text-muted'>All " + result.details.total + " results are displayed</td></tr>"
-                                }
-                                if (skipTo == 0) {
-                                    $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                                } else {
-                                    $('#' + panel.divElement.id + '-resultsTable').append(resultsHtml);
-                                }
-
-                                $("#" + panel.divElement.id + "-more").click(function (event) {
-                                    panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
-                                });
-
-                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                                    appendTo: 'body',
-                                    helper: 'clone',
-                                    delay: 500
-                                });
-                                $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                                    $.each(panel.subscribers, function (i, field) {
-                                        //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                        field.conceptId = $(event.target).attr('data-concept-id');
-                                        field.updateCanvas();
-                                        lastClickedSctid = $(event.target).attr('data-concept-id');
-                                        lastClickTime = Date.now();
-                                    });
-                                });
-                            }
-                        }).fail(function () {
+                        if (!matchedDescriptions || matchedDescriptions.length <= 0) {
                             resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                             $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                        } else {
+//                            var searchFiltersHtml = "<span class='pull right'><a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#" + panel.divElement.id + "-searchFiltersPanel'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span></a>";
+//                            if (panel.options.semTagFilter != "none") {
+//                                searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.semTagFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-semtag'>&times;</a></span>&nbsp;&nbsp;";
+//                            }
+//                            if (panel.options.langFilter != "none") {
+//                                searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.langFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>&nbsp;&nbsp;";
+//                            }
+//                            searchFiltersHtml = searchFiltersHtml + "</span><div id='" + panel.divElement.id + "-searchFiltersPanel' class='panel-collapse collapse'>";
+//                            searchFiltersHtml = searchFiltersHtml + "<div class='tree'><ul><li><a>Filter results by Language</a><ul>";
+//                            for(var key in result.filters.lang) {
+//                                searchFiltersHtml = searchFiltersHtml + "<li><a class='lang-link' href='javascript:void(0);' data-lang='" + key + "'>" + key + " (" + result.filters.lang[key] + ")</a></li>";
+//                            }
+//                            searchFiltersHtml = searchFiltersHtml + "</ul></li></ul>";
+//                            searchFiltersHtml = searchFiltersHtml + "<ul><li><a>Filter results by Semantic Tag</a><ul>";
+//                            for(var key in result.filters.semTag) {
+//                                searchFiltersHtml = searchFiltersHtml + "<li><a class='semtag-link' href='javascript:void(0);' data-semtag='" + key + "'>" + key + " (" + result.filters.semTag[key] + ")</a></li>";
+//                            }
+//                            searchFiltersHtml = searchFiltersHtml + "</ul></li></ul></div>";
+                            //$('#' + panel.divElement.id + '-searchBar').html($('#' + panel.divElement.id + '-searchBar').html() + searchFiltersHtml);
+                            if (panel.options.searchMode == "regex") {
+                                result.matches.sort(function (a, b) {
+                                    if (a.term.length < b.term.length)
+                                        return -1;
+                                    if (a.term.length > b.term.length)
+                                        return 1;
+                                    return 0;
+                                });
+                            }
+                            $.each(matchedDescriptions, function (i, field) {
+                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+                                //console.log(field.active + " " + field.conceptActive);
+                                if (field.active == false || field.conceptActive == false) {
+                                    resultsHtml = resultsHtml + " danger";
+                                }
+                                resultsHtml = resultsHtml + "'><td class='col-md-6'><div draggable='true' ondragstart='drag(event)' class='result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+                            });
+                            if (remaining > 0) {
+                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='" + panel.divElement.id + "-more'>Load " + returnLimit +  " more (" + remaining + " remaining on server)</button></td></tr>"
+                            } else {
+                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center text-muted'>All " + result.details.total + " results are displayed</td></tr>"
+                            }
+                        }
+                        $.get("views/searchPlugin/body/default.hbs").then(function (src) {
+                            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                                if (a){
+                                    if(a > parseInt(b))
+                                        return opts.fn(this);
+                                    else
+                                        return opts.inverse(this);
+                                }
+                            });
+                            Handlebars.registerHelper('if_gre', function(a,b, opts) {
+                                if (a){
+                                    if(parseInt(a) >= b)
+                                        return opts.fn(this);
+                                    else
+                                        return opts.inverse(this);
+                                }
+                            });
+                            var context = {
+                                result: result,
+                                divElementId: panel.divElement.id,
+                                remaining: remaining,
+                                returnLimit: returnLimit
+                            };
+                            var template = Handlebars.compile(src);
+                            $("#" + panel.divElement.id + "-more").click(function (event) {
+                                panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
+                            });
+                            if (skipTo == 0) {
+                                $('#' + panel.divElement.id + '-resultsTable').html(template(context));
+                            } else {
+                                $('#' + panel.divElement.id + '-resultsTable').append(template(context));
+                            }
+                            $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+                                appendTo: 'body',
+                                helper: 'clone',
+                                delay: 500
+                            });
+                            $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
+                                $.each(panel.subscribers, function (i, field) {
+                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                    field.conceptId = $(event.target).attr('data-concept-id');
+                                    field.updateCanvas();
+                                    lastClickedSctid = $(event.target).attr('data-concept-id');
+                                    lastClickTime = Date.now();
+                                });
+                            });
                         });
+
+                    }).fail(function () {
+                        resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
+                        $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                    });
                 }
             }
         }
@@ -2150,6 +2237,38 @@ function drawSubsumesNode(svg, x, y) {
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+function dropT(event, ui) {
+    var draggable = ui.draggable;
+
+    if (!draggable.attr('data-concept-id')) {
+        //console.log("ignore");
+    } else {
+        var conceptId = draggable.attr('data-concept-id');
+        var term = draggable.attr('data-term');
+        var definitionStatus = draggable.attr('data-def-status');
+        if (panel.options.selectedView == "undefined") {
+            panel.options.selectedView = "inferred";
+        }
+        if (typeof conceptId != "undefined") {
+            panel.setToConcept(conceptId, term, definitionStatus);
+        }
+        $(ui.helper).remove(); //destroy clone
+    }
+
+
+    if (!draggable.attr('data-panel')) {
+        //console.log("ignore");
+    } else {
+        //console.log("OK : " + draggable.attr('data-panel'));
+        $.each(componentsRegistry, function(i, field) {
+            if (field.divElement.id == draggable.attr('data-panel')) {
+                if (field.type == "concept-details") {
+                    panel.subscribe(field);
+                }
+            }
+        });
+    }
+}
 
 function taxonomyPanel(divElement, conceptId, options) {
     var nodeCount = 0;
@@ -2177,40 +2296,28 @@ function taxonomyPanel(divElement, conceptId, options) {
     this.history = [];
 
     this.setupCanvas = function() {
-//        var taxonomyHtml = "<div style='height:100%;margin: 5px; overflow:auto;' class='panel panel-default' id='" + panel.divElement.id + "-mainPanel'>";
-//        taxonomyHtml = taxonomyHtml + "<div class='panel-heading' id='" + panel.divElement.id + "-panelHeading'>";
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<div class='row'>";
-//        taxonomyHtml = taxonomyHtml + "<div class='col-md-6' id='" + panel.divElement.id + "-panelTitle'>&nbsp&nbsp&nbsp<strong><span class='i18n' data-i18n-id='i18n_taxonomy'>Taxonomy</span></strong></div>";
-//        taxonomyHtml = taxonomyHtml + "<div class='col-md-6 text-right'>";
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-resetButton' class='btn btn-link' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-repeat'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='" + panel.divElement.id + "' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-configButton' class='btn btn-link' style='padding:2px' data-target='#" + panel.divElement.id + "-configModal'><i class='glyphicon glyphicon-cog'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-collapseButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-small'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-expandButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-resize-full'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "<button id='" + panel.divElement.id + "-closeButton' class='btn btn-link' style='padding:2px'><i class='glyphicon glyphicon-remove'></i></button>"
-//        taxonomyHtml = taxonomyHtml + "</div>";
-//        taxonomyHtml = taxonomyHtml + "</div>";
-//        taxonomyHtml = taxonomyHtml + "</div>";
-//        taxonomyHtml = taxonomyHtml + "<div id='" + panel.divElement.id + "-taxonomyConfigBar' style='margin-bottom: 10px;'><nav class='navbar navbar-default' role='navigation' style='min-height: 28px;border-radius: 0px;border-bottom: 1px lightgray solid;'>";
-//        taxonomyHtml = taxonomyHtml + " <ul class='nav navbar-nav navbar-left'>";
-//        taxonomyHtml = taxonomyHtml + "     <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>";
-//        taxonomyHtml = taxonomyHtml + "         <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='" + panel.divElement.id + "-txViewLabel'></span> <b class='caret'></b></a>";
-//        taxonomyHtml = taxonomyHtml + "         <ul class='dropdown-menu' role='menu' style='float: none;'>";
-//        taxonomyHtml = taxonomyHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-inferredViewButton'><span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span></button></li>";
-//        taxonomyHtml = taxonomyHtml + "             <li><button class='btn btn-link' id='" + panel.divElement.id + "-statedViewButton'><span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span></button></li>";
-//        taxonomyHtml = taxonomyHtml + "         </ul>";
-//        taxonomyHtml = taxonomyHtml + "     </li>";
-//        taxonomyHtml = taxonomyHtml + " </ul>";
-//        taxonomyHtml = taxonomyHtml + "</nav></div>";
-//        taxonomyHtml = taxonomyHtml + "<div class='panel-body' style='height:100%' id='" + panel.divElement.id + "-panelBody'>";
-//        taxonomyHtml = taxonomyHtml + "</div>";
-//        taxonomyHtml = taxonomyHtml + "</div>";
-//        $(divElement).html(taxonomyHtml);
         var context = {
             divElementId: panel.divElement.id
-        }
+        };
         $.get("views/taxonomyPlugin/main.hbs").then(function (src) {
+            Handlebars.registerHelper('console', function (something){
+                console.log(something);
+            });
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if(a > b)
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            });
+
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
             $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
@@ -2353,124 +2460,146 @@ function taxonomyPanel(divElement, conceptId, options) {
     }
 
     this.setupParents = function(parents, focusConcept) {
-        var treeHtml = "<div style='height:100%;margin-bottom: 15px;'>";
-        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 5px;'>";
         var lastParent;
-        $.each(parents, function(i, parent) {
+        $.each(parents, function(i, parent){
             lastParent = parent;
-            treeHtml = treeHtml + "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
-            treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
-            if (parent.definitionStatus == "Primitive") {
-                treeHtml = treeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
-            } else {
-                treeHtml = treeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
-            }
-            treeHtml = treeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
-            treeHtml = treeHtml + "</li>";
         });
-        if (parents.length > 0) {
-            treeHtml = treeHtml.slice(0, -5);
-        }
-        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 15px;'>";
-        treeHtml = treeHtml + "<li data-concept-id='" + focusConcept.conceptId + "' data-term='" + focusConcept.defaultTerm + "' class='treeLabel'>";
-        treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + focusConcept.conceptId + "'></i></button>";
-        if (focusConcept.definitionStatus == "Primitive") {
-            treeHtml = treeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
-        } else {
-            treeHtml = treeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
-        }
-        treeHtml = treeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + focusConcept.conceptId + '" data-term="' + focusConcept.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + focusConcept.conceptId + '">' + focusConcept.defaultTerm + "</span></a>";
-        treeHtml = treeHtml + "</li>";
-        treeHtml = treeHtml + "</ul>";
-        if (parents.length > 0) {
-            treeHtml = treeHtml + "</li>";
-        }
-        treeHtml = treeHtml + "</ul>";
-        treeHtml = treeHtml + "</div>";
-        $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
+//
+//        var treeHtml = "<div style='height:100%;margin-bottom: 15px;'>";
+//        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 5px;'>";
+//        $.each(parents, function(i, parent) {
+//            lastParent = parent;
+//            treeHtml = treeHtml + "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
+//            treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
+//            if (parent.definitionStatus == "Primitive") {
+//                treeHtml = treeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
+//            } else {
+//                treeHtml = treeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
+//            }
+//            treeHtml = treeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
+//            treeHtml = treeHtml + "</li>";
+//        });
+//        if (parents.length > 0) {
+//            treeHtml = treeHtml.slice(0, -5);
+//        }
+//        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 15px;'>";
+//        treeHtml = treeHtml + "<li data-concept-id='" + focusConcept.conceptId + "' data-term='" + focusConcept.defaultTerm + "' class='treeLabel'>";
+//        treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + focusConcept.conceptId + "'></i></button>";
+//        if (focusConcept.definitionStatus == "Primitive") {
+//            treeHtml = treeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
+//        } else {
+//            treeHtml = treeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
+//        }
+//        treeHtml = treeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + focusConcept.conceptId + '" data-term="' + focusConcept.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + focusConcept.conceptId + '">' + focusConcept.defaultTerm + "</span></a>";
+//        treeHtml = treeHtml + "</li>";
+//        treeHtml = treeHtml + "</ul>";
+//        if (parents.length > 0) {
+//            treeHtml = treeHtml + "</li>";
+//        }
+//        treeHtml = treeHtml + "</ul>";
+//        treeHtml = treeHtml + "</div>";
+//        $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
 
-        $(".treeButton").disableTextSelect();
+        $.get("views/taxonomyPlugin/body/parents.hbs").then(function (src) {
+            var context = {
+                parents: parents,
+                focusConcept: focusConcept,
+                divElementId: panel.divElement.id
+            };
+            Handlebars.registerHelper('slice', function (a, b) {
+                $("#" + panel.divElement.id + "-panelBody").html($("#" + panel.divElement.id + "-panelBody").html().slice(a, b));
+            });
 
-        $('.jqui-draggable').draggable({
-            appendTo: 'body',
-            helper: 'clone',
-            delay: 500
-        });
-        $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
-        $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
-            if ($(event.target).hasClass("treeLabel")) {
-                var selectedId = $(event.target).attr('data-concept-id');
-                var selectedLabel = $(event.target).attr('data-term');
-                if (typeof selectedId != "undefined") {
-                    console.log(panel.options.selectedView);
-                    $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
-                        // done
-                    }).done(function(result) {
-                        panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive"});
-                    }).fail(function() {
-                    });
+            var template = Handlebars.compile(src);
+            $("#" + panel.divElement.id + "-panelBody").html(template(context));
+
+            $(".treeButton").disableTextSelect();
+
+            $('.jqui-draggable').draggable({
+                appendTo: 'body',
+                helper: 'clone',
+                delay: 500
+            });
+
+
+            $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
+            $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
+                if ($(event.target).hasClass("treeLabel")) {
+                    var selectedId = $(event.target).attr('data-concept-id');
+                    var selectedLabel = $(event.target).attr('data-term');
+                    if (typeof selectedId != "undefined") {
+                        console.log(panel.options.selectedView);
+                        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
+                            // done
+                        }).done(function(result) {
+                            panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive"});
+                        }).fail(function() {
+                        });
+                    }
                 }
-            }
-        });
-        $("#" + panel.divElement.id + "-panelBody").unbind("click");
-        $("#" + panel.divElement.id + "-panelBody").click(function(event) {
-            if ($(event.target).hasClass("treeButton")) {
-                var conceptId = $(event.target).closest("li").attr('data-concept-id');
-                var iconId = panel.divElement.id + "-treeicon-" + conceptId;
-                event.preventDefault();
-                if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
-                    //console.log("close");
-                    $(event.target).closest("li").find("ul").remove();
-                    $("#" + iconId).removeClass("glyphicon-chevron-down");
-                    $("#" + iconId).addClass("glyphicon-chevron-right");
-                } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
-                    //console.log("open");
-                    $("#" + iconId).removeClass("glyphicon-chevron-right");
-                    $("#" + iconId).addClass("glyphicon-refresh");
-                    $("#" + iconId).addClass("icon-spin");
-                    panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
-                } else if ($("#" + iconId).hasClass("glyphicon-chevron-up")){
-                    $("#" + iconId).removeClass("glyphicon-chevron-up");
-                    $("#" + iconId).addClass("glyphicon-refresh");
-                    $("#" + iconId).addClass("icon-spin");
-                    panel.wrapInParents($(event.target).closest("li").attr('data-concept-id'), $(event.target).closest("li"));
-                } else if ($("#" + iconId).hasClass("glyphicon-minus")){
-                    $("#" + iconId).removeClass("glyphicon-minus");
-                    $("#" + iconId).addClass("glyphicon-chevron-right");
+            });
+            $("#" + panel.divElement.id + "-panelBody").unbind("click");
+            $("#" + panel.divElement.id + "-panelBody").click(function(event) {
+                if ($(event.target).hasClass("treeButton")) {
+                    var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                    var iconId = panel.divElement.id + "-treeicon-" + conceptId;
+                    event.preventDefault();
+                    if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
+                        //console.log("close");
+                        $(event.target).closest("li").find("ul").remove();
+                        $("#" + iconId).removeClass("glyphicon-chevron-down");
+                        $("#" + iconId).addClass("glyphicon-chevron-right");
+                    } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
+                        //console.log("open");
+                        $("#" + iconId).removeClass("glyphicon-chevron-right");
+                        $("#" + iconId).addClass("glyphicon-refresh");
+                        $("#" + iconId).addClass("icon-spin");
+                        panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                    } else if ($("#" + iconId).hasClass("glyphicon-chevron-up")){
+                        $("#" + iconId).removeClass("glyphicon-chevron-up");
+                        $("#" + iconId).addClass("glyphicon-refresh");
+                        $("#" + iconId).addClass("icon-spin");
+                        panel.wrapInParents($(event.target).closest("li").attr('data-concept-id'), $(event.target).closest("li"));
+                    } else if ($("#" + iconId).hasClass("glyphicon-minus")){
+                        $("#" + iconId).removeClass("glyphicon-minus");
+                        $("#" + iconId).addClass("glyphicon-chevron-right");
+                    }
+
+                } else if ($(event.target).hasClass("treeLabel")) {
+                    var selectedId = $(event.target).attr('data-concept-id');
+                    if (typeof selectedId != "undefined") {
+                        $.each(panel.subscribers, function(i, suscriberPanel) {
+                            if (suscriberPanel.conceptId != selectedId) {
+                                suscriberPanel.conceptId = selectedId;
+                                suscriberPanel.updateCanvas();
+                            }
+                        });
+                    }
                 }
 
-            } else if ($(event.target).hasClass("treeLabel")) {
-                var selectedId = $(event.target).attr('data-concept-id');
-                if (typeof selectedId != "undefined") {
-                    $.each(panel.subscribers, function(i, suscriberPanel) {
-                        if (suscriberPanel.conceptId != selectedId) {
-                            suscriberPanel.conceptId = selectedId;
-                            suscriberPanel.updateCanvas();
-                        }
-                    });
-                }
-            }
+            });
 
+            var iconId = panel.divElement.id + "-treeicon-" + focusConcept.conceptId;
+            $("#" + iconId).removeClass("glyphicon-chevron-right");
+            $("#" + iconId).addClass("glyphicon-refresh");
+            $("#" + iconId).addClass("icon-spin");
+            //console.log("getChildren..." + focusConcept.conceptId);
+            panel.getChildren(focusConcept.conceptId);
         });
 
-        var iconId = panel.divElement.id + "-treeicon-" + focusConcept.conceptId;
-        $("#" + iconId).removeClass("glyphicon-chevron-right");
-        $("#" + iconId).addClass("glyphicon-refresh");
-        $("#" + iconId).addClass("icon-spin");
-        //console.log("getChildren..." + focusConcept.conceptId);
-        panel.getChildren(focusConcept.conceptId);
-    }
+
+    };
 
     this.getChildren = function(conceptId) {
         if (typeof panel.options.selectedView == "undefined") {
             panel.options.selectedView = "inferred";
         }
 
-        if (panel.options.selectedView == "inferred") {
-            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
-        } else {
-            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
-        }
+//        if (panel.options.selectedView == "inferred") {
+//            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+//        } else {
+//            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+//        }
 
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
@@ -2481,7 +2610,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
                     return 1;
                 return 0;
-            })
+            });
             //console.log(JSON.stringify(result));
             var listIconIds = [];
             $.each(result, function(i, field) {
@@ -2493,12 +2622,13 @@ function taxonomyPanel(divElement, conceptId, options) {
                     } else {
                         nodeHtml = nodeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
                     }
-                    nodeHtml = nodeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="jqui-draggable treeLabel selectable-row" data-concept-id="' + field.conceptId + '" data-term="' + field.defaultTerm + '" id="' + panel.divElement.id + '-treenode-' + field.conceptId + '">' + field.defaultTerm + '</span></a>';
+                    nodeHtml = nodeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" data-concept-id="' + field.conceptId + '" data-term="' + field.defaultTerm + '" id="' + panel.divElement.id + '-treenode-' + field.conceptId + '">' + field.defaultTerm + '</span></a>';
                     listIconIds.push(field.conceptId);
                 }
             });
             nodeHtml = nodeHtml + "</li>";
             nodeHtml = nodeHtml + "</ul>";
+
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
             if (result.length > 0) {
@@ -2517,7 +2647,20 @@ function taxonomyPanel(divElement, conceptId, options) {
                     revert: false
                 });
             });
+//            $.get("views/taxonomyPlugin/body/children.hbs").then(function (src) {
+//                var context = {
+//                    result: result,
+//                    divElementId: panel.divElement.id
+//                };
+//                Handlebars.registerHelper('push', function (element){
+//                    listIconIds.push(element);
+//                });
+//                var template = Handlebars.compile(src);
+//
+//            });
         }).fail(function() {
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
         });
     }
@@ -2538,7 +2681,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                     } else {
                         parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
                     }
-                    parentLiHtml = parentLiHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
+                    parentLiHtml = parentLiHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
                     parentLiHtml = parentLiHtml + "</li>";
                     parentsStrs.push(parentLiHtml);
                     if (firstParent == "empty") {
@@ -2760,7 +2903,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='";
+    + "-linkerButton' draggable = \"true\" ondragstart = \"drag(event)\" class='btn btn-link linker-button' data-panel='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -2913,8 +3056,12 @@ function program1(depth0,data) {
 
 function program3(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                    <a href=\"javascript:void(0);\" draggable = \"true\" ondragstart=\"drag(event, ";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + ")\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -2926,8 +3073,12 @@ function program3(depth0,data) {
 
 function program5(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                    <a href=\"javascript:void(0);\" draggable = \"true\" ondragstart=\"drag(event, ";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + ")\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -2967,7 +3118,7 @@ function program13(depth0,data) {
   buffer += "\n            >\n        <td>\n            <h4>\n                ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n\n                <span class='jqui-droppable'>"
+  buffer += "\n\n                <span ondrop=\"dropC(event)\" ondragover=\"allowDrop(event)\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</span>\n            </h4>\n            <br>SCTID: "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -3018,7 +3169,7 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n        <tr><td class='jqui-draggable' data-concept-id='";
+  buffer += "\n        <tr><td draggable=\"true\" ondragstart=\"drag(event)\" data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -4309,7 +4460,7 @@ function program11(depth0,data) {
 function program13(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4322,7 +4473,7 @@ function program13(depth0,data) {
 function program15(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4335,7 +4486,7 @@ function program15(depth0,data) {
 function program17(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4348,7 +4499,7 @@ function program17(depth0,data) {
 function program19(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4486,26 +4637,26 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n    <h4><a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n    <h4><a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">&nbsp;</span></a>&nbsp;&nbsp;<span class=\"jqui-droppable\">\n";
+    + "\">&nbsp;</span></a>&nbsp;&nbsp;<span ondrop=\"dropC(event)\" ondragover=\"allowDrop(event)\">\n";
   return buffer;
   }
 
 function program3(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n    <h4><a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n    <h4><a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">&equiv;</span></a>&nbsp;&nbsp;<span class=\"jqui-droppable\">\n";
+    + "\">&equiv;</span></a>&nbsp;&nbsp;<span ondrop=\"dropC(event)\" ondragover=\"allowDrop(event)\">\n";
   return buffer;
   }
 
@@ -4543,7 +4694,7 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n        <span class='jqui-draggable text-warning' data-concept-id='"
+  buffer += "\n        <span draggable = \"true\" ondragstart=\"drag(event)\" class='text-warning' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4580,7 +4731,7 @@ function program5(depth0,data) {
 function program7(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n            <span class='jqui-draggable sct-primitive-concept-compact' data-concept-id='"
+  buffer += "\n            <span draggable = \"true\" ondragstart=\"drag(event)\" class='sct-primitive-concept-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4591,7 +4742,7 @@ function program7(depth0,data) {
 function program9(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n            <span class='jqui-draggable sct-defined-concept-compact' data-concept-id='"
+  buffer += "\n            <span draggable = \"true\" ondragstart=\"drag(event)\" class='sct-defined-concept-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4638,7 +4789,7 @@ function program17(depth0,data) {
 function program18(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n        <span class='jqui-draggable text-warning' data-concept-id='"
+  buffer += "\n        <span draggable = \"true\" ondragstart=\"drag(event)\" class='text-warning' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4683,7 +4834,7 @@ function program2(depth0,data) {
   buffer += "\n            <br>\n            ";
   stack1 = (helper = helpers.eqLastGroup || (depth0 && depth0.eqLastGroup),options={hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), options) : helperMissing.call(depth0, "eqLastGroup", (depth0 && depth0.groupId), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            &nbsp;<span class='jqui-draggable sct-attribute-compact' data-concept-id='"
+  buffer += "\n            &nbsp;<span draggable = \"true\" ondragstart=\"drag(event)\" class='sct-attribute-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4722,7 +4873,7 @@ function program5(depth0,data) {
 function program7(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                <span class='jqui-draggable sct-primitive-concept-compact' data-concept-id='"
+  buffer += "\n                <span draggable = \"true\" ondragstart=\"drag(event)\" class='sct-primitive-concept-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4733,7 +4884,7 @@ function program7(depth0,data) {
 function program9(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                <span class='jqui-draggable sct-defined-concept-compact' data-concept-id='"
+  buffer += "\n                <span draggable = \"true\" ondragstart=\"drag(event)\" class='sct-defined-concept-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4765,13 +4916,13 @@ function program14(depth0,data) {
   buffer += "\n            <br>\n            ";
   stack1 = (helper = helpers.eqLastGroup || (depth0 && depth0.eqLastGroup),options={hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), options) : helperMissing.call(depth0, "eqLastGroup", (depth0 && depth0.groupId), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            &nbsp;<span class='jqui-draggable sct-attribute-compact' data-concept-id='"
+  buffer += "\n            &nbsp;<span draggable = \"true\" class='sct-attribute-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>\n                "
     + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options)))
-    + "</span>&nbsp;&rarr;&nbsp;\n            <span class='jqui-draggable\n                ";
+    + "</span>&nbsp;&rarr;&nbsp;\n            <span draggable = \"true\" ondragstart=\"drag(event)\" class='\n                ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(17, program17, data),fn:self.program(15, program15, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                ' data-concept-id='"
@@ -4921,7 +5072,7 @@ function program16(depth0,data) {
 function program18(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                        <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                        <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4934,7 +5085,7 @@ function program18(depth0,data) {
 function program20(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                        <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                        <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4984,7 +5135,7 @@ function program23(depth0,data) {
 function program24(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4997,7 +5148,7 @@ function program24(depth0,data) {
 function program26(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5048,7 +5199,7 @@ function program29(depth0,data) {
 function program30(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5061,7 +5212,7 @@ function program30(depth0,data) {
 function program32(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5074,7 +5225,7 @@ function program32(depth0,data) {
 function program34(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.cidValue)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.cidValue)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5087,7 +5238,7 @@ function program34(depth0,data) {
 function program36(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning jqui-draggable\"  data-concept-id=\""
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.cidValue)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.cidValue)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5155,7 +5306,566 @@ function program43(depth0,data) {
   return buffer;
   });
 
-this["JST"]["views/searchPlugin/searchPlugin-main.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["JST"]["views/searchPlugin/body/0.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data,depth1) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n    ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.programWithDepth(8, program8, data, depth1),fn:self.programWithDepth(2, program2, data, depth1),data:data},helper ? helper.call(depth0, (depth0 && depth0.active), false, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.active), false, options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }
+function program2(depth0,data,depth2) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n        ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.programWithDepth(5, program5, data, depth2),fn:self.programWithDepth(3, program3, data, depth2),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "inactiveOnly", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "inactiveOnly", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n    ";
+  return buffer;
+  }
+function program3(depth0,data,depth3) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n            <tr class='resultRow selectable-row danger'>\n                <td class='col-md-7'>\n                    <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                        <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n                    </div>\n                </td>\n                <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                    "
+    + escapeExpression(((stack1 = ((stack1 = (depth3 && depth3.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\n                </td>\n            </tr>\n        ";
+  return buffer;
+  }
+
+function program5(depth0,data,depth3) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n            ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.noop,fn:self.programWithDepth(6, program6, data, depth3),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n        ";
+  return buffer;
+  }
+function program6(depth0,data,depth4) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n                <tr class='resultRow selectable-row danger'>\n                    <td class='col-md-7'>\n                        <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                            <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n                        </div>\n                    </td>\n                    <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                        "
+    + escapeExpression(((stack1 = ((stack1 = (depth4 && depth4.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\n                    </td>\n                </tr>\n            ";
+  return buffer;
+  }
+
+function program8(depth0,data,depth2) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n        ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.programWithDepth(13, program13, data, depth2),fn:self.programWithDepth(9, program9, data, depth2),data:data},helper ? helper.call(depth0, (depth0 && depth0.conceptActive), false, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.conceptActive), false, options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n    ";
+  return buffer;
+  }
+function program9(depth0,data,depth3) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n            ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.programWithDepth(10, program10, data, depth3),fn:self.programWithDepth(6, program6, data, depth3),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "inactiveOnly", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "inactiveOnly", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n        ";
+  return buffer;
+  }
+function program10(depth0,data,depth4) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n                ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.noop,fn:self.programWithDepth(11, program11, data, depth4),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n            ";
+  return buffer;
+  }
+function program11(depth0,data,depth5) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n                    <tr class='resultRow selectable-row danger'>\n                        <td class='col-md-7'>\n                            <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n                            </div>\n                        </td>\n                        <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                            "
+    + escapeExpression(((stack1 = ((stack1 = (depth5 && depth5.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\n                        </td>\n                    </tr>\n                ";
+  return buffer;
+  }
+
+function program13(depth0,data,depth3) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n            ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.programWithDepth(16, program16, data, depth3),fn:self.programWithDepth(14, program14, data, depth3),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "inactiveOnly", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "inactiveOnly", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n        ";
+  return buffer;
+  }
+function program14(depth0,data,depth4) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n                <tr class='resultRow selectable-row'>\n                    <td class='col-md-7'>\n                        <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                            <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n                        </div>\n                    </td>\n                    <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                        "
+    + escapeExpression(((stack1 = ((stack1 = (depth4 && depth4.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\n                    </td>\n                </tr>\n            ";
+  return buffer;
+  }
+
+function program16(depth0,data,depth4) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n                ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.noop,fn:self.programWithDepth(17, program17, data, depth4),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n            ";
+  return buffer;
+  }
+function program17(depth0,data,depth5) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n                    <tr class='resultRow selectable-row'>\n                        <td class='col-md-7'>\n                            <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n                            </div>\n                        </td>\n                        <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                            "
+    + escapeExpression(((stack1 = ((stack1 = (depth5 && depth5.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\n                        </td>\n                    </tr>\n                ";
+  return buffer;
+  }
+
+  stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.descriptions), {hash:{},inverse:self.noop,fn:self.programWithDepth(1, program1, data, depth0),data:data});
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  });
+
+this["JST"]["views/searchPlugin/body/1.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, self=this, helperMissing=helpers.helperMissing, functionType="function", escapeExpression=this.escapeExpression;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n    <tr class='resultRow selectable-row";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.active), false, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.active), false, options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "'>\n        <td class='col-md-7'>\n            <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n            </div>\n        </td>\n        <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n            ";
+  if (helper = helpers.fsn) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fsn); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\n        </td>\n    </tr>\n";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  
+  return "danger";
+  }
+
+function program4(depth0,data) {
+  
+  var stack1, helper, options;
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.conceptActive), false, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.conceptActive), false, options));
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }
+
+  stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.matches), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  });
+
+this["JST"]["views/searchPlugin/body/bar.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n    <span class='text-muted'>"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.details)),stack1 == null || stack1 === false ? stack1 : stack1.total)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " matches found in ";
+  if (helper = helpers.elapsed) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.elapsed); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " seconds.</span>\n";
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  
+  return "\n";
+  }
+
+function program5(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n    &nbsp;&nbsp;<span class='label label-danger'>"
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.semTagFilter)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-semtag'>&times;</a></span>&nbsp;&nbsp;\n";
+  return buffer;
+  }
+
+function program7(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n    &nbsp;&nbsp;<span class='label label-danger'>"
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.langFilter)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>&nbsp;&nbsp;\n";
+  return buffer;
+  }
+
+function program9(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n                    <li><a class='lang-link' href='javascript:void(0);' data-lang='"
+    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "'>"
+    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " ("
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+    + ")</a></li>\n                ";
+  return buffer;
+  }
+
+function program11(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n                    <li><a class='semtag-link' href='javascript:void(0);' data-semtag='"
+    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "'>"
+    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " ("
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+    + ")</a></li>\n                ";
+  return buffer;
+  }
+
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.details), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n<span class='pull right'>\n<a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-searchFiltersPanel'>\n    <span class='i18n' data-i18n-id='i18n_filters'>Filters</span>\n</a>\n";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.semTagFilter), "none", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.semTagFilter), "none", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(7, program7, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.langFilter), "none", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.langFilter), "none", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</span><div id='";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-searchFiltersPanel' class='panel-collapse collapse'>\n<div class='tree'>\n    <ul>\n        <li><a>Filter results by Language</a>\n            <ul>\n                ";
+  stack1 = helpers.each.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.filters)),stack1 == null || stack1 === false ? stack1 : stack1.lang), {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n            </ul>\n        </li>\n    </ul>\n    <ul>\n        <li><a>Filter results by Semantic Tag</a>\n            <ul>\n                ";
+  stack1 = helpers.each.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.filters)),stack1 == null || stack1 === false ? stack1 : stack1.semTag), {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n            </ul>\n        </li>\n    </ul>\n</div>\n";
+  return buffer;
+  });
+
+this["JST"]["views/searchPlugin/body/default.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this, functionType="function";
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n    ";
+  stack1 = (helper = helpers.if_gre || (depth0 && depth0.if_gre),options={hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data},helper ? helper.call(depth0, "0", ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.matches)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "if_gre", "0", ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.matches)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = "", helper, options;
+  buffer += "\n        "
+    + escapeExpression((helper = helpers.console || (depth0 && depth0.console),options={hash:{},data:data},helper ? helper.call(depth0, "a", options) : helperMissing.call(depth0, "console", "a", options)))
+    + "\n        <tr><td class='text-muted'>No results</td></tr>\n    ";
+  return buffer;
+  }
+
+function program4(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n        "
+    + escapeExpression((helper = helpers.console || (depth0 && depth0.console),options={hash:{},data:data},helper ? helper.call(depth0, "ab", options) : helperMissing.call(depth0, "console", "ab", options)))
+    + "\n        ";
+  stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.matches), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n        ";
+  stack1 = (helper = helpers.if_gr || (depth0 && depth0.if_gr),options={hash:{},inverse:self.program(12, program12, data),fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), 0, options) : helperMissing.call(depth0, "if_gr", (depth0 && depth0.remaining), 0, options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n    ";
+  return buffer;
+  }
+function program5(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n            <tr class='resultRow selectable-row";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.active), false, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.active), false, options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "'>\n                <td class='col-md-6'>\n                    <div draggable='true' ondragstart='drag(event)' class='result-item' data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>\n                        <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n                    </div>\n                </td>\n                <td class='text-muted small-text col-md-6 result-item'  data-concept-id='";
+  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "' data-term='";
+  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "'>";
+  if (helper = helpers.fsn) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fsn); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</td>\n            </tr>\n        ";
+  return buffer;
+  }
+function program6(depth0,data) {
+  
+  
+  return " danger";
+  }
+
+function program8(depth0,data) {
+  
+  var stack1, helper, options;
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.conceptActive), false, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.conceptActive), false, options));
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }
+  }
+
+function program10(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n            <tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-more'>Load ";
+  if (helper = helpers.returnLimit) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.returnLimit); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " more (";
+  if (helper = helpers.remaining) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.remaining); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " remaining on server)</button></td></tr>\n        ";
+  return buffer;
+  }
+
+function program12(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n            <tr class='more-row'><td colspan='2' class='text-center text-muted'>All "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.details)),stack1 == null || stack1 === false ? stack1 : stack1.total)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " results are displayed</td></tr>\n        ";
+  return buffer;
+  }
+
+function program14(depth0,data) {
+  
+  
+  return "\n    <tr><td class='text-muted'>No results</td></tr>\n";
+  }
+
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.matches), {hash:{},inverse:self.program(14, program14, data),fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  });
+
+this["JST"]["views/searchPlugin/main.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -5173,7 +5883,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='";
+    + "-linkerButton' draggable=\"true\" ondragstart=\"drag(event)\" class='btn btn-link linker-button' data-panel='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5301,21 +6011,33 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["JST"]["views/taxonomyPlugin/children.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["JST"]["views/taxonomyPlugin/body/children.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
-function program1(depth0,data,depth1) {
+function program1(depth0,data) {
+  
+  
+  return "\n   <span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>\n";
+  }
+
+function program3(depth0,data) {
+  
+  
+  return "\n    <span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>\n";
+  }
+
+function program5(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n        ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.active), {hash:{},inverse:self.noop,fn:self.programWithDepth(2, program2, data, depth1),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.active), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    ";
   return buffer;
   }
-function program2(depth0,data,depth2) {
+function program6(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n            <li data-concept-id='";
@@ -5326,16 +6048,16 @@ function program2(depth0,data,depth2) {
   if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "' class='treeLabel'>\n            <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' id='"
-    + escapeExpression(((stack1 = (depth2 && depth2.divElementId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "' class='treeLabel'>\n                <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' id='"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.panel)),stack1 == null || stack1 === false ? stack1 : stack1.divElement)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "-treeicon-";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "'></i></button>\n            ";
-  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.definitionStatus), "Primitive", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.definitionStatus), "Primitive", options));
+    + "'></i></button>\n                ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(9, program9, data),fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.definitionStatus), "Primitive", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.definitionStatus), "Primitive", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"jqui-draggable treeLabel selectable-row\" data-concept-id=\"";
+  buffer += "\n                <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable=\"true\" ondragstart=\"drag(event)\" class=\"treeLabel selectable-row\" data-concept-id=\"";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5344,7 +6066,7 @@ function program2(depth0,data,depth2) {
   else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "\" id=\""
-    + escapeExpression(((stack1 = (depth2 && depth2.divElementId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.panel)),stack1 == null || stack1 === false ? stack1 : stack1.divElement)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "-treenode-";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
@@ -5353,31 +6075,33 @@ function program2(depth0,data,depth2) {
   if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span></a>\n            "
+    + "</span></a>\n                "
     + escapeExpression((helper = helpers.push || (depth0 && depth0.push),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.conceptId), options) : helperMissing.call(depth0, "push", (depth0 && depth0.conceptId), options)))
-    + "\n        ";
+    + "\n            </li>\n        ";
   return buffer;
   }
-function program3(depth0,data) {
+function program7(depth0,data) {
   
   
-  return "\n                <span class=\"badge alert-warning\">&nbsp;</span>&nbsp;&nbsp;\n            ";
+  return "\n                    <span class=\"badge alert-warning\">&nbsp;</span>&nbsp;&nbsp;\n                ";
   }
 
-function program5(depth0,data) {
+function program9(depth0,data) {
   
   
-  return "\n                <span class=\"badge alert-warning\">&equiv;</span>&nbsp;&nbsp;\n            ";
+  return "\n                    <span class=\"badge alert-warning\">&equiv;</span>&nbsp;&nbsp;\n                ";
   }
 
-  buffer += "<ul style='list-style-type: none; padding-left: 15px;'>\n    ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.result), {hash:{},inverse:self.noop,fn:self.programWithDepth(1, program1, data, depth0),data:data});
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.selectedView), "inferred", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.selectedView), "inferred", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </li>\n</ul>";
+  buffer += "\n\n<ul style='list-style-type: none; padding-left: 15px;'>\n    ";
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.result), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ul>\n\n";
   return buffer;
   });
 
-this["JST"]["views/taxonomyPlugin/parents.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data,depth1) {
+this["JST"]["views/taxonomyPlugin/body/parents.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data,depth1) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
@@ -5410,7 +6134,7 @@ function program1(depth0,data,depth2) {
   if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" class=\"jqui-draggable treeLabel selectable-row\" id=\""
+    + "\" draggable=\"true\" ondragstart=\"drag(event)\" class=\"treeLabel selectable-row\" id=\""
     + escapeExpression(((stack1 = (depth2 && depth2.divElementId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "-treenode-";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -5460,9 +6184,7 @@ function program8(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.focusConcept)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.focusConcept)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "' class='treeLabel'>\n                "
-    + escapeExpression((helper = helpers.console || (depth0 && depth0.console),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.focusConcept), options) : helperMissing.call(depth0, "console", (depth0 && depth0.focusConcept), options)))
-    + "\n                <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='";
+    + "' class='treeLabel'>\n                <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5475,7 +6197,7 @@ function program8(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.focusConcept)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.focusConcept)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" class=\"jqui-draggable treeLabel selectable-row\" id=\"";
+    + "\" draggable=\"true\" ondragstart=\"drag(event)\" class=\"treeLabel selectable-row\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5490,7 +6212,7 @@ function program8(depth0,data) {
   return buffer;
   });
 
-this["JST"]["views/taxonomyPlugin/taxonomyPlugin-main.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["JST"]["views/taxonomyPlugin/main.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
@@ -5500,7 +6222,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-mainPanel'>\n    <div class='panel-heading' id='";
+    + "-mainPanel'>\n    <div ondrop=\"dropT(event)\" ondragover=\"allowDrop(event)\" class='panel-heading' id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5524,7 +6246,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-linkerButton' class='btn btn-link jqui-draggable linker-button' data-panel='";
+    + "-linkerButton' draggable=\"true\" ondragstart=\"drag(event)\" class='btn btn-link linker-button' data-panel='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5564,7 +6286,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-statedViewButton'><span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span></button></li>\n                </ul>\n            </li>\n        </ul>\n    </nav></div>\n    <div class='panel-body' style='height:100%' id='";
+    + "-statedViewButton'><span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span></button></li>\n                </ul>\n            </li>\n        </ul>\n    </nav></div>\n    <div ondrop=\"dropT(event)\" ondragover=\"allowDrop(event)\" class='panel-body' style='height:100%' id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

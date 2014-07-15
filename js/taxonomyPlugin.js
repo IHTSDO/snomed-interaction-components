@@ -3,38 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-function dropT(event, ui) {
-    var draggable = ui.draggable;
-
-    if (!draggable.attr('data-concept-id')) {
-        //console.log("ignore");
-    } else {
-        var conceptId = draggable.attr('data-concept-id');
-        var term = draggable.attr('data-term');
-        var definitionStatus = draggable.attr('data-def-status');
-        if (panel.options.selectedView == "undefined") {
-            panel.options.selectedView = "inferred";
-        }
-        if (typeof conceptId != "undefined") {
-            panel.setToConcept(conceptId, term, definitionStatus);
-        }
-        $(ui.helper).remove(); //destroy clone
-    }
-
-
-    if (!draggable.attr('data-panel')) {
-        //console.log("ignore");
-    } else {
-        //console.log("OK : " + draggable.attr('data-panel'));
-        $.each(componentsRegistry, function(i, field) {
-            if (field.divElement.id == draggable.attr('data-panel')) {
-                if (field.type == "concept-details") {
-                    panel.subscribe(field);
-                }
-            }
-        });
-    }
-}
 
 function taxonomyPanel(divElement, conceptId, options) {
     var nodeCount = 0;
@@ -66,24 +34,6 @@ function taxonomyPanel(divElement, conceptId, options) {
             divElementId: panel.divElement.id
         };
         $.get("views/taxonomyPlugin/main.hbs").then(function (src) {
-            Handlebars.registerHelper('console', function (something){
-                console.log(something);
-            });
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                if (opts != "undefined") {
-                    if(a == b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                if(a > b)
-                    return opts.fn(this);
-                else
-                    return opts.inverse(this);
-            });
-
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
             $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
@@ -161,23 +111,23 @@ function taxonomyPanel(divElement, conceptId, options) {
                 animation: true,
                 delay: 1000
             });
-            $("#" + panel.divElement.id + "-linkerButton").draggable({
-                cancel: false,
-                appendTo: 'body',
-                helper: 'clone',
-                delay: 500,
-                revert: false
-            });
+//            $("#" + panel.divElement.id + "-linkerButton").draggable({
+//                cancel: false,
+//                appendTo: 'body',
+//                helper: 'clone',
+//                delay: 500,
+//                revert: false
+//            });
 
-            $("#" + panel.divElement.id + "-panelBody").droppable({
-                drop: panel.handleDropEvent,
-                hoverClass: "bg-info"
-            });
-
-            $("#" + panel.divElement.id + "-panelHeading").droppable({
-                drop: panel.handleDropEvent,
-                hoverClass: "bg-info"
-            });
+//            $("#" + panel.divElement.id + "-panelBody").droppable({
+//                drop: panel.handleDropEvent,
+//                hoverClass: "bg-info"
+//            });
+//
+//            $("#" + panel.divElement.id + "-panelHeading").droppable({
+//                drop: panel.handleDropEvent,
+//                hoverClass: "bg-info"
+//            });
 
             $("#" + panel.divElement.id + "-resetButton").click(function() {
                 panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
@@ -267,6 +217,20 @@ function taxonomyPanel(divElement, conceptId, options) {
 //        $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
 
         $.get("views/taxonomyPlugin/body/parents.hbs").then(function (src) {
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if(a > b)
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            });
             var context = {
                 parents: parents,
                 focusConcept: focusConcept,
@@ -281,13 +245,11 @@ function taxonomyPanel(divElement, conceptId, options) {
 
             $(".treeButton").disableTextSelect();
 
-            $('.jqui-draggable').draggable({
-                appendTo: 'body',
-                helper: 'clone',
-                delay: 500
-            });
-
-
+//            $('.jqui-draggable').draggable({
+//                appendTo: 'body',
+//                helper: 'clone',
+//                delay: 500
+//            });
             $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
             $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
                 if ($(event.target).hasClass("treeLabel")) {
@@ -330,7 +292,6 @@ function taxonomyPanel(divElement, conceptId, options) {
                         $("#" + iconId).removeClass("glyphicon-minus");
                         $("#" + iconId).addClass("glyphicon-chevron-right");
                     }
-
                 } else if ($(event.target).hasClass("treeLabel")) {
                     var selectedId = $(event.target).attr('data-concept-id');
                     if (typeof selectedId != "undefined") {
@@ -406,18 +367,26 @@ function taxonomyPanel(divElement, conceptId, options) {
             $(".treeButton").disableTextSelect();
             //console.log(JSON.stringify(listIconIds));
             $.each(listIconIds, function(i, nodeId) {
-                $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
-                    appendTo: 'body',
-                    helper: 'clone',
-                    delay: 500,
-                    revert: false
-                });
+//                $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
+//                    appendTo: 'body',
+//                    helper: 'clone',
+//                    delay: 500,
+//                    revert: false
+//                });
             });
 //            $.get("views/taxonomyPlugin/body/children.hbs").then(function (src) {
 //                var context = {
 //                    result: result,
 //                    divElementId: panel.divElement.id
 //                };
+    //            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+    //                if (opts != "undefined") {
+    //                    if(a == b)
+    //                        return opts.fn(this);
+    //                    else
+    //                        return opts.inverse(this);
+    //                }
+    //            });
 //                Handlebars.registerHelper('push', function (element){
 //                    listIconIds.push(element);
 //                });
@@ -637,6 +606,46 @@ function clearTaxonomyPanelSubscriptions(divElementId1) {
     d1.unsubscribeAll();
     $("#" + divElementId1).find('.linker-button').popover('toggle');
 }
+
+function dropT(ev, id) {
+    var divElementId = id;
+    var panel;
+    var panelD = ev.dataTransfer.getData("panel");
+    var conceptId = ev.dataTransfer.getData("concept-id");
+    var term = ev.dataTransfer.getData("term");
+    var definitionStatus = ev.dataTransfer.getData("def-status");
+
+    $.each(componentsRegistry, function (i, field){
+        if (field.divElement.id == divElementId){
+            panel = field;
+        }
+    });
+
+    if (!conceptId) {
+        //console.log("ignore");
+    } else {
+        if (panel.options.selectedView == "undefined") {
+            panel.options.selectedView = "inferred";
+        }
+        if (typeof conceptId != "undefined") {
+            panel.setToConcept(conceptId, term, definitionStatus);
+        }
+        //$(ui.helper).remove(); //destroy clone
+    }
+    if (!panelD) {
+        //console.log("ignore");
+    } else {
+        //console.log("OK : " + draggable.attr('data-panel'));
+        $.each(componentsRegistry, function(i, field) {
+            if (field.divElement.id == panelD) {
+                if (field.type == "concept-details") {
+                    panel.subscribe(field);
+                }
+            }
+        });
+    }
+}
+
 
 (function($) {
     $.fn.addTaxonomy = function(options) {

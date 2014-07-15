@@ -3,7 +3,7 @@
         {{#if_eq options.statusSearchFilter "inactiveOnly"}}
             <tr class='resultRow selectable-row danger'>
                 <td class='col-md-7'>
-                    <div draggable="true" ondragstart="drag(event)" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                    <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
                         <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
                     </div>
                 </td>
@@ -15,7 +15,7 @@
             {{#if_eq options.statusSearchFilter "activeAndInactive"}}
                 <tr class='resultRow selectable-row danger'>
                     <td class='col-md-7'>
-                        <div draggable="true" ondragstart="drag(event)" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                        <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
                             <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
                         </div>
                     </td>
@@ -30,7 +30,7 @@
             {{#if_eq options.statusSearchFilter "inactiveOnly"}}
                 <tr class='resultRow selectable-row danger'>
                     <td class='col-md-7'>
-                        <div draggable="true" ondragstart="drag(event)" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                        <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
                             <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
                         </div>
                     </td>
@@ -42,7 +42,7 @@
                 {{#if_eq options.statusSearchFilter "activeAndInactive"}}
                     <tr class='resultRow selectable-row danger'>
                         <td class='col-md-7'>
-                            <div draggable="true" ondragstart="drag(event)" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                            <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
                                 <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
                             </div>
                         </td>
@@ -56,7 +56,7 @@
             {{#if_eq options.statusSearchFilter "inactiveOnly"}}
                 <tr class='resultRow selectable-row'>
                     <td class='col-md-7'>
-                        <div draggable="true" ondragstart="drag(event)" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                        <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
                             <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
                         </div>
                     </td>
@@ -68,7 +68,7 @@
                 {{#if_eq options.statusSearchFilter "activeAndInactive"}}
                     <tr class='resultRow selectable-row'>
                         <td class='col-md-7'>
-                            <div draggable="true" ondragstart="drag(event)" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                            <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
                                 <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
                             </div>
                         </td>

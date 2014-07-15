@@ -14,7 +14,7 @@
                 {{else}}
                     <span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;
                 {{/if_eq}}
-                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" id="{{panel.divElement.id}}-treenode-{{conceptId}}">{{defaultTerm}}</span></a>
+                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable="true" ondragstart="drag(event, '{{divElementId}}')" class="treeLabel selectable-row" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" id="{{panel.divElement.id}}-treenode-{{conceptId}}">{{defaultTerm}}</span></a>
                 {{push conceptId}}
             </li>
         {{/if}}
