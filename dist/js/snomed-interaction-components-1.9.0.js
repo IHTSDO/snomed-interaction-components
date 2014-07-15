@@ -1149,7 +1149,7 @@ function searchPanel(divElement, options) {
         var context = {
             divElementId: panel.divElement.id
         }
-        $.get("views/searchPlugin/main.hbs").then(function (src) {
+        $.get("views/searchPlugin/searchPlugin-main.hbs").then(function (src) {
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
             $('#' + panel.divElement.id + '-searchBox').keyup(function () {
@@ -2210,7 +2210,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         var context = {
             divElementId: panel.divElement.id
         }
-        $.get("views/taxonomyPlugin/main.hbs").then(function (src) {
+        $.get("views/taxonomyPlugin/taxonomyPlugin-main.hbs").then(function (src) {
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
             $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
