@@ -143,6 +143,3 @@ and open the template in the editor.
     transform: skewX(15deg);
 }
 
-.menu-item-active {
-    background-color: #99ccff;
-}
