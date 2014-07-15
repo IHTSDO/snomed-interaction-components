@@ -9,56 +9,6 @@ $(function() {
     $('.noSelect').disableTextSelect(); //No text selection on elements with a class of 'noSelect'
 });
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-
-function drag(ev, id) {
-    $.each(ev.target.attributes, function (){
-        if (this.name.substr(0, 4) == "data"){
-            ev.dataTransfer.setData(this.name.substr(5), this.value);
-        }
-    });
-    ev.dataTransfer.setData("divElementId", id);
-}
-
-function dropC(ev) {
-    ev.preventDefault();
-    var conceptId = ev.dataTransfer.getData("concept-id");
-    var panelD = ev.dataTransfer.getData("panel");
-    var divElementID = ev.dataTransfer.getData("divElementId");
-    var panelAct;
-    $.each(componentsRegistry, function (i, field){
-        if (field.id == divElementID){
-            panelAct = field;
-        }
-    });
-    //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
-    if (!conceptId) {
-        if (!panelD) {
-            //console.log("ignore");
-        } else {
-            //console.log("OK : " + draggable.attr('data-panel'));
-            $.each(componentsRegistry, function(i, field) {
-                if (field.divElement.id == panelD) {
-                    if (field.type == "search" || field.type == "taxonomy") {
-                        field.subscribe(panelAct);
-                    }
-                }
-            });
-        }
-    } else {
-        if (panelAct.conceptId != conceptId) {
-            if ($.contains($("#" + panelAct.divElement.id).get(0), $(draggable).get(0))) {
-                draggable.remove();
-            }
-            panelAct.conceptId = conceptId;
-            panelAct.updateCanvas();
-        }
-    }
-    //ev.target.appendChild(document.getElementById(data));
-}
-
 function conceptDetails(divElement, conceptId, options) {
 
     if (typeof componentsRegistry == "undefined") {
@@ -118,92 +68,92 @@ function conceptDetails(divElement, conceptId, options) {
         $.get("views/conceptDetailsPlugin/main.hbs").then(function (src) {
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                if (opts != "undefined") {
-                    if(a == b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                if (a){
-                    var s = a.lastIndexOf("(");
-                    if(s > b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('substr', function (string, start){
-                var l = string.lastIndexOf("(") - 1;
-                return string.substr(start, l);
-            });
-            Handlebars.registerHelper('push', function (element, array){
-                array.push(element);
-                // return ;
-            });
-            Handlebars.registerHelper('removeSemtag', function (term){
-                return panel.removeSemtag(term);
-            });
-            Handlebars.registerHelper('lastIndexOf', function (term, pos){
-                return term.lastIndexOf(pos);
-            });
-            Handlebars.registerHelper('console', function (something){
-                console.log(something);
-            });
-            Handlebars.registerHelper('eqLastGroup', function (a, opts){
-                if(!a == panel.lastGroup)
-                    return opts.fn(this);
-                else
-                    return opts.inverse(this);
-            });
-            Handlebars.registerHelper('setLastGroup', function (a){
-                 panel.lastGroup = a;
-            });
-            Handlebars.registerHelper('getRandomColor' , function (){
-                return getRandomColor();
-            });
-            Handlebars.registerHelper('lastColor', function (a) {
-                if (a == "get") {
-                    return panel.color;
-                }else {
-                    panel.color = a;
-                }
-            });
-            Handlebars.registerHelper('preferred', function (a, opts) {
-                if (a == "get") {
-                    if (panel.preferred) {
-                        return opts.fn(this);
-                    }else{
-                        return opts.inverse(this);
-                    }
-                }else {
-                    panel.preferred = a;
-                }
-            });
-            Handlebars.registerHelper('acceptable', function (a, opts) {
-                if (a == "get") {
-                    if (panel.acceptable) {
-                        return opts.fn(this);
-                    }else{
-                        return opts.inverse(this);
-                    }
-                }else {
-                    panel.acceptable = a;
-                }
-            });
-            Handlebars.registerHelper('included', function (a, opts) {
-                if (a == "get") {
-                    if (panel.included) {
-                        return opts.fn(this);
-                    }else{
-                        return opts.inverse(this);
-                    }
-                }else {
-                    panel.included = a;
-                }
-            });
+//            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+//                if (opts != "undefined") {
+//                    if(a == b)
+//                        return opts.fn(this);
+//                    else
+//                        return opts.inverse(this);
+//                }
+//            });
+//            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+//                if (a){
+//                    var s = a.lastIndexOf("(");
+//                    if(s > b)
+//                        return opts.fn(this);
+//                    else
+//                        return opts.inverse(this);
+//                }
+//            });
+//            Handlebars.registerHelper('substr', function (string, start){
+//                var l = string.lastIndexOf("(") - 1;
+//                return string.substr(start, l);
+//            });
+//            Handlebars.registerHelper('push', function (element, array){
+//                array.push(element);
+//                // return ;
+//            });
+//            Handlebars.registerHelper('removeSemtag', function (term){
+//                return panel.removeSemtag(term);
+//            });
+//            Handlebars.registerHelper('lastIndexOf', function (term, pos){
+//                return term.lastIndexOf(pos);
+//            });
+//            Handlebars.registerHelper('console', function (something){
+//                console.log(something);
+//            });
+//            Handlebars.registerHelper('eqLastGroup', function (a, opts){
+//                if(!a == panel.lastGroup)
+//                    return opts.fn(this);
+//                else
+//                    return opts.inverse(this);
+//            });
+//            Handlebars.registerHelper('setLastGroup', function (a){
+//                 panel.lastGroup = a;
+//            });
+//            Handlebars.registerHelper('getRandomColor' , function (){
+//                return getRandomColor();
+//            });
+//            Handlebars.registerHelper('lastColor', function (a) {
+//                if (a == "get") {
+//                    return panel.color;
+//                }else {
+//                    panel.color = a;
+//                }
+//            });
+//            Handlebars.registerHelper('preferred', function (a, opts) {
+//                if (a == "get") {
+//                    if (panel.preferred) {
+//                        return opts.fn(this);
+//                    }else{
+//                        return opts.inverse(this);
+//                    }
+//                }else {
+//                    panel.preferred = a;
+//                }
+//            });
+//            Handlebars.registerHelper('acceptable', function (a, opts) {
+//                if (a == "get") {
+//                    if (panel.acceptable) {
+//                        return opts.fn(this);
+//                    }else{
+//                        return opts.inverse(this);
+//                    }
+//                }else {
+//                    panel.acceptable = a;
+//                }
+//            });
+//            Handlebars.registerHelper('included', function (a, opts) {
+//                if (a == "get") {
+//                    if (panel.included) {
+//                        return opts.fn(this);
+//                    }else{
+//                        return opts.inverse(this);
+//                    }
+//                }else {
+//                    panel.included = a;
+//                }
+//            });
 
             $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
             $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
@@ -345,19 +295,19 @@ function conceptDetails(divElement, conceptId, options) {
                 panel.updateCanvas();
             });
 
-            $("#" + panel.divElement.id + "-linkerButton").draggable({
-                cancel: false,
-                appendTo: 'body',
-                helper: 'clone',
-                delay: 500
-            });
+//            $("#" + panel.divElement.id + "-linkerButton").draggable({
+//                cancel: false,
+//                appendTo: 'body',
+//                helper: 'clone',
+//                delay: 500
+//            });
 
-            $(".resizable").resizable();
+//            $(".resizable").resizable();
 
-            $('#' + panel.divElement.id + '-panelHeading').droppable({
-                drop: panel.handleDropEvent,
-                hoverClass: "bg-info"
-            });
+//            $('#' + panel.divElement.id + '-panelHeading').droppable({
+//                drop: panel.handleDropEvent,
+//                hoverClass: "bg-info"
+//            });
 
             $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
                 $("#" + panel.divElement.id + "-linkerButton").popover({
@@ -379,48 +329,6 @@ function conceptDetails(divElement, conceptId, options) {
             panel.updateCanvas();
             panel.setupOptionsPanel();
         });
-    }
-
-    this.allowDrop = function(ev) {
-        ev.preventDefault();
-    }
-
-    this.drag = function(ev) {
-        var attr = {
-            conceptId: $(ev.target).attr('data-concept-id'),
-            panel: $(ev.target).attr('data-panel')
-        };
-        ev.dataTransfer.setData("conceptId", attr.conceptId);
-        ev.dataTransfer.setData("panel", attr.panel);
-        console.log($(ev.target).get(0));
-    }
-
-    this.drop = function(ev) {
-        ev.preventDefault();
-        var conceptId = ev.dataTransfer.getData("conceptId");
-        var panelD = ev.dataTransfer.getData("panel");
-        if (conceptId) {
-            if (panelD) {
-            } else {
-                $.each(componentsRegistry, function(i, field) {
-                    if (field.divElement.id == panelD) {
-                        if (field.type == "search" || field.type == "taxonomy") {
-                            field.subscribe(panel);
-                        }
-                    }
-                });
-            }
-        } else {
-            console.log(panel);
-            if (panel.conceptId != conceptId) {
-                if ($.contains($("#" + panel.divElement.id).get(0), $(draggable).get(0))) {
-                    draggable.remove();
-                }
-                panel.conceptId = conceptId;
-                panel.updateCanvas();
-            }
-        }
-        //ev.target.appendChild(document.getElementById(data));
     }
 
     this.handleDropEvent = function(event, ui) {
@@ -484,6 +392,14 @@ function conceptDetails(divElement, conceptId, options) {
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
             $.get("views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs").then(function (src) {
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
                 var context = {
                     firstMatch: firstMatch,
                     divElementId: panel.divElement.id,
@@ -502,6 +418,14 @@ function conceptDetails(divElement, conceptId, options) {
 
             // load home-attributes
             $.get("views/conceptDetailsPlugin/tabs/home/attributes.hbs").then(function (src) {
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
                 var context = {
                     panel: panel,
                     firstMatch: firstMatch,
@@ -519,16 +443,16 @@ function conceptDetails(divElement, conceptId, options) {
                     $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
                 }
 
-                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find('.jqui-droppable').droppable({
-                    drop: panel.handleDropEvent,
-                    hoverClass: "bg-info"
-                });
+//                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find('.jqui-droppable').droppable({
+//                    drop: panel.handleDropEvent,
+//                    hoverClass: "bg-info"
+//                });
 
-                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").draggable({
-                    appendTo: 'body',
-                    helper: 'clone',
-                    delay: 10
-                });
+//                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").draggable({
+//                    appendTo: 'body',
+//                    helper: 'clone',
+//                    delay: 10
+//                });
                 if (typeof i18n_drag_this == "undefined") {
                     i18n_drag_this = "Drag this";
                 }
@@ -583,6 +507,50 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             $.get("views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs").then(function (src) {
+                Handlebars.registerHelper('removeSemtag', function (term){
+                    return panel.removeSemtag(term);
+                });
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
+                Handlebars.registerHelper('preferred', function (a, opts) {
+                    if (a == "get") {
+                        if (panel.preferred) {
+                            return opts.fn(this);
+                        }else{
+                            return opts.inverse(this);
+                        }
+                    }else {
+                        panel.preferred = a;
+                    }
+                });
+                Handlebars.registerHelper('acceptable', function (a, opts) {
+                    if (a == "get") {
+                        if (panel.acceptable) {
+                            return opts.fn(this);
+                        }else{
+                            return opts.inverse(this);
+                        }
+                    }else {
+                        panel.acceptable = a;
+                    }
+                });
+                Handlebars.registerHelper('included', function (a, opts) {
+                    if (a == "get") {
+                        if (panel.included) {
+                            return opts.fn(this);
+                        }else{
+                            return opts.inverse(this);
+                        }
+                    }else {
+                        panel.included = a;
+                    }
+                });
                 var context = {
                     options: panel.options,
                     languageName: languageName,
@@ -612,11 +580,11 @@ function conceptDetails(divElement, conceptId, options) {
                         $(val).toggle();
                     });
                 });
-                $('#' + panel.descsPId).find(".jqui-draggable").draggable({
-                    appendTo: 'body',
-                    helper: 'clone',
-                    delay: 500
-                });
+//                $('#' + panel.descsPId).find(".jqui-draggable").draggable({
+//                    appendTo: 'body',
+//                    helper: 'clone',
+//                    delay: 500
+//                });
 
                 $('#' + panel.descsPId).find("[rel=tooltip-right]").tooltip({ placement: 'right'});
             });
@@ -677,6 +645,18 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             $.get("views/conceptDetailsPlugin/tabs/details/rels-panel.hbs").then(function (src) {
+                Handlebars.registerHelper('push', function (element, array){
+                    array.push(element);
+                    // return ;
+                });
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
                 var context = {
                     firstMatch: firstMatch,
                     inferredParents: panel.inferredParents,
@@ -733,6 +713,27 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             $.get("views/conceptDetailsPlugin/tabs/home/parents.hbs").then(function (src) {
+                Handlebars.registerHelper('substr', function (string, start){
+                    var l = string.lastIndexOf("(") - 1;
+                    return string.substr(start, l);
+                });
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
+                Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                    if (a){
+                        var s = a.lastIndexOf("(");
+                        if(s > b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
                 var context = {
                     statedParents: panel.statedParents,
                     inferredParents: panel.inferredParents,
@@ -746,6 +747,36 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             $.get("views/conceptDetailsPlugin/tabs/home/roles.hbs").then(function (src) {
+                Handlebars.registerHelper('eqLastGroup', function (a, opts){
+                    if(!a == panel.lastGroup)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                });
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
+                Handlebars.registerHelper('removeSemtag', function (term){
+                    return panel.removeSemtag(term);
+                });
+                Handlebars.registerHelper('setLastGroup', function (a){
+                    panel.lastGroup = a;
+                });
+                Handlebars.registerHelper('lastColor', function (a) {
+                    if (a == "get") {
+                        return panel.color;
+                    }else {
+                        panel.color = a;
+                    }
+                });
+                Handlebars.registerHelper('getRandomColor' , function (){
+                    return getRandomColor();
+                });
                 var context = {
                     options: options,
                     statedRoles: panel.statedRoles,
@@ -761,6 +792,14 @@ function conceptDetails(divElement, conceptId, options) {
 
 
             $.get("views/conceptDetailsPlugin/tabs/refset.hbs").then(function (src) {
+                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                    if (opts != "undefined") {
+                        if(a == b)
+                            return opts.fn(this);
+                        else
+                            return opts.inverse(this);
+                    }
+                });
                 var context = {
                     firstMatch: firstMatch
                 };
@@ -795,11 +834,11 @@ function conceptDetails(divElement, conceptId, options) {
                 } else if (panel.options.selectedView != "all") {
                     // show all
                 }
-                $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id + ',#refsets-' + panel.divElement.id).find(".jqui-draggable").draggable({
-                    appendTo: 'body',
-                    helper: 'clone',
-                    delay: 500
-                });
+//                $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id + ',#refsets-' + panel.divElement.id).find(".jqui-draggable").draggable({
+//                    appendTo: 'body',
+//                    helper: 'clone',
+//                    delay: 500
+//                });
                 $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
                     placement : 'left auto',
                     trigger: 'hover',
@@ -845,11 +884,11 @@ function conceptDetails(divElement, conceptId, options) {
                     };
                     var template = Handlebars.compile(src);
                     $('#' + panel.childrenPId).html(template(context));
-                    $('#' + panel.childrenPId).find(".jqui-draggable").draggable({
-                        appendTo: 'body',
-                        helper: 'clone',
-                        delay: 500
-                    });
+//                    $('#' + panel.childrenPId).find(".jqui-draggable").draggable({
+//                        appendTo: 'body',
+//                        helper: 'clone',
+//                        delay: 500
+//                    });
                 });
 
             }).fail(function() {
@@ -1054,6 +1093,52 @@ function getRandomColor() {
     return color;
 }
 
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev, id) {
+    $.each(ev.target.attributes, function (){
+        if (this.name.substr(0, 4) == "data"){
+            ev.dataTransfer.setData(this.name.substr(5), this.value);
+        }
+    });
+    ev.dataTransfer.setData("divElementId", id);
+}
+
+function dropC(ev, id) {
+    ev.preventDefault();
+    var conceptId = ev.dataTransfer.getData("concept-id");
+    var panelD = ev.dataTransfer.getData("panel");
+    var divElementID = id;
+    var panelAct;
+    $.each(componentsRegistry, function (i, field){
+        if (field.divElement.id == divElementID){
+            panelAct = field;
+        }
+    });
+    if (!conceptId) {
+        if (!panelD) {
+        } else {
+            $.each(componentsRegistry, function(i, field) {
+                if (field.divElement.id == panelD) {
+                    if (field.type == "search" || field.type == "taxonomy") {
+                        field.subscribe(panelAct);
+                    }
+                }
+            });
+        }
+    } else {
+        if (panelAct.conceptId != conceptId) {
+//            if ($.contains($("#" + panelAct.divElement.id).get(0), $(draggable).get(0))) {
+//                draggable.remove();
+//            }
+            panelAct.conceptId = conceptId;
+            panelAct.updateCanvas();
+        }
+    }
+}
+
 (function($) {
     $.fn.addConceptDetails = function(conceptId, options) {
         this.filter("div").each(function() {
@@ -1246,18 +1331,6 @@ function searchPanel(divElement, options) {
             divElementId: panel.divElement.id
         };
         $.get("views/searchPlugin/main.hbs").then(function (src) {
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                if (opts != "undefined") {
-                    if(a == b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('console', function (something){
-                console.log(something);
-            });
-
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
             $('#' + panel.divElement.id + '-searchBox').keyup(function () {
@@ -1350,16 +1423,16 @@ function searchPanel(divElement, options) {
                 delay: 1000
             });
 
-            $("#" + panel.divElement.id + "-linkerButton").draggable({
-                cancel: false,
-                appendTo: 'body',
-                helper: 'clone',
-                delay: 500
-            });
-            $("#" + panel.divElement.id + "-linkerButton").droppable({
-                drop: panel.handlePanelDropEvent,
-                hoverClass: "bg-info"
-            });
+//            $("#" + panel.divElement.id + "-linkerButton").draggable({
+//                cancel: false,
+//                appendTo: 'body',
+//                helper: 'clone',
+//                delay: 500
+//            });
+//            $("#" + panel.divElement.id + "-linkerButton").droppable({
+//                drop: panel.handlePanelDropEvent,
+//                hoverClass: "bg-info"
+//            });
             $("#" + panel.divElement.id + "-apply-button").click(function () {
                 panel.readOptionsPanel();
                 var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
@@ -1637,6 +1710,14 @@ function searchPanel(divElement, options) {
 
                         }).done(function (result) {
                             $.get("views/searchPlugin/body/0.hbs").then(function (src) {
+                                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                    if (opts != "undefined") {
+                                        if(a == b)
+                                            return opts.fn(this);
+                                        else
+                                            return opts.inverse(this);
+                                    }
+                                });
                                 var context = {
                                     result: result
                                 };
@@ -1644,11 +1725,11 @@ function searchPanel(divElement, options) {
 
                                 $('#' + panel.divElement.id + '-resultsTable').html(template(context));
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
-                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                                    appendTo: 'body',
-                                    helper: 'clone',
-                                    delay: 500
-                                });
+//                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+//                                    appendTo: 'body',
+//                                    helper: 'clone',
+//                                    delay: 500
+//                                });
                                 $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                     $.each(panel.subscribers, function (i, field) {
                                         //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
@@ -1678,18 +1759,26 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
 
                         }).done(function (result) {
-                            $.get("views/searchPlugin/body/0.hbs").then(function (src) {
+                            $.get("views/searchPlugin/body/1.hbs").then(function (src) {
+                                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                    if (opts != "undefined") {
+                                        if(a == b)
+                                            return opts.fn(this);
+                                        else
+                                            return opts.inverse(this);
+                                    }
+                                });
                                 var context = {
                                     result: result
                                 };
                                 var template = Handlebars.compile(src);
                                 $('#' + panel.divElement.id + '-resultsTable').html(template(context));
                                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
-                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                                    appendTo: 'body',
-                                    helper: 'clone',
-                                    delay: 500
-                                });
+//                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+//                                    appendTo: 'body',
+//                                    helper: 'clone',
+//                                    delay: 500
+//                                });
                                 $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                     $.each(panel.subscribers, function (i, field) {
                                         //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
@@ -1730,6 +1819,14 @@ function searchPanel(divElement, options) {
                         var endTime = Date.now();
                         var elapsed = (endTime - startTime)/1000;
                         $.get("views/searchPlugin/body/bar.hbs").then(function (src) {
+                            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                if (opts != "undefined") {
+                                    if(a == b)
+                                        return opts.fn(this);
+                                    else
+                                        return opts.inverse(this);
+                                }
+                            });
                             var context = {
                                 result: result,
                                 elapsed: elapsed,
@@ -1764,10 +1861,10 @@ function searchPanel(divElement, options) {
                         //console.log(JSON.stringify(result));
                         var remaining = result.details.total - (skipTo + returnLimit);
 
-                        if (!matchedDescriptions || matchedDescriptions.length <= 0) {
-                            resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
-                            $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                        } else {
+//                        if (!matchedDescriptions || matchedDescriptions.length <= 0) {
+//                            resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
+//                            $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+//                        } else {
 //                            var searchFiltersHtml = "<span class='pull right'><a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#" + panel.divElement.id + "-searchFiltersPanel'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span></a>";
 //                            if (panel.options.semTagFilter != "none") {
 //                                searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.semTagFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-semtag'>&times;</a></span>&nbsp;&nbsp;";
@@ -1796,21 +1893,29 @@ function searchPanel(divElement, options) {
                                     return 0;
                                 });
                             }
-                            $.each(matchedDescriptions, function (i, field) {
-                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-                                //console.log(field.active + " " + field.conceptActive);
-                                if (field.active == false || field.conceptActive == false) {
-                                    resultsHtml = resultsHtml + " danger";
-                                }
-                                resultsHtml = resultsHtml + "'><td class='col-md-6'><div draggable='true' ondragstart='drag(event)' class='result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
-                            });
-                            if (remaining > 0) {
-                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='" + panel.divElement.id + "-more'>Load " + returnLimit +  " more (" + remaining + " remaining on server)</button></td></tr>"
-                            } else {
-                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center text-muted'>All " + result.details.total + " results are displayed</td></tr>"
-                            }
-                        }
+//                            $.each(matchedDescriptions, function (i, field) {
+//                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
+//                                //console.log(field.active + " " + field.conceptActive);
+//                                if (field.active == false || field.conceptActive == false) {
+//                                    resultsHtml = resultsHtml + " danger";
+//                                }
+//                                resultsHtml = resultsHtml + "'><td class='col-md-6'><div draggable='true' ondragstart='drag(event)' class='result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
+//                            });
+//                            if (remaining > 0) {
+//                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='" + panel.divElement.id + "-more'>Load " + returnLimit +  " more (" + remaining + " remaining on server)</button></td></tr>"
+//                            } else {
+//                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center text-muted'>All " + result.details.total + " results are displayed</td></tr>"
+//                            }
+//                        }
                         $.get("views/searchPlugin/body/default.hbs").then(function (src) {
+                            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                if (opts != "undefined") {
+                                    if(a == b)
+                                        return opts.fn(this);
+                                    else
+                                        return opts.inverse(this);
+                                }
+                            });
                             Handlebars.registerHelper('if_gr', function(a,b, opts) {
                                 if (a){
                                     if(a > parseInt(b))
@@ -1834,19 +1939,20 @@ function searchPanel(divElement, options) {
                                 returnLimit: returnLimit
                             };
                             var template = Handlebars.compile(src);
-                            $("#" + panel.divElement.id + "-more").click(function (event) {
-                                panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
-                            });
+
                             if (skipTo == 0) {
                                 $('#' + panel.divElement.id + '-resultsTable').html(template(context));
                             } else {
                                 $('#' + panel.divElement.id + '-resultsTable').append(template(context));
                             }
-                            $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-                                appendTo: 'body',
-                                helper: 'clone',
-                                delay: 500
+                            $("#" + panel.divElement.id + "-more").click(function (event) {
+                                panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
                             });
+//                            $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
+//                                appendTo: 'body',
+//                                helper: 'clone',
+//                                delay: 500
+//                            });
                             $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                                 $.each(panel.subscribers, function (i, field) {
                                     //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
@@ -2237,38 +2343,6 @@ function drawSubsumesNode(svg, x, y) {
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-function dropT(event, ui) {
-    var draggable = ui.draggable;
-
-    if (!draggable.attr('data-concept-id')) {
-        //console.log("ignore");
-    } else {
-        var conceptId = draggable.attr('data-concept-id');
-        var term = draggable.attr('data-term');
-        var definitionStatus = draggable.attr('data-def-status');
-        if (panel.options.selectedView == "undefined") {
-            panel.options.selectedView = "inferred";
-        }
-        if (typeof conceptId != "undefined") {
-            panel.setToConcept(conceptId, term, definitionStatus);
-        }
-        $(ui.helper).remove(); //destroy clone
-    }
-
-
-    if (!draggable.attr('data-panel')) {
-        //console.log("ignore");
-    } else {
-        //console.log("OK : " + draggable.attr('data-panel'));
-        $.each(componentsRegistry, function(i, field) {
-            if (field.divElement.id == draggable.attr('data-panel')) {
-                if (field.type == "concept-details") {
-                    panel.subscribe(field);
-                }
-            }
-        });
-    }
-}
 
 function taxonomyPanel(divElement, conceptId, options) {
     var nodeCount = 0;
@@ -2300,24 +2374,6 @@ function taxonomyPanel(divElement, conceptId, options) {
             divElementId: panel.divElement.id
         };
         $.get("views/taxonomyPlugin/main.hbs").then(function (src) {
-            Handlebars.registerHelper('console', function (something){
-                console.log(something);
-            });
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                if (opts != "undefined") {
-                    if(a == b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                if(a > b)
-                    return opts.fn(this);
-                else
-                    return opts.inverse(this);
-            });
-
             var template = Handlebars.compile(src);
             $(divElement).html(template(context));
             $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
@@ -2395,23 +2451,23 @@ function taxonomyPanel(divElement, conceptId, options) {
                 animation: true,
                 delay: 1000
             });
-            $("#" + panel.divElement.id + "-linkerButton").draggable({
-                cancel: false,
-                appendTo: 'body',
-                helper: 'clone',
-                delay: 500,
-                revert: false
-            });
+//            $("#" + panel.divElement.id + "-linkerButton").draggable({
+//                cancel: false,
+//                appendTo: 'body',
+//                helper: 'clone',
+//                delay: 500,
+//                revert: false
+//            });
 
-            $("#" + panel.divElement.id + "-panelBody").droppable({
-                drop: panel.handleDropEvent,
-                hoverClass: "bg-info"
-            });
-
-            $("#" + panel.divElement.id + "-panelHeading").droppable({
-                drop: panel.handleDropEvent,
-                hoverClass: "bg-info"
-            });
+//            $("#" + panel.divElement.id + "-panelBody").droppable({
+//                drop: panel.handleDropEvent,
+//                hoverClass: "bg-info"
+//            });
+//
+//            $("#" + panel.divElement.id + "-panelHeading").droppable({
+//                drop: panel.handleDropEvent,
+//                hoverClass: "bg-info"
+//            });
 
             $("#" + panel.divElement.id + "-resetButton").click(function() {
                 panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
@@ -2501,6 +2557,20 @@ function taxonomyPanel(divElement, conceptId, options) {
 //        $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
 
         $.get("views/taxonomyPlugin/body/parents.hbs").then(function (src) {
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if(a > b)
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            });
             var context = {
                 parents: parents,
                 focusConcept: focusConcept,
@@ -2515,13 +2585,11 @@ function taxonomyPanel(divElement, conceptId, options) {
 
             $(".treeButton").disableTextSelect();
 
-            $('.jqui-draggable').draggable({
-                appendTo: 'body',
-                helper: 'clone',
-                delay: 500
-            });
-
-
+//            $('.jqui-draggable').draggable({
+//                appendTo: 'body',
+//                helper: 'clone',
+//                delay: 500
+//            });
             $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
             $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
                 if ($(event.target).hasClass("treeLabel")) {
@@ -2564,7 +2632,6 @@ function taxonomyPanel(divElement, conceptId, options) {
                         $("#" + iconId).removeClass("glyphicon-minus");
                         $("#" + iconId).addClass("glyphicon-chevron-right");
                     }
-
                 } else if ($(event.target).hasClass("treeLabel")) {
                     var selectedId = $(event.target).attr('data-concept-id');
                     if (typeof selectedId != "undefined") {
@@ -2640,18 +2707,26 @@ function taxonomyPanel(divElement, conceptId, options) {
             $(".treeButton").disableTextSelect();
             //console.log(JSON.stringify(listIconIds));
             $.each(listIconIds, function(i, nodeId) {
-                $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
-                    appendTo: 'body',
-                    helper: 'clone',
-                    delay: 500,
-                    revert: false
-                });
+//                $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
+//                    appendTo: 'body',
+//                    helper: 'clone',
+//                    delay: 500,
+//                    revert: false
+//                });
             });
 //            $.get("views/taxonomyPlugin/body/children.hbs").then(function (src) {
 //                var context = {
 //                    result: result,
 //                    divElementId: panel.divElement.id
 //                };
+    //            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+    //                if (opts != "undefined") {
+    //                    if(a == b)
+    //                        return opts.fn(this);
+    //                    else
+    //                        return opts.inverse(this);
+    //                }
+    //            });
 //                Handlebars.registerHelper('push', function (element){
 //                    listIconIds.push(element);
 //                });
@@ -2872,6 +2947,46 @@ function clearTaxonomyPanelSubscriptions(divElementId1) {
     $("#" + divElementId1).find('.linker-button').popover('toggle');
 }
 
+function dropT(ev, id) {
+    var divElementId = id;
+    var panel;
+    var panelD = ev.dataTransfer.getData("panel");
+    var conceptId = ev.dataTransfer.getData("concept-id");
+    var term = ev.dataTransfer.getData("term");
+    var definitionStatus = ev.dataTransfer.getData("def-status");
+
+    $.each(componentsRegistry, function (i, field){
+        if (field.divElement.id == divElementId){
+            panel = field;
+        }
+    });
+
+    if (!conceptId) {
+        //console.log("ignore");
+    } else {
+        if (panel.options.selectedView == "undefined") {
+            panel.options.selectedView = "inferred";
+        }
+        if (typeof conceptId != "undefined") {
+            panel.setToConcept(conceptId, term, definitionStatus);
+        }
+        //$(ui.helper).remove(); //destroy clone
+    }
+    if (!panelD) {
+        //console.log("ignore");
+    } else {
+        //console.log("OK : " + draggable.attr('data-panel'));
+        $.each(componentsRegistry, function(i, field) {
+            if (field.divElement.id == panelD) {
+                if (field.type == "concept-details") {
+                    panel.subscribe(field);
+                }
+            }
+        });
+    }
+}
+
+
 (function($) {
     $.fn.addTaxonomy = function(options) {
         this.filter("div").each(function() {
@@ -2903,7 +3018,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-linkerButton' draggable = \"true\" ondragstart = \"drag(event)\" class='btn btn-link linker-button' data-panel='";
+    + "-linkerButton' draggable = \"true\" ondragstart = \"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='btn btn-link linker-button' data-panel='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -3057,11 +3176,11 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n                    <a href=\"javascript:void(0);\" draggable = \"true\" ondragstart=\"drag(event, ";
+  buffer += "\n                    <a href=\"javascript:void(0);\" draggable = \"true\" ondragstart=\"drag(event, '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + ")\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning\"  data-concept-id=\""
+    + "')\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -3074,11 +3193,11 @@ function program3(depth0,data) {
 function program5(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n                    <a href=\"javascript:void(0);\" draggable = \"true\" ondragstart=\"drag(event, ";
+  buffer += "\n                    <a href=\"javascript:void(0);\" draggable = \"true\" ondragstart=\"drag(event, '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + ")\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning\"  data-concept-id=\""
+    + "')\" style=\"color: inherit;text-decoration: inherit;\"><span class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -3118,7 +3237,11 @@ function program13(depth0,data) {
   buffer += "\n            >\n        <td>\n            <h4>\n                ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n\n                <span ondrop=\"dropC(event)\" ondragover=\"allowDrop(event)\">"
+  buffer += "\n\n                <span ondrop=\"dropC(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" ondragover=\"allowDrop(event)\">"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</span>\n            </h4>\n            <br>SCTID: "
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -3169,7 +3292,11 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n        <tr><td draggable=\"true\" ondragstart=\"drag(event)\" data-concept-id='";
+  buffer += "\n        <tr><td draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -4459,8 +4586,12 @@ function program11(depth0,data) {
 
 function program13(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4472,8 +4603,12 @@ function program13(depth0,data) {
 
 function program15(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4485,8 +4620,12 @@ function program15(depth0,data) {
 
 function program17(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4498,8 +4637,12 @@ function program17(depth0,data) {
 
 function program19(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4636,27 +4779,43 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n    <h4><a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n    <h4><a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">&nbsp;</span></a>&nbsp;&nbsp;<span ondrop=\"dropC(event)\" ondragover=\"allowDrop(event)\">\n";
+    + "\">&nbsp;</span></a>&nbsp;&nbsp;<span ondrop=\"dropC(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" ondragover=\"allowDrop(event)\">\n";
   return buffer;
   }
 
 function program3(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n    <h4><a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n    <h4><a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">&equiv;</span></a>&nbsp;&nbsp;<span ondrop=\"dropC(event)\" ondragover=\"allowDrop(event)\">\n";
+    + "\">&equiv;</span></a>&nbsp;&nbsp;<span ondrop=\"dropC(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" ondragover=\"allowDrop(event)\">\n";
   return buffer;
   }
 
@@ -4694,7 +4853,11 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n        <span draggable = \"true\" ondragstart=\"drag(event)\" class='text-warning' data-concept-id='"
+  buffer += "\n        <span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='text-warning' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4730,8 +4893,12 @@ function program5(depth0,data) {
 
 function program7(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n            <span draggable = \"true\" ondragstart=\"drag(event)\" class='sct-primitive-concept-compact' data-concept-id='"
+  var buffer = "", stack1, helper;
+  buffer += "\n            <span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='sct-primitive-concept-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4741,8 +4908,12 @@ function program7(depth0,data) {
 
 function program9(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n            <span draggable = \"true\" ondragstart=\"drag(event)\" class='sct-defined-concept-compact' data-concept-id='"
+  var buffer = "", stack1, helper;
+  buffer += "\n            <span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='sct-defined-concept-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4789,7 +4960,11 @@ function program17(depth0,data) {
 function program18(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n        <span draggable = \"true\" ondragstart=\"drag(event)\" class='text-warning' data-concept-id='"
+  buffer += "\n        <span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='text-warning' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4834,7 +5009,11 @@ function program2(depth0,data) {
   buffer += "\n            <br>\n            ";
   stack1 = (helper = helpers.eqLastGroup || (depth0 && depth0.eqLastGroup),options={hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), options) : helperMissing.call(depth0, "eqLastGroup", (depth0 && depth0.groupId), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            &nbsp;<span draggable = \"true\" ondragstart=\"drag(event)\" class='sct-attribute-compact' data-concept-id='"
+  buffer += "\n            &nbsp;<span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='sct-attribute-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4872,8 +5051,12 @@ function program5(depth0,data) {
 
 function program7(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                <span draggable = \"true\" ondragstart=\"drag(event)\" class='sct-primitive-concept-compact' data-concept-id='"
+  var buffer = "", stack1, helper;
+  buffer += "\n                <span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='sct-primitive-concept-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4883,8 +5066,12 @@ function program7(depth0,data) {
 
 function program9(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                <span draggable = \"true\" ondragstart=\"drag(event)\" class='sct-defined-concept-compact' data-concept-id='"
+  var buffer = "", stack1, helper;
+  buffer += "\n                <span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='sct-defined-concept-compact' data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -4922,7 +5109,11 @@ function program14(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>\n                "
     + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options)))
-    + "</span>&nbsp;&rarr;&nbsp;\n            <span draggable = \"true\" ondragstart=\"drag(event)\" class='\n                ";
+    + "</span>&nbsp;&rarr;&nbsp;\n            <span draggable = \"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='\n                ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(17, program17, data),fn:self.program(15, program15, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                ' data-concept-id='"
@@ -5071,8 +5262,12 @@ function program16(depth0,data) {
 
 function program18(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                        <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                        <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5084,8 +5279,12 @@ function program18(depth0,data) {
 
 function program20(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                        <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                        <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5134,8 +5333,12 @@ function program23(depth0,data) {
   }
 function program24(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5147,8 +5350,12 @@ function program24(depth0,data) {
 
 function program26(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5198,8 +5405,12 @@ function program29(depth0,data) {
   }
 function program30(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5211,8 +5422,12 @@ function program30(depth0,data) {
 
 function program32(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.refset)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5224,8 +5439,12 @@ function program32(depth0,data) {
 
 function program34(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.cidValue)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.cidValue)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5237,8 +5456,12 @@ function program34(depth0,data) {
 
 function program36(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event)\" class=\"badge alert-warning\"  data-concept-id=\""
+  var buffer = "", stack1, helper;
+  buffer += "\n                            <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable = \"true\" ondragstart = \"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"badge alert-warning\"  data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.cidValue)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.cidValue)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -5332,7 +5555,11 @@ function program2(depth0,data,depth2) {
 function program3(depth0,data,depth3) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n            <tr class='resultRow selectable-row danger'>\n                <td class='col-md-7'>\n                    <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  buffer += "\n            <tr class='resultRow selectable-row danger'>\n                <td class='col-md-7'>\n                    <div draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='result-item' data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5378,7 +5605,11 @@ function program5(depth0,data,depth3) {
 function program6(depth0,data,depth4) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n                <tr class='resultRow selectable-row danger'>\n                    <td class='col-md-7'>\n                        <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  buffer += "\n                <tr class='resultRow selectable-row danger'>\n                    <td class='col-md-7'>\n                        <div draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='result-item' data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5442,7 +5673,11 @@ function program10(depth0,data,depth4) {
 function program11(depth0,data,depth5) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n                    <tr class='resultRow selectable-row danger'>\n                        <td class='col-md-7'>\n                            <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  buffer += "\n                    <tr class='resultRow selectable-row danger'>\n                        <td class='col-md-7'>\n                            <div draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='result-item' data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5488,7 +5723,11 @@ function program13(depth0,data,depth3) {
 function program14(depth0,data,depth4) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n                <tr class='resultRow selectable-row'>\n                    <td class='col-md-7'>\n                        <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  buffer += "\n                <tr class='resultRow selectable-row'>\n                    <td class='col-md-7'>\n                        <div draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='result-item' data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5534,7 +5773,11 @@ function program16(depth0,data,depth4) {
 function program17(depth0,data,depth5) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n                    <tr class='resultRow selectable-row'>\n                        <td class='col-md-7'>\n                            <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  buffer += "\n                    <tr class='resultRow selectable-row'>\n                        <td class='col-md-7'>\n                            <div draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='result-item' data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5584,7 +5827,11 @@ function program1(depth0,data) {
   buffer += "\n    <tr class='resultRow selectable-row";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.active), false, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.active), false, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "'>\n        <td class='col-md-7'>\n            <div draggable=\"true\" ondragstart=\"drag(event)\" class='result-item' data-concept-id='";
+  buffer += "'>\n        <td class='col-md-7'>\n            <div draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='result-item' data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5736,7 +5983,7 @@ function program11(depth0,data) {
 this["JST"]["views/searchPlugin/body/default.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this, functionType="function";
+  var buffer = "", stack1, self=this, helperMissing=helpers.helperMissing, functionType="function", escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
@@ -5749,20 +5996,15 @@ function program1(depth0,data) {
   }
 function program2(depth0,data) {
   
-  var buffer = "", helper, options;
-  buffer += "\n        "
-    + escapeExpression((helper = helpers.console || (depth0 && depth0.console),options={hash:{},data:data},helper ? helper.call(depth0, "a", options) : helperMissing.call(depth0, "console", "a", options)))
-    + "\n        <tr><td class='text-muted'>No results</td></tr>\n    ";
-  return buffer;
+  
+  return "\n        <tr><td class='text-muted'>No results</td></tr>\n    ";
   }
 
 function program4(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n        "
-    + escapeExpression((helper = helpers.console || (depth0 && depth0.console),options={hash:{},data:data},helper ? helper.call(depth0, "ab", options) : helperMissing.call(depth0, "console", "ab", options)))
-    + "\n        ";
-  stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.matches), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  buffer += "\n        ";
+  stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.matches), {hash:{},inverse:self.noop,fn:self.programWithDepth(5, program5, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n        ";
   stack1 = (helper = helpers.if_gr || (depth0 && depth0.if_gr),options={hash:{},inverse:self.program(12, program12, data),fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), 0, options) : helperMissing.call(depth0, "if_gr", (depth0 && depth0.remaining), 0, options));
@@ -5770,13 +6012,15 @@ function program4(depth0,data) {
   buffer += "\n    ";
   return buffer;
   }
-function program5(depth0,data) {
+function program5(depth0,data,depth1) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n            <tr class='resultRow selectable-row";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.active), false, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.active), false, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "'>\n                <td class='col-md-6'>\n                    <div draggable='true' ondragstart='drag(event)' class='result-item' data-concept-id='";
+  buffer += "'>\n                <td class='col-md-6'>\n                    <div draggable='true' ondragstart=\"drag(event, '"
+    + escapeExpression(((stack1 = (depth1 && depth1.divElementId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "')\" class='result-item' data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5883,7 +6127,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-linkerButton' draggable=\"true\" ondragstart=\"drag(event)\" class='btn btn-link linker-button' data-panel='";
+    + "-linkerButton' draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='btn btn-link linker-button' data-panel='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -6057,7 +6305,11 @@ function program6(depth0,data) {
     + "'></i></button>\n                ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(9, program9, data),fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.definitionStatus), "Primitive", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.definitionStatus), "Primitive", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n                <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable=\"true\" ondragstart=\"drag(event)\" class=\"treeLabel selectable-row\" data-concept-id=\"";
+  buffer += "\n                <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"treeLabel selectable-row\" data-concept-id=\"";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -6106,7 +6358,7 @@ this["JST"]["views/taxonomyPlugin/body/parents.hbs"] = Handlebars.template(funct
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
-function program1(depth0,data,depth2) {
+function program1(depth0,data,depth1,depth2) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n            <li data-concept-id='";
@@ -6117,13 +6369,13 @@ function program1(depth0,data,depth2) {
   if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "' class='treeLabel'>\n                <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='"
-    + escapeExpression(((stack1 = (depth2 && depth2.divElementId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "' class='treeLabel'>\n                <button class='btn btn-link btn-xs treeButton' style='padding:2px'>\n                    <i class='glyphicon glyphicon-chevron-up treeButton' id='"
+    + escapeExpression(((stack1 = (depth1 && depth1.divElementId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "-treeicon-";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "'></i></button>\n                ";
+    + "'></i>\n                </button>\n                ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.definitionStatus), "Primitive", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.definitionStatus), "Primitive", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"><span data-concept-id=\"";
@@ -6134,7 +6386,11 @@ function program1(depth0,data,depth2) {
   if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" draggable=\"true\" ondragstart=\"drag(event)\" class=\"treeLabel selectable-row\" id=\""
+    + "\" draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"treeLabel selectable-row\" id=\""
     + escapeExpression(((stack1 = (depth2 && depth2.divElementId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "-treenode-";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -6175,7 +6431,7 @@ function program8(depth0,data) {
   }
 
   buffer += "<div style='height:100%;margin-bottom: 15px;'>\n    <ul style='list-style-type: none; padding-left: 5px;'>\n        ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.parents), {hash:{},inverse:self.noop,fn:self.programWithDepth(1, program1, data, depth1),data:data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.parents), {hash:{},inverse:self.noop,fn:self.programWithDepth(1, program1, data, depth0, depth1),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n        ";
   stack1 = (helper = helpers.if_gr || (depth0 && depth0.if_gr),options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.parents)),stack1 == null || stack1 === false ? stack1 : stack1.length), 0, options) : helperMissing.call(depth0, "if_gr", ((stack1 = (depth0 && depth0.parents)),stack1 == null || stack1 === false ? stack1 : stack1.length), 0, options));
@@ -6197,7 +6453,11 @@ function program8(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.focusConcept)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.focusConcept)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" draggable=\"true\" ondragstart=\"drag(event)\" class=\"treeLabel selectable-row\" id=\"";
+    + "\" draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class=\"treeLabel selectable-row\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -6222,7 +6482,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-mainPanel'>\n    <div ondrop=\"dropT(event)\" ondragover=\"allowDrop(event)\" class='panel-heading' id='";
+    + "-mainPanel'>\n    <div ondrop=\"dropT(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" ondragover=\"allowDrop(event)\" class='panel-heading' id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -6246,7 +6510,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-linkerButton' draggable=\"true\" ondragstart=\"drag(event)\" class='btn btn-link linker-button' data-panel='";
+    + "-linkerButton' draggable=\"true\" ondragstart=\"drag(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" class='btn btn-link linker-button' data-panel='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -6286,7 +6554,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-statedViewButton'><span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span></button></li>\n                </ul>\n            </li>\n        </ul>\n    </nav></div>\n    <div ondrop=\"dropT(event)\" ondragover=\"allowDrop(event)\" class='panel-body' style='height:100%' id='";
+    + "-statedViewButton'><span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span></button></li>\n                </ul>\n            </li>\n        </ul>\n    </nav></div>\n    <div ondrop=\"dropT(event, '";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "')\" ondragover=\"allowDrop(event)\" class='panel-body' style='height:100%' id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
