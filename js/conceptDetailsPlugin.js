@@ -360,13 +360,6 @@ function conceptDetails(divElement, conceptId, options) {
                 animation: true,
                 delay: 500
             });
-            $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
-                placement : 'left auto',
-                trigger: 'hover',
-                title: i18n_drag_this,
-                animation: true,
-                delay: 500
-            });
 
 
 
@@ -719,13 +712,6 @@ function conceptDetails(divElement, conceptId, options) {
                 // show all
             }
             $( "span[draggable='true']" ).tooltip({
-                placement : 'left auto',
-                trigger: 'hover',
-                title: i18n_drag_this,
-                animation: true,
-                delay: 500
-            });
-            $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
                 placement : 'left auto',
                 trigger: 'hover',
                 title: i18n_drag_this,

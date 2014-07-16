@@ -124,17 +124,6 @@ function searchPanel(divElement, options) {
             animation: true,
             delay: 1000
         });
-
-//            $("#" + panel.divElement.id + "-linkerButton").draggable({
-//                cancel: false,
-//                appendTo: 'body',
-//                helper: 'clone',
-//                delay: 500
-//            });
-//            $("#" + panel.divElement.id + "-linkerButton").droppable({
-//                drop: panel.handlePanelDropEvent,
-//                hoverClass: "bg-info"
-//            });
         $("#" + panel.divElement.id + "-apply-button").click(function () {
             panel.readOptionsPanel();
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();

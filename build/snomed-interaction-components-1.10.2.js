@@ -360,13 +360,6 @@ function conceptDetails(divElement, conceptId, options) {
                 animation: true,
                 delay: 500
             });
-            $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
-                placement : 'left auto',
-                trigger: 'hover',
-                title: i18n_drag_this,
-                animation: true,
-                delay: 500
-            });
 
 
 
@@ -719,13 +712,6 @@ function conceptDetails(divElement, conceptId, options) {
                 // show all
             }
             $( "span[draggable='true']" ).tooltip({
-                placement : 'left auto',
-                trigger: 'hover',
-                title: i18n_drag_this,
-                animation: true,
-                delay: 500
-            });
-            $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
                 placement : 'left auto',
                 trigger: 'hover',
                 title: i18n_drag_this,
@@ -1298,17 +1284,6 @@ function searchPanel(divElement, options) {
             animation: true,
             delay: 1000
         });
-
-//            $("#" + panel.divElement.id + "-linkerButton").draggable({
-//                cancel: false,
-//                appendTo: 'body',
-//                helper: 'clone',
-//                delay: 500
-//            });
-//            $("#" + panel.divElement.id + "-linkerButton").droppable({
-//                drop: panel.handlePanelDropEvent,
-//                hoverClass: "bg-info"
-//            });
         $("#" + panel.divElement.id + "-apply-button").click(function () {
             panel.readOptionsPanel();
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
@@ -6065,11 +6040,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-searchFilters\"></div>\n            <table id='";
+    + "-searchFilters\"></div>\n            <table class='table table-bordered'>\n                <tbody  id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-resultsTable' class='table table-bordered'>\n            </table>\n        </div>\n    </div>\n</div>\n        ";
+    + "-resultsTable'>\n                </tbody>\n            </table>\n        </div>\n    </div>\n</div>\n        ";
   return buffer;
   });
 
