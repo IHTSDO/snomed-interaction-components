@@ -1022,7 +1022,8 @@ $(document).keypress(function(event) {
 
 
 
-;function drawConceptDiagram (concept, div, options) {
+
+function drawConceptDiagram (concept, div, options) {
     var svgIsaModel = [];
     var svgAttrModel = [];
     if (options.selectedView == "stated") {
@@ -1160,7 +1161,8 @@ function saveAsPng(svg) {
 
     //Clear the canvas
     canvas.width = canvas.width;
-};/* 
+}
+/* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -1982,7 +1984,8 @@ $(document).keypress(function (event) {
             var tx = new conceptDetails(this, options);
         });
     };
-}(jQuery));;/*
+}(jQuery));
+/*
 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -2183,7 +2186,8 @@ function drawSubsumesNode(svg, x, y) {
     return g;
 }
 
-;/* 
+
+/* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -2740,7 +2744,8 @@ function dropT(ev, id) {
         });
     };
 }(jQuery));
-;this["JST"] = this["JST"] || {};
+
+this["JST"] = this["JST"] || {};
 
 this["JST"]["views/conceptDetailsPlugin/main.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
