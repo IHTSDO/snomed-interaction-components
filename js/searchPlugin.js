@@ -419,9 +419,40 @@ function searchPanel(divElement, options) {
                                         return opts.inverse(this);
                                 }
                             });
+                            var res={};
+                            res.descriptions = [];
+                            $.each(result.descriptions, function (i, field){
+                                var aux=field;
+                                if(field.active){
+                                    if (field.conceptActive){
+                                        if (panel.options.statusSearchFilter=="activeOnly"){
+                                            res.descriptions.push(aux);
+                                        }
+                                        if (panel.options.statusSearchFilter=="activeAndInactive"){
+                                            res.descriptions.push(aux);
+                                        }
+                                    }else{
+                                        aux.danger = true;
+                                        if (panel.options.statusSearchFilter=="inactiveOnly"){
+                                            res.descriptions.push(aux);
+                                        }
+                                        if (panel.options.statusSearchFilter=="activeAndInactive"){
+                                            res.descriptions.push(aux);
+                                        }
+                                    }
+                                }else{
+                                    aux.danger = true;
+                                    if (panel.options.statusSearchFilter=="inactiveOnly"){
+                                        res.descriptions.push(aux);
+                                    }
+                                    if (panel.options.statusSearchFilter=="activeAndInactive"){
+                                        res.descriptions.push(aux);
+                                    }
+                                }
+                            });
+                            result.descriptions = res.descriptions;
                             var context = {
-                                result: result,
-                                options: panel.options
+                                result: result
                             };
 
                             $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/0.hbs"](context));
