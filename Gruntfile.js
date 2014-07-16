@@ -74,6 +74,24 @@ module.exports = function(grunt) {
                     "views/compiled/templates.js": "views/**/*.hbs"
                 }
             }
+        },
+        release: {
+            options: {
+                npm: false,
+                tagName: 'snomed-interaction-components-<%= version %>',
+                github: {
+                    repo: 'termMed/snomed-interaction-components',
+                    usernameVar: 'GITHUB_USERNAME',
+                    passwordVar: 'GITHUB_PASSWORD'
+                }
+            }
+        },
+        jshint: {
+            all: ['js/**/*.js'],
+            options: {
+                reporter: require('jshint-stylish'),
+                reporterOutput: 'dist/jshint-output.txt'
+            }
         }
 
     });
@@ -84,8 +102,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
+    grunt.loadNpmTasks('grunt-release');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     // Default task(s).
     grunt.registerTask('default', ['clean', 'handlebars', 'concat','uglify', 'copy', 'cssmin']);
-
 };
