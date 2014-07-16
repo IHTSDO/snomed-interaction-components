@@ -548,7 +548,6 @@ function dropT(ev, id) {
     }
 }
 
-
 (function($) {
     $.fn.addTaxonomy = function(options) {
         this.filter("div").each(function() {
