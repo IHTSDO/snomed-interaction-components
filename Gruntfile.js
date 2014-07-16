@@ -59,8 +59,8 @@ module.exports = function(grunt) {
                 createTag: true,
                 tagName: 'v%VERSION%',
                 tagMessage: 'Version %VERSION%',
-                push: false,
-                pushTo: 'upstream',
+                push: true,
+                pushTo: 'origin',
                 gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d'
             }
         },
