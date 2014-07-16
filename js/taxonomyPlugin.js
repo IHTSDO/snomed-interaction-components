@@ -159,41 +159,6 @@ function taxonomyPanel(divElement, conceptId, options) {
         $.each(parents, function(i, parent){
             lastParent = parent;
         });
-//
-//        var treeHtml = "<div style='height:100%;margin-bottom: 15px;'>";
-//        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 5px;'>";
-//        $.each(parents, function(i, parent) {
-//            lastParent = parent;
-//            treeHtml = treeHtml + "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
-//            treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
-//            if (parent.definitionStatus == "Primitive") {
-//                treeHtml = treeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
-//            } else {
-//                treeHtml = treeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
-//            }
-//            treeHtml = treeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
-//            treeHtml = treeHtml + "</li>";
-//        });
-//        if (parents.length > 0) {
-//            treeHtml = treeHtml.slice(0, -5);
-//        }
-//        treeHtml = treeHtml + "<ul style='list-style-type: none; padding-left: 15px;'>";
-//        treeHtml = treeHtml + "<li data-concept-id='" + focusConcept.conceptId + "' data-term='" + focusConcept.defaultTerm + "' class='treeLabel'>";
-//        treeHtml = treeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='" + panel.divElement.id + "-treeicon-" + focusConcept.conceptId + "'></i></button>";
-//        if (focusConcept.definitionStatus == "Primitive") {
-//            treeHtml = treeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
-//        } else {
-//            treeHtml = treeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
-//        }
-//        treeHtml = treeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + focusConcept.conceptId + '" data-term="' + focusConcept.defaultTerm + '" class="jqui-draggable treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + focusConcept.conceptId + '">' + focusConcept.defaultTerm + "</span></a>";
-//        treeHtml = treeHtml + "</li>";
-//        treeHtml = treeHtml + "</ul>";
-//        if (parents.length > 0) {
-//            treeHtml = treeHtml + "</li>";
-//        }
-//        treeHtml = treeHtml + "</ul>";
-//        treeHtml = treeHtml + "</div>";
-//        $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
         Handlebars.registerHelper('if_eq', function(a, b, opts) {
             if (opts != "undefined") {
                 if(a == b)
@@ -288,15 +253,14 @@ function taxonomyPanel(divElement, conceptId, options) {
             panel.options.selectedView = "inferred";
         }
 
-//        if (panel.options.selectedView == "inferred") {
-//            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
-//        } else {
-//            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
-//        }
+        if (panel.options.selectedView == "inferred") {
+            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+        } else {
+            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+        }
 
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
-            var nodeHtml = "<ul style='list-style-type: none; padding-left: 15px;'>";
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
                     return -1;
@@ -306,22 +270,22 @@ function taxonomyPanel(divElement, conceptId, options) {
             });
             //console.log(JSON.stringify(result));
             var listIconIds = [];
-            $.each(result, function(i, field) {
-                if (field.active == true) {
-                    nodeHtml = nodeHtml + "<li data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "' class='treeLabel'>";
-                    nodeHtml = nodeHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' id='" + panel.divElement.id + "-treeicon-" + field.conceptId + "'></i></button>";
-                    if (field.definitionStatus == "Primitive") {
-                        nodeHtml = nodeHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
-                    } else {
-                        nodeHtml = nodeHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
-                    }
-                    nodeHtml = nodeHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" data-concept-id="' + field.conceptId + '" data-term="' + field.defaultTerm + '" id="' + panel.divElement.id + '-treenode-' + field.conceptId + '">' + field.defaultTerm + '</span></a>';
-                    listIconIds.push(field.conceptId);
+            //console.log(JSON.stringify(listIconIds));
+            var context = {
+                result: result,
+                divElementId: panel.divElement.id
+            };
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
                 }
             });
-            nodeHtml = nodeHtml + "</li>";
-            nodeHtml = nodeHtml + "</ul>";
-
+            Handlebars.registerHelper('push', function (element){
+                listIconIds.push(element);
+            });
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
             if (result.length > 0) {
@@ -329,36 +293,8 @@ function taxonomyPanel(divElement, conceptId, options) {
             } else {
                 $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
             }
-            $("#" + panel.divElement.id + "-treenode-" + conceptId).after(nodeHtml);
+            $("#" + panel.divElement.id + "-treenode-" + conceptId).after(JST["views/taxonomyPlugin/body/children.hbs"](context));
             $(".treeButton").disableTextSelect();
-            //console.log(JSON.stringify(listIconIds));
-            $.each(listIconIds, function(i, nodeId) {
-//                $('#' + panel.divElement.id + "-treenode-" + nodeId).draggable({
-//                    appendTo: 'body',
-//                    helper: 'clone',
-//                    delay: 500,
-//                    revert: false
-//                });
-            });
-//            $.get("views/taxonomyPlugin/body/children.hbs").then(function (src) {
-//                var context = {
-//                    result: result,
-//                    divElementId: panel.divElement.id
-//                };
-    //            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-    //                if (opts != "undefined") {
-    //                    if(a == b)
-    //                        return opts.fn(this);
-    //                    else
-    //                        return opts.inverse(this);
-    //                }
-    //            });
-//                Handlebars.registerHelper('push', function (element){
-//                    listIconIds.push(element);
-//                });
-//                var template = Handlebars.compile(src);
-//
-//            });
         }).fail(function() {
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");

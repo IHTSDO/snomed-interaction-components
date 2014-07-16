@@ -28,6 +28,11 @@ function conceptDetails(divElement, conceptId, options) {
     panel.preferred = false;
     panel.acceptable = false;
     panel.included = false;
+    panel.refset = {};
+    panel.refset.simple = false;
+    panel.refset.simplemap = false;
+    panel.refset.attr = false;
+    panel.refset.assoc = false;
     this.lastGroup = null;
     this.subscription = null;
     var xhr = null;
@@ -665,6 +670,17 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('refset', function(type, data, opts){
+                if (data == "get"){
+                    if (panel.refset[type]) {
+                        return opts.fn(this);
+                    }else{
+                        return opts.inverse(this);
+                    }
+                }else{
+                    panel.refset[type] = data;
                 }
             });
             var context = {
