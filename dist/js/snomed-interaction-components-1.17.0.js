@@ -1583,9 +1583,40 @@ function searchPanel(divElement, options) {
                                         return opts.inverse(this);
                                 }
                             });
+                            var res={};
+                            res.descriptions = [];
+                            $.each(result.descriptions, function (i, field){
+                                var aux=field;
+                                if(field.active){
+                                    if (field.conceptActive){
+                                        if (panel.options.statusSearchFilter=="activeOnly"){
+                                            res.descriptions.push(aux);
+                                        }
+                                        if (panel.options.statusSearchFilter=="activeAndInactive"){
+                                            res.descriptions.push(aux);
+                                        }
+                                    }else{
+                                        aux.danger = true;
+                                        if (panel.options.statusSearchFilter=="inactiveOnly"){
+                                            res.descriptions.push(aux);
+                                        }
+                                        if (panel.options.statusSearchFilter=="activeAndInactive"){
+                                            res.descriptions.push(aux);
+                                        }
+                                    }
+                                }else{
+                                    aux.danger = true;
+                                    if (panel.options.statusSearchFilter=="inactiveOnly"){
+                                        res.descriptions.push(aux);
+                                    }
+                                    if (panel.options.statusSearchFilter=="activeAndInactive"){
+                                        res.descriptions.push(aux);
+                                    }
+                                }
+                            });
+                            result.descriptions = res.descriptions;
                             var context = {
-                                result: result,
-                                options: panel.options
+                                result: result
                             };
 
                             $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/0.hbs"](context));
@@ -5272,32 +5303,15 @@ function program45(depth0,data) {
 this["JST"]["views/searchPlugin/body/0.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+  var buffer = "", stack1, helper, options, self=this, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data,depth1) {
   
-  var buffer = "", stack1, helper, options;
-  buffer += "\n    "
-    + escapeExpression((helper = helpers.shown || (depth0 && depth0.shown),options={hash:{},data:data},helper ? helper.call(depth0, false, options) : helperMissing.call(depth0, "shown", false, options)))
-    + "\n    ";
-  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.programWithDepth(8, program8, data, depth1),fn:self.programWithDepth(2, program2, data, depth1),data:data},helper ? helper.call(depth0, (depth0 && depth0.active), false, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.active), false, options));
+  var buffer = "", stack1, helper;
+  buffer += "\n    <tr class='resultRow selectable-row ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.danger), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n";
-  return buffer;
-  }
-function program2(depth0,data,depth2) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n        ";
-  stack1 = (helper = helpers.if_eq || (depth2 && depth2.if_eq),options={hash:{},inverse:self.programWithDepth(5, program5, data, depth2),fn:self.programWithDepth(3, program3, data, depth2),data:data},helper ? helper.call(depth0, ((stack1 = (depth2 && depth2.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "inactiveOnly", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth2 && depth2.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "inactiveOnly", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    ";
-  return buffer;
-  }
-function program3(depth0,data,depth3) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n            <tr class='resultRow selectable-row danger'>\n                <td class='col-md-7'>\n                    <div draggable=\"true\" ondragstart=\"drag(event, '";
+  buffer += "'>\n        <td class='col-md-7'>\n            <div draggable=\"true\" ondragstart=\"drag(event, '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5309,7 +5323,7 @@ function program3(depth0,data,depth3) {
   if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "'>\n                        <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
+    + "'>\n                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5321,7 +5335,7 @@ function program3(depth0,data,depth3) {
   if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</a>\n                    </div>\n                </td>\n                <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
+    + "</a>\n            </div>\n        </td>\n        <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5329,247 +5343,18 @@ function program3(depth0,data,depth3) {
   if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "'>\n                    "
-    + escapeExpression(((stack1 = ((stack1 = (depth3 && depth3.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n                </td>\n            </tr>\n            "
-    + escapeExpression((helper = helpers.shown || (depth3 && depth3.shown),options={hash:{},data:data},helper ? helper.call(depth0, true, options) : helperMissing.call(depth0, "shown", true, options)))
-    + "\n        ";
+    + "'>\n            "
+    + escapeExpression(((stack1 = ((stack1 = (depth1 && depth1.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\n        </td>\n    </tr>\n";
   return buffer;
+  }
+function program2(depth0,data) {
+  
+  
+  return "danger";
   }
 
-function program5(depth0,data,depth3) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n            ";
-  stack1 = (helper = helpers.if_eq || (depth3 && depth3.if_eq),options={hash:{},inverse:self.noop,fn:self.programWithDepth(6, program6, data, depth3),data:data},helper ? helper.call(depth0, ((stack1 = (depth3 && depth3.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth3 && depth3.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n        ";
-  return buffer;
-  }
-function program6(depth0,data,depth4) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n                <tr class='resultRow selectable-row danger'>\n                    <td class='col-md-7'>\n                        <div draggable=\"true\" ondragstart=\"drag(event, '";
-  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "')\" class='result-item' data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n                            <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</a>\n                        </div>\n                    </td>\n                    <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n                        "
-    + escapeExpression(((stack1 = ((stack1 = (depth4 && depth4.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n                    </td>\n                </tr>\n                "
-    + escapeExpression((helper = helpers.shown || (depth4 && depth4.shown),options={hash:{},data:data},helper ? helper.call(depth0, true, options) : helperMissing.call(depth0, "shown", true, options)))
-    + "\n            ";
-  return buffer;
-  }
-
-function program8(depth0,data,depth2) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n        ";
-  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.programWithDepth(13, program13, data, depth2),fn:self.programWithDepth(9, program9, data, depth2),data:data},helper ? helper.call(depth0, (depth0 && depth0.conceptActive), false, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.conceptActive), false, options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    ";
-  return buffer;
-  }
-function program9(depth0,data,depth3) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n            ";
-  stack1 = (helper = helpers.if_eq || (depth3 && depth3.if_eq),options={hash:{},inverse:self.programWithDepth(10, program10, data, depth3),fn:self.programWithDepth(6, program6, data, depth3),data:data},helper ? helper.call(depth0, ((stack1 = (depth3 && depth3.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "inactiveOnly", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth3 && depth3.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "inactiveOnly", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n        ";
-  return buffer;
-  }
-function program10(depth0,data,depth4) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n                ";
-  stack1 = (helper = helpers.if_eq || (depth4 && depth4.if_eq),options={hash:{},inverse:self.noop,fn:self.programWithDepth(11, program11, data, depth4),data:data},helper ? helper.call(depth0, ((stack1 = (depth4 && depth4.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth4 && depth4.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            ";
-  return buffer;
-  }
-function program11(depth0,data,depth5) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n                    <tr class='resultRow selectable-row danger'>\n                        <td class='col-md-7'>\n                            <div draggable=\"true\" ondragstart=\"drag(event, '";
-  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "')\" class='result-item' data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n                                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</a>\n                            </div>\n                        </td>\n                        <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n                            "
-    + escapeExpression(((stack1 = ((stack1 = (depth5 && depth5.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n                        </td>\n                    </tr>\n                    "
-    + escapeExpression((helper = helpers.shown || (depth5 && depth5.shown),options={hash:{},data:data},helper ? helper.call(depth0, true, options) : helperMissing.call(depth0, "shown", true, options)))
-    + "\n                ";
-  return buffer;
-  }
-
-function program13(depth0,data,depth3) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n            ";
-  stack1 = (helper = helpers.if_eq || (depth3 && depth3.if_eq),options={hash:{},inverse:self.programWithDepth(16, program16, data, depth3),fn:self.programWithDepth(14, program14, data, depth3),data:data},helper ? helper.call(depth0, ((stack1 = (depth3 && depth3.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeOnly", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth3 && depth3.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeOnly", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n        ";
-  return buffer;
-  }
-function program14(depth0,data,depth4) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n                <tr class='resultRow selectable-row'>\n                    <td class='col-md-7'>\n                        <div draggable=\"true\" ondragstart=\"drag(event, '";
-  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "')\" class='result-item' data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n                            <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</a>\n                        </div>\n                    </td>\n                    <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n                        "
-    + escapeExpression(((stack1 = ((stack1 = (depth4 && depth4.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n                    </td>\n                </tr>\n                "
-    + escapeExpression((helper = helpers.shown || (depth4 && depth4.shown),options={hash:{},data:data},helper ? helper.call(depth0, true, options) : helperMissing.call(depth0, "shown", true, options)))
-    + "\n            ";
-  return buffer;
-  }
-
-function program16(depth0,data,depth4) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n                ";
-  stack1 = (helper = helpers.if_eq || (depth4 && depth4.if_eq),options={hash:{},inverse:self.noop,fn:self.programWithDepth(17, program17, data, depth4),data:data},helper ? helper.call(depth0, ((stack1 = (depth4 && depth4.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth4 && depth4.options)),stack1 == null || stack1 === false ? stack1 : stack1.statusSearchFilter), "activeAndInactive", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            ";
-  return buffer;
-  }
-function program17(depth0,data,depth5) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n                    <tr class='resultRow selectable-row'>\n                        <td class='col-md-7'>\n                            <div draggable=\"true\" ondragstart=\"drag(event, '";
-  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "')\" class='result-item' data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n                                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</a>\n                            </div>\n                        </td>\n                        <td class='text-muted small-text col-md-5 result-item'  data-concept-id='";
-  if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "' data-term='";
-  if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "'>\n                            "
-    + escapeExpression(((stack1 = ((stack1 = (depth5 && depth5.result)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n                        </td>\n                    </tr>\n                    "
-    + escapeExpression((helper = helpers.shown || (depth5 && depth5.shown),options={hash:{},data:data},helper ? helper.call(depth0, true, options) : helperMissing.call(depth0, "shown", true, options)))
-    + "\n                ";
-  return buffer;
-  }
-
-function program19(depth0,data) {
-  
-  
-  return "\n";
-  }
-
-function program21(depth0,data) {
+function program4(depth0,data) {
   
   
   return "\n    <tr><td class='text-muted'>No results</td></tr>\n";
@@ -5578,8 +5363,9 @@ function program21(depth0,data) {
   stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.descriptions), {hash:{},inverse:self.noop,fn:self.programWithDepth(1, program1, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n";
-  stack1 = (helper = helpers.shown || (depth0 && depth0.shown),options={hash:{},inverse:self.program(21, program21, data),fn:self.program(19, program19, data),data:data},helper ? helper.call(depth0, "get", options) : helperMissing.call(depth0, "shown", "get", options));
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.descriptions)),stack1 == null || stack1 === false ? stack1 : stack1.length), 0, options) : helperMissing.call(depth0, "if_eq", ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.descriptions)),stack1 == null || stack1 === false ? stack1 : stack1.length), 0, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
   return buffer;
   });
 
