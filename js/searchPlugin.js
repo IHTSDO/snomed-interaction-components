@@ -19,6 +19,7 @@ function searchPanel(divElement, options) {
     this.divElement = divElement;
     this.options = jQuery.extend(true, {}, options);
     var componentLoaded = false;
+    panel.shown0 = false;
     $.each(componentsRegistry, function (i, field) {
         if (field.divElement.id == panel.divElement.id) {
             componentLoaded = true;
@@ -399,6 +400,17 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
                         }).done(function (result) {
+                            Handlebars.registerHelper('shown', function(data, opts){
+                                if (data == "get"){
+                                    if (panel.shown0) {
+                                        return opts.fn(this);
+                                    }else{
+                                        return opts.inverse(this);
+                                    }
+                                }else{
+                                    panel.shown0 = data;
+                                }
+                            });
                             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                                 if (opts != "undefined") {
                                     if(a == b)
@@ -408,7 +420,8 @@ function searchPanel(divElement, options) {
                                 }
                             });
                             var context = {
-                                result: result
+                                result: result,
+                                options: panel.options
                             };
 
                             $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/0.hbs"](context));
@@ -420,22 +433,6 @@ function searchPanel(divElement, options) {
                                     field.updateCanvas();
                                 });
                             });
-//                            $.each(result.descriptions, function (i, field) {
-//                                if (field.active === false || field.conceptActive == false) {
-//                                    if (panel.options.statusSearchFilter == "inactiveOnly" ||
-//                                        panel.options.statusSearchFilter == "activeAndInactive") {
-//                                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-//                                        resultsHtml = resultsHtml + " danger";
-//                                        resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
-//                                    }
-//                                } else {
-//                                    if (panel.options.statusSearchFilter == "activeOnly" ||
-//                                        panel.options.statusSearchFilter == "activeAndInactive") {
-//                                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-//                                        resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
-//                                    }
-//                                }
-//                            });
                         });
                     } else if (t.substr(-2, 1) == "1") {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
@@ -461,13 +458,6 @@ function searchPanel(divElement, options) {
                                     field.updateCanvas();
                                 });
                             });
-//                            $.each(result.matches, function (i, field) {
-//                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-//                                if (field.active == false || field.conceptActive == false) {
-//                                    resultsHtml = resultsHtml + " danger";
-//                                }
-//                                resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
-//                            });
                         });
                     } else {
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
