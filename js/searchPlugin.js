@@ -424,21 +424,11 @@ function searchPanel(divElement, options) {
                             $.each(result.descriptions, function (i, field){
                                 var aux=field;
                                 if(field.active){
-                                    if (field.conceptActive){
-                                        if (panel.options.statusSearchFilter=="activeOnly"){
-                                            res.descriptions.push(aux);
-                                        }
-                                        if (panel.options.statusSearchFilter=="activeAndInactive"){
-                                            res.descriptions.push(aux);
-                                        }
-                                    }else{
-                                        aux.danger = true;
-                                        if (panel.options.statusSearchFilter=="inactiveOnly"){
-                                            res.descriptions.push(aux);
-                                        }
-                                        if (panel.options.statusSearchFilter=="activeAndInactive"){
-                                            res.descriptions.push(aux);
-                                        }
+                                    if (panel.options.statusSearchFilter=="activeOnly"){
+                                        res.descriptions.push(aux);
+                                    }
+                                    if (panel.options.statusSearchFilter=="activeAndInactive"){
+                                        res.descriptions.push(aux);
                                     }
                                 }else{
                                     aux.danger = true;
