@@ -65,235 +65,148 @@ function conceptDetails(divElement, conceptId, options) {
         };
         //        options statedParents inferredParents firstMatch statedRoles inferredRoles allDescriptions
         // dataContentValue = document.URL.split("?")[0].split("#")[0]
-        $.get("views/conceptDetailsPlugin/main.hbs").then(function (src) {
-            var template = Handlebars.compile(src);
-            $(divElement).html(template(context));
-//            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-//                if (opts != "undefined") {
-//                    if(a == b)
-//                        return opts.fn(this);
-//                    else
-//                        return opts.inverse(this);
-//                }
-//            });
-//            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-//                if (a){
-//                    var s = a.lastIndexOf("(");
-//                    if(s > b)
-//                        return opts.fn(this);
-//                    else
-//                        return opts.inverse(this);
-//                }
-//            });
-//            Handlebars.registerHelper('substr', function (string, start){
-//                var l = string.lastIndexOf("(") - 1;
-//                return string.substr(start, l);
-//            });
-//            Handlebars.registerHelper('push', function (element, array){
-//                array.push(element);
-//                // return ;
-//            });
-//            Handlebars.registerHelper('removeSemtag', function (term){
-//                return panel.removeSemtag(term);
-//            });
-//            Handlebars.registerHelper('lastIndexOf', function (term, pos){
-//                return term.lastIndexOf(pos);
-//            });
-//            Handlebars.registerHelper('console', function (something){
-//                console.log(something);
-//            });
-//            Handlebars.registerHelper('eqLastGroup', function (a, opts){
-//                if(!a == panel.lastGroup)
-//                    return opts.fn(this);
-//                else
-//                    return opts.inverse(this);
-//            });
-//            Handlebars.registerHelper('setLastGroup', function (a){
-//                 panel.lastGroup = a;
-//            });
-//            Handlebars.registerHelper('getRandomColor' , function (){
-//                return getRandomColor();
-//            });
-//            Handlebars.registerHelper('lastColor', function (a) {
-//                if (a == "get") {
-//                    return panel.color;
-//                }else {
-//                    panel.color = a;
-//                }
-//            });
-//            Handlebars.registerHelper('preferred', function (a, opts) {
-//                if (a == "get") {
-//                    if (panel.preferred) {
-//                        return opts.fn(this);
-//                    }else{
-//                        return opts.inverse(this);
-//                    }
-//                }else {
-//                    panel.preferred = a;
-//                }
-//            });
-//            Handlebars.registerHelper('acceptable', function (a, opts) {
-//                if (a == "get") {
-//                    if (panel.acceptable) {
-//                        return opts.fn(this);
-//                    }else{
-//                        return opts.inverse(this);
-//                    }
-//                }else {
-//                    panel.acceptable = a;
-//                }
-//            });
-//            Handlebars.registerHelper('included', function (a, opts) {
-//                if (a == "get") {
-//                    if (panel.included) {
-//                        return opts.fn(this);
-//                    }else{
-//                        return opts.inverse(this);
-//                    }
-//                }else {
-//                    panel.included = a;
-//                }
-//            });
 
-            $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
-            $("#" + panel.divElement.id + "-configButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
+        $(divElement).html(JST["views/conceptDetailsPlugin/main.hbs"](context));
 
+        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
+        $("#" + panel.divElement.id + "-configButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
+
+        $("#" + panel.divElement.id + "-expandButton").hide();
+        $("#" + panel.divElement.id + "-subscribersMarker").hide();
+
+        $("#" + panel.divElement.id + "-closeButton").click(function(event) {
+            $(divElement).remove();
+        });
+
+        if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
+            $("#" + panel.divElement.id + "-closeButton").hide();
+        }
+
+        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+            $("#" + panel.divElement.id + "-linkerButton").hide();
+        }
+
+        if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
+            $("#" + panel.divElement.id + "-subscribersMarker").remove();
+        }
+
+        if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
             $("#" + panel.divElement.id + "-expandButton").hide();
-            $("#" + panel.divElement.id + "-subscribersMarker").hide();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+        }
 
-            $("#" + panel.divElement.id + "-closeButton").click(function(event) {
-                $(divElement).remove();
-            });
+        $("#" + panel.divElement.id + "-expandButton").click(function(event) {
+            $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
+            $("#" + panel.divElement.id + "-expandButton").hide();
+            $("#" + panel.divElement.id + "-collapseButton").show();
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details</strong>");
+        });
 
-            if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
-                $("#" + panel.divElement.id + "-closeButton").hide();
+        $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
+            $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
+            $("#" + panel.divElement.id + "-expandButton").show();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+            //if (panel.defaultTerm.length > 25) {
+            //    $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm.substring(0, 24).trim() + "...</strong>");
+            //} else {
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+            //}
+        });
+
+        $('#' + panel.divElement.id).click(function(event) {
+            if (!$(event.target).hasClass('glyphicon')) {
+                $('#' + panel.divElement.id).find('.more-fields-button').popover('hide');
             }
+        });
 
-            if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-                $("#" + panel.divElement.id + "-linkerButton").hide();
-            }
-
-            if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
-                $("#" + panel.divElement.id + "-subscribersMarker").remove();
-            }
-
-            if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
-                $("#" + panel.divElement.id + "-expandButton").hide();
-                $("#" + panel.divElement.id + "-collapseButton").hide();
-            }
-
-            $("#" + panel.divElement.id + "-expandButton").click(function(event) {
-                $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
-                $("#" + panel.divElement.id + "-expandButton").hide();
-                $("#" + panel.divElement.id + "-collapseButton").show();
-                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details</strong>");
-            });
-
-            $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
-                $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
-                $("#" + panel.divElement.id + "-expandButton").show();
-                $("#" + panel.divElement.id + "-collapseButton").hide();
-                //if (panel.defaultTerm.length > 25) {
-                //    $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm.substring(0, 24).trim() + "...</strong>");
-                //} else {
-                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
-                //}
-            });
-
-            $('#' + panel.divElement.id).click(function(event) {
-                if (!$(event.target).hasClass('glyphicon')) {
-                    $('#' + panel.divElement.id).find('.more-fields-button').popover('hide');
+        $("#" + panel.divElement.id + "-historyButton").click(function(event) {
+            $("#" + panel.divElement.id + "-historyButton").popover({
+                trigger: 'manual',
+                placement: 'bottomRight',
+                html: true,
+                content: function() {
+                    var historyHtml = '<div style="height:100px;overflow:auto;">';
+                    historyHtml = historyHtml + '<table>';
+                    var reversedHistory = panel.history.slice(0);
+                    reversedHistory.reverse();
+                    //console.log(JSON.stringify(reversedHistory));
+                    $.each(reversedHistory, function(i, field) {
+                        var d = new Date();
+                        var curTime = d.getTime();
+                        var ago = curTime - field.time;
+                        var agoString = "";
+                        if (ago < (1000 * 60)) {
+                            if (Math.round((ago / 1000)) == 1) {
+                                agoString = Math.round((ago / 1000)) + ' second ago';
+                            } else {
+                                agoString = Math.round((ago / 1000)) + ' seconds ago';
+                            }
+                        } else if (ago < (1000 * 60 * 60)) {
+                            if (Math.round((ago / 1000) / 60) == 1) {
+                                agoString = Math.round((ago / 1000) / 60) + ' minute ago';
+                            } else {
+                                agoString = Math.round((ago / 1000) / 60) + ' minutes ago';
+                            }
+                        } else if (ago < (1000 * 60 * 60 * 60)) {
+                            if (Math.round(((ago / 1000) / 60) / 60) == 1) {
+                                agoString = Math.round(((ago / 1000) / 60) / 60) + ' hour ago';
+                            } else {
+                                agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
+                            }
+                        }
+                        historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.conceptId + ');">' + field.defaultTerm + '</a>';
+                        historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
+                        historyHtml = historyHtml + '</td></tr>';
+                    });
+                    historyHtml = historyHtml + '</table>';
+                    historyHtml = historyHtml + '</div>';
+                    return historyHtml;
                 }
             });
+            $("#" + panel.divElement.id + "-historyButton").popover('toggle');
+        });
 
-            $("#" + panel.divElement.id + "-historyButton").click(function(event) {
-                $("#" + panel.divElement.id + "-historyButton").popover({
-                    trigger: 'manual',
-                    placement: 'bottomRight',
-                    html: true,
-                    content: function() {
-                        var historyHtml = '<div style="height:100px;overflow:auto;">';
-                        historyHtml = historyHtml + '<table>';
-                        var reversedHistory = panel.history.slice(0);
-                        reversedHistory.reverse();
-                        //console.log(JSON.stringify(reversedHistory));
-                        $.each(reversedHistory, function(i, field) {
-                            var d = new Date();
-                            var curTime = d.getTime();
-                            var ago = curTime - field.time;
-                            var agoString = "";
-                            if (ago < (1000 * 60)) {
-                                if (Math.round((ago / 1000)) == 1) {
-                                    agoString = Math.round((ago / 1000)) + ' second ago';
-                                } else {
-                                    agoString = Math.round((ago / 1000)) + ' seconds ago';
-                                }
-                            } else if (ago < (1000 * 60 * 60)) {
-                                if (Math.round((ago / 1000) / 60) == 1) {
-                                    agoString = Math.round((ago / 1000) / 60) + ' minute ago';
-                                } else {
-                                    agoString = Math.round((ago / 1000) / 60) + ' minutes ago';
-                                }
-                            } else if (ago < (1000 * 60 * 60 * 60)) {
-                                if (Math.round(((ago / 1000) / 60) / 60) == 1) {
-                                    agoString = Math.round(((ago / 1000) / 60) / 60) + ' hour ago';
-                                } else {
-                                    agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
-                                }
-                            }
-                            historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.conceptId + ');">' + field.defaultTerm + '</a>';
-                            historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
-                            historyHtml = historyHtml + '</td></tr>';
-                        });
-                        historyHtml = historyHtml + '</table>';
-                        historyHtml = historyHtml + '</div>';
-                        return historyHtml;
-                    }
-                });
-                $("#" + panel.divElement.id + "-historyButton").popover('toggle');
-            });
+        if (typeof i18n_panel_options == "undefined") {
+            i18n_panel_options = "Panel options";
+        }
+        $("#" + panel.divElement.id + "-configButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_options,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_history == "undefined") {
+            i18n_history = 'History';
+        }
+        $("#" + panel.divElement.id + "-historyButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_history,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_panel_links == "undefined") {
+            i18n_panel_links = 'Panel links';
+        }
+        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_links,
+            animation: true,
+            delay: 1000
+        });
 
-            if (typeof i18n_panel_options == "undefined") {
-                i18n_panel_options = "Panel options";
-            }
-            $("#" + panel.divElement.id + "-configButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_panel_options,
-                animation: true,
-                delay: 1000
-            });
-            if (typeof i18n_history == "undefined") {
-                i18n_history = 'History';
-            }
-            $("#" + panel.divElement.id + "-historyButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_history,
-                animation: true,
-                delay: 1000
-            });
-            if (typeof i18n_panel_links == "undefined") {
-                i18n_panel_links = 'Panel links';
-            }
-            $("#" + panel.divElement.id + "-linkerButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_panel_links,
-                animation: true,
-                delay: 1000
-            });
-
-            $("#" + panel.divElement.id + "-apply-button").click(function() {
-                //console.log("apply!");
-                panel.readOptionsPanel();
-                panel.updateCanvas();
-            });
+        $("#" + panel.divElement.id + "-apply-button").click(function() {
+            //console.log("apply!");
+            panel.readOptionsPanel();
+            panel.updateCanvas();
+        });
 
 //            $("#" + panel.divElement.id + "-linkerButton").draggable({
 //                cancel: false,
@@ -309,26 +222,25 @@ function conceptDetails(divElement, conceptId, options) {
 //                hoverClass: "bg-info"
 //            });
 
-            $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
-                $("#" + panel.divElement.id + "-linkerButton").popover({
-                    trigger: 'manual',
-                    placement: 'bottomRight',
-                    html: true,
-                    content: function() {
-                        if (!panel.subscription) {
-                            linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
-                        } else {
-                            linkerHtml = '<div class="text-center"><a href="javascript:void(0);" onclick="cancelSubscription(\'' + panel.subscription.divElement.id + '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
-                        }
-                        return linkerHtml;
+        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+            $("#" + panel.divElement.id + "-linkerButton").popover({
+                trigger: 'manual',
+                placement: 'bottomRight',
+                html: true,
+                content: function() {
+                    if (!panel.subscription) {
+                        linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
+                    } else {
+                        linkerHtml = '<div class="text-center"><a href="javascript:void(0);" onclick="cancelSubscription(\'' + panel.subscription.divElement.id + '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
                     }
-                });
-                $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+                    return linkerHtml;
+                }
             });
-
-            panel.updateCanvas();
-            panel.setupOptionsPanel();
+            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
         });
+
+        panel.updateCanvas();
+        panel.setupOptionsPanel();
     }
 
     this.handleDropEvent = function(event, ui) {
@@ -391,78 +303,69 @@ function conceptDetails(divElement, conceptId, options) {
             var d = new Date();
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
-            $.get("views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs").then(function (src) {
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                var context = {
-                    firstMatch: firstMatch,
-                    divElementId: panel.divElement.id,
-                    dataContentValue: document.URL.split("?")[0].split("#")[0]
-                };
-                var template = Handlebars.compile(src);
-                $('#' + panel.attributesPId).html(template(context));
-                $('#' + 'share-link-' + panel.divElement.id).disableTextSelect();
-                $('#' + 'share-link-' + panel.divElement.id).click(function(event) {
-                    setTimeout(function () {
-                        $('#' + 'share-field-' + panel.divElement.id).select();
-                    },300);
-                });
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            var context = {
+                firstMatch: firstMatch,
+                divElementId: panel.divElement.id,
+                dataContentValue: document.URL.split("?")[0].split("#")[0]
+            };
+            $('#' + panel.attributesPId).html(JST["views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs"](context));
+            $('#' + 'share-link-' + panel.divElement.id).disableTextSelect();
+            $('#' + 'share-link-' + panel.divElement.id).click(function(event) {
+                setTimeout(function () {
+                    $('#' + 'share-field-' + panel.divElement.id).select();
+                },300);
             });
 
 
             // load home-attributes
-            $.get("views/conceptDetailsPlugin/tabs/home/attributes.hbs").then(function (src) {
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                var context = {
-                    panel: panel,
-                    firstMatch: firstMatch,
-                    divElementId: panel.divElement.id
-                };
-                var template = Handlebars.compile(src);
-                $('#home-attributes-' + panel.divElement.id).html(template(context));
-                if (!firstMatch.active) {
-                    $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
-                } else {
-                    $('#home-attributes-' + panel.divElement.id).css("background-color", "white");
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
                 }
+            });
+            var context = {
+                panel: panel,
+                firstMatch: firstMatch,
+                divElementId: panel.divElement.id
+            };
+            $('#home-attributes-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/attributes.hbs"](context));
 
-                if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
-                    $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
-                }
+            if (!firstMatch.active) {
+                $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
+            } else {
+                $('#home-attributes-' + panel.divElement.id).css("background-color", "white");
+            }
 
-//                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find('.jqui-droppable').droppable({
-//                    drop: panel.handleDropEvent,
-//                    hoverClass: "bg-info"
-//                });
-
-//                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").draggable({
-//                    appendTo: 'body',
-//                    helper: 'clone',
-//                    delay: 10
-//                });
-                if (typeof i18n_drag_this == "undefined") {
-                    i18n_drag_this = "Drag this";
-                }
-                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
-                    placement : 'left auto',
-                    trigger: 'hover',
-                    title: i18n_drag_this,
-                    animation: true,
-                    delay: 500
-                });
+            if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+            }
+            if (typeof i18n_drag_this == "undefined") {
+                i18n_drag_this = "Drag this";
+            }
+            $( "span[draggable='true']" ).tooltip({
+                placement : 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+            $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
+                placement : 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
             });
 
 
@@ -505,8 +408,6 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 }
             });
-
-            $.get("views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs").then(function (src) {
                 Handlebars.registerHelper('removeSemtag', function (term){
                     return panel.removeSemtag(term);
                 });
@@ -557,9 +458,7 @@ function conceptDetails(divElement, conceptId, options) {
                     divElementId: panel.divElement.id,
                     allDescriptions: allDescriptions
                 };
-                var template = Handlebars.compile(src);
-                $('#' + panel.descsPId).html(template(context));
-
+                $("#" + panel.descsPId).html(JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context));
                 if (panel.options.displaySynonyms) {
                     $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
                 }
@@ -580,14 +479,7 @@ function conceptDetails(divElement, conceptId, options) {
                         $(val).toggle();
                     });
                 });
-//                $('#' + panel.descsPId).find(".jqui-draggable").draggable({
-//                    appendTo: 'body',
-//                    helper: 'clone',
-//                    delay: 500
-//                });
-
                 $('#' + panel.descsPId).find("[rel=tooltip-right]").tooltip({ placement: 'right'});
-            });
 
 
 
@@ -644,29 +536,28 @@ function conceptDetails(divElement, conceptId, options) {
                     return 0;
                 }
             });
-            $.get("views/conceptDetailsPlugin/tabs/details/rels-panel.hbs").then(function (src) {
-                Handlebars.registerHelper('push', function (element, array){
-                    array.push(element);
-                    // return ;
-                });
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                var context = {
-                    firstMatch: firstMatch,
-                    inferredParents: panel.inferredParents,
-                    inferredRoles: panel.inferredRoles,
-                    statedParents: panel.statedParents,
-                    statedRoles: panel.statedRoles
-                };
-                var template = Handlebars.compile(src);
-                $('#' + panel.relsPId).html(template(context));
+
+            Handlebars.registerHelper('push', function (element, array){
+                array.push(element);
+                // return ;
             });
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            var context = {
+                firstMatch: firstMatch,
+                inferredParents: panel.inferredParents,
+                inferredRoles: panel.inferredRoles,
+                statedParents: panel.statedParents,
+                statedRoles: panel.statedRoles
+            };
+            $("#" + panel.relsPId).html(JST["views/conceptDetailsPlugin/tabs/details/rels-panel.hbs"](context));
+
 
             panel.inferredParents.sort(function(a, b) {
                 if (a.target.defaultTerm < b.target.defaultTerm)
@@ -712,145 +603,139 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
 
-            $.get("views/conceptDetailsPlugin/tabs/home/parents.hbs").then(function (src) {
-                Handlebars.registerHelper('substr', function (string, start){
-                    var l = string.lastIndexOf("(") - 1;
-                    return string.substr(start, l);
-                });
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                    if (a){
-                        var s = a.lastIndexOf("(");
-                        if(s > b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                var context = {
-                    statedParents: panel.statedParents,
-                    inferredParents: panel.inferredParents,
-                    options: panel.options
-                };
-                var template = Handlebars.compile(src);
-                $('#home-parents-' + panel.divElement.id).html(template(context));
-                if (!panel.options.diagrammingMarkupEnabled) {
-                    $('#home-parents-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-parents-' + panel.divElement.id).html()));
-                }
+            Handlebars.registerHelper('substr', function (string, start){
+                var l = string.lastIndexOf("(") - 1;
+                return string.substr(start, l);
             });
-
-            $.get("views/conceptDetailsPlugin/tabs/home/roles.hbs").then(function (src) {
-                Handlebars.registerHelper('eqLastGroup', function (a, opts){
-                    if(!a == panel.lastGroup)
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
-                });
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                Handlebars.registerHelper('removeSemtag', function (term){
-                    return panel.removeSemtag(term);
-                });
-                Handlebars.registerHelper('setLastGroup', function (a){
-                    panel.lastGroup = a;
-                });
-                Handlebars.registerHelper('lastColor', function (a) {
-                    if (a == "get") {
-                        return panel.color;
-                    }else {
-                        panel.color = a;
-                    }
-                });
-                Handlebars.registerHelper('getRandomColor' , function (){
-                    return getRandomColor();
-                });
-                var context = {
-                    options: options,
-                    statedRoles: panel.statedRoles,
-                    inferredRoles: panel.inferredRoles
-                };
-                var template = Handlebars.compile(src);
-                $('#home-roles-' + panel.divElement.id).html(template(context));
-
-                if (!panel.options.diagrammingMarkupEnabled) {
-                    $('#home-roles-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-roles-' + panel.divElement.id).html()));
                 }
             });
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if (a){
+                    var s = a.lastIndexOf("(");
+                    if(s > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            var context = {
+                statedParents: panel.statedParents,
+                inferredParents: panel.inferredParents,
+                options: panel.options
+            };
+            $('#home-parents-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/parents.hbs"](context));
+            if (!panel.options.diagrammingMarkupEnabled) {
+                $('#home-parents-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-parents-' + panel.divElement.id).html()));
+            }
 
 
-            $.get("views/conceptDetailsPlugin/tabs/refset.hbs").then(function (src) {
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                var context = {
-                    firstMatch: firstMatch
-                };
-                var template = Handlebars.compile(src);
-                $('#refsets-' + panel.divElement.id).html(template(context));
+            Handlebars.registerHelper('eqLastGroup', function (a, opts){
+                if(!a == panel.lastGroup)
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            });
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('removeSemtag', function (term){
+                return panel.removeSemtag(term);
+            });
+            Handlebars.registerHelper('setLastGroup', function (a){
+                panel.lastGroup = a;
+            });
+            Handlebars.registerHelper('lastColor', function (a) {
+                if (a == "get") {
+                    return panel.color;
+                }else {
+                    panel.color = a;
+                }
+            });
+            Handlebars.registerHelper('getRandomColor' , function (){
+                return getRandomColor();
+            });
+            var context = {
+                options: options,
+                statedRoles: panel.statedRoles,
+                inferredRoles: panel.inferredRoles
+            };
+            $('#home-roles-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/roles.hbs"](context));
 
-                if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
+            if (!panel.options.diagrammingMarkupEnabled) {
+                $('#home-roles-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-roles-' + panel.divElement.id).html()));
+            }
+
+
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            var context = {
+                firstMatch: firstMatch
+            };
+            $('#refsets-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/refset.hbs"](context));
+
+            if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
+                $("#diagram-canvas-" + panel.divElement.id).html("");
+                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+            }
+
+            $("#diagram-tab-link-" + panel.divElement.id).click(function (e) {
+                $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                setTimeout(function () {
                     $("#diagram-canvas-" + panel.divElement.id).html("");
                     drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
-                }
+                }, 1000)
 
-                $("#diagram-tab-link-" + panel.divElement.id).click(function (e) {
-                    $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-                    setTimeout(function () {
-                        $("#diagram-canvas-" + panel.divElement.id).html("");
-                        drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
-                    }, 1000)
-
-                });
-
-                $('.more-fields-button').disableTextSelect();
-                $('.more-fields-button').popover();
-
-                if (panel.options.selectedView == "stated") {
-                    $('#' + panel.relsPId).find('.inferred-rel').each(function(i, val) {
-                        $(val).toggle();
-                    });
-                } else if (panel.options.selectedView == "inferred") {
-                    $('#' + panel.relsPId).find('.stated-rel').each(function(i, val) {
-                        $(val).toggle();
-                    });
-                } else if (panel.options.selectedView != "all") {
-                    // show all
-                }
-//                $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id + ',#refsets-' + panel.divElement.id).find(".jqui-draggable").draggable({
-//                    appendTo: 'body',
-//                    helper: 'clone',
-//                    delay: 500
-//                });
-                $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
-                    placement : 'left auto',
-                    trigger: 'hover',
-                    title: i18n_drag_this,
-                    animation: true,
-                    delay: 500
-                });
-                if (typeof(switchLanguage) == "function") {
-                    switchLanguage(selectedLanguage, selectedFlag, false);
-                }
-                conceptRequested = 0;
             });
+
+            $('.more-fields-button').disableTextSelect();
+            $('.more-fields-button').popover();
+
+            if (panel.options.selectedView == "stated") {
+                $('#' + panel.relsPId).find('.inferred-rel').each(function(i, val) {
+                    $(val).toggle();
+                });
+            } else if (panel.options.selectedView == "inferred") {
+                $('#' + panel.relsPId).find('.stated-rel').each(function(i, val) {
+                    $(val).toggle();
+                });
+            } else if (panel.options.selectedView != "all") {
+                // show all
+            }
+            $( "span[draggable='true']" ).tooltip({
+                placement : 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+            $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
+                placement : 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+            if (typeof(switchLanguage) == "function") {
+                switchLanguage(selectedLanguage, selectedFlag, false);
+            }
+            conceptRequested = 0;
 
 
         }).fail(function() {
@@ -878,19 +763,11 @@ function conceptDetails(divElement, conceptId, options) {
                 // load relationships panel
                 xhrChildren = null;
                 panel.childrenPId = divElement.id + "-children-panel";
-                $.get("views/conceptDetailsPlugin/tabs/details/children-panel.hbs").then(function (src) {
-                    var context = {
-                        childrenResult: result
-                    };
-                    var template = Handlebars.compile(src);
-                    $('#' + panel.childrenPId).html(template(context));
-//                    $('#' + panel.childrenPId).find(".jqui-draggable").draggable({
-//                        appendTo: 'body',
-//                        helper: 'clone',
-//                        delay: 500
-//                    });
-                });
 
+                var context = {
+                    childrenResult: result
+                };
+                $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
             }).fail(function() {
                 $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             });

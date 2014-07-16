@@ -65,235 +65,148 @@ function conceptDetails(divElement, conceptId, options) {
         };
         //        options statedParents inferredParents firstMatch statedRoles inferredRoles allDescriptions
         // dataContentValue = document.URL.split("?")[0].split("#")[0]
-        $.get("views/conceptDetailsPlugin/main.hbs").then(function (src) {
-            var template = Handlebars.compile(src);
-            $(divElement).html(template(context));
-//            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-//                if (opts != "undefined") {
-//                    if(a == b)
-//                        return opts.fn(this);
-//                    else
-//                        return opts.inverse(this);
-//                }
-//            });
-//            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-//                if (a){
-//                    var s = a.lastIndexOf("(");
-//                    if(s > b)
-//                        return opts.fn(this);
-//                    else
-//                        return opts.inverse(this);
-//                }
-//            });
-//            Handlebars.registerHelper('substr', function (string, start){
-//                var l = string.lastIndexOf("(") - 1;
-//                return string.substr(start, l);
-//            });
-//            Handlebars.registerHelper('push', function (element, array){
-//                array.push(element);
-//                // return ;
-//            });
-//            Handlebars.registerHelper('removeSemtag', function (term){
-//                return panel.removeSemtag(term);
-//            });
-//            Handlebars.registerHelper('lastIndexOf', function (term, pos){
-//                return term.lastIndexOf(pos);
-//            });
-//            Handlebars.registerHelper('console', function (something){
-//                console.log(something);
-//            });
-//            Handlebars.registerHelper('eqLastGroup', function (a, opts){
-//                if(!a == panel.lastGroup)
-//                    return opts.fn(this);
-//                else
-//                    return opts.inverse(this);
-//            });
-//            Handlebars.registerHelper('setLastGroup', function (a){
-//                 panel.lastGroup = a;
-//            });
-//            Handlebars.registerHelper('getRandomColor' , function (){
-//                return getRandomColor();
-//            });
-//            Handlebars.registerHelper('lastColor', function (a) {
-//                if (a == "get") {
-//                    return panel.color;
-//                }else {
-//                    panel.color = a;
-//                }
-//            });
-//            Handlebars.registerHelper('preferred', function (a, opts) {
-//                if (a == "get") {
-//                    if (panel.preferred) {
-//                        return opts.fn(this);
-//                    }else{
-//                        return opts.inverse(this);
-//                    }
-//                }else {
-//                    panel.preferred = a;
-//                }
-//            });
-//            Handlebars.registerHelper('acceptable', function (a, opts) {
-//                if (a == "get") {
-//                    if (panel.acceptable) {
-//                        return opts.fn(this);
-//                    }else{
-//                        return opts.inverse(this);
-//                    }
-//                }else {
-//                    panel.acceptable = a;
-//                }
-//            });
-//            Handlebars.registerHelper('included', function (a, opts) {
-//                if (a == "get") {
-//                    if (panel.included) {
-//                        return opts.fn(this);
-//                    }else{
-//                        return opts.inverse(this);
-//                    }
-//                }else {
-//                    panel.included = a;
-//                }
-//            });
 
-            $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
-            $("#" + panel.divElement.id + "-configButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
+        $(divElement).html(JST["views/conceptDetailsPlugin/main.hbs"](context));
 
+        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
+        $("#" + panel.divElement.id + "-configButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
+
+        $("#" + panel.divElement.id + "-expandButton").hide();
+        $("#" + panel.divElement.id + "-subscribersMarker").hide();
+
+        $("#" + panel.divElement.id + "-closeButton").click(function(event) {
+            $(divElement).remove();
+        });
+
+        if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
+            $("#" + panel.divElement.id + "-closeButton").hide();
+        }
+
+        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+            $("#" + panel.divElement.id + "-linkerButton").hide();
+        }
+
+        if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
+            $("#" + panel.divElement.id + "-subscribersMarker").remove();
+        }
+
+        if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
             $("#" + panel.divElement.id + "-expandButton").hide();
-            $("#" + panel.divElement.id + "-subscribersMarker").hide();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+        }
 
-            $("#" + panel.divElement.id + "-closeButton").click(function(event) {
-                $(divElement).remove();
-            });
+        $("#" + panel.divElement.id + "-expandButton").click(function(event) {
+            $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
+            $("#" + panel.divElement.id + "-expandButton").hide();
+            $("#" + panel.divElement.id + "-collapseButton").show();
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details</strong>");
+        });
 
-            if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
-                $("#" + panel.divElement.id + "-closeButton").hide();
+        $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
+            $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
+            $("#" + panel.divElement.id + "-expandButton").show();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+            //if (panel.defaultTerm.length > 25) {
+            //    $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm.substring(0, 24).trim() + "...</strong>");
+            //} else {
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+            //}
+        });
+
+        $('#' + panel.divElement.id).click(function(event) {
+            if (!$(event.target).hasClass('glyphicon')) {
+                $('#' + panel.divElement.id).find('.more-fields-button').popover('hide');
             }
+        });
 
-            if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-                $("#" + panel.divElement.id + "-linkerButton").hide();
-            }
-
-            if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
-                $("#" + panel.divElement.id + "-subscribersMarker").remove();
-            }
-
-            if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
-                $("#" + panel.divElement.id + "-expandButton").hide();
-                $("#" + panel.divElement.id + "-collapseButton").hide();
-            }
-
-            $("#" + panel.divElement.id + "-expandButton").click(function(event) {
-                $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
-                $("#" + panel.divElement.id + "-expandButton").hide();
-                $("#" + panel.divElement.id + "-collapseButton").show();
-                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details</strong>");
-            });
-
-            $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
-                $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
-                $("#" + panel.divElement.id + "-expandButton").show();
-                $("#" + panel.divElement.id + "-collapseButton").hide();
-                //if (panel.defaultTerm.length > 25) {
-                //    $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm.substring(0, 24).trim() + "...</strong>");
-                //} else {
-                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
-                //}
-            });
-
-            $('#' + panel.divElement.id).click(function(event) {
-                if (!$(event.target).hasClass('glyphicon')) {
-                    $('#' + panel.divElement.id).find('.more-fields-button').popover('hide');
+        $("#" + panel.divElement.id + "-historyButton").click(function(event) {
+            $("#" + panel.divElement.id + "-historyButton").popover({
+                trigger: 'manual',
+                placement: 'bottomRight',
+                html: true,
+                content: function() {
+                    var historyHtml = '<div style="height:100px;overflow:auto;">';
+                    historyHtml = historyHtml + '<table>';
+                    var reversedHistory = panel.history.slice(0);
+                    reversedHistory.reverse();
+                    //console.log(JSON.stringify(reversedHistory));
+                    $.each(reversedHistory, function(i, field) {
+                        var d = new Date();
+                        var curTime = d.getTime();
+                        var ago = curTime - field.time;
+                        var agoString = "";
+                        if (ago < (1000 * 60)) {
+                            if (Math.round((ago / 1000)) == 1) {
+                                agoString = Math.round((ago / 1000)) + ' second ago';
+                            } else {
+                                agoString = Math.round((ago / 1000)) + ' seconds ago';
+                            }
+                        } else if (ago < (1000 * 60 * 60)) {
+                            if (Math.round((ago / 1000) / 60) == 1) {
+                                agoString = Math.round((ago / 1000) / 60) + ' minute ago';
+                            } else {
+                                agoString = Math.round((ago / 1000) / 60) + ' minutes ago';
+                            }
+                        } else if (ago < (1000 * 60 * 60 * 60)) {
+                            if (Math.round(((ago / 1000) / 60) / 60) == 1) {
+                                agoString = Math.round(((ago / 1000) / 60) / 60) + ' hour ago';
+                            } else {
+                                agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
+                            }
+                        }
+                        historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.conceptId + ');">' + field.defaultTerm + '</a>';
+                        historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
+                        historyHtml = historyHtml + '</td></tr>';
+                    });
+                    historyHtml = historyHtml + '</table>';
+                    historyHtml = historyHtml + '</div>';
+                    return historyHtml;
                 }
             });
+            $("#" + panel.divElement.id + "-historyButton").popover('toggle');
+        });
 
-            $("#" + panel.divElement.id + "-historyButton").click(function(event) {
-                $("#" + panel.divElement.id + "-historyButton").popover({
-                    trigger: 'manual',
-                    placement: 'bottomRight',
-                    html: true,
-                    content: function() {
-                        var historyHtml = '<div style="height:100px;overflow:auto;">';
-                        historyHtml = historyHtml + '<table>';
-                        var reversedHistory = panel.history.slice(0);
-                        reversedHistory.reverse();
-                        //console.log(JSON.stringify(reversedHistory));
-                        $.each(reversedHistory, function(i, field) {
-                            var d = new Date();
-                            var curTime = d.getTime();
-                            var ago = curTime - field.time;
-                            var agoString = "";
-                            if (ago < (1000 * 60)) {
-                                if (Math.round((ago / 1000)) == 1) {
-                                    agoString = Math.round((ago / 1000)) + ' second ago';
-                                } else {
-                                    agoString = Math.round((ago / 1000)) + ' seconds ago';
-                                }
-                            } else if (ago < (1000 * 60 * 60)) {
-                                if (Math.round((ago / 1000) / 60) == 1) {
-                                    agoString = Math.round((ago / 1000) / 60) + ' minute ago';
-                                } else {
-                                    agoString = Math.round((ago / 1000) / 60) + ' minutes ago';
-                                }
-                            } else if (ago < (1000 * 60 * 60 * 60)) {
-                                if (Math.round(((ago / 1000) / 60) / 60) == 1) {
-                                    agoString = Math.round(((ago / 1000) / 60) / 60) + ' hour ago';
-                                } else {
-                                    agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
-                                }
-                            }
-                            historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.conceptId + ');">' + field.defaultTerm + '</a>';
-                            historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
-                            historyHtml = historyHtml + '</td></tr>';
-                        });
-                        historyHtml = historyHtml + '</table>';
-                        historyHtml = historyHtml + '</div>';
-                        return historyHtml;
-                    }
-                });
-                $("#" + panel.divElement.id + "-historyButton").popover('toggle');
-            });
+        if (typeof i18n_panel_options == "undefined") {
+            i18n_panel_options = "Panel options";
+        }
+        $("#" + panel.divElement.id + "-configButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_options,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_history == "undefined") {
+            i18n_history = 'History';
+        }
+        $("#" + panel.divElement.id + "-historyButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_history,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_panel_links == "undefined") {
+            i18n_panel_links = 'Panel links';
+        }
+        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_links,
+            animation: true,
+            delay: 1000
+        });
 
-            if (typeof i18n_panel_options == "undefined") {
-                i18n_panel_options = "Panel options";
-            }
-            $("#" + panel.divElement.id + "-configButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_panel_options,
-                animation: true,
-                delay: 1000
-            });
-            if (typeof i18n_history == "undefined") {
-                i18n_history = 'History';
-            }
-            $("#" + panel.divElement.id + "-historyButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_history,
-                animation: true,
-                delay: 1000
-            });
-            if (typeof i18n_panel_links == "undefined") {
-                i18n_panel_links = 'Panel links';
-            }
-            $("#" + panel.divElement.id + "-linkerButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_panel_links,
-                animation: true,
-                delay: 1000
-            });
-
-            $("#" + panel.divElement.id + "-apply-button").click(function() {
-                //console.log("apply!");
-                panel.readOptionsPanel();
-                panel.updateCanvas();
-            });
+        $("#" + panel.divElement.id + "-apply-button").click(function() {
+            //console.log("apply!");
+            panel.readOptionsPanel();
+            panel.updateCanvas();
+        });
 
 //            $("#" + panel.divElement.id + "-linkerButton").draggable({
 //                cancel: false,
@@ -309,26 +222,25 @@ function conceptDetails(divElement, conceptId, options) {
 //                hoverClass: "bg-info"
 //            });
 
-            $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
-                $("#" + panel.divElement.id + "-linkerButton").popover({
-                    trigger: 'manual',
-                    placement: 'bottomRight',
-                    html: true,
-                    content: function() {
-                        if (!panel.subscription) {
-                            linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
-                        } else {
-                            linkerHtml = '<div class="text-center"><a href="javascript:void(0);" onclick="cancelSubscription(\'' + panel.subscription.divElement.id + '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
-                        }
-                        return linkerHtml;
+        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+            $("#" + panel.divElement.id + "-linkerButton").popover({
+                trigger: 'manual',
+                placement: 'bottomRight',
+                html: true,
+                content: function() {
+                    if (!panel.subscription) {
+                        linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
+                    } else {
+                        linkerHtml = '<div class="text-center"><a href="javascript:void(0);" onclick="cancelSubscription(\'' + panel.subscription.divElement.id + '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
                     }
-                });
-                $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+                    return linkerHtml;
+                }
             });
-
-            panel.updateCanvas();
-            panel.setupOptionsPanel();
+            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
         });
+
+        panel.updateCanvas();
+        panel.setupOptionsPanel();
     }
 
     this.handleDropEvent = function(event, ui) {
@@ -391,78 +303,69 @@ function conceptDetails(divElement, conceptId, options) {
             var d = new Date();
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
-            $.get("views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs").then(function (src) {
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                var context = {
-                    firstMatch: firstMatch,
-                    divElementId: panel.divElement.id,
-                    dataContentValue: document.URL.split("?")[0].split("#")[0]
-                };
-                var template = Handlebars.compile(src);
-                $('#' + panel.attributesPId).html(template(context));
-                $('#' + 'share-link-' + panel.divElement.id).disableTextSelect();
-                $('#' + 'share-link-' + panel.divElement.id).click(function(event) {
-                    setTimeout(function () {
-                        $('#' + 'share-field-' + panel.divElement.id).select();
-                    },300);
-                });
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            var context = {
+                firstMatch: firstMatch,
+                divElementId: panel.divElement.id,
+                dataContentValue: document.URL.split("?")[0].split("#")[0]
+            };
+            $('#' + panel.attributesPId).html(JST["views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs"](context));
+            $('#' + 'share-link-' + panel.divElement.id).disableTextSelect();
+            $('#' + 'share-link-' + panel.divElement.id).click(function(event) {
+                setTimeout(function () {
+                    $('#' + 'share-field-' + panel.divElement.id).select();
+                },300);
             });
 
 
             // load home-attributes
-            $.get("views/conceptDetailsPlugin/tabs/home/attributes.hbs").then(function (src) {
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                var context = {
-                    panel: panel,
-                    firstMatch: firstMatch,
-                    divElementId: panel.divElement.id
-                };
-                var template = Handlebars.compile(src);
-                $('#home-attributes-' + panel.divElement.id).html(template(context));
-                if (!firstMatch.active) {
-                    $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
-                } else {
-                    $('#home-attributes-' + panel.divElement.id).css("background-color", "white");
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
                 }
+            });
+            var context = {
+                panel: panel,
+                firstMatch: firstMatch,
+                divElementId: panel.divElement.id
+            };
+            $('#home-attributes-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/attributes.hbs"](context));
 
-                if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
-                    $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
-                }
+            if (!firstMatch.active) {
+                $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
+            } else {
+                $('#home-attributes-' + panel.divElement.id).css("background-color", "white");
+            }
 
-//                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find('.jqui-droppable').droppable({
-//                    drop: panel.handleDropEvent,
-//                    hoverClass: "bg-info"
-//                });
-
-//                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").draggable({
-//                    appendTo: 'body',
-//                    helper: 'clone',
-//                    delay: 10
-//                });
-                if (typeof i18n_drag_this == "undefined") {
-                    i18n_drag_this = "Drag this";
-                }
-                $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
-                    placement : 'left auto',
-                    trigger: 'hover',
-                    title: i18n_drag_this,
-                    animation: true,
-                    delay: 500
-                });
+            if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+            }
+            if (typeof i18n_drag_this == "undefined") {
+                i18n_drag_this = "Drag this";
+            }
+            $( "span[draggable='true']" ).tooltip({
+                placement : 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+            $('#' + panel.attributesPId + ',#home-attributes-' + panel.divElement.id).find(".jqui-draggable").tooltip({
+                placement : 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
             });
 
 
@@ -505,8 +408,6 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 }
             });
-
-            $.get("views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs").then(function (src) {
                 Handlebars.registerHelper('removeSemtag', function (term){
                     return panel.removeSemtag(term);
                 });
@@ -557,9 +458,7 @@ function conceptDetails(divElement, conceptId, options) {
                     divElementId: panel.divElement.id,
                     allDescriptions: allDescriptions
                 };
-                var template = Handlebars.compile(src);
-                $('#' + panel.descsPId).html(template(context));
-
+                $("#" + panel.descsPId).html(JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context));
                 if (panel.options.displaySynonyms) {
                     $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
                 }
@@ -580,14 +479,7 @@ function conceptDetails(divElement, conceptId, options) {
                         $(val).toggle();
                     });
                 });
-//                $('#' + panel.descsPId).find(".jqui-draggable").draggable({
-//                    appendTo: 'body',
-//                    helper: 'clone',
-//                    delay: 500
-//                });
-
                 $('#' + panel.descsPId).find("[rel=tooltip-right]").tooltip({ placement: 'right'});
-            });
 
 
 
@@ -644,29 +536,28 @@ function conceptDetails(divElement, conceptId, options) {
                     return 0;
                 }
             });
-            $.get("views/conceptDetailsPlugin/tabs/details/rels-panel.hbs").then(function (src) {
-                Handlebars.registerHelper('push', function (element, array){
-                    array.push(element);
-                    // return ;
-                });
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                var context = {
-                    firstMatch: firstMatch,
-                    inferredParents: panel.inferredParents,
-                    inferredRoles: panel.inferredRoles,
-                    statedParents: panel.statedParents,
-                    statedRoles: panel.statedRoles
-                };
-                var template = Handlebars.compile(src);
-                $('#' + panel.relsPId).html(template(context));
+
+            Handlebars.registerHelper('push', function (element, array){
+                array.push(element);
+                // return ;
             });
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            var context = {
+                firstMatch: firstMatch,
+                inferredParents: panel.inferredParents,
+                inferredRoles: panel.inferredRoles,
+                statedParents: panel.statedParents,
+                statedRoles: panel.statedRoles
+            };
+            $("#" + panel.relsPId).html(JST["views/conceptDetailsPlugin/tabs/details/rels-panel.hbs"](context));
+
 
             panel.inferredParents.sort(function(a, b) {
                 if (a.target.defaultTerm < b.target.defaultTerm)
@@ -712,145 +603,139 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
 
-            $.get("views/conceptDetailsPlugin/tabs/home/parents.hbs").then(function (src) {
-                Handlebars.registerHelper('substr', function (string, start){
-                    var l = string.lastIndexOf("(") - 1;
-                    return string.substr(start, l);
-                });
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                    if (a){
-                        var s = a.lastIndexOf("(");
-                        if(s > b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                var context = {
-                    statedParents: panel.statedParents,
-                    inferredParents: panel.inferredParents,
-                    options: panel.options
-                };
-                var template = Handlebars.compile(src);
-                $('#home-parents-' + panel.divElement.id).html(template(context));
-                if (!panel.options.diagrammingMarkupEnabled) {
-                    $('#home-parents-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-parents-' + panel.divElement.id).html()));
-                }
+            Handlebars.registerHelper('substr', function (string, start){
+                var l = string.lastIndexOf("(") - 1;
+                return string.substr(start, l);
             });
-
-            $.get("views/conceptDetailsPlugin/tabs/home/roles.hbs").then(function (src) {
-                Handlebars.registerHelper('eqLastGroup', function (a, opts){
-                    if(!a == panel.lastGroup)
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
-                });
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                Handlebars.registerHelper('removeSemtag', function (term){
-                    return panel.removeSemtag(term);
-                });
-                Handlebars.registerHelper('setLastGroup', function (a){
-                    panel.lastGroup = a;
-                });
-                Handlebars.registerHelper('lastColor', function (a) {
-                    if (a == "get") {
-                        return panel.color;
-                    }else {
-                        panel.color = a;
-                    }
-                });
-                Handlebars.registerHelper('getRandomColor' , function (){
-                    return getRandomColor();
-                });
-                var context = {
-                    options: options,
-                    statedRoles: panel.statedRoles,
-                    inferredRoles: panel.inferredRoles
-                };
-                var template = Handlebars.compile(src);
-                $('#home-roles-' + panel.divElement.id).html(template(context));
-
-                if (!panel.options.diagrammingMarkupEnabled) {
-                    $('#home-roles-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-roles-' + panel.divElement.id).html()));
                 }
             });
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if (a){
+                    var s = a.lastIndexOf("(");
+                    if(s > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            var context = {
+                statedParents: panel.statedParents,
+                inferredParents: panel.inferredParents,
+                options: panel.options
+            };
+            $('#home-parents-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/parents.hbs"](context));
+            if (!panel.options.diagrammingMarkupEnabled) {
+                $('#home-parents-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-parents-' + panel.divElement.id).html()));
+            }
 
 
-            $.get("views/conceptDetailsPlugin/tabs/refset.hbs").then(function (src) {
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                var context = {
-                    firstMatch: firstMatch
-                };
-                var template = Handlebars.compile(src);
-                $('#refsets-' + panel.divElement.id).html(template(context));
+            Handlebars.registerHelper('eqLastGroup', function (a, opts){
+                if(!a == panel.lastGroup)
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            });
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('removeSemtag', function (term){
+                return panel.removeSemtag(term);
+            });
+            Handlebars.registerHelper('setLastGroup', function (a){
+                panel.lastGroup = a;
+            });
+            Handlebars.registerHelper('lastColor', function (a) {
+                if (a == "get") {
+                    return panel.color;
+                }else {
+                    panel.color = a;
+                }
+            });
+            Handlebars.registerHelper('getRandomColor' , function (){
+                return getRandomColor();
+            });
+            var context = {
+                options: options,
+                statedRoles: panel.statedRoles,
+                inferredRoles: panel.inferredRoles
+            };
+            $('#home-roles-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/roles.hbs"](context));
 
-                if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
+            if (!panel.options.diagrammingMarkupEnabled) {
+                $('#home-roles-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-roles-' + panel.divElement.id).html()));
+            }
+
+
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            var context = {
+                firstMatch: firstMatch
+            };
+            $('#refsets-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/refset.hbs"](context));
+
+            if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
+                $("#diagram-canvas-" + panel.divElement.id).html("");
+                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+            }
+
+            $("#diagram-tab-link-" + panel.divElement.id).click(function (e) {
+                $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                setTimeout(function () {
                     $("#diagram-canvas-" + panel.divElement.id).html("");
                     drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
-                }
+                }, 1000)
 
-                $("#diagram-tab-link-" + panel.divElement.id).click(function (e) {
-                    $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-                    setTimeout(function () {
-                        $("#diagram-canvas-" + panel.divElement.id).html("");
-                        drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
-                    }, 1000)
-
-                });
-
-                $('.more-fields-button').disableTextSelect();
-                $('.more-fields-button').popover();
-
-                if (panel.options.selectedView == "stated") {
-                    $('#' + panel.relsPId).find('.inferred-rel').each(function(i, val) {
-                        $(val).toggle();
-                    });
-                } else if (panel.options.selectedView == "inferred") {
-                    $('#' + panel.relsPId).find('.stated-rel').each(function(i, val) {
-                        $(val).toggle();
-                    });
-                } else if (panel.options.selectedView != "all") {
-                    // show all
-                }
-//                $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id + ',#refsets-' + panel.divElement.id).find(".jqui-draggable").draggable({
-//                    appendTo: 'body',
-//                    helper: 'clone',
-//                    delay: 500
-//                });
-                $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
-                    placement : 'left auto',
-                    trigger: 'hover',
-                    title: i18n_drag_this,
-                    animation: true,
-                    delay: 500
-                });
-                if (typeof(switchLanguage) == "function") {
-                    switchLanguage(selectedLanguage, selectedFlag, false);
-                }
-                conceptRequested = 0;
             });
+
+            $('.more-fields-button').disableTextSelect();
+            $('.more-fields-button').popover();
+
+            if (panel.options.selectedView == "stated") {
+                $('#' + panel.relsPId).find('.inferred-rel').each(function(i, val) {
+                    $(val).toggle();
+                });
+            } else if (panel.options.selectedView == "inferred") {
+                $('#' + panel.relsPId).find('.stated-rel').each(function(i, val) {
+                    $(val).toggle();
+                });
+            } else if (panel.options.selectedView != "all") {
+                // show all
+            }
+            $( "span[draggable='true']" ).tooltip({
+                placement : 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+            $('#' + panel.relsPId + ',#home-parents-' + panel.divElement.id + ',#home-roles-' + panel.divElement.id).find(".jqui-draggable").tooltip({
+                placement : 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+            if (typeof(switchLanguage) == "function") {
+                switchLanguage(selectedLanguage, selectedFlag, false);
+            }
+            conceptRequested = 0;
 
 
         }).fail(function() {
@@ -878,19 +763,11 @@ function conceptDetails(divElement, conceptId, options) {
                 // load relationships panel
                 xhrChildren = null;
                 panel.childrenPId = divElement.id + "-children-panel";
-                $.get("views/conceptDetailsPlugin/tabs/details/children-panel.hbs").then(function (src) {
-                    var context = {
-                        childrenResult: result
-                    };
-                    var template = Handlebars.compile(src);
-                    $('#' + panel.childrenPId).html(template(context));
-//                    $('#' + panel.childrenPId).find(".jqui-draggable").draggable({
-//                        appendTo: 'body',
-//                        helper: 'clone',
-//                        delay: 500
-//                    });
-                });
 
+                var context = {
+                    childrenResult: result
+                };
+                $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
             }).fail(function() {
                 $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             });
@@ -1330,98 +1207,97 @@ function searchPanel(divElement, options) {
         var context = {
             divElementId: panel.divElement.id
         };
-        $.get("views/searchPlugin/main.hbs").then(function (src) {
-            var template = Handlebars.compile(src);
-            $(divElement).html(template(context));
-            $('#' + panel.divElement.id + '-searchBox').keyup(function () {
-                clearTimeout(thread);
-                var $this = $(this);
-                thread = setTimeout(function () {
-                    panel.search($this.val(),0,100,false);
-                }, 500);
-            });
-            $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
-            $("#" + panel.divElement.id + "-configButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-clearButton").disableTextSelect();
+        $(divElement).html(JST["views/searchPlugin/main.hbs"](context));
+
+        $('#' + panel.divElement.id + '-searchBox').keyup(function () {
+            clearTimeout(thread);
+            var $this = $(this);
+            thread = setTimeout(function () {
+                panel.search($this.val(),0,100,false);
+            }, 500);
+        });
+        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
+        $("#" + panel.divElement.id + "-configButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-clearButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-expandButton").hide();
+        $("#" + panel.divElement.id + "-subscribersMarker").hide();
+
+        $("#" + panel.divElement.id).find('.semtag-button').click(function (event) {
+            console.log("Semtag click: " + $(this).html());
+        });
+
+        //$("#" + panel.divElement.id + "-searchConfigBar").slideUp('fast');
+        if (options.searchMode != "fullText") {
+            $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').hide();
+        }
+
+        $("#" + panel.divElement.id + "-configButton").click(function (event) {
+            $("#" + panel.divElement.id + "-searchConfigBar").slideToggle('slow');
+        });
+
+        if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
+            $("#" + panel.divElement.id + "-closeButton").hide();
+        }
+
+        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+            $("#" + panel.divElement.id + "-linkerButton").hide();
+        }
+
+        if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
+            $("#" + panel.divElement.id + "-subscribersMarker").remove();
+        }
+
+        if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
             $("#" + panel.divElement.id + "-expandButton").hide();
-            $("#" + panel.divElement.id + "-subscribersMarker").hide();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+        }
 
-            $("#" + panel.divElement.id).find('.semtag-button').click(function (event) {
-                console.log("Semtag click: " + $(this).html());
-            });
+        $("#" + panel.divElement.id + "-expandButton").click(function (event) {
+            $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
+            $("#" + panel.divElement.id + "-expandButton").hide();
+            $("#" + panel.divElement.id + "-collapseButton").show();
+        });
+        $("#" + panel.divElement.id + "-collapseButton").click(function (event) {
+            $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
+            $("#" + panel.divElement.id + "-expandButton").show();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+        });
 
-            //$("#" + panel.divElement.id + "-searchConfigBar").slideUp('fast');
-            if (options.searchMode != "fullText") {
-                $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').hide();
-            }
-
-            $("#" + panel.divElement.id + "-configButton").click(function (event) {
-                $("#" + panel.divElement.id + "-searchConfigBar").slideToggle('slow');
-            });
-
-            if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
-                $("#" + panel.divElement.id + "-closeButton").hide();
-            }
-
-            if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-                $("#" + panel.divElement.id + "-linkerButton").hide();
-            }
-
-            if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
-                $("#" + panel.divElement.id + "-subscribersMarker").remove();
-            }
-
-            if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
-                $("#" + panel.divElement.id + "-expandButton").hide();
-                $("#" + panel.divElement.id + "-collapseButton").hide();
-            }
-
-            $("#" + panel.divElement.id + "-expandButton").click(function (event) {
-                $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
-                $("#" + panel.divElement.id + "-expandButton").hide();
-                $("#" + panel.divElement.id + "-collapseButton").show();
-            });
-            $("#" + panel.divElement.id + "-collapseButton").click(function (event) {
-                $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
-                $("#" + panel.divElement.id + "-expandButton").show();
-                $("#" + panel.divElement.id + "-collapseButton").hide();
-            });
-
-            if (typeof i18n_panel_options == "undefined") {
-                i18n_panel_options = "Panel options";
-            }
-            $("#" + panel.divElement.id + "-configButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_panel_options,
-                animation: true,
-                delay: 1000
-            });
-            if (typeof i18n_history == "undefined") {
-                i18n_history = 'History';
-            }
-            $("#" + panel.divElement.id + "-historyButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_history,
-                animation: true,
-                delay: 1000
-            });
-            if (typeof i18n_panel_links == "undefined") {
-                i18n_panel_links = 'Panel links';
-            }
-            $("#" + panel.divElement.id + "-linkerButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_panel_links,
-                animation: true,
-                delay: 1000
-            });
+        if (typeof i18n_panel_options == "undefined") {
+            i18n_panel_options = "Panel options";
+        }
+        $("#" + panel.divElement.id + "-configButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_options,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_history == "undefined") {
+            i18n_history = 'History';
+        }
+        $("#" + panel.divElement.id + "-historyButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_history,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_panel_links == "undefined") {
+            i18n_panel_links = 'Panel links';
+        }
+        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_links,
+            animation: true,
+            delay: 1000
+        });
 
 //            $("#" + panel.divElement.id + "-linkerButton").draggable({
 //                cancel: false,
@@ -1433,183 +1309,182 @@ function searchPanel(divElement, options) {
 //                drop: panel.handlePanelDropEvent,
 //                hoverClass: "bg-info"
 //            });
-            $("#" + panel.divElement.id + "-apply-button").click(function () {
-                panel.readOptionsPanel();
-                var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
-                console.log("searchTerm: " + searchTerm);
-                if (searchTerm.length > 0) {
-                    panel.search(searchTerm + " ",0,100,false);
-                }
-            });
-            $("#" + panel.divElement.id + "-clearButton").click(function () {
-                panel.options.semTagFilter = "none";
-                panel.options.langFilter = "none";
-                $('#' + panel.divElement.id + '-searchBox').val('');
-                $('#' + panel.divElement.id + '-searchFilters').html("");
-                $('#' + panel.divElement.id + '-resultsTable').html("");
-                $('#' + panel.divElement.id + '-searchBar').html("");
-                $('#' + panel.divElement.id + '-typeIcon').removeClass('glyphicon-ok');
-                $('#' + panel.divElement.id + '-typeIcon').removeClass('text-success');
-                $('#' + panel.divElement.id + '-typeIcon').addClass('glyphicon-remove');
-                $('#' + panel.divElement.id + '-typeIcon').addClass('text-danger');
-                lastT = "";
-            });
-            $("#" + panel.divElement.id + "-historyButton").click(function (event) {
-                $("#" + panel.divElement.id + "-historyButton").popover({
-                    trigger: 'manual',
-                    placement: 'bottomRight',
-                    html: true,
-                    content: function () {
-                        historyHtml = '<div style="height:100px;overflow:auto;">';
-                        if (panel.history.length == 0) {
-                            historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em>'+ i18n_no_search_terms + '</span>...</em></div>';
-                        }
-                        historyHtml = historyHtml + '<table>';
-                        var reversedHistory = panel.history.slice(0);
-                        reversedHistory.reverse();
-                        //console.log(JSON.stringify(reversedHistory));
-                        $.each(reversedHistory, function (i, field) {
-                            var d = new Date();
-                            var curTime = d.getTime();
-                            var ago = curTime - field.time;
-                            var agoString = "";
-                            if (ago < (1000 * 60)) {
-                                if (Math.round((ago / 1000)) == 1) {
-                                    agoString = Math.round((ago / 1000)) + ' second ago';
-                                } else {
-                                    agoString = Math.round((ago / 1000)) + ' seconds ago';
-                                }
-                            } else if (ago < (1000 * 60 * 60)) {
-                                if (Math.round((ago / 1000) / 60) == 1) {
-                                    agoString = Math.round((ago / 1000) / 60) + ' minute ago';
-                                } else {
-                                    agoString = Math.round((ago / 1000) / 60) + ' minutes ago';
-                                }
-                            } else if (ago < (1000 * 60 * 60 * 60)) {
-                                if (Math.round(((ago / 1000) / 60) / 60) == 1) {
-                                    agoString = Math.round(((ago / 1000) / 60) / 60) + ' hour ago';
-                                } else {
-                                    agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
-                                }
-                            }
-                            historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="searchInPanel(\'' + panel.divElement.id + '\',\'' + field.searchTerm + '\');">' + field.searchTerm + '</a>';
-                            historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
-                            historyHtml = historyHtml + '</td></tr>';
-                        });
-                        historyHtml = historyHtml + '</table>';
-                        historyHtml = historyHtml + '</div>';
-                        return historyHtml;
-                    }
-                });
-                $("#" + panel.divElement.id + "-historyButton").popover('toggle');
-            });
-            $("#" + panel.divElement.id + "-linkerButton").click(function (event) {
-                $("#" + panel.divElement.id + "-linkerButton").popover({
-                    trigger: 'manual',
-                    placement: 'bottomRight',
-                    html: true,
-                    content: function () {
-                        var linkerHtml = '<div class="text-center text-muted"><em><span class="i18n" data-i18n-id="i18n_drag_to_link">Drag to link with other panels</span><br>';
-                        if (panel.subscribers.length == 1) {
-                            linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
-                        } else {
-                            linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
-                        }
-                        linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearSearchPanelSubscriptions(\'' + panel.divElement.id + '\');"><span class="i18n" data-i18n-id="i18n_clear_links">Clear links</span></a></div>';
-                        return linkerHtml;
-                    }
-                });
-                $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
-            });
-
-            $("#" + panel.divElement.id + "-fullTextButton").click(function (event) {
-                panel.options.searchMode = 'fullText';
-                panel.updateSearchLabel();
-                var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
-                $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').show();
-                if (searchTerm.charAt(0) == "^") {
-                    $("#" + panel.divElement.id + '-searchBox').val(searchTerm.slice(1));
-                }
-                if (searchTerm.length > 0) {
-                    panel.search(searchTerm,0,100,true);
-                }
-            });
-            $("#" + panel.divElement.id + "-partialMatchingButton").click(function (event) {
-                panel.options.searchMode = 'partialMatching';
-                panel.updateSearchLabel();
-                var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
-                $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').hide();
-                if (searchTerm.charAt(0) == "^") {
-                    $("#" + panel.divElement.id + '-searchBox').val(searchTerm.slice(1));
-                }
-                if (searchTerm.length > 0) {
-                    panel.search(searchTerm,0,100,true);
-                }
-            });
-            $("#" + panel.divElement.id + "-regexButton").click(function (event) {
-                panel.options.searchMode = 'regex';
-                panel.updateSearchLabel();
-                var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
-                $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').hide();
-                if (searchTerm.charAt(0) != "^") {
-                    $("#" + panel.divElement.id + '-searchBox').val("^" + searchTerm);
-                }
-                if (searchTerm.length > 0) {
-                    panel.search(searchTerm,0,100,true);
-                }
-            });
-
-            $("#" + panel.divElement.id + "-danishLangButton").click(function (event) {
-                panel.options.searchLang = 'danish';
-                $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_danish_stemmer);
-                var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
-                if (searchTerm.length > 0) {
-                    panel.search(searchTerm,0,100,true);
-                }
-            });
-            $("#" + panel.divElement.id + "-englishLangButton").click(function (event) {
-                panel.options.searchLang = 'english';
-                $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_english_stemmer);
-                var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
-                if (searchTerm.length > 0) {
-                    panel.search(searchTerm,0,100,true);
-                }
-            });
-            $("#" + panel.divElement.id + "-spanishLangButton").click(function (event) {
-                panel.options.searchLang = 'spanish';
-                $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_spanish_stemmer);
-                var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
-                if (searchTerm.length > 0) {
-                    panel.search(searchTerm,0,100,true);
-                }
-            });
-            $("#" + panel.divElement.id + "-swedishLangButton").click(function (event) {
-                panel.options.searchLang = 'swedish';
-                $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_swedish_stemmer);
-                var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
-                if (searchTerm.length > 0) {
-                    panel.search(searchTerm,0,100,true);
-                }
-            });
-
-            panel.updateStatusFilterLabel();
-
-            $("#" + panel.divElement.id + "-activeOnlyButton").click(function (event) {
-                panel.options.statusSearchFilter = 'activeOnly';
-                panel.updateStatusFilterLabel();
-            });
-
-            $("#" + panel.divElement.id + "-activeInactiveButton").click(function (event) {
-                panel.options.statusSearchFilter = 'activeAndInactive';
-                panel.updateStatusFilterLabel();
-            });
-
-            $("#" + panel.divElement.id + "-inactiveOnlyButton").click(function (event) {
-                panel.options.statusSearchFilter = 'inactiveOnly';
-                panel.updateStatusFilterLabel();
-            });
-            $("#" + panel.divElement.id + "-partialMatchingButton").click();
+        $("#" + panel.divElement.id + "-apply-button").click(function () {
+            panel.readOptionsPanel();
+            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+            console.log("searchTerm: " + searchTerm);
+            if (searchTerm.length > 0) {
+                panel.search(searchTerm + " ",0,100,false);
+            }
         });
+        $("#" + panel.divElement.id + "-clearButton").click(function () {
+            panel.options.semTagFilter = "none";
+            panel.options.langFilter = "none";
+            $('#' + panel.divElement.id + '-searchBox').val('');
+            $('#' + panel.divElement.id + '-searchFilters').html("");
+            $('#' + panel.divElement.id + '-resultsTable').html("");
+            $('#' + panel.divElement.id + '-searchBar').html("");
+            $('#' + panel.divElement.id + '-typeIcon').removeClass('glyphicon-ok');
+            $('#' + panel.divElement.id + '-typeIcon').removeClass('text-success');
+            $('#' + panel.divElement.id + '-typeIcon').addClass('glyphicon-remove');
+            $('#' + panel.divElement.id + '-typeIcon').addClass('text-danger');
+            lastT = "";
+        });
+        $("#" + panel.divElement.id + "-historyButton").click(function (event) {
+            $("#" + panel.divElement.id + "-historyButton").popover({
+                trigger: 'manual',
+                placement: 'bottomRight',
+                html: true,
+                content: function () {
+                    historyHtml = '<div style="height:100px;overflow:auto;">';
+                    if (panel.history.length == 0) {
+                        historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em>'+ i18n_no_search_terms + '</span>...</em></div>';
+                    }
+                    historyHtml = historyHtml + '<table>';
+                    var reversedHistory = panel.history.slice(0);
+                    reversedHistory.reverse();
+                    //console.log(JSON.stringify(reversedHistory));
+                    $.each(reversedHistory, function (i, field) {
+                        var d = new Date();
+                        var curTime = d.getTime();
+                        var ago = curTime - field.time;
+                        var agoString = "";
+                        if (ago < (1000 * 60)) {
+                            if (Math.round((ago / 1000)) == 1) {
+                                agoString = Math.round((ago / 1000)) + ' second ago';
+                            } else {
+                                agoString = Math.round((ago / 1000)) + ' seconds ago';
+                            }
+                        } else if (ago < (1000 * 60 * 60)) {
+                            if (Math.round((ago / 1000) / 60) == 1) {
+                                agoString = Math.round((ago / 1000) / 60) + ' minute ago';
+                            } else {
+                                agoString = Math.round((ago / 1000) / 60) + ' minutes ago';
+                            }
+                        } else if (ago < (1000 * 60 * 60 * 60)) {
+                            if (Math.round(((ago / 1000) / 60) / 60) == 1) {
+                                agoString = Math.round(((ago / 1000) / 60) / 60) + ' hour ago';
+                            } else {
+                                agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
+                            }
+                        }
+                        historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="searchInPanel(\'' + panel.divElement.id + '\',\'' + field.searchTerm + '\');">' + field.searchTerm + '</a>';
+                        historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
+                        historyHtml = historyHtml + '</td></tr>';
+                    });
+                    historyHtml = historyHtml + '</table>';
+                    historyHtml = historyHtml + '</div>';
+                    return historyHtml;
+                }
+            });
+            $("#" + panel.divElement.id + "-historyButton").popover('toggle');
+        });
+        $("#" + panel.divElement.id + "-linkerButton").click(function (event) {
+            $("#" + panel.divElement.id + "-linkerButton").popover({
+                trigger: 'manual',
+                placement: 'bottomRight',
+                html: true,
+                content: function () {
+                    var linkerHtml = '<div class="text-center text-muted"><em><span class="i18n" data-i18n-id="i18n_drag_to_link">Drag to link with other panels</span><br>';
+                    if (panel.subscribers.length == 1) {
+                        linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
+                    } else {
+                        linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
+                    }
+                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearSearchPanelSubscriptions(\'' + panel.divElement.id + '\');"><span class="i18n" data-i18n-id="i18n_clear_links">Clear links</span></a></div>';
+                    return linkerHtml;
+                }
+            });
+            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+        });
+
+        $("#" + panel.divElement.id + "-fullTextButton").click(function (event) {
+            panel.options.searchMode = 'fullText';
+            panel.updateSearchLabel();
+            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+            $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').show();
+            if (searchTerm.charAt(0) == "^") {
+                $("#" + panel.divElement.id + '-searchBox').val(searchTerm.slice(1));
+            }
+            if (searchTerm.length > 0) {
+                panel.search(searchTerm,0,100,true);
+            }
+        });
+        $("#" + panel.divElement.id + "-partialMatchingButton").click(function (event) {
+            panel.options.searchMode = 'partialMatching';
+            panel.updateSearchLabel();
+            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+            $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').hide();
+            if (searchTerm.charAt(0) == "^") {
+                $("#" + panel.divElement.id + '-searchBox').val(searchTerm.slice(1));
+            }
+            if (searchTerm.length > 0) {
+                panel.search(searchTerm,0,100,true);
+            }
+        });
+        $("#" + panel.divElement.id + "-regexButton").click(function (event) {
+            panel.options.searchMode = 'regex';
+            panel.updateSearchLabel();
+            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+            $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').hide();
+            if (searchTerm.charAt(0) != "^") {
+                $("#" + panel.divElement.id + '-searchBox').val("^" + searchTerm);
+            }
+            if (searchTerm.length > 0) {
+                panel.search(searchTerm,0,100,true);
+            }
+        });
+
+        $("#" + panel.divElement.id + "-danishLangButton").click(function (event) {
+            panel.options.searchLang = 'danish';
+            $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_danish_stemmer);
+            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+            if (searchTerm.length > 0) {
+                panel.search(searchTerm,0,100,true);
+            }
+        });
+        $("#" + panel.divElement.id + "-englishLangButton").click(function (event) {
+            panel.options.searchLang = 'english';
+            $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_english_stemmer);
+            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+            if (searchTerm.length > 0) {
+                panel.search(searchTerm,0,100,true);
+            }
+        });
+        $("#" + panel.divElement.id + "-spanishLangButton").click(function (event) {
+            panel.options.searchLang = 'spanish';
+            $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_spanish_stemmer);
+            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+            if (searchTerm.length > 0) {
+                panel.search(searchTerm,0,100,true);
+            }
+        });
+        $("#" + panel.divElement.id + "-swedishLangButton").click(function (event) {
+            panel.options.searchLang = 'swedish';
+            $("#" + panel.divElement.id + '-navLanguageLabel').html(i18n_swedish_stemmer);
+            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+            if (searchTerm.length > 0) {
+                panel.search(searchTerm,0,100,true);
+            }
+        });
+
+        panel.updateStatusFilterLabel();
+
+        $("#" + panel.divElement.id + "-activeOnlyButton").click(function (event) {
+            panel.options.statusSearchFilter = 'activeOnly';
+            panel.updateStatusFilterLabel();
+        });
+
+        $("#" + panel.divElement.id + "-activeInactiveButton").click(function (event) {
+            panel.options.statusSearchFilter = 'activeAndInactive';
+            panel.updateStatusFilterLabel();
+        });
+
+        $("#" + panel.divElement.id + "-inactiveOnlyButton").click(function (event) {
+            panel.options.statusSearchFilter = 'inactiveOnly';
+            panel.updateStatusFilterLabel();
+        });
+        $("#" + panel.divElement.id + "-partialMatchingButton").click();
     };
 
     this.updateStatusFilterLabel = function() {
@@ -1709,33 +1584,25 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
                         }).done(function (result) {
-                            $.get("views/searchPlugin/body/0.hbs").then(function (src) {
-                                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                                    if (opts != "undefined") {
-                                        if(a == b)
-                                            return opts.fn(this);
-                                        else
-                                            return opts.inverse(this);
-                                    }
-                                });
-                                var context = {
-                                    result: result
-                                };
-                                var template = Handlebars.compile(src);
+                            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                if (opts != "undefined") {
+                                    if(a == b)
+                                        return opts.fn(this);
+                                    else
+                                        return opts.inverse(this);
+                                }
+                            });
+                            var context = {
+                                result: result
+                            };
 
-                                $('#' + panel.divElement.id + '-resultsTable').html(template(context));
-                                $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
-//                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-//                                    appendTo: 'body',
-//                                    helper: 'clone',
-//                                    delay: 500
-//                                });
-                                $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                                    $.each(panel.subscribers, function (i, field) {
-                                        //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                        field.conceptId = $(event.target).attr('data-concept-id');
-                                        field.updateCanvas();
-                                    });
+                            $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/0.hbs"](context));
+                            $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
+                            $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
+                                $.each(panel.subscribers, function (i, field) {
+                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                    field.conceptId = $(event.target).attr('data-concept-id');
+                                    field.updateCanvas();
                                 });
                             });
 //                            $.each(result.descriptions, function (i, field) {
@@ -1759,32 +1626,24 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
 
                         }).done(function (result) {
-                            $.get("views/searchPlugin/body/1.hbs").then(function (src) {
-                                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                                    if (opts != "undefined") {
-                                        if(a == b)
-                                            return opts.fn(this);
-                                        else
-                                            return opts.inverse(this);
-                                    }
-                                });
-                                var context = {
-                                    result: result
-                                };
-                                var template = Handlebars.compile(src);
-                                $('#' + panel.divElement.id + '-resultsTable').html(template(context));
-                                $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
-//                                $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-//                                    appendTo: 'body',
-//                                    helper: 'clone',
-//                                    delay: 500
-//                                });
-                                $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                                    $.each(panel.subscribers, function (i, field) {
-                                        //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                        field.conceptId = $(event.target).attr('data-concept-id');
-                                        field.updateCanvas();
-                                    });
+                            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                if (opts != "undefined") {
+                                    if(a == b)
+                                        return opts.fn(this);
+                                    else
+                                        return opts.inverse(this);
+                                }
+                            });
+                            var context = {
+                                result: result
+                            };
+                            $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/1.hbs"](context));
+                            $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
+                            $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
+                                $.each(panel.subscribers, function (i, field) {
+                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                    field.conceptId = $(event.target).attr('data-concept-id');
+                                    field.updateCanvas();
                                 });
                             });
 //                            $.each(result.matches, function (i, field) {
@@ -1818,39 +1677,36 @@ function searchPanel(divElement, options) {
                         $('#' + panel.divElement.id + '-resultsTable').find('.more-row').remove();
                         var endTime = Date.now();
                         var elapsed = (endTime - startTime)/1000;
-                        $.get("views/searchPlugin/body/bar.hbs").then(function (src) {
-                            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                                if (opts != "undefined") {
-                                    if(a == b)
-                                        return opts.fn(this);
-                                    else
-                                        return opts.inverse(this);
-                                }
-                            });
-                            var context = {
-                                result: result,
-                                elapsed: elapsed,
-                                divElementId: panel.divElement.id,
-                                options: panel.options
-                            };
-                            var template = Handlebars.compile(src);
-                            $('#' + panel.divElement.id + '-searchBar').html(template(context));
-                            $("#" + panel.divElement.id + '-searchBar').find('.semtag-link').click(function (event) {
-                                panel.options.semTagFilter = $(event.target).attr('data-semtag');
-                                panel.search(t, 0, returnLimit, true);
-                            });
-                            $("#" + panel.divElement.id + '-searchBar').find('.lang-link').click(function (event) {
-                                panel.options.langFilter = $(event.target).attr('data-lang');
-                                panel.search(t, 0, returnLimit, true);
-                            });
-                            $("#" + panel.divElement.id + '-searchBar').find('.remove-semtag').click(function (event) {
-                                panel.options.semTagFilter = "none";
-                                panel.search(t, 0, returnLimit, true);
-                            });
-                            $("#" + panel.divElement.id + '-searchBar').find('.remove-lang').click(function (event) {
-                                panel.options.langFilter = "none";
-                                panel.search(t, 0, returnLimit, true);
-                            });
+                        Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                            if (opts != "undefined") {
+                                if(a == b)
+                                    return opts.fn(this);
+                                else
+                                    return opts.inverse(this);
+                            }
+                        });
+                        var context = {
+                            result: result,
+                            elapsed: elapsed,
+                            divElementId: panel.divElement.id,
+                            options: panel.options
+                        };
+                        $('#' + panel.divElement.id + '-searchBar').html(JST["views/searchPlugin/body/bar.hbs"](context));
+                        $("#" + panel.divElement.id + '-searchBar').find('.semtag-link').click(function (event) {
+                            panel.options.semTagFilter = $(event.target).attr('data-semtag');
+                            panel.search(t, 0, returnLimit, true);
+                        });
+                        $("#" + panel.divElement.id + '-searchBar').find('.lang-link').click(function (event) {
+                            panel.options.langFilter = $(event.target).attr('data-lang');
+                            panel.search(t, 0, returnLimit, true);
+                        });
+                        $("#" + panel.divElement.id + '-searchBar').find('.remove-semtag').click(function (event) {
+                            panel.options.semTagFilter = "none";
+                            panel.search(t, 0, returnLimit, true);
+                        });
+                        $("#" + panel.divElement.id + '-searchBar').find('.remove-lang').click(function (event) {
+                            panel.options.langFilter = "none";
+                            panel.search(t, 0, returnLimit, true);
                         });
                         if (result.details) {
                             var searchComment = "<span class='text-muted'>" + result.details.total + " matches found in " + elapsed + " seconds.</span>";
@@ -1884,15 +1740,15 @@ function searchPanel(divElement, options) {
 //                            }
 //                            searchFiltersHtml = searchFiltersHtml + "</ul></li></ul></div>";
                             //$('#' + panel.divElement.id + '-searchBar').html($('#' + panel.divElement.id + '-searchBar').html() + searchFiltersHtml);
-                            if (panel.options.searchMode == "regex") {
-                                result.matches.sort(function (a, b) {
-                                    if (a.term.length < b.term.length)
-                                        return -1;
-                                    if (a.term.length > b.term.length)
-                                        return 1;
-                                    return 0;
-                                });
-                            }
+                        if (panel.options.searchMode == "regex") {
+                            result.matches.sort(function (a, b) {
+                                if (a.term.length < b.term.length)
+                                    return -1;
+                                if (a.term.length > b.term.length)
+                                    return 1;
+                                return 0;
+                            });
+                        }
 //                            $.each(matchedDescriptions, function (i, field) {
 //                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
 //                                //console.log(field.active + " " + field.conceptActive);
@@ -1907,60 +1763,52 @@ function searchPanel(divElement, options) {
 //                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center text-muted'>All " + result.details.total + " results are displayed</td></tr>"
 //                            }
 //                        }
-                        $.get("views/searchPlugin/body/default.hbs").then(function (src) {
-                            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                                if (opts != "undefined") {
-                                    if(a == b)
-                                        return opts.fn(this);
-                                    else
-                                        return opts.inverse(this);
-                                }
-                            });
-                            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                                if (a){
-                                    if(a > parseInt(b))
-                                        return opts.fn(this);
-                                    else
-                                        return opts.inverse(this);
-                                }
-                            });
-                            Handlebars.registerHelper('if_gre', function(a,b, opts) {
-                                if (a){
-                                    if(parseInt(a) >= b)
-                                        return opts.fn(this);
-                                    else
-                                        return opts.inverse(this);
-                                }
-                            });
-                            var context = {
-                                result: result,
-                                divElementId: panel.divElement.id,
-                                remaining: remaining,
-                                returnLimit: returnLimit
-                            };
-                            var template = Handlebars.compile(src);
-
-                            if (skipTo == 0) {
-                                $('#' + panel.divElement.id + '-resultsTable').html(template(context));
-                            } else {
-                                $('#' + panel.divElement.id + '-resultsTable').append(template(context));
+                        Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                            if (opts != "undefined") {
+                                if(a == b)
+                                    return opts.fn(this);
+                                else
+                                    return opts.inverse(this);
                             }
-                            $("#" + panel.divElement.id + "-more").click(function (event) {
-                                panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
-                            });
-//                            $('#' + panel.divElement.id + '-resultsTable').find(".jqui-draggable").draggable({
-//                                appendTo: 'body',
-//                                helper: 'clone',
-//                                delay: 500
-//                            });
-                            $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                                $.each(panel.subscribers, function (i, field) {
-                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                    field.conceptId = $(event.target).attr('data-concept-id');
-                                    field.updateCanvas();
-                                    lastClickedSctid = $(event.target).attr('data-concept-id');
-                                    lastClickTime = Date.now();
-                                });
+                        });
+                        Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                            if (a){
+                                if(a > parseInt(b))
+                                    return opts.fn(this);
+                                else
+                                    return opts.inverse(this);
+                            }
+                        });
+                        Handlebars.registerHelper('if_gre', function(a,b, opts) {
+                            if (a){
+                                if(parseInt(a) >= b)
+                                    return opts.fn(this);
+                                else
+                                    return opts.inverse(this);
+                            }
+                        });
+                        var context = {
+                            result: result,
+                            divElementId: panel.divElement.id,
+                            remaining: remaining,
+                            returnLimit: returnLimit
+                        };
+
+                        if (skipTo == 0) {
+                            $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/default.hbs"](context));
+                        } else {
+                            $('#' + panel.divElement.id + '-resultsTable').append(JST["views/searchPlugin/body/default.hbs"](context));
+                        }
+                        $("#" + panel.divElement.id + "-more").click(function (event) {
+                            panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
+                        });
+                        $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
+                            $.each(panel.subscribers, function (i, field) {
+                                //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                field.conceptId = $(event.target).attr('data-concept-id');
+                                field.updateCanvas();
+                                lastClickedSctid = $(event.target).attr('data-concept-id');
+                                lastClickTime = Date.now();
                             });
                         });
 
@@ -2373,146 +2221,125 @@ function taxonomyPanel(divElement, conceptId, options) {
         var context = {
             divElementId: panel.divElement.id
         };
-        $.get("views/taxonomyPlugin/main.hbs").then(function (src) {
-            var template = Handlebars.compile(src);
-            $(divElement).html(template(context));
-            $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
-            $("#" + panel.divElement.id + "-configButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-expandButton").hide();
-            $("#" + panel.divElement.id + "-subscribersMarker").hide();
+        $(divElement).html(JST["views/taxonomyPlugin/main.hbs"](context));
+        $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
+        $("#" + panel.divElement.id + "-configButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-expandButton").hide();
+        $("#" + panel.divElement.id + "-subscribersMarker").hide();
 
-            $("#" + panel.divElement.id + "-closeButton").click(function(event) {
-                $(divElement).remove();
-            });
-
-            $("#" + panel.divElement.id + "-configButton").click(function (event) {
-                $("#" + panel.divElement.id + "-taxonomyConfigBar").slideToggle('slow');
-            });
-
-            if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
-                $("#" + panel.divElement.id + "-closeButton").hide();
-            }
-
-            if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-                $("#" + panel.divElement.id + "-linkerButton").hide();
-            }
-
-            if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
-                $("#" + panel.divElement.id + "-subscribersMarker").remove();
-            }
-
-            if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
-                $("#" + panel.divElement.id + "-expandButton").hide();
-                $("#" + panel.divElement.id + "-collapseButton").hide();
-            }
-
-            $("#" + panel.divElement.id + "-expandButton").click(function(event) {
-                $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
-                $("#" + panel.divElement.id + "-expandButton").hide();
-                $("#" + panel.divElement.id + "-collapseButton").show();
-            });
-            $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
-                $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
-                $("#" + panel.divElement.id + "-expandButton").show();
-                $("#" + panel.divElement.id + "-collapseButton").hide();
-            });
-            if (typeof i18n_panel_options == "undefined") {
-                i18n_panel_options = 'Options';
-            }
-            $("#" + panel.divElement.id + "-configButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_panel_options,
-                animation: true,
-                delay: 1000
-            });
-            if (typeof i18n_reset == "undefined") {
-                i18n_reset = 'Reset';
-            }
-            $("#" + panel.divElement.id + "-resetButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_reset,
-                animation: true,
-                delay: 1000
-            });
-            if (typeof i18n_panel_links == "undefined") {
-                i18n_panel_links = 'Panel links';
-            }
-            $("#" + panel.divElement.id + "-linkerButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_panel_links,
-                animation: true,
-                delay: 1000
-            });
-//            $("#" + panel.divElement.id + "-linkerButton").draggable({
-//                cancel: false,
-//                appendTo: 'body',
-//                helper: 'clone',
-//                delay: 500,
-//                revert: false
-//            });
-
-//            $("#" + panel.divElement.id + "-panelBody").droppable({
-//                drop: panel.handleDropEvent,
-//                hoverClass: "bg-info"
-//            });
-//
-//            $("#" + panel.divElement.id + "-panelHeading").droppable({
-//                drop: panel.handleDropEvent,
-//                hoverClass: "bg-info"
-//            });
-
-            $("#" + panel.divElement.id + "-resetButton").click(function() {
-                panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
-            });
-
-            $("#" + panel.divElement.id + "-apply-button").click(function() {
-                //console.log("apply!");
-                panel.readOptionsPanel();
-                panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
-            });
-
-
-            $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
-                $("#" + panel.divElement.id + "-linkerButton").popover({
-                    trigger: 'manual',
-                    placement: 'bottomRight',
-                    html: true,
-                    content: function() {
-                        linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
-                        if (panel.subscribers.length == 1) {
-                            linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
-                        } else {
-                            linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
-                        }
-                        linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearTaxonomyPanelSubscriptions(\'' + panel.divElement.id + '\');">Clear links</a></div>';
-                        return linkerHtml;
-                    }
-                });
-                $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
-            });
-
-            $("#" + panel.divElement.id + "-inferredViewButton").click(function (event) {
-                panel.options.selectedView = 'inferred';
-                $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
-                panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
-            });
-
-            $("#" + panel.divElement.id + "-statedViewButton").click(function (event) {
-                panel.options.selectedView = 'stated';
-                $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
-                panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
-            });
-            $("#" + panel.divElement.id + "-inferredViewButton").click();
+        $("#" + panel.divElement.id + "-closeButton").click(function(event) {
+            $(divElement).remove();
         });
 
+        $("#" + panel.divElement.id + "-configButton").click(function (event) {
+            $("#" + panel.divElement.id + "-taxonomyConfigBar").slideToggle('slow');
+        });
+
+        if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
+            $("#" + panel.divElement.id + "-closeButton").hide();
+        }
+
+        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+            $("#" + panel.divElement.id + "-linkerButton").hide();
+        }
+
+        if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
+            $("#" + panel.divElement.id + "-subscribersMarker").remove();
+        }
+
+        if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
+            $("#" + panel.divElement.id + "-expandButton").hide();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+        }
+
+        $("#" + panel.divElement.id + "-expandButton").click(function(event) {
+            $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
+            $("#" + panel.divElement.id + "-expandButton").hide();
+            $("#" + panel.divElement.id + "-collapseButton").show();
+        });
+        $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
+            $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
+            $("#" + panel.divElement.id + "-expandButton").show();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+        });
+        if (typeof i18n_panel_options == "undefined") {
+            i18n_panel_options = 'Options';
+        }
+        $("#" + panel.divElement.id + "-configButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_options,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_reset == "undefined") {
+            i18n_reset = 'Reset';
+        }
+        $("#" + panel.divElement.id + "-resetButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_reset,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_panel_links == "undefined") {
+            i18n_panel_links = 'Panel links';
+        }
+        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_links,
+            animation: true,
+            delay: 1000
+        });
+
+        $("#" + panel.divElement.id + "-resetButton").click(function() {
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        });
+
+        $("#" + panel.divElement.id + "-apply-button").click(function() {
+            //console.log("apply!");
+            panel.readOptionsPanel();
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        });
+
+
+        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+            $("#" + panel.divElement.id + "-linkerButton").popover({
+                trigger: 'manual',
+                placement: 'bottomRight',
+                html: true,
+                content: function() {
+                    linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
+                    if (panel.subscribers.length == 1) {
+                        linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
+                    } else {
+                        linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
+                    }
+                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearTaxonomyPanelSubscriptions(\'' + panel.divElement.id + '\');">Clear links</a></div>';
+                    return linkerHtml;
+                }
+            });
+            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+        });
+
+        $("#" + panel.divElement.id + "-inferredViewButton").click(function (event) {
+            panel.options.selectedView = 'inferred';
+            $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        });
+
+        $("#" + panel.divElement.id + "-statedViewButton").click(function (event) {
+            panel.options.selectedView = 'stated';
+            $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        });
+        $("#" + panel.divElement.id + "-inferredViewButton").click();
     }
 
     this.setupParents = function(parents, focusConcept) {
@@ -2555,105 +2382,92 @@ function taxonomyPanel(divElement, conceptId, options) {
 //        treeHtml = treeHtml + "</ul>";
 //        treeHtml = treeHtml + "</div>";
 //        $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
-
-        $.get("views/taxonomyPlugin/body/parents.hbs").then(function (src) {
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                if (opts != "undefined") {
-                    if(a == b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                if(a > b)
+        Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            if (opts != "undefined") {
+                if(a == b)
                     return opts.fn(this);
                 else
                     return opts.inverse(this);
-            });
-            var context = {
-                parents: parents,
-                focusConcept: focusConcept,
-                divElementId: panel.divElement.id
-            };
-            Handlebars.registerHelper('slice', function (a, b) {
-                $("#" + panel.divElement.id + "-panelBody").html($("#" + panel.divElement.id + "-panelBody").html().slice(a, b));
-            });
-
-            var template = Handlebars.compile(src);
-            $("#" + panel.divElement.id + "-panelBody").html(template(context));
-
-            $(".treeButton").disableTextSelect();
-
-//            $('.jqui-draggable').draggable({
-//                appendTo: 'body',
-//                helper: 'clone',
-//                delay: 500
-//            });
-            $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
-            $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
-                if ($(event.target).hasClass("treeLabel")) {
-                    var selectedId = $(event.target).attr('data-concept-id');
-                    var selectedLabel = $(event.target).attr('data-term');
-                    if (typeof selectedId != "undefined") {
-                        console.log(panel.options.selectedView);
-                        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
-                            // done
-                        }).done(function(result) {
-                            panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive"});
-                        }).fail(function() {
-                        });
-                    }
+            }
+        });
+        Handlebars.registerHelper('if_gr', function(a,b, opts) {
+            if(a > b)
+                return opts.fn(this);
+            else
+                return opts.inverse(this);
+        });
+        var context = {
+            parents: parents,
+            focusConcept: focusConcept,
+            divElementId: panel.divElement.id
+        };
+        Handlebars.registerHelper('slice', function (a, b) {
+            $("#" + panel.divElement.id + "-panelBody").html($("#" + panel.divElement.id + "-panelBody").html().slice(a, b));
+        });
+        $("#" + panel.divElement.id + "-panelBody").html(JST["views/taxonomyPlugin/body/parents.hbs"](context));
+        $(".treeButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
+        $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
+            if ($(event.target).hasClass("treeLabel")) {
+                var selectedId = $(event.target).attr('data-concept-id');
+                var selectedLabel = $(event.target).attr('data-term');
+                if (typeof selectedId != "undefined") {
+                    console.log(panel.options.selectedView);
+                    $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
+                        // done
+                    }).done(function(result) {
+                        panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive"});
+                    }).fail(function() {
+                    });
                 }
-            });
-            $("#" + panel.divElement.id + "-panelBody").unbind("click");
-            $("#" + panel.divElement.id + "-panelBody").click(function(event) {
-                if ($(event.target).hasClass("treeButton")) {
-                    var conceptId = $(event.target).closest("li").attr('data-concept-id');
-                    var iconId = panel.divElement.id + "-treeicon-" + conceptId;
-                    event.preventDefault();
-                    if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
-                        //console.log("close");
-                        $(event.target).closest("li").find("ul").remove();
-                        $("#" + iconId).removeClass("glyphicon-chevron-down");
-                        $("#" + iconId).addClass("glyphicon-chevron-right");
-                    } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
-                        //console.log("open");
-                        $("#" + iconId).removeClass("glyphicon-chevron-right");
-                        $("#" + iconId).addClass("glyphicon-refresh");
-                        $("#" + iconId).addClass("icon-spin");
-                        panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
-                    } else if ($("#" + iconId).hasClass("glyphicon-chevron-up")){
-                        $("#" + iconId).removeClass("glyphicon-chevron-up");
-                        $("#" + iconId).addClass("glyphicon-refresh");
-                        $("#" + iconId).addClass("icon-spin");
-                        panel.wrapInParents($(event.target).closest("li").attr('data-concept-id'), $(event.target).closest("li"));
-                    } else if ($("#" + iconId).hasClass("glyphicon-minus")){
-                        $("#" + iconId).removeClass("glyphicon-minus");
-                        $("#" + iconId).addClass("glyphicon-chevron-right");
-                    }
-                } else if ($(event.target).hasClass("treeLabel")) {
-                    var selectedId = $(event.target).attr('data-concept-id');
-                    if (typeof selectedId != "undefined") {
-                        $.each(panel.subscribers, function(i, suscriberPanel) {
-                            if (suscriberPanel.conceptId != selectedId) {
-                                suscriberPanel.conceptId = selectedId;
-                                suscriberPanel.updateCanvas();
-                            }
-                        });
-                    }
+            }
+        });
+        $("#" + panel.divElement.id + "-panelBody").unbind("click");
+        $("#" + panel.divElement.id + "-panelBody").click(function(event) {
+            if ($(event.target).hasClass("treeButton")) {
+                var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                var iconId = panel.divElement.id + "-treeicon-" + conceptId;
+                event.preventDefault();
+                if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
+                    //console.log("close");
+                    $(event.target).closest("li").find("ul").remove();
+                    $("#" + iconId).removeClass("glyphicon-chevron-down");
+                    $("#" + iconId).addClass("glyphicon-chevron-right");
+                } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
+                    //console.log("open");
+                    $("#" + iconId).removeClass("glyphicon-chevron-right");
+                    $("#" + iconId).addClass("glyphicon-refresh");
+                    $("#" + iconId).addClass("icon-spin");
+                    panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                } else if ($("#" + iconId).hasClass("glyphicon-chevron-up")){
+                    $("#" + iconId).removeClass("glyphicon-chevron-up");
+                    $("#" + iconId).addClass("glyphicon-refresh");
+                    $("#" + iconId).addClass("icon-spin");
+                    panel.wrapInParents($(event.target).closest("li").attr('data-concept-id'), $(event.target).closest("li"));
+                } else if ($("#" + iconId).hasClass("glyphicon-minus")){
+                    $("#" + iconId).removeClass("glyphicon-minus");
+                    $("#" + iconId).addClass("glyphicon-chevron-right");
                 }
+            } else if ($(event.target).hasClass("treeLabel")) {
+                var selectedId = $(event.target).attr('data-concept-id');
+                if (typeof selectedId != "undefined") {
+                    $.each(panel.subscribers, function(i, suscriberPanel) {
+                        if (suscriberPanel.conceptId != selectedId) {
+                            suscriberPanel.conceptId = selectedId;
+                            suscriberPanel.updateCanvas();
+                        }
+                    });
+                }
+            }
 
-            });
-
-            var iconId = panel.divElement.id + "-treeicon-" + focusConcept.conceptId;
-            $("#" + iconId).removeClass("glyphicon-chevron-right");
-            $("#" + iconId).addClass("glyphicon-refresh");
-            $("#" + iconId).addClass("icon-spin");
-            //console.log("getChildren..." + focusConcept.conceptId);
-            panel.getChildren(focusConcept.conceptId);
         });
 
+        var iconId = panel.divElement.id + "-treeicon-" + focusConcept.conceptId;
+        $("#" + iconId).removeClass("glyphicon-chevron-right");
+        $("#" + iconId).addClass("glyphicon-refresh");
+        $("#" + iconId).addClass("icon-spin");
+        //console.log("getChildren..." + focusConcept.conceptId);
+        panel.getChildren(focusConcept.conceptId);
 
     };
 

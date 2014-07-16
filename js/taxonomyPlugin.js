@@ -33,146 +33,125 @@ function taxonomyPanel(divElement, conceptId, options) {
         var context = {
             divElementId: panel.divElement.id
         };
-        $.get("views/taxonomyPlugin/main.hbs").then(function (src) {
-            var template = Handlebars.compile(src);
-            $(divElement).html(template(context));
-            $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
-            $("#" + panel.divElement.id + "-configButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
-            $("#" + panel.divElement.id + "-expandButton").hide();
-            $("#" + panel.divElement.id + "-subscribersMarker").hide();
+        $(divElement).html(JST["views/taxonomyPlugin/main.hbs"](context));
+        $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
+        $("#" + panel.divElement.id + "-configButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-closeButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-expandButton").hide();
+        $("#" + panel.divElement.id + "-subscribersMarker").hide();
 
-            $("#" + panel.divElement.id + "-closeButton").click(function(event) {
-                $(divElement).remove();
-            });
-
-            $("#" + panel.divElement.id + "-configButton").click(function (event) {
-                $("#" + panel.divElement.id + "-taxonomyConfigBar").slideToggle('slow');
-            });
-
-            if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
-                $("#" + panel.divElement.id + "-closeButton").hide();
-            }
-
-            if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-                $("#" + panel.divElement.id + "-linkerButton").hide();
-            }
-
-            if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
-                $("#" + panel.divElement.id + "-subscribersMarker").remove();
-            }
-
-            if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
-                $("#" + panel.divElement.id + "-expandButton").hide();
-                $("#" + panel.divElement.id + "-collapseButton").hide();
-            }
-
-            $("#" + panel.divElement.id + "-expandButton").click(function(event) {
-                $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
-                $("#" + panel.divElement.id + "-expandButton").hide();
-                $("#" + panel.divElement.id + "-collapseButton").show();
-            });
-            $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
-                $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
-                $("#" + panel.divElement.id + "-expandButton").show();
-                $("#" + panel.divElement.id + "-collapseButton").hide();
-            });
-            if (typeof i18n_panel_options == "undefined") {
-                i18n_panel_options = 'Options';
-            }
-            $("#" + panel.divElement.id + "-configButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_panel_options,
-                animation: true,
-                delay: 1000
-            });
-            if (typeof i18n_reset == "undefined") {
-                i18n_reset = 'Reset';
-            }
-            $("#" + panel.divElement.id + "-resetButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_reset,
-                animation: true,
-                delay: 1000
-            });
-            if (typeof i18n_panel_links == "undefined") {
-                i18n_panel_links = 'Panel links';
-            }
-            $("#" + panel.divElement.id + "-linkerButton").tooltip({
-                placement : 'left',
-                trigger: 'hover',
-                title: i18n_panel_links,
-                animation: true,
-                delay: 1000
-            });
-//            $("#" + panel.divElement.id + "-linkerButton").draggable({
-//                cancel: false,
-//                appendTo: 'body',
-//                helper: 'clone',
-//                delay: 500,
-//                revert: false
-//            });
-
-//            $("#" + panel.divElement.id + "-panelBody").droppable({
-//                drop: panel.handleDropEvent,
-//                hoverClass: "bg-info"
-//            });
-//
-//            $("#" + panel.divElement.id + "-panelHeading").droppable({
-//                drop: panel.handleDropEvent,
-//                hoverClass: "bg-info"
-//            });
-
-            $("#" + panel.divElement.id + "-resetButton").click(function() {
-                panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
-            });
-
-            $("#" + panel.divElement.id + "-apply-button").click(function() {
-                //console.log("apply!");
-                panel.readOptionsPanel();
-                panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
-            });
-
-
-            $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
-                $("#" + panel.divElement.id + "-linkerButton").popover({
-                    trigger: 'manual',
-                    placement: 'bottomRight',
-                    html: true,
-                    content: function() {
-                        linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
-                        if (panel.subscribers.length == 1) {
-                            linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
-                        } else {
-                            linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
-                        }
-                        linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearTaxonomyPanelSubscriptions(\'' + panel.divElement.id + '\');">Clear links</a></div>';
-                        return linkerHtml;
-                    }
-                });
-                $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
-            });
-
-            $("#" + panel.divElement.id + "-inferredViewButton").click(function (event) {
-                panel.options.selectedView = 'inferred';
-                $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
-                panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
-            });
-
-            $("#" + panel.divElement.id + "-statedViewButton").click(function (event) {
-                panel.options.selectedView = 'stated';
-                $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
-                panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
-            });
-            $("#" + panel.divElement.id + "-inferredViewButton").click();
+        $("#" + panel.divElement.id + "-closeButton").click(function(event) {
+            $(divElement).remove();
         });
 
+        $("#" + panel.divElement.id + "-configButton").click(function (event) {
+            $("#" + panel.divElement.id + "-taxonomyConfigBar").slideToggle('slow');
+        });
+
+        if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
+            $("#" + panel.divElement.id + "-closeButton").hide();
+        }
+
+        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+            $("#" + panel.divElement.id + "-linkerButton").hide();
+        }
+
+        if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
+            $("#" + panel.divElement.id + "-subscribersMarker").remove();
+        }
+
+        if (typeof panel.options.collapseButton != "undefined" && panel.options.collapseButton == false) {
+            $("#" + panel.divElement.id + "-expandButton").hide();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+        }
+
+        $("#" + panel.divElement.id + "-expandButton").click(function(event) {
+            $("#" + panel.divElement.id + "-panelBody").slideDown("fast");
+            $("#" + panel.divElement.id + "-expandButton").hide();
+            $("#" + panel.divElement.id + "-collapseButton").show();
+        });
+        $("#" + panel.divElement.id + "-collapseButton").click(function(event) {
+            $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
+            $("#" + panel.divElement.id + "-expandButton").show();
+            $("#" + panel.divElement.id + "-collapseButton").hide();
+        });
+        if (typeof i18n_panel_options == "undefined") {
+            i18n_panel_options = 'Options';
+        }
+        $("#" + panel.divElement.id + "-configButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_options,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_reset == "undefined") {
+            i18n_reset = 'Reset';
+        }
+        $("#" + panel.divElement.id + "-resetButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_reset,
+            animation: true,
+            delay: 1000
+        });
+        if (typeof i18n_panel_links == "undefined") {
+            i18n_panel_links = 'Panel links';
+        }
+        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_panel_links,
+            animation: true,
+            delay: 1000
+        });
+
+        $("#" + panel.divElement.id + "-resetButton").click(function() {
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        });
+
+        $("#" + panel.divElement.id + "-apply-button").click(function() {
+            //console.log("apply!");
+            panel.readOptionsPanel();
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        });
+
+
+        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+            $("#" + panel.divElement.id + "-linkerButton").popover({
+                trigger: 'manual',
+                placement: 'bottomRight',
+                html: true,
+                content: function() {
+                    linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
+                    if (panel.subscribers.length == 1) {
+                        linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
+                    } else {
+                        linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
+                    }
+                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearTaxonomyPanelSubscriptions(\'' + panel.divElement.id + '\');">Clear links</a></div>';
+                    return linkerHtml;
+                }
+            });
+            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+        });
+
+        $("#" + panel.divElement.id + "-inferredViewButton").click(function (event) {
+            panel.options.selectedView = 'inferred';
+            $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        });
+
+        $("#" + panel.divElement.id + "-statedViewButton").click(function (event) {
+            panel.options.selectedView = 'stated';
+            $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        });
+        $("#" + panel.divElement.id + "-inferredViewButton").click();
     }
 
     this.setupParents = function(parents, focusConcept) {
@@ -215,105 +194,92 @@ function taxonomyPanel(divElement, conceptId, options) {
 //        treeHtml = treeHtml + "</ul>";
 //        treeHtml = treeHtml + "</div>";
 //        $("#" + panel.divElement.id + "-panelBody").html(treeHtml);
-
-        $.get("views/taxonomyPlugin/body/parents.hbs").then(function (src) {
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                if (opts != "undefined") {
-                    if(a == b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                if(a > b)
+        Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            if (opts != "undefined") {
+                if(a == b)
                     return opts.fn(this);
                 else
                     return opts.inverse(this);
-            });
-            var context = {
-                parents: parents,
-                focusConcept: focusConcept,
-                divElementId: panel.divElement.id
-            };
-            Handlebars.registerHelper('slice', function (a, b) {
-                $("#" + panel.divElement.id + "-panelBody").html($("#" + panel.divElement.id + "-panelBody").html().slice(a, b));
-            });
-
-            var template = Handlebars.compile(src);
-            $("#" + panel.divElement.id + "-panelBody").html(template(context));
-
-            $(".treeButton").disableTextSelect();
-
-//            $('.jqui-draggable').draggable({
-//                appendTo: 'body',
-//                helper: 'clone',
-//                delay: 500
-//            });
-            $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
-            $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
-                if ($(event.target).hasClass("treeLabel")) {
-                    var selectedId = $(event.target).attr('data-concept-id');
-                    var selectedLabel = $(event.target).attr('data-term');
-                    if (typeof selectedId != "undefined") {
-                        console.log(panel.options.selectedView);
-                        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
-                            // done
-                        }).done(function(result) {
-                            panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive"});
-                        }).fail(function() {
-                        });
-                    }
+            }
+        });
+        Handlebars.registerHelper('if_gr', function(a,b, opts) {
+            if(a > b)
+                return opts.fn(this);
+            else
+                return opts.inverse(this);
+        });
+        var context = {
+            parents: parents,
+            focusConcept: focusConcept,
+            divElementId: panel.divElement.id
+        };
+        Handlebars.registerHelper('slice', function (a, b) {
+            $("#" + panel.divElement.id + "-panelBody").html($("#" + panel.divElement.id + "-panelBody").html().slice(a, b));
+        });
+        $("#" + panel.divElement.id + "-panelBody").html(JST["views/taxonomyPlugin/body/parents.hbs"](context));
+        $(".treeButton").disableTextSelect();
+        $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
+        $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
+            if ($(event.target).hasClass("treeLabel")) {
+                var selectedId = $(event.target).attr('data-concept-id');
+                var selectedLabel = $(event.target).attr('data-term');
+                if (typeof selectedId != "undefined") {
+                    console.log(panel.options.selectedView);
+                    $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
+                        // done
+                    }).done(function(result) {
+                        panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive"});
+                    }).fail(function() {
+                    });
                 }
-            });
-            $("#" + panel.divElement.id + "-panelBody").unbind("click");
-            $("#" + panel.divElement.id + "-panelBody").click(function(event) {
-                if ($(event.target).hasClass("treeButton")) {
-                    var conceptId = $(event.target).closest("li").attr('data-concept-id');
-                    var iconId = panel.divElement.id + "-treeicon-" + conceptId;
-                    event.preventDefault();
-                    if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
-                        //console.log("close");
-                        $(event.target).closest("li").find("ul").remove();
-                        $("#" + iconId).removeClass("glyphicon-chevron-down");
-                        $("#" + iconId).addClass("glyphicon-chevron-right");
-                    } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
-                        //console.log("open");
-                        $("#" + iconId).removeClass("glyphicon-chevron-right");
-                        $("#" + iconId).addClass("glyphicon-refresh");
-                        $("#" + iconId).addClass("icon-spin");
-                        panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
-                    } else if ($("#" + iconId).hasClass("glyphicon-chevron-up")){
-                        $("#" + iconId).removeClass("glyphicon-chevron-up");
-                        $("#" + iconId).addClass("glyphicon-refresh");
-                        $("#" + iconId).addClass("icon-spin");
-                        panel.wrapInParents($(event.target).closest("li").attr('data-concept-id'), $(event.target).closest("li"));
-                    } else if ($("#" + iconId).hasClass("glyphicon-minus")){
-                        $("#" + iconId).removeClass("glyphicon-minus");
-                        $("#" + iconId).addClass("glyphicon-chevron-right");
-                    }
-                } else if ($(event.target).hasClass("treeLabel")) {
-                    var selectedId = $(event.target).attr('data-concept-id');
-                    if (typeof selectedId != "undefined") {
-                        $.each(panel.subscribers, function(i, suscriberPanel) {
-                            if (suscriberPanel.conceptId != selectedId) {
-                                suscriberPanel.conceptId = selectedId;
-                                suscriberPanel.updateCanvas();
-                            }
-                        });
-                    }
+            }
+        });
+        $("#" + panel.divElement.id + "-panelBody").unbind("click");
+        $("#" + panel.divElement.id + "-panelBody").click(function(event) {
+            if ($(event.target).hasClass("treeButton")) {
+                var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                var iconId = panel.divElement.id + "-treeicon-" + conceptId;
+                event.preventDefault();
+                if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
+                    //console.log("close");
+                    $(event.target).closest("li").find("ul").remove();
+                    $("#" + iconId).removeClass("glyphicon-chevron-down");
+                    $("#" + iconId).addClass("glyphicon-chevron-right");
+                } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
+                    //console.log("open");
+                    $("#" + iconId).removeClass("glyphicon-chevron-right");
+                    $("#" + iconId).addClass("glyphicon-refresh");
+                    $("#" + iconId).addClass("icon-spin");
+                    panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                } else if ($("#" + iconId).hasClass("glyphicon-chevron-up")){
+                    $("#" + iconId).removeClass("glyphicon-chevron-up");
+                    $("#" + iconId).addClass("glyphicon-refresh");
+                    $("#" + iconId).addClass("icon-spin");
+                    panel.wrapInParents($(event.target).closest("li").attr('data-concept-id'), $(event.target).closest("li"));
+                } else if ($("#" + iconId).hasClass("glyphicon-minus")){
+                    $("#" + iconId).removeClass("glyphicon-minus");
+                    $("#" + iconId).addClass("glyphicon-chevron-right");
                 }
+            } else if ($(event.target).hasClass("treeLabel")) {
+                var selectedId = $(event.target).attr('data-concept-id');
+                if (typeof selectedId != "undefined") {
+                    $.each(panel.subscribers, function(i, suscriberPanel) {
+                        if (suscriberPanel.conceptId != selectedId) {
+                            suscriberPanel.conceptId = selectedId;
+                            suscriberPanel.updateCanvas();
+                        }
+                    });
+                }
+            }
 
-            });
-
-            var iconId = panel.divElement.id + "-treeicon-" + focusConcept.conceptId;
-            $("#" + iconId).removeClass("glyphicon-chevron-right");
-            $("#" + iconId).addClass("glyphicon-refresh");
-            $("#" + iconId).addClass("icon-spin");
-            //console.log("getChildren..." + focusConcept.conceptId);
-            panel.getChildren(focusConcept.conceptId);
         });
 
+        var iconId = panel.divElement.id + "-treeicon-" + focusConcept.conceptId;
+        $("#" + iconId).removeClass("glyphicon-chevron-right");
+        $("#" + iconId).addClass("glyphicon-refresh");
+        $("#" + iconId).addClass("icon-spin");
+        //console.log("getChildren..." + focusConcept.conceptId);
+        panel.getChildren(focusConcept.conceptId);
 
     };
 
