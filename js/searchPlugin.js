@@ -526,7 +526,6 @@ function searchPanel(divElement, options) {
                         if (result.details) {
                             var searchComment = "<span class='text-muted'>" + result.details.total + " matches found in " + elapsed + " seconds.</span>";
                         }
-                        $('#' + panel.divElement.id + '-searchBar').html(searchComment);
                         xhr = null;
                         var matchedDescriptions = result.matches;
                         //console.log(JSON.stringify(result));

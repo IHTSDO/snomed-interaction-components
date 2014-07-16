@@ -208,20 +208,6 @@ function conceptDetails(divElement, conceptId, options) {
             panel.updateCanvas();
         });
 
-//            $("#" + panel.divElement.id + "-linkerButton").draggable({
-//                cancel: false,
-//                appendTo: 'body',
-//                helper: 'clone',
-//                delay: 500
-//            });
-
-//            $(".resizable").resizable();
-
-//            $('#' + panel.divElement.id + '-panelHeading').droppable({
-//                drop: panel.handleDropEvent,
-//                hoverClass: "bg-info"
-//            });
-
         $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
             $("#" + panel.divElement.id + "-linkerButton").popover({
                 trigger: 'manual',
@@ -491,45 +477,48 @@ function conceptDetails(divElement, conceptId, options) {
             panel.inferredRoles = [];
 
 
-            firstMatch.relationships.sort(function(a, b) {
-                if (a.groupId < b.groupId) {
-                    return -1;
-                } else if (a.groupId > b.groupId) {
-                    return 1;
-                } else {
-                    if (a.type.conceptId == 116680003) {
+            if (firstMatch.relationships){
+                firstMatch.relationships.sort(function(a, b) {
+                    if (a.groupId < b.groupId) {
                         return -1;
-                    }
-                    if (b.type.conceptId == 116680003) {
+                    } else if (a.groupId > b.groupId) {
                         return 1;
+                    } else {
+                        if (a.type.conceptId == 116680003) {
+                            return -1;
+                        }
+                        if (b.type.conceptId == 116680003) {
+                            return 1;
+                        }
+                        if (a.target.defaultTerm < b.target.defaultTerm)
+                            return -1;
+                        if (a.target.defaultTerm > b.target.defaultTerm)
+                            return 1;
+                        return 0;
                     }
-                    if (a.target.defaultTerm < b.target.defaultTerm)
+                });
+            }
+            if (firstMatch.statedRelationships){
+                firstMatch.statedRelationships.sort(function(a, b) {
+                    if (a.groupId < b.groupId) {
                         return -1;
-                    if (a.target.defaultTerm > b.target.defaultTerm)
+                    } else if (a.groupId > b.groupId) {
                         return 1;
-                    return 0;
-                }
-            });
-            firstMatch.statedRelationships.sort(function(a, b) {
-                if (a.groupId < b.groupId) {
-                    return -1;
-                } else if (a.groupId > b.groupId) {
-                    return 1;
-                } else {
-                    if (a.type.conceptId == 116680003) {
-                        return -1;
+                    } else {
+                        if (a.type.conceptId == 116680003) {
+                            return -1;
+                        }
+                        if (b.type.conceptId == 116680003) {
+                            return 1;
+                        }
+                        if (a.target.defaultTerm < b.target.defaultTerm)
+                            return -1;
+                        if (a.target.defaultTerm > b.target.defaultTerm)
+                            return 1;
+                        return 0;
                     }
-                    if (b.type.conceptId == 116680003) {
-                        return 1;
-                    }
-                    if (a.target.defaultTerm < b.target.defaultTerm)
-                        return -1;
-                    if (a.target.defaultTerm > b.target.defaultTerm)
-                        return 1;
-                    return 0;
-                }
-            });
-
+                });
+            }
             Handlebars.registerHelper('push', function (element, array){
                 array.push(element);
                 // return ;
@@ -993,9 +982,6 @@ function dropC(ev, id) {
         }
     } else {
         if (panelAct.conceptId != conceptId) {
-//            if ($.contains($("#" + panelAct.divElement.id).get(0), $(draggable).get(0))) {
-//                draggable.remove();
-//            }
             panelAct.conceptId = conceptId;
             panelAct.updateCanvas();
         }

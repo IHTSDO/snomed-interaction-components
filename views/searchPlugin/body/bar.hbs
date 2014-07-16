@@ -13,24 +13,26 @@
 {{else}}
     &nbsp;&nbsp;<span class='label label-danger'>{{options.langFilter}}&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>&nbsp;&nbsp;
 {{/if_eq}}
-</span><div id='{{divElementId}}-searchFiltersPanel' class='panel-collapse collapse'>
-<div class='tree'>
-    <ul>
-        <li><a>Filter results by Language</a>
-            <ul>
-                {{#each result.filters.lang}}
-                    <li><a class='lang-link' href='javascript:void(0);' data-lang='{{@key}}'>{{@key}} ({{this}})</a></li>
-                {{/each}}
-            </ul>
-        </li>
-    </ul>
-    <ul>
-        <li><a>Filter results by Semantic Tag</a>
-            <ul>
-                {{#each result.filters.semTag}}
-                    <li><a class='semtag-link' href='javascript:void(0);' data-semtag='{{@key}}'>{{@key}} ({{this}})</a></li>
-                {{/each}}
-            </ul>
-        </li>
-    </ul>
+</span>
+<div id='{{divElementId}}-searchFiltersPanel' class='panel-collapse collapse'>
+    <div class='tree'>
+        <ul>
+            <li><a>Filter results by Language</a>
+                <ul>
+                    {{#each result.filters.lang}}
+                        <li><a class='lang-link' href='javascript:void(0);' data-lang='{{@key}}'>{{@key}} ({{this}})</a></li>
+                    {{/each}}
+                </ul>
+            </li>
+        </ul>
+        <ul>
+            <li><a>Filter results by Semantic Tag</a>
+                <ul>
+                    {{#each result.filters.semTag}}
+                        <li><a class='semtag-link' href='javascript:void(0);' data-semtag='{{@key}}'>{{@key}} ({{this}})</a></li>
+                    {{/each}}
+                </ul>
+            </li>
+        </ul>
+    </div>
 </div>

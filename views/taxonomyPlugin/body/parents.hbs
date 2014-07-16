@@ -11,7 +11,6 @@
                     <span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;
                 {{/if_eq}}
                 <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" draggable="true" ondragstart="drag(event, '{{divElementId}}')" class="treeLabel selectable-row" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span></a>
-            </li>
         {{/each}}
         {{#if_gr parents.length 0}}
             {{slice 0 -5}}

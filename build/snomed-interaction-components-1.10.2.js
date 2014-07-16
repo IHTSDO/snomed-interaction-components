@@ -5720,26 +5720,26 @@ function program7(depth0,data) {
 function program9(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                    <li><a class='lang-link' href='javascript:void(0);' data-lang='"
+  buffer += "\n                        <li><a class='lang-link' href='javascript:void(0);' data-lang='"
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>"
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " ("
     + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + ")</a></li>\n                ";
+    + ")</a></li>\n                    ";
   return buffer;
   }
 
 function program11(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n                    <li><a class='semtag-link' href='javascript:void(0);' data-semtag='"
+  buffer += "\n                        <li><a class='semtag-link' href='javascript:void(0);' data-semtag='"
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>"
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " ("
     + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + ")</a></li>\n                ";
+    + ")</a></li>\n                    ";
   return buffer;
   }
 
@@ -5755,17 +5755,17 @@ function program11(depth0,data) {
   buffer += "\n";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(7, program7, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.langFilter), "none", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.langFilter), "none", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</span><div id='";
+  buffer += "\n</span>\n<div id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-searchFiltersPanel' class='panel-collapse collapse'>\n<div class='tree'>\n    <ul>\n        <li><a>Filter results by Language</a>\n            <ul>\n                ";
+    + "-searchFiltersPanel' class='panel-collapse collapse'>\n    <div class='tree'>\n        <ul>\n            <li><a>Filter results by Language</a>\n                <ul>\n                    ";
   stack1 = helpers.each.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.filters)),stack1 == null || stack1 === false ? stack1 : stack1.lang), {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            </ul>\n        </li>\n    </ul>\n    <ul>\n        <li><a>Filter results by Semantic Tag</a>\n            <ul>\n                ";
+  buffer += "\n                </ul>\n            </li>\n        </ul>\n        <ul>\n            <li><a>Filter results by Semantic Tag</a>\n                <ul>\n                    ";
   stack1 = helpers.each.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.filters)),stack1 == null || stack1 === false ? stack1 : stack1.semTag), {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            </ul>\n        </li>\n    </ul>\n</div>\n";
+  buffer += "\n                </ul>\n            </li>\n        </ul>\n    </div>\n</div>";
   return buffer;
   });
 
@@ -6036,11 +6036,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-searchBar\"></div>\n            <div id=\"";
-  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "-searchFilters\"></div>\n            <table class='table table-bordered'>\n                <tbody  id='";
+    + "-searchBar\"></div>\n            <table class='table table-bordered'>\n                <tbody  id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -6189,7 +6185,7 @@ function program1(depth0,data,depth1,depth2) {
   if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span></a>\n            </li>\n        ";
+    + "</span></a>\n        ";
   return buffer;
   }
 function program2(depth0,data) {
