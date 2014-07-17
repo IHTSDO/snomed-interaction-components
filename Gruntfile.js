@@ -55,7 +55,7 @@ module.exports = function(grunt) {
                 updateConfigs: [],
                 commit: true,
                 commitMessage: 'Release v%VERSION%',
-                commitFiles: ['-a'],
+                commitFiles: ['-A'],
                 createTag: true,
                 tagName: 'v%VERSION%',
                 tagMessage: 'Version %VERSION%',
@@ -81,6 +81,11 @@ module.exports = function(grunt) {
             options: {
                 reporter: require('jshint-stylish'),
                 reporterOutput: 'dist/jshint-output.txt'
+            }
+        },
+        changelog: {
+            options: {
+                // Task-specific options go here.
             }
         }
 
