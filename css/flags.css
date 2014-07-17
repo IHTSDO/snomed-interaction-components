@@ -49,11 +49,32 @@
     height: 50%;
     background-size: 100% 100%;
 }
+/* denmark */
+.dk {
+    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNzAgMjgwIj4NCjxwYXRoIGZpbGw9IiNkMDBjMzMiIGQ9Im0wLDBoMzcwdjI4MGgtMzcweiIvPg0KPGcgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjQwIj4NCjxwYXRoIGQ9Im0xNDAsMHYyODAiLz4NCjxwYXRoIGQ9Im0wLDE0MGgzNzAiLz4NCjwvZz4NCjwvc3ZnPg0K');
+    width: 100%;
+    height: 75.675675675676%;
+    background-size: 100% 100%;
+}
 /* england */
 .england {
     background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMjUgMTUiIGhlaWdodD0iNzIwIj4NCjxwYXRoIGZpbGw9IiNmZmYiIGQ9Im0wLDBoMjV2MTVoLTI1eiIvPg0KPGcgZmlsbD0iI2NmMTQyYiI+DQo8cGF0aCBkPSJtMTEsMGgzdjE1aC0zeiIvPg0KPHBhdGggZD0ibTAsNmgyNXYzaC0yNXoiLz4NCjwvZz4NCjwvc3ZnPg0K');
     width: 100%;
     height: 60%;
+    background-size: 100% 100%;
+}
+/* spain */
+.es {
+    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NTAgNTAwIj4NCjxwYXRoIGZpbGw9IiNjNjBiMWUiIGQ9Im0wLDBoNzUwdjUwMGgtNzUweiIvPg0KPHBhdGggZmlsbD0iI2ZmYzQwMCIgZD0ibTAsMTI1aDc1MHYyNTBoLTc1MHoiLz4NCjwvc3ZnPg0K');
+    width: 100%;
+    height: 66.666666666667%;
+    background-size: 100% 100%;
+}
+/* sweden */
+.se {
+    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAwIDEwMDAiPg0KPHBhdGggZmlsbD0iIzBiNTA4OSIgZD0ibTAsMGgxNjAwdjEwMDBoLTE2MDB6Ii8+DQo8ZyBmaWxsPSIjZmZjMTAwIj4NCjxwYXRoIGQ9Im01MDAsMGgyMDB2MTAwMGgtMjAweiIvPg0KPHBhdGggZD0ibTAsNDAwaDE2MDB2MjAwaC0xNjAweiIvPg0KPC9nPg0KPC9zdmc+DQo=');
+    width: 100%;
+    height: 62.5%;
     background-size: 100% 100%;
 }
 /* united_kingdom */
