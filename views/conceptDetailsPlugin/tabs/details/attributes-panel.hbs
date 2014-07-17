@@ -28,12 +28,20 @@
                 , <span class='i18n' data-i18n-id='i18n_inactive'>Inactive</span>
             {{/if_eq}}
         </td>
-        <td><button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+        <td>
+            <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                 <table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>{{firstMatch.effectiveTime}}</td><td style='padding: 3px;'>{{firstMatch.module}}</td></tr></table>
                 " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
-            &nbsp;<button type="button" id="share-link-{{divElementId}}" class="btn btn-link more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+            &nbsp;
+            <button type="button" id="share-link-{{divElementId}}" class="btn btn-link more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                     <form><input class='form-control' id='share-field-{{divElementId}}' value='{{dataContentValue}}?perspective=full&conceptId1={{conceptId}}'></form><br>Copy the concept link (e.g. CTRL-C) to save and share a reference to this concept.
-                    " data-html="true"><i class="glyphicon glyphicon-share-alt"></i></button></td>
+                    " data-html="true"><i class="glyphicon glyphicon-share-alt"></i></button>
+            <span class="pull-right">
+               <div class="phoca-flagbox" style="width:40px;height:40px">
+                   <span class="phoca-flag {{countryIcon firstMatch.module}}"></span>
+               </div>
+            </span>
+        </td>
 
     </tr>
 </table>

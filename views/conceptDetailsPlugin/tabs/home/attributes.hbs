@@ -1,9 +1,18 @@
+<h4>
+    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&nbsp;
 {{#if_eq firstMatch.definitionStatus "Primitive"}}
-    <h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;<span ondrop="dropC(event, '{{divElementId}}')" ondragover="allowDrop(event)">
+    &nbsp;
 {{else}}
-    <h4><a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;<span ondrop="dropC(event, '{{divElementId}}')" ondragover="allowDrop(event)">
+    &equiv;
 {{/if_eq}}
-{{firstMatch.defaultTerm}}
-</span></h4>
+    </span></a>&nbsp;&nbsp;<span ondrop="dropC(event, '{{divElementId}}')" ondragover="allowDrop(event)"></span>
+    {{firstMatch.defaultTerm}}
+    <span class="pull-right">
+       <div class="phoca-flagbox" style="width:40px;height:40px">
+           <span class="phoca-flag {{countryIcon firstMatch.module}}"></span>
+       </div>
+    </span>
+</h4>
+
 <h5>SCTID: {{firstMatch.conceptId}}</h5>
 <div id="home-descriptions-{{divElementId}}"></div>

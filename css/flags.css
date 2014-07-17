@@ -26,9 +26,6 @@
     margin: auto;
     display: inline-block;
     vertical-align: middle;
-    border: 1px solid #e5e5e5;
-    -webkit-box-shadow: inset 0px 0px 0px 2px #fff;
-    box-shadow: inset 0px 0px 0px 2px #fff;
 }
 .phoca-title {
 
