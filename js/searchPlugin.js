@@ -400,17 +400,6 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
                         }).done(function (result) {
-                            Handlebars.registerHelper('shown', function(data, opts){
-                                if (data == "get"){
-                                    if (panel.shown0) {
-                                        return opts.fn(this);
-                                    }else{
-                                        return opts.inverse(this);
-                                    }
-                                }else{
-                                    panel.shown0 = data;
-                                }
-                            });
                             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                                 if (opts != "undefined") {
                                     if(a == b)
