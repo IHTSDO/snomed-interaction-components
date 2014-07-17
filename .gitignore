@@ -4,4 +4,3 @@
 .idea
 node_modules
 *.iml
-dist
