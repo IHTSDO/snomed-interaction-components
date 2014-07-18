@@ -327,21 +327,21 @@ function searchPanel(divElement, options) {
         }
     }
 
-    this.handlePanelDropEvent = function (event, ui) {
-        var draggable = ui.draggable;
-        if (!draggable.attr('data-panel')) {
-            //console.log("ignore");
-        } else {
-            //console.log("OK : " + draggable.attr('data-panel'));
-            $.each(componentsRegistry, function (i, field) {
-                if (field.divElement.id == draggable.attr('data-panel')) {
-                    if (field.type == "concept-details") {
-                        panel.subscribe(field);
-                    }
-                }
-            });
-        }
-    }
+//    this.handlePanelDropEvent = function (event, ui) {
+//        var draggable = ui.draggable;
+//        if (!draggable.attr('data-panel')) {
+//            //console.log("ignore");
+//        } else {
+//            //console.log("OK : " + draggable.attr('data-panel'));
+//            $.each(componentsRegistry, function (i, field) {
+//                if (field.divElement.id == draggable.attr('data-panel')) {
+//                    if (field.type == "concept-details") {
+//                        panel.subscribe(field);
+//                    }
+//                }
+//            });
+//        }
+//    }
 
     this.search = function (t, skipTo, returnLimit, forceSearch) {
         if (typeof panel.options.searchMode == "undefined") {

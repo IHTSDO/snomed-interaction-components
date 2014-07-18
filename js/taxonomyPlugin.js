@@ -197,11 +197,9 @@ function taxonomyPanel(divElement, conceptId, options) {
                 var selectedId = $(event.target).attr('data-concept-id');
                 var selectedLabel = $(event.target).attr('data-term');
                 if (typeof selectedId != "undefined") {
-                    console.log(panel.options.selectedView);
                     $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
                         // done
                     }).done(function(result) {
-                        console.log(result);
                         panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive", module: selectedModule});
                     }).fail(function() {
                     });
@@ -333,7 +331,10 @@ function taxonomyPanel(divElement, conceptId, options) {
                     } else {
                         parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
                     }
-                    parentLiHtml = parentLiHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '">' + parent.defaultTerm + '</span></a>';
+                    if (countryIcons[parent.module]){
+                        parentLiHtml = parentLiHtml + "<div class='phoca-flagbox' style='width:33px;height:33px'><span class='phoca-flag " + countryIcons[parent.module] + "'></span></div> ";
+                    }
+                    parentLiHtml = parentLiHtml + '<a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span data-concept-id="' + parent.conceptId + '" data-term="' + parent.defaultTerm + '" draggable="true" ondragstart="drag(event)" class="treeLabel selectable-row" id="' + panel.divElement.id + '-treenode-' + parent.conceptId + '"> ' + parent.defaultTerm + '</span></a>';
                     parentLiHtml = parentLiHtml + "</li>";
                     parentsStrs.push(parentLiHtml);
                     if (firstParent == "empty") {
@@ -383,7 +384,6 @@ function taxonomyPanel(divElement, conceptId, options) {
 
     this.setToConcept = function(conceptId, term, definitionStatus, module) {
         $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-        console.log(panel.options.selectedView);
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form="+panel.options.selectedView, function(result) {
             // done
         }).done(function(result) {
@@ -395,39 +395,39 @@ function taxonomyPanel(divElement, conceptId, options) {
         });
     }
 
-    this.handleDropEvent = function(event, ui) {
-        var draggable = ui.draggable;
-
-        //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
-        if (!draggable.attr('data-concept-id')) {
-            //console.log("ignore");
-        } else {
-            var conceptId = draggable.attr('data-concept-id');
-            var term = draggable.attr('data-term');
-            var definitionStatus = draggable.attr('data-def-status');
-            if (panel.options.selectedView == "undefined") {
-                panel.options.selectedView = "inferred";
-            }
-            if (typeof conceptId != "undefined") {
-                panel.setToConcept(conceptId, term, definitionStatus);
-            }
-            $(ui.helper).remove(); //destroy clone
-        }
-
-
-        if (!draggable.attr('data-panel')) {
-            //console.log("ignore");
-        } else {
-            //console.log("OK : " + draggable.attr('data-panel'));
-            $.each(componentsRegistry, function(i, field) {
-                if (field.divElement.id == draggable.attr('data-panel')) {
-                    if (field.type == "concept-details") {
-                        panel.subscribe(field);
-                    }
-                }
-            });
-        }
-    }
+//    this.handleDropEvent = function(event, ui) {
+//        var draggable = ui.draggable;
+//
+//        //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
+//        if (!draggable.attr('data-concept-id')) {
+//            //console.log("ignore");
+//        } else {
+//            var conceptId = draggable.attr('data-concept-id');
+//            var term = draggable.attr('data-term');
+//            var definitionStatus = draggable.attr('data-def-status');
+//            if (panel.options.selectedView == "undefined") {
+//                panel.options.selectedView = "inferred";
+//            }
+//            if (typeof conceptId != "undefined") {
+//                panel.setToConcept(conceptId, term, definitionStatus);
+//            }
+//            $(ui.helper).remove(); //destroy clone
+//        }
+//
+//
+//        if (!draggable.attr('data-panel')) {
+//            //console.log("ignore");
+//        } else {
+//            //console.log("OK : " + draggable.attr('data-panel'));
+//            $.each(componentsRegistry, function(i, field) {
+//                if (field.divElement.id == draggable.attr('data-panel')) {
+//                    if (field.type == "concept-details") {
+//                        panel.subscribe(field);
+//                    }
+//                }
+//            });
+//        }
+//    }
 
     this.subscribe = function(subscriber) {
         var alreadySubscribed = false;
@@ -524,45 +524,6 @@ function clearTaxonomyPanelSubscriptions(divElementId1) {
     $("#" + divElementId1).find('.linker-button').popover('toggle');
 }
 
-function dropT(ev, id) {
-    var divElementId = id;
-    var panel;
-    var panelD = ev.dataTransfer.getData("panel");
-    var conceptId = ev.dataTransfer.getData("concept-id");
-    var term = ev.dataTransfer.getData("term");
-    var definitionStatus = ev.dataTransfer.getData("def-status");
-    var module = ev.dataTransfer.getData("module");
-
-    $.each(componentsRegistry, function (i, field){
-        if (field.divElement.id == divElementId){
-            panel = field;
-        }
-    });
-
-    if (!conceptId) {
-        //console.log("ignore");
-    } else {
-        if (panel.options.selectedView == "undefined") {
-            panel.options.selectedView = "inferred";
-        }
-        if (typeof conceptId != "undefined") {
-            panel.setToConcept(conceptId, term, definitionStatus, module);
-        }
-        //$(ui.helper).remove(); //destroy clone
-    }
-    if (!panelD) {
-        //console.log("ignore");
-    } else {
-        //console.log("OK : " + draggable.attr('data-panel'));
-        $.each(componentsRegistry, function(i, field) {
-            if (field.divElement.id == panelD) {
-                if (field.type == "concept-details") {
-                    panel.subscribe(field);
-                }
-            }
-        });
-    }
-}
 
 (function($) {
     $.fn.addTaxonomy = function(options) {
