@@ -193,6 +193,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
         $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
             if ($(event.target).hasClass("treeLabel")) {
+                var selectedModule = $(event.target).attr('data-module');
                 var selectedId = $(event.target).attr('data-concept-id');
                 var selectedLabel = $(event.target).attr('data-term');
                 if (typeof selectedId != "undefined") {
@@ -200,7 +201,8 @@ function taxonomyPanel(divElement, conceptId, options) {
                     $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
                         // done
                     }).done(function(result) {
-                        panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive"});
+                        console.log(result);
+                        panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive", module: selectedModule});
                     }).fail(function() {
                     });
                 }
@@ -379,7 +381,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         });
     }
 
-    this.setToConcept = function(conceptId, term, definitionStatus) {
+    this.setToConcept = function(conceptId, term, definitionStatus, module) {
         $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         console.log(panel.options.selectedView);
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form="+panel.options.selectedView, function(result) {
@@ -388,7 +390,7 @@ function taxonomyPanel(divElement, conceptId, options) {
             if (definitionStatus != "Primitive" && definitionStatus != "Fully defined") {
                 definitionStatus = "Primitive";
             }
-            panel.setupParents(result, {conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus});
+            panel.setupParents(result, {conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus, module: module});
         }).fail(function() {
         });
     }
@@ -529,6 +531,7 @@ function dropT(ev, id) {
     var conceptId = ev.dataTransfer.getData("concept-id");
     var term = ev.dataTransfer.getData("term");
     var definitionStatus = ev.dataTransfer.getData("def-status");
+    var module = ev.dataTransfer.getData("module");
 
     $.each(componentsRegistry, function (i, field){
         if (field.divElement.id == divElementId){
@@ -543,7 +546,7 @@ function dropT(ev, id) {
             panel.options.selectedView = "inferred";
         }
         if (typeof conceptId != "undefined") {
-            panel.setToConcept(conceptId, term, definitionStatus);
+            panel.setToConcept(conceptId, term, definitionStatus, module);
         }
         //$(ui.helper).remove(); //destroy clone
     }

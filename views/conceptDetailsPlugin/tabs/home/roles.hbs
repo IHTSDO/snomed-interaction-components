@@ -9,13 +9,13 @@
             {{else}}
                 &nbsp;&nbsp;&nbsp;<span style='background-color: {{lastColor "get"}}'>&nbsp;&nbsp;</span>
             {{/eqLastGroup}}
-            &nbsp;<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-attribute-compact' data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
+            &nbsp;<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
                 {{removeSemtag type.defaultTerm}}</span>&nbsp;&rarr;&nbsp;
 
             {{#if_eq target.definitionStatus "Primitive"}}
-                <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-primitive-concept-compact' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+                <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
             {{else}}
-                <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-defined-concept-compact' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+                <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
             {{/if_eq}}
             {{removeSemtag target.defaultTerm}}
         </span><br>
@@ -33,7 +33,7 @@
             {{else}}
                 &nbsp;&nbsp;&nbsp;<span style='background-color: {{lastColor "get"}}'>&nbsp;&nbsp;</span>
             {{/eqLastGroup}}
-            &nbsp;<span draggable = "true" class='sct-attribute-compact' data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
+            &nbsp;<span draggable = "true" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
                 {{removeSemtag type.defaultTerm}}</span>&nbsp;&rarr;&nbsp;
             <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='
                 {{#if_eq target.definitionStatus "Primitive"}}
@@ -41,7 +41,7 @@
                 {{else}}
                      sct-defined-concept-compact
                 {{/if_eq}}
-                ' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+                ' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
                 {{removeSemtag target.defaultTerm}}</span><br>
         {{/each}}
         {{#if_eq inferredRoles.length 0}}

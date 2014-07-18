@@ -1,6 +1,6 @@
 {{#if_eq options.selectedView "stated"}}
     {{#each statedParents}}
-        <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='text-warning' data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
+        <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='text-warning' data-module="{{target.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
             {{#if_gr type.defaultTerm 0}}
                 {{substr type.defaultTerm 0}}
             {{else}}
@@ -9,9 +9,9 @@
         </span>&nbsp;&rArr;&nbsp;
 
         {{#if_eq target.definitionStatus "Primitive"}}
-            <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-primitive-concept-compact' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+            <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
         {{else}}
-            <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-defined-concept-compact' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+            <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
         {{/if_eq}}
 
         {{#if_gr target.defaultTerm 0}}
@@ -28,7 +28,7 @@
     {{/if_eq}}
 {{else}}
     {{#each inferredParents}}
-        <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='text-warning' data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
+        <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='text-warning' data-module="{{target.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
             {{#if_gr type.defaultTerm 0}}
                 {{substr type.defaultTerm 0}}
             {{else}}
@@ -37,9 +37,9 @@
         </span>&nbsp;&rArr;&nbsp;
 
         {{#if_eq target.definitionStatus "Primitive"}}
-            <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-primitive-concept-compact' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+            <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
         {{else}}
-            <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-defined-concept-compact' data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+            <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
         {{/if_eq}}
 
         {{#if_gr target.defaultTerm 0}}

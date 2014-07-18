@@ -7,9 +7,9 @@
         <td>
             <h4>
                 {{#if_eq firstMatch.definitionStatus "Primitive"}}
-                    <a href="javascript:void(0);" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                    <a href="javascript:void(0);" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
                 {{else}}
-                    <a href="javascript:void(0);" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning"  data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                    <a href="javascript:void(0);" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
                 {{/if_eq}}
 
                 <span ondrop="dropC(event, '{{divElementId}}')" ondragleave="removeHighlight();" ondragover="allowDrop(event)">{{firstMatch.defaultTerm}}</span>
