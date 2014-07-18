@@ -9,7 +9,11 @@
                         <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
                     </div>
                 </td>
-                <td class='text-muted small-text col-md-6 result-item'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{fsn}}</td>
+                <td class='text-muted small-text col-md-6 result-item'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{fsn}}
+                    <div class="phoca-flagbox" style="width:33px;height:17px">
+                        <span class="phoca-flag {{countryIcon module}}"></span>
+                    </div>
+                </td>
             </tr>
         {{/each}}
         {{#if_gr remaining 0}}

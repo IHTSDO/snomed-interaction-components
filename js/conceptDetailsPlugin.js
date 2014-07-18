@@ -960,12 +960,17 @@ function getRandomColor() {
     }
     return color;
 }
+function removeHighlight(){
+    $(document).find('.validtarget').removeClass('validtarget');
+}
 
 function allowDrop(ev) {
     ev.preventDefault();
+    $(ev.toElement).addClass("validtarget");
 }
 
 function drag(ev, id) {
+    //$( "[ondragover='allowDrop(event)']" ).addClass("validtarget");
     $.each(ev.target.attributes, function (){
         if (this.name.substr(0, 4) == "data"){
             ev.dataTransfer.setData(this.name.substr(5), this.value);
@@ -975,6 +980,7 @@ function drag(ev, id) {
 }
 
 function dropC(ev, id) {
+    $(document).find('.validtarget').removeClass('validtarget');
     ev.preventDefault();
     var conceptId = ev.dataTransfer.getData("concept-id");
     var panelD = ev.dataTransfer.getData("panel");

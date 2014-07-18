@@ -1,5 +1,5 @@
 <div style='height:100%;margin: 5px; overflow:auto;' class='panel panel-default' id='{{divElementId}}-mainPanel'>
-    <div ondrop="dropT(event, '{{divElementId}}')" ondragover="allowDrop(event)" class='panel-heading' id='{{divElementId}}-panelHeading'>
+    <div ondrop="dropT(event, '{{divElementId}}')" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class='panel-heading' id='{{divElementId}}-panelHeading'>
         <button id='{{divElementId}}-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>
         <div class='row'>
             <div class='col-md-6' id='{{divElementId}}-panelTitle'>&nbsp&nbsp&nbsp<strong><span class='i18n' data-i18n-id='i18n_taxonomy'>Taxonomy</span></strong></div>
@@ -24,6 +24,6 @@
             </li>
         </ul>
     </nav></div>
-    <div ondrop="dropT(event, '{{divElementId}}')" ondragover="allowDrop(event)" class='panel-body' style='height:100%' id='{{divElementId}}-panelBody'>
+    <div ondrop="dropT(event, '{{divElementId}}')" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class='panel-body' style='height:100%' id='{{divElementId}}-panelBody'>
     </div>
 </div>

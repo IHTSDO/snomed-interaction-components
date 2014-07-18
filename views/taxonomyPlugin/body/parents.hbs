@@ -5,6 +5,11 @@
                 <button class='btn btn-link btn-xs treeButton' style='padding:2px'>
                     <i class='glyphicon glyphicon-chevron-up treeButton' id='{{../divElementId}}-treeicon-{{conceptId}}'></i>
                 </button>
+                {{#hasCountryIcon module}}
+                    <div class="phoca-flagbox" style="width:33px;height:33px">
+                        <span class="phoca-flag {{countryIcon module}}"></span>
+                    </div>
+                {{/hasCountryIcon}}
                 {{#if_eq definitionStatus "Primitive"}}
                     <span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;
                 {{else}}
@@ -18,6 +23,12 @@
         <ul style='list-style-type: none; padding-left: 15px;'>
             <li data-concept-id='{{focusConcept.conceptId}}' data-term='{{focusConcept.defaultTerm}}' class='treeLabel'>
                 <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='{{divElementId}}-treeicon-{{focusConcept.conceptId}}'></i></button>
+               {{#hasCountryIcon module}}
+                   <div class="phoca-flagbox" style="width:33px;height:33px">
+                       <span class="phoca-flag {{countryIcon module}}"></span>
+                   </div>
+               {{/hasCountryIcon}}
+
                 {{#if_eq focusConcept.definitionStatus "Primitive"}}
                     <span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;
                 {{else}}

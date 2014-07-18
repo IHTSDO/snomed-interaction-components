@@ -159,6 +159,12 @@ function taxonomyPanel(divElement, conceptId, options) {
         $.each(parents, function(i, parent){
             lastParent = parent;
         });
+        Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+            if (countryIcons[moduleId])
+                return opts.fn(this);
+            else
+                return opts.inverse(this);
+        });
         Handlebars.registerHelper('if_eq', function(a, b, opts) {
             if (opts != "undefined") {
                 if(a == b)
@@ -182,6 +188,7 @@ function taxonomyPanel(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-panelBody").html($("#" + panel.divElement.id + "-panelBody").html().slice(a, b));
         });
         $("#" + panel.divElement.id + "-panelBody").html(JST["views/taxonomyPlugin/body/parents.hbs"](context));
+        //console.log(JST["views/taxonomyPlugin/body/parents.hbs"](context));
         $(".treeButton").disableTextSelect();
         $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
         $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
@@ -275,6 +282,12 @@ function taxonomyPanel(divElement, conceptId, options) {
                 result: result,
                 divElementId: panel.divElement.id
             };
+            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                if (countryIcons[moduleId])
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            });
             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                 if (opts != "undefined") {
                     if(a == b)
@@ -481,21 +494,21 @@ function taxonomyPanel(divElement, conceptId, options) {
     }
 
     this.setupCanvas();
-    if (!conceptId || conceptId == 138875005) {
-        this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
-    } else {
-        if (xhr != null) {
-            xhr.abort();
-            console.log("aborting call...");
-        }
-        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
-
-        }).done(function(result) {
-            panel.setToConcept(conceptId, result.defaultTerm);
-        }).fail(function() {
-            console.log("Error");
-        });
-    }
+//    if (!conceptId || conceptId == 138875005) {
+//        this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+//    } else {
+//        if (xhr != null) {
+//            xhr.abort();
+//            console.log("aborting call...");
+//        }
+//        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
+//
+//        }).done(function(result) {
+//            panel.setToConcept(conceptId, result.defaultTerm);
+//        }).fail(function() {
+//            console.log("Error");
+//        });
+//    }
 }
 
 function clearTaxonomyPanelSubscriptions(divElementId1) {
