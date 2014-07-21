@@ -9,6 +9,7 @@ function removeHighlight(){
 function allowDrop(ev) {
     ev.preventDefault();
     $(ev.toElement).addClass("drop-highlighted");
+    $(ev.target).addClass("drop-highlighted");
 }
 
 function drag(ev, id) {
@@ -87,3 +88,9 @@ function dropT(ev, id) {
         });
     }
 }
+
+function alertEvent(message, type) {
+    $.notify(message,type);
+}
+
+
