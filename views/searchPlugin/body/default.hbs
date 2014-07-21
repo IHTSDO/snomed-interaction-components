@@ -7,12 +7,12 @@
                 <td class='col-md-6'>
                     <div draggable='true' ondragstart="drag(event, '{{../divElementId}}')" class='result-item' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>
                         <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
+                        <div class="phoca-flagbox" style="width:35px;height:35px">
+                            <span class="phoca-flag {{countryIcon module}}"></span>
+                        </div>
                     </div>
                 </td>
                 <td class='text-muted small-text col-md-6 result-item'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{fsn}}
-                    <div class="phoca-flagbox" style="width:38px;height:22px">
-                        <span class="phoca-flag {{countryIcon module}}"></span>
-                    </div>
                 </td>
             </tr>
         {{/each}}

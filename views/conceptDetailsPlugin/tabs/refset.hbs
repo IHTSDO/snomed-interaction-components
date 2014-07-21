@@ -30,9 +30,9 @@
             <tr class='{{#if active}}{{else}}danger{{/if}}'>
                 <td>
                     {{#if_eq refset.definitionStatus "Primitive"}}
-                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                     {{else}}
-                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                     {{/if_eq}}
                     {{refset.defaultTerm}}
                 </td>
@@ -66,9 +66,9 @@
             <tr class='{{#if active}}{{else}}danger{{/if}}'>
                 <td>
                     {{#if_eq refset.definitionStatus "Primitive"}}
-                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{refset.module}}"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                     {{else}}
-                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{refset.module}}"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                     {{/if_eq}}
                     {{refset.defaultTerm}}
                 </td>
@@ -102,17 +102,17 @@
                 <tr class='{{#if active}}{{else}}danger{{/if}}'>
                     <td>
                         {{#if_eq refset.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{refset.defaultTerm}}
                     </td>
                     <td>
                         {{#if_eq cidValue.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')"  data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}"><span  class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')"  data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}"><span  class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{cidValue.defaultTerm}}</td>
                         <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
@@ -143,17 +143,17 @@
                 <tr class='{{#if active}}{{else}}danger{{/if}}'>
                     <td>
                         {{#if_eq refset.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{refset.defaultTerm}}
                     </td>
                     <td>
                         {{#if_eq cidValue.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning" data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{cidValue.defaultTerm}}</td>
                         <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
