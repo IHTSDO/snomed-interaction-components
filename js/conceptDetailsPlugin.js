@@ -693,6 +693,8 @@ function conceptDetails(divElement, conceptId, options) {
                 drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
             }
 
+
+            $("#diagram-tab-link-" + panel.divElement.id).unbind();
             $("#diagram-tab-link-" + panel.divElement.id).click(function (e) {
                 $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
                 setTimeout(function () {

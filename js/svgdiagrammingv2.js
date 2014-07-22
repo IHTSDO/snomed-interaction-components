@@ -22,9 +22,12 @@ function drawSctBox(svg, x, y, label, sctid, cssClass) {
     } else if (sctid) {
         testText = sctid.toString();
     }
-    var tempText = svg.text(x, y , testText, {fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif', fontSize: '12', fill: 'black'});
+    var fontFamily = '"Helvetica Neue",Helvetica,Arial,sans-serif';
+    //var fontFamily = 'sans-serif';
+    var tempText = svg.text(x, y , testText, {fontFamily: fontFamily, fontSize: '12', fill: 'black'});
     var textHeight = tempText.getBBox().height;
     var textWidth = tempText.getBBox().width;
+    textWidth = Math.round(textWidth* 1.2);
     svg.remove(tempText);
 
     var rect = null;
@@ -50,12 +53,12 @@ function drawSctBox(svg, x, y, label, sctid, cssClass) {
     }
 
     if (sctid && label) {
-        svg.text(x + 10, y + 16, sctid.toString(), {fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif', fontSize: '10', fill: 'black'});
-        svg.text(x + 10, y + 31, label, {fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif', fontSize: '12', fill: 'black'});
+        svg.text(x + 10, y + 16, sctid.toString(), {fontFamily: fontFamily, fontSize: '10', fill: 'black'});
+        svg.text(x + 10, y + 31, label, {fontFamily: fontFamily, fontSize: '12', fill: 'black'});
     } else if (label) {
-        svg.text(x + 10, y + 18, label, {fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif', fontSize: '12', fill: 'black'});
+        svg.text(x + 10, y + 18, label, {fontFamily: fontFamily, fontSize: '12', fill: 'black'});
     } else if (sctid) {
-        svg.text(x + 10, y + 18, sctid.toString(), {fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif', fontSize: '12', fill: 'black'});
+        svg.text(x + 10, y + 18, sctid.toString(), {fontFamily: fontFamily, fontSize: '12', fill: 'black'});
     }
 
     idSequence++;
