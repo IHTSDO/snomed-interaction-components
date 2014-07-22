@@ -136,9 +136,7 @@ function drawConceptDiagram (concept, div, options) {
     $("#" + div.attr('id') + "-png-button").disableTextSelect();
     $("#" + div.attr('id') + "-svg-button").disableTextSelect();
     $("#" + div.attr('id') + "-download-button").removeClass('disabled');
-    $("#" + div.attr('id') + "-download-button").unbind();
-
-    $("#" + div.attr('id') + "-download-button").click(function(event) {
+    $("#" + div.attr('id') + "-download-button").unbind().click(function(event) {
         $("#" + div.attr('id') + "-download-button").hide();
         $("#" + div.attr('id') + "-progress-button").show();
         $.post("http://107.170.33.116:3000/util/svg2png", { svgContent: svgCode}).done(function( response ) {
@@ -147,11 +145,11 @@ function drawConceptDiagram (concept, div, options) {
             $("#" + div.attr('id') + "-png-button").show();
             $("#" + div.attr('id') + "-svg-button").show();
 
-            $("#" + div.attr('id') + "-png-button").click(function(event) {
+            $("#" + div.attr('id') + "-png-button").unbind().click(function(event) {
                 window.open('http://107.170.33.116:3000/' + response);
             });
-            $("#" + div.attr('id') + "-svg-button").click(function(event) {
-                window.open('http://107.170.33.116:3000/' + response.replace("png", "svg"));
+            $("#" + div.attr('id') + "-svg-button").unbind().click(function(event) {
+                window.open('http://107.170.33.116:3000/' + response.replace(".png", ".svg"));
             });
 
             //$(div).prepend($("<a href-lang='image/svg+xml' href='http://107.170.33.116:3000/"+response+"' download='diagram.png'>Download as PNG</a>&nbsp;&nbsp;&nbsp;"));
