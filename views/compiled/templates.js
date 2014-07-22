@@ -146,7 +146,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" style=\"position: relative; width: 1000px;\"></div>\n            </div>\n            <div class=\"tab-pane fade\" id=\"refsets-";
+    + "\"></div>\n            </div>\n            <div class=\"tab-pane fade\" id=\"refsets-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -1492,6 +1492,40 @@ function program182(depth0,data,depth4) {
   stack1 = helpers.each.call(depth0, (depth0 && depth0.allDescriptions), {hash:{},inverse:self.noop,fn:self.programWithDepth(3, program3, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </tbody>\n</table>";
+  return buffer;
+  });
+
+this["JST"]["views/conceptDetailsPlugin/tabs/details/diagram.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"container\" style=\"max-width: 100%;\">\n    <div id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-diagram-toolbar\" class=\"row\">\n        <div class=\"row\" style=\"margin: 15px;\">\n            <div class=\"btn-toolbar\" role=\"toolbar\">\n                <button id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-download-button\" type=\"button\" class=\"btn btn-primary btn-sm disabled\" style=\"visibility: visible;\">Download</button>\n                <button id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-progress-button\" type=\"button\" class=\"btn btn-warning btn-sm disabled\" style=\"visibility: hidden;\">Generating downloadable files <span class='glyphicon glyphicon-refresh icon-spin'></span></button>\n                <button id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-png-button\" type=\"button\" class=\"btn btn-success btn-sm\" style=\"visibility: hidden;\"><span class=\"glyphicon glyphicon-picture\"></span> PNG</button>\n                <button id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-svg-button\" type=\"button\" class=\"btn btn-success btn-sm\" style=\"visibility: hidden;\"><span class=\"glyphicon glyphicon-tint\"></span> SVG</button>\n            </div>\n        </div>\n    </div>\n    <div id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-diagram-body\" class=\"row\" style=\"overflow: auto; width: 1000;\">\n\n    </div>\n</div>";
   return buffer;
   });
 

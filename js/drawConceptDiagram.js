@@ -24,9 +24,15 @@ function drawConceptDiagram (concept, div, options) {
             });
         }
     }
-    var parentDiv = div;
+    var context = {
+        divElementId: div.attr('id')
+    };
+    console.log(context);
+    div.html(JST["views/conceptDetailsPlugin/tabs/details/diagram.hbs"](context));
 
+    var parentDiv = $("#" + div.attr('id') + "-diagram-body");
     parentDiv.svg('destroy');
+
     parentDiv.svg({
         settings: {
             width: '1000px',
@@ -124,6 +130,14 @@ function drawConceptDiagram (concept, div, options) {
         svgCode.substr(svgCode.indexOf("svg") + 5)
     svgCode = svgCode.replace('width="1000px" height="2000px"', 'width="' + maxX + '" height="' + y + '"');
     var b64 = Base64.encode(svgCode);
+
+    $("#" + div.attr('id') + "-download-button").disableTextSelect();
+    $("#" + div.attr('id') + "-progress-button").disableTextSelect();
+    $("#" + div.attr('id') + "-png-button").disableTextSelect();
+    $("#" + div.attr('id') + "-svg-button").disableTextSelect();
+    $("#" + div.attr('id') + "-download-button").removeClass('disabled');
+
+
     $(div).prepend($("<a href-lang='image/svg+xml' href='data:image/svg+xml;base64,\n"+b64+"' download='diagram.svg'>Download as SVG</a>"));
 
     $.post("http://107.170.33.116:3000/util/svg2png", { svgContent: svgCode}).done(function( response ) {
