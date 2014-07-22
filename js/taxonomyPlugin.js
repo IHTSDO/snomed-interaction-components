@@ -29,6 +29,8 @@ function taxonomyPanel(divElement, conceptId, options) {
 
     this.history = [];
 
+    var channel = postal.channel("taxonomySelections");
+
     this.setupCanvas = function() {
         var context = {
             divElementId: panel.divElement.id
@@ -235,6 +237,10 @@ function taxonomyPanel(divElement, conceptId, options) {
             } else if ($(event.target).hasClass("treeLabel")) {
                 var selectedId = $(event.target).attr('data-concept-id');
                 if (typeof selectedId != "undefined") {
+                    channel.publish("taxonomy.click", {
+                        conceptId: selectedId,
+                        source: panel.divElement.id
+                    });
                     $.each(panel.subscribers, function(i, suscriberPanel) {
                         if (suscriberPanel.conceptId != selectedId) {
                             suscriberPanel.conceptId = selectedId;
@@ -394,40 +400,6 @@ function taxonomyPanel(divElement, conceptId, options) {
         }).fail(function() {
         });
     }
-
-//    this.handleDropEvent = function(event, ui) {
-//        var draggable = ui.draggable;
-//
-//        //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
-//        if (!draggable.attr('data-concept-id')) {
-//            //console.log("ignore");
-//        } else {
-//            var conceptId = draggable.attr('data-concept-id');
-//            var term = draggable.attr('data-term');
-//            var definitionStatus = draggable.attr('data-def-status');
-//            if (panel.options.selectedView == "undefined") {
-//                panel.options.selectedView = "inferred";
-//            }
-//            if (typeof conceptId != "undefined") {
-//                panel.setToConcept(conceptId, term, definitionStatus);
-//            }
-//            $(ui.helper).remove(); //destroy clone
-//        }
-//
-//
-//        if (!draggable.attr('data-panel')) {
-//            //console.log("ignore");
-//        } else {
-//            //console.log("OK : " + draggable.attr('data-panel'));
-//            $.each(componentsRegistry, function(i, field) {
-//                if (field.divElement.id == draggable.attr('data-panel')) {
-//                    if (field.type == "concept-details") {
-//                        panel.subscribe(field);
-//                    }
-//                }
-//            });
-//        }
-//    }
 
     this.subscribe = function(subscriber) {
         var alreadySubscribed = false;

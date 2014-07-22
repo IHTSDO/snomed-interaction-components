@@ -30,6 +30,9 @@ function searchPanel(divElement, options) {
     }
 
     this.history = [];
+
+    var channel = postal.channel("searchSelections");
+
     this.setupCanvas = function () {
         var context = {
             divElementId: panel.divElement.id
@@ -327,22 +330,6 @@ function searchPanel(divElement, options) {
         }
     }
 
-//    this.handlePanelDropEvent = function (event, ui) {
-//        var draggable = ui.draggable;
-//        if (!draggable.attr('data-panel')) {
-//            //console.log("ignore");
-//        } else {
-//            //console.log("OK : " + draggable.attr('data-panel'));
-//            $.each(componentsRegistry, function (i, field) {
-//                if (field.divElement.id == draggable.attr('data-panel')) {
-//                    if (field.type == "concept-details") {
-//                        panel.subscribe(field);
-//                    }
-//                }
-//            });
-//        }
-//    }
-
     this.search = function (t, skipTo, returnLimit, forceSearch) {
         if (typeof panel.options.searchMode == "undefined") {
             panel.options.searchMode = "partialMatching";
@@ -442,6 +429,10 @@ function searchPanel(divElement, options) {
                                     field.conceptId = $(event.target).attr('data-concept-id');
                                     field.updateCanvas();
                                 });
+                                channel.publish("search.click", {
+                                    conceptId: $(event.target).attr('data-concept-id'),
+                                    source: panel.divElement.id
+                                });
                             });
                         });
                     } else if (t.substr(-2, 1) == "1") {
@@ -466,6 +457,10 @@ function searchPanel(divElement, options) {
                                     //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
                                     field.conceptId = $(event.target).attr('data-concept-id');
                                     field.updateCanvas();
+                                });
+                                channel.publish("search.click", {
+                                    conceptId: $(event.target).attr('data-concept-id'),
+                                    source: panel.divElement.id
                                 });
                             });
                         });
@@ -623,6 +618,10 @@ function searchPanel(divElement, options) {
                                 field.updateCanvas();
                                 lastClickedSctid = $(event.target).attr('data-concept-id');
                                 lastClickTime = Date.now();
+                            });
+                            channel.publish("search.click", {
+                                conceptId: $(event.target).attr('data-concept-id'),
+                                source: panel.divElement.id
                             });
                         });
 
