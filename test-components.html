@@ -30,7 +30,6 @@
 
         <script src="views/compiled/templates.js" type="text/javascript"></script>
 
-        <script src="js/popover.js"></script>
         <script src="js/jquery.splitter-0.14.0.js" type="text/javascript"></script>
         <script src="js/countryIcons.js" type="text/javascript"></script>
         <script src="js/svgdiagrammingv2.js" type="text/javascript"></script>
@@ -39,6 +38,7 @@
         <script src="js/taxonomyPlugin.js" type="text/javascript"></script>
         <script src="js/conceptDetailsPlugin.js" type="text/javascript"></script>
         <script src="js/popover-extra-placements.js" type="text/javascript"></script>
+        <script src="js/popover.js"></script>
 
         <script type="text/javascript">
             var selectedLanguage = 'en_US';
@@ -199,7 +199,6 @@
                 $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("<em>...</em>");
-                $('.more-fields-button').popover('hide');
             }
             function switchToBrowsing(cd1Value, cd2Value, txValue1) {
                 currentPerspective = "browsing";

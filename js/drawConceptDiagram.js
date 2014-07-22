@@ -136,16 +136,35 @@ function drawConceptDiagram (concept, div, options) {
     $("#" + div.attr('id') + "-png-button").disableTextSelect();
     $("#" + div.attr('id') + "-svg-button").disableTextSelect();
     $("#" + div.attr('id') + "-download-button").removeClass('disabled');
+    $("#" + div.attr('id') + "-download-button").unbind();
 
+    $("#" + div.attr('id') + "-download-button").click(function(event) {
+        $("#" + div.attr('id') + "-download-button").hide();
+        $("#" + div.attr('id') + "-progress-button").show();
+        $.post("http://107.170.33.116:3000/util/svg2png", { svgContent: svgCode}).done(function( response ) {
+            //console.log(response);
+            $("#" + div.attr('id') + "-progress-button").hide();
+            $("#" + div.attr('id') + "-png-button").show();
+            $("#" + div.attr('id') + "-svg-button").show();
 
-    $(div).prepend($("<a href-lang='image/svg+xml' href='data:image/svg+xml;base64,\n"+b64+"' download='diagram.svg'>Download as SVG</a>"));
+            $("#" + div.attr('id') + "-png-button").click(function(event) {
+                window.open('http://107.170.33.116:3000/' + response);
+            });
+            $("#" + div.attr('id') + "-svg-button").click(function(event) {
+                window.open('http://107.170.33.116:3000/' + response.replace("png", "svg"));
+            });
 
-    $.post("http://107.170.33.116:3000/util/svg2png", { svgContent: svgCode}).done(function( response ) {
-        console.log(response);
-        $(div).prepend($("<a href-lang='image/svg+xml' href='http://107.170.33.116:3000/"+response+"' download='diagram.png'>Download as PNG</a>&nbsp;&nbsp;&nbsp;"));
-    }).fail(function() {
-        console.log("Error");
+            //$(div).prepend($("<a href-lang='image/svg+xml' href='http://107.170.33.116:3000/"+response+"' download='diagram.png'>Download as PNG</a>&nbsp;&nbsp;&nbsp;"));
+        }).fail(function() {
+            console.log("Error");
+        });
     });
+
+
+
+    //$(div).prepend($("<a href-lang='image/svg+xml' href='data:image/svg+xml;base64,\n"+b64+"' download='diagram.svg'>Download as SVG</a>"));
+
+
 
 
 }
