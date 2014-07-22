@@ -2,14 +2,18 @@
  * Created by alo on 7/18/14.
  */
 
+$(document).on('dragend', function(){
+    removeHighlight();
+});
+
 function removeHighlight(){
     $(document).find('.drop-highlighted').removeClass('drop-highlighted');
 }
 
 function allowDrop(ev) {
     ev.preventDefault();
-    $(ev.toElement).addClass("drop-highlighted");
-    $(ev.target).addClass("drop-highlighted");
+    $(ev.toElement).closest("div").addClass("drop-highlighted");
+    $(ev.target).closest("div").addClass("drop-highlighted");
 }
 
 function drag(ev, id) {

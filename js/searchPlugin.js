@@ -46,7 +46,7 @@ function searchPanel(divElement, options) {
                 panel.search($this.val(),0,100,false);
             }, 500);
         });
-        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+//        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
         $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
@@ -424,11 +424,11 @@ function searchPanel(divElement, options) {
                             $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/0.hbs"](context));
                             $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                             $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                                $.each(panel.subscribers, function (i, field) {
-                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                    field.conceptId = $(event.target).attr('data-concept-id');
-                                    field.updateCanvas();
-                                });
+//                                $.each(panel.subscribers, function (i, field) {
+//                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+//                                    field.conceptId = $(event.target).attr('data-concept-id');
+//                                    field.updateCanvas();
+//                                });
                                 channel.publish("search.click", {
                                     conceptId: $(event.target).attr('data-concept-id'),
                                     source: panel.divElement.id
@@ -453,11 +453,11 @@ function searchPanel(divElement, options) {
                             $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/1.hbs"](context));
                             $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                             $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                                $.each(panel.subscribers, function (i, field) {
-                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                    field.conceptId = $(event.target).attr('data-concept-id');
-                                    field.updateCanvas();
-                                });
+//                                $.each(panel.subscribers, function (i, field) {
+//                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+//                                    field.conceptId = $(event.target).attr('data-concept-id');
+//                                    field.updateCanvas();
+//                                });
                                 channel.publish("search.click", {
                                     conceptId: $(event.target).attr('data-concept-id'),
                                     source: panel.divElement.id
@@ -612,13 +612,13 @@ function searchPanel(divElement, options) {
                             panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
                         });
                         $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                            $.each(panel.subscribers, function (i, field) {
-                                //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                field.conceptId = $(event.target).attr('data-concept-id');
-                                field.updateCanvas();
-                                lastClickedSctid = $(event.target).attr('data-concept-id');
-                                lastClickTime = Date.now();
-                            });
+//                            $.each(panel.subscribers, function (i, field) {
+//                                //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+//                                field.conceptId = $(event.target).attr('data-concept-id');
+//                                field.updateCanvas();
+//                                lastClickedSctid = $(event.target).attr('data-concept-id');
+//                                lastClickTime = Date.now();
+//                            });
                             channel.publish("search.click", {
                                 conceptId: $(event.target).attr('data-concept-id'),
                                 source: panel.divElement.id

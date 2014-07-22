@@ -41,15 +41,30 @@ function conceptDetails(divElement, conceptId, options) {
 
     var channel = postal.channel("taxonomySelections");
     channel.subscribe("taxonomy.click", function(data, envelope) {
-        //console.log("taxonomy.click: " + data.conceptId + " Origin: " + data.source);
-        panel.conceptId = data.conceptId;
-        panel.updateCanvas();
+        var subscribers;
+        $.each(componentsRegistry, function (i, field){
+            if (field.divElement.id == data.source){
+                subscribers = field.subscribers;
+            }
+        });
+        $.each(subscribers, function (i, field) {
+            field.conceptId = data.conceptId;
+            field.updateCanvas();
+        });
     });
+
     var sechannel = postal.channel("searchSelections");
     sechannel.subscribe("search.click", function(data, envelope) {
-        //console.log("workunit-inbox-selection: " + data.conceptId + " Origin: " + data.source);
-        panel.conceptId = data.conceptId;
-        panel.updateCanvas();
+        var subscribers;
+        $.each(componentsRegistry, function (i, field){
+            if (field.divElement.id == data.source){
+                subscribers = field.subscribers;
+            }
+        });
+        $.each(subscribers, function (i, field) {
+            field.conceptId = data.conceptId;
+            field.updateCanvas();
+        });
     });
     componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
@@ -85,7 +100,7 @@ function conceptDetails(divElement, conceptId, options) {
 
         $(divElement).html(JST["views/conceptDetailsPlugin/main.hbs"](context));
 
-        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+//        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
         $("#" + panel.divElement.id + "-historyButton").disableTextSelect();

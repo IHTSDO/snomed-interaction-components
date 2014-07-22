@@ -37,7 +37,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         };
         $(divElement).html(JST["views/taxonomyPlugin/main.hbs"](context));
         $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
-        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+//        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
         $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
@@ -241,12 +241,12 @@ function taxonomyPanel(divElement, conceptId, options) {
                         conceptId: selectedId,
                         source: panel.divElement.id
                     });
-                    $.each(panel.subscribers, function(i, suscriberPanel) {
-                        if (suscriberPanel.conceptId != selectedId) {
-                            suscriberPanel.conceptId = selectedId;
-                            suscriberPanel.updateCanvas();
-                        }
-                    });
+//                    $.each(panel.subscribers, function(i, suscriberPanel) {
+//                        if (suscriberPanel.conceptId != selectedId) {
+//                            suscriberPanel.conceptId = selectedId;
+//                            suscriberPanel.updateCanvas();
+//                        }
+//                    });
                 }
             }
 
