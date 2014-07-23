@@ -12,19 +12,27 @@ function drawConceptDiagram (concept, div, options) {
             }
         });
     } else {
-        $.each(concept.relationships, function(i, field) {
-            if (field.active == true) {
-                if (field.type.conceptId == 116680003) {
-                    svgIsaModel.push(field);
-                } else {
-                    svgAttrModel.push(field);
+        if (concept.relationships) {
+            $.each(concept.relationships, function (i, field) {
+                if (field.active == true) {
+                    if (field.type.conceptId == 116680003) {
+                        svgIsaModel.push(field);
+                    } else {
+                        svgAttrModel.push(field);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
-    var parentDiv = div;
+    var context = {
+        divElementId: div.attr('id')
+    };
+    console.log(context);
+    div.html(JST["views/conceptDetailsPlugin/tabs/details/diagram.hbs"](context));
 
+    var parentDiv = $("#" + div.attr('id') + "-diagram-body");
     parentDiv.svg('destroy');
+
     parentDiv.svg({
         settings: {
             width: '1000px',
@@ -33,6 +41,7 @@ function drawConceptDiagram (concept, div, options) {
     loadDefs(svg);
     var x = 10;
     var y = 10;
+    var maxX = 10;
     var sctClass = "";
     if (concept.definitionStatus == "Primitive") {
         sctClass = "sct-primitive-concept";
@@ -55,6 +64,7 @@ function drawConceptDiagram (concept, div, options) {
     connectElements(svg, circle1, circle2, 'right', 'left', 'LineMarker');
     x = x + 40;
     y = y - 18;
+    maxX = ((maxX < x) ? x : maxX);
     // load stated parents
     sctClass = "sct-defined-concept";
     $.each(svgIsaModel, function(i, relationship) {
@@ -68,6 +78,7 @@ function drawConceptDiagram (concept, div, options) {
         // (rectParent.outerHeight()/2) + "px"});
         connectElements(svg, circle2, rectParent, 'center', 'left', 'ClearTriangle');
         y = y + rectParent.getBBox().height + 25;
+        maxX = ((maxX < x + rectParent.getBBox().width + 50) ? x + rectParent.getBBox().width + 50 : maxX);
     });
 
     // load ungrouped attributes
@@ -84,6 +95,7 @@ function drawConceptDiagram (concept, div, options) {
             var rectTarget = drawSctBox(svg, x + rectAttr.getBBox().width + 50, y, relationship.target.defaultTerm,relationship.target.conceptId, sctClass);
             connectElements(svg, rectAttr, rectTarget, 'right', 'left');
             y = y + rectTarget.getBBox().height + 25;
+            maxX = ((maxX < x + rectAttr.getBBox().width + 50 + rectTarget.getBBox().width + 50) ? x + rectAttr.getBBox().width + 50 + rectTarget.getBBox().width + 50 : maxX);
         } else {
             if (relationship.groupId > maxRoleNumber) {
                 maxRoleNumber = relationship.groupId;
@@ -108,6 +120,7 @@ function drawConceptDiagram (concept, div, options) {
                 var rectRole2 = drawSctBox(svg, x + 85 + rectRole.getBBox().width + 30, y - 18, relationship.target.defaultTerm,relationship.target.conceptId, sctClass);
                 connectElements(svg, rectRole, rectRole2, 'right', 'left');
                 y = y + rectRole2.getBBox().height + 25;
+                maxX = ((maxX < x + 85 + rectRole.getBBox().width + 30 + rectRole2.getBBox().width + 50) ? x + 85 + rectRole.getBBox().width + 30 + rectRole2.getBBox().width + 50 : maxX);
             }
         });
     }
@@ -115,8 +128,42 @@ function drawConceptDiagram (concept, div, options) {
     svgCode = svgCode.substr(0, svgCode.indexOf("svg") + 4) +
         ' xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" ' +
         svgCode.substr(svgCode.indexOf("svg") + 5)
+    svgCode = svgCode.replace('width="1000px" height="2000px"', 'width="' + maxX + '" height="' + y + '"');
     var b64 = Base64.encode(svgCode);
-    $(div).prepend($("<a href-lang='image/svg+xml' href='data:image/svg+xml;base64,\n"+b64+"' download='diagram.svg'>Download</a>"));
+
+    $("#" + div.attr('id') + "-download-button").disableTextSelect();
+    $("#" + div.attr('id') + "-progress-button").disableTextSelect();
+    $("#" + div.attr('id') + "-png-button").disableTextSelect();
+    $("#" + div.attr('id') + "-svg-button").disableTextSelect();
+    $("#" + div.attr('id') + "-download-button").removeClass('disabled');
+    $("#" + div.attr('id') + "-download-button").unbind().click(function(event) {
+        $("#" + div.attr('id') + "-download-button").hide();
+        $("#" + div.attr('id') + "-progress-button").show();
+        $.post("http://107.170.33.116:3000/util/svg2png", { svgContent: svgCode}).done(function( response ) {
+            //console.log(response);
+            $("#" + div.attr('id') + "-progress-button").hide();
+            $("#" + div.attr('id') + "-png-button").show();
+            $("#" + div.attr('id') + "-svg-button").show();
+
+            $("#" + div.attr('id') + "-png-button").unbind().click(function(event) {
+                window.open('http://107.170.33.116:3000/' + response);
+            });
+            $("#" + div.attr('id') + "-svg-button").unbind().click(function(event) {
+                window.open('http://107.170.33.116:3000/' + response.replace(".png", ".svg"));
+            });
+
+            //$(div).prepend($("<a href-lang='image/svg+xml' href='http://107.170.33.116:3000/"+response+"' download='diagram.png'>Download as PNG</a>&nbsp;&nbsp;&nbsp;"));
+        }).fail(function() {
+            console.log("Error");
+        });
+    });
+
+
+
+    //$(div).prepend($("<a href-lang='image/svg+xml' href='data:image/svg+xml;base64,\n"+b64+"' download='diagram.svg'>Download as SVG</a>"));
+
+
+
 
 }
 
