@@ -38,7 +38,7 @@ function conceptDetails(divElement, conceptId, options) {
     var xhr = null;
     var xhrChildren = null;
     var conceptRequested = 0;
-
+    panel.markerColor = [];
     panel.subscriptions = [];
 
     componentLoaded = false;
@@ -94,9 +94,9 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
 
-        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-            $("#" + panel.divElement.id + "-linkerButton").hide();
-        }
+//        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+//            $("#" + panel.divElement.id + "-linkerButton").hide();
+//        }
 
         if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
             $("#" + panel.divElement.id + "-subscribersMarker").remove();
@@ -201,13 +201,13 @@ function conceptDetails(divElement, conceptId, options) {
         if (typeof i18n_panel_links == "undefined") {
             i18n_panel_links = 'Panel links';
         }
-        $("#" + panel.divElement.id + "-linkerButton").tooltip({
-            placement : 'left',
-            trigger: 'hover',
-            title: i18n_panel_links,
-            animation: true,
-            delay: 1000
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+//            placement : 'left',
+//            trigger: 'hover',
+//            title: i18n_panel_links,
+//            animation: true,
+//            delay: 1000
+//        });
 
         $("#" + panel.divElement.id + "-apply-button").click(function() {
             //console.log("apply!");
@@ -215,38 +215,38 @@ function conceptDetails(divElement, conceptId, options) {
             panel.updateCanvas();
         });
 
-        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
-            $("#" + panel.divElement.id + "-linkerButton").popover({
-                trigger: 'manual',
-                placement: 'bottomRight',
-                html: true,
-                content: function() {
-                    if (panel.subscriptions.length == 0) {
-                        linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
-                    } else {
-                        var linkHtml = '';
-                        $.each(panel.subscriptions, function(i, field){
-                            var panelLink = {};
-                            $.each(componentsRegistry, function(i, panl){
-                                if (panl.divElement.id == field.topic){
-                                    panelLink = panl;
-                                }
-                            });
-                            linkHtml = linkHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="\'' + panel.unsubscribe(panelLink) + '\'">Clear link with '+ field.topic +'</a><br></div>';
-                        });
-                        linkHtml = linkHtml + '';
-                        linkerHtml = linkHtml;
-                    }
-                    return linkerHtml;
-                }
-            });
-            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+//            $("#" + panel.divElement.id + "-linkerButton").popover({
+//                trigger: 'manual',
+//                placement: 'bottomRight',
+//                html: true,
+//                content: function() {
+//                    if (panel.subscriptions.length == 0) {
+//                        linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
+//                    } else {
+//                        var linkHtml = '';
+//                        $.each(panel.subscriptions, function(i, field){
+//                            var panelLink = {};
+//                            $.each(componentsRegistry, function(i, panl){
+//                                if (panl.divElement.id == field.topic){
+//                                    panelLink = panl;
+//                                }
+//                            });
+//                            linkHtml = linkHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="\'' + panel.unsubscribe(panelLink) + '\'">Clear link with '+ field.topic +'</a><br></div>';
+//                        });
+//                        linkHtml = linkHtml + '';
+//                        linkerHtml = linkHtml;
+//                    }
+//                    return linkerHtml;
+//                }
+//            });
+//            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+//        });
 
         panel.updateCanvas();
         panel.setupOptionsPanel();
         if (panel.subscriptions.length > 0){
-            $("#" + panel.divElement.id + "-subscribersMarker").css('color', panel.markerColor);
+            $("#" + panel.divElement.id + "-subscribersMarker").css('color', panel.markerColor[0]);
             $("#" + panel.divElement.id + "-subscribersMarker").show();
         }
     }
@@ -810,11 +810,24 @@ function conceptDetails(divElement, conceptId, options) {
         panel.subscriptions.push(subscription);
         panelToSubscribe.subscriptions.push(panel.divElement.id);
 //        console.log(panel.subscriptions);
-        panel.markerColor = panelToSubscribe.markerColor;
-        $("#" + panelId + "-subscribersMarker").css('color', panelToSubscribe.markerColor);
-        $("#" + panel.divElement.id + "-subscribersMarker").css('color', panelToSubscribe.markerColor);
-        $("#" + panelId + "-subscribersMarker").show();
+        var alreadySubscribed = false;
+        $.each(panel.markerColor, function(i, field){
+            if (field == panelToSubscribe.markerColor){
+                alreadySubscribed = true;
+            }
+        });
+        if (!alreadySubscribed) {
+            panel.markerColor.push(panelToSubscribe.markerColor);
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+        }
+        var auxMarker = "";
+        $.each(panel.markerColor, function(i, field){
+            auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"'></i>";
+        });
+        $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
         $("#" + panel.divElement.id + "-subscribersMarker").show();
+        $("#" + panelId + "-subscribersMarker").css('color', panelToSubscribe.markerColor);
+        $("#" + panelId + "-subscribersMarker").show();
     }
 
     this.unsubscribe = function(panelToUnsubscribe) {
@@ -825,7 +838,25 @@ function conceptDetails(divElement, conceptId, options) {
                 aux.push(field);
             }
         });
-        console.log(aux);
+        var unsubscribed = false;
+        var colors = [];
+        $.each(panel.markerColor, function(i, field){
+            if (field != panelToUnsubscribe.markerColor){
+                colors.push(field);
+            }else{
+                unsubscribed = true;
+            }
+        });
+        panel.markerColor = colors;
+        var auxMarker = "";
+        $("#" + panel.divElement.id + "-panelTitle").html($("#" + panel.divElement.id + "-panelTitle").html().replace(/&nbsp;/g, ''));
+        $.each(panel.markerColor, function(i, field){
+            auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"'></i>";
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+        });
+        $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
+//        console.log(colors);
+//        console.log(aux);
         panelToUnsubscribe.subscriptions = aux;
         if (panelToUnsubscribe.subscriptions.length == 0){
             $("#" + panelToUnsubscribe.divElement.id + "-subscribersMarker").hide();

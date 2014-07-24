@@ -75,9 +75,9 @@ function searchPanel(divElement, options) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
 
-        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-            $("#" + panel.divElement.id + "-linkerButton").hide();
-        }
+//        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+//            $("#" + panel.divElement.id + "-linkerButton").hide();
+//        }
 
         if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
             $("#" + panel.divElement.id + "-subscribersMarker").remove();
@@ -122,13 +122,13 @@ function searchPanel(divElement, options) {
         if (typeof i18n_panel_links == "undefined") {
             i18n_panel_links = 'Panel links';
         }
-        $("#" + panel.divElement.id + "-linkerButton").tooltip({
-            placement : 'left',
-            trigger: 'hover',
-            title: i18n_panel_links,
-            animation: true,
-            delay: 1000
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+//            placement : 'left',
+//            trigger: 'hover',
+//            title: i18n_panel_links,
+//            animation: true,
+//            delay: 1000
+//        });
         $("#" + panel.divElement.id + "-apply-button").click(function () {
             panel.readOptionsPanel();
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
@@ -199,24 +199,24 @@ function searchPanel(divElement, options) {
             });
             $("#" + panel.divElement.id + "-historyButton").popover('toggle');
         });
-        $("#" + panel.divElement.id + "-linkerButton").click(function (event) {
-            $("#" + panel.divElement.id + "-linkerButton").popover({
-                trigger: 'manual',
-                placement: 'bottomRight',
-                html: true,
-                content: function () {
-                    var linkerHtml = '<div class="text-center text-muted"><em><span class="i18n" data-i18n-id="i18n_drag_to_link">Drag to link with other panels</span><br>';
-                    if (panel.subscriptions.length == 1) {
-                        linkerHtml = linkerHtml + panel.subscriptions.length + ' link established</em></div>';
-                    } else {
-                        linkerHtml = linkerHtml + panel.subscriptions.length + ' links established</em></div>';
-                    }
-                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearSearchPanelSubscriptions(\'' + panel.divElement.id + '\');"><span class="i18n" data-i18n-id="i18n_clear_links">Clear links</span></a></div>';
-                    return linkerHtml;
-                }
-            });
-            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").click(function (event) {
+//            $("#" + panel.divElement.id + "-linkerButton").popover({
+//                trigger: 'manual',
+//                placement: 'bottomRight',
+//                html: true,
+//                content: function () {
+//                    var linkerHtml = '<div class="text-center text-muted"><em><span class="i18n" data-i18n-id="i18n_drag_to_link">Drag to link with other panels</span><br>';
+//                    if (panel.subscriptions.length == 1) {
+//                        linkerHtml = linkerHtml + panel.subscriptions.length + ' link established</em></div>';
+//                    } else {
+//                        linkerHtml = linkerHtml + panel.subscriptions.length + ' links established</em></div>';
+//                    }
+//                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearSearchPanelSubscriptions(\'' + panel.divElement.id + '\');"><span class="i18n" data-i18n-id="i18n_clear_links">Clear links</span></a></div>';
+//                    return linkerHtml;
+//                }
+//            });
+//            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+//        });
 
         $("#" + panel.divElement.id + "-fullTextButton").click(function (event) {
             panel.options.searchMode = 'fullText';

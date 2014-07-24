@@ -59,9 +59,9 @@ function taxonomyPanel(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
 
-        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-            $("#" + panel.divElement.id + "-linkerButton").hide();
-        }
+//        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+//            $("#" + panel.divElement.id + "-linkerButton").hide();
+//        }
 
         if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
             $("#" + panel.divElement.id + "-subscribersMarker").remove();
@@ -105,13 +105,13 @@ function taxonomyPanel(divElement, conceptId, options) {
         if (typeof i18n_panel_links == "undefined") {
             i18n_panel_links = 'Panel links';
         }
-        $("#" + panel.divElement.id + "-linkerButton").tooltip({
-            placement : 'left',
-            trigger: 'hover',
-            title: i18n_panel_links,
-            animation: true,
-            delay: 1000
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+//            placement : 'left',
+//            trigger: 'hover',
+//            title: i18n_panel_links,
+//            animation: true,
+//            delay: 1000
+//        });
 
         $("#" + panel.divElement.id + "-resetButton").click(function() {
             panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
@@ -124,24 +124,24 @@ function taxonomyPanel(divElement, conceptId, options) {
         });
 
 
-        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
-            $("#" + panel.divElement.id + "-linkerButton").popover({
-                trigger: 'manual',
-                placement: 'bottomRight',
-                html: true,
-                content: function() {
-                    linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
-                    if (panel.subscriptions.length == 1) {
-                        linkerHtml = linkerHtml + panel.subscriptions.length + ' link established</em></div>';
-                    } else {
-                        linkerHtml = linkerHtml + panel.subscriptions.length + ' links established</em></div>';
-                    }
-                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearTaxonomyPanelSubscriptions(\'' + panel.divElement.id + '\');">Clear links</a></div>';
-                    return linkerHtml;
-                }
-            });
-            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+//            $("#" + panel.divElement.id + "-linkerButton").popover({
+//                trigger: 'manual',
+//                placement: 'bottomRight',
+//                html: true,
+//                content: function() {
+//                    linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
+//                    if (panel.subscriptions.length == 1) {
+//                        linkerHtml = linkerHtml + panel.subscriptions.length + ' link established</em></div>';
+//                    } else {
+//                        linkerHtml = linkerHtml + panel.subscriptions.length + ' links established</em></div>';
+//                    }
+//                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearTaxonomyPanelSubscriptions(\'' + panel.divElement.id + '\');">Clear links</a></div>';
+//                    return linkerHtml;
+//                }
+//            });
+//            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+//        });
 
         $("#" + panel.divElement.id + "-inferredViewButton").click(function (event) {
             panel.options.selectedView = 'inferred';

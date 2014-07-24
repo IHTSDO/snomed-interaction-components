@@ -97,12 +97,27 @@
         </select>
     </div>
     <div class="form-group">
-        {{#each options.possibleSubscribers}}
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" id="{{../divElementId}}-subscribeTo-{{id}}" {{#if subscribed}}checked{{/if}}> <span class="i18n">Subscribed to {{id}}</span>
-                </label>
-            </div>
-        {{/each}}
+        <table class='table table-bordered table-hover'>
+            <thead>
+                <tr>
+                    <th>Panel</th>
+                    <th>Subscribed</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each options.possibleSubscribers}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="{{../divElementId}}-subscribeTo-{{id}}" {{#if subscribed}}checked{{/if}}> <span class="i18n"></span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
 </form>
