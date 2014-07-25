@@ -14,6 +14,9 @@ function taxonomyPanel(divElement, conceptId, options) {
     }
 
     this.markerColor = 'black';
+    if (typeof globalMarkerColor == "undefined") {
+        globalMarkerColor = 'black';
+    }
     this.type = "taxonomy";
     this.divElement = divElement;
     this.options = jQuery.extend(true, {}, options);
@@ -26,10 +29,8 @@ function taxonomyPanel(divElement, conceptId, options) {
     if (componentLoaded == false) {
         componentsRegistry.push(panel);
     }
-
+    panel.subscriptions = [];
     this.history = [];
-
-    var channel = postal.channel("taxonomySelections");
 
     this.setupCanvas = function() {
         var context = {
@@ -37,7 +38,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         };
         $(divElement).html(JST["views/taxonomyPlugin/main.hbs"](context));
         $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
-        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+//        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
         $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
@@ -58,9 +59,9 @@ function taxonomyPanel(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
 
-        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-            $("#" + panel.divElement.id + "-linkerButton").hide();
-        }
+//        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+//            $("#" + panel.divElement.id + "-linkerButton").hide();
+//        }
 
         if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
             $("#" + panel.divElement.id + "-subscribersMarker").remove();
@@ -104,13 +105,13 @@ function taxonomyPanel(divElement, conceptId, options) {
         if (typeof i18n_panel_links == "undefined") {
             i18n_panel_links = 'Panel links';
         }
-        $("#" + panel.divElement.id + "-linkerButton").tooltip({
-            placement : 'left',
-            trigger: 'hover',
-            title: i18n_panel_links,
-            animation: true,
-            delay: 1000
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+//            placement : 'left',
+//            trigger: 'hover',
+//            title: i18n_panel_links,
+//            animation: true,
+//            delay: 1000
+//        });
 
         $("#" + panel.divElement.id + "-resetButton").click(function() {
             panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
@@ -123,24 +124,24 @@ function taxonomyPanel(divElement, conceptId, options) {
         });
 
 
-        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
-            $("#" + panel.divElement.id + "-linkerButton").popover({
-                trigger: 'manual',
-                placement: 'bottomRight',
-                html: true,
-                content: function() {
-                    linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
-                    if (panel.subscribers.length == 1) {
-                        linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
-                    } else {
-                        linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
-                    }
-                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearTaxonomyPanelSubscriptions(\'' + panel.divElement.id + '\');">Clear links</a></div>';
-                    return linkerHtml;
-                }
-            });
-            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+//            $("#" + panel.divElement.id + "-linkerButton").popover({
+//                trigger: 'manual',
+//                placement: 'bottomRight',
+//                html: true,
+//                content: function() {
+//                    linkerHtml = '<div class="text-center text-muted"><em>Drag to link with other panels<br>';
+//                    if (panel.subscriptions.length == 1) {
+//                        linkerHtml = linkerHtml + panel.subscriptions.length + ' link established</em></div>';
+//                    } else {
+//                        linkerHtml = linkerHtml + panel.subscriptions.length + ' links established</em></div>';
+//                    }
+//                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearTaxonomyPanelSubscriptions(\'' + panel.divElement.id + '\');">Clear links</a></div>';
+//                    return linkerHtml;
+//                }
+//            });
+//            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+//        });
 
         $("#" + panel.divElement.id + "-inferredViewButton").click(function (event) {
             panel.options.selectedView = 'inferred';
@@ -237,15 +238,9 @@ function taxonomyPanel(divElement, conceptId, options) {
             } else if ($(event.target).hasClass("treeLabel")) {
                 var selectedId = $(event.target).attr('data-concept-id');
                 if (typeof selectedId != "undefined") {
-                    channel.publish("taxonomy.click", {
+                    channel.publish(panel.divElement.id, {
                         conceptId: selectedId,
                         source: panel.divElement.id
-                    });
-                    $.each(panel.subscribers, function(i, suscriberPanel) {
-                        if (suscriberPanel.conceptId != selectedId) {
-                            suscriberPanel.conceptId = selectedId;
-                            suscriberPanel.updateCanvas();
-                        }
                     });
                 }
             }
@@ -419,7 +414,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 $("#" + panel.divElement.id + "-subscribersMarker").show();
             }
             panel.subscribers.push(subscriber);
-            subscriber.setSubscription(panel);
+//            subscriber.setSubscription(panel);
         }
     }
 
@@ -466,6 +461,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         globalMarkerColor = returnColor;
         return returnColor;
     }
+    panel.markerColor = panel.getNextMarkerColor(globalMarkerColor);
 
     this.setupCanvas();
 //    if (!conceptId || conceptId == 138875005) {

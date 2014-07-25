@@ -38,19 +38,9 @@ function conceptDetails(divElement, conceptId, options) {
     var xhr = null;
     var xhrChildren = null;
     var conceptRequested = 0;
+    panel.markerColor = [];
+    panel.subscriptions = [];
 
-    var channel = postal.channel("taxonomySelections");
-    channel.subscribe("taxonomy.click", function(data, envelope) {
-        //console.log("taxonomy.click: " + data.conceptId + " Origin: " + data.source);
-        panel.conceptId = data.conceptId;
-        panel.updateCanvas();
-    });
-    var sechannel = postal.channel("searchSelections");
-    sechannel.subscribe("search.click", function(data, envelope) {
-        //console.log("workunit-inbox-selection: " + data.conceptId + " Origin: " + data.source);
-        panel.conceptId = data.conceptId;
-        panel.updateCanvas();
-    });
     componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
         if (field.divElement.id == panel.divElement.id) {
@@ -85,7 +75,7 @@ function conceptDetails(divElement, conceptId, options) {
 
         $(divElement).html(JST["views/conceptDetailsPlugin/main.hbs"](context));
 
-        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+//        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
         $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
@@ -104,9 +94,9 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
 
-        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-            $("#" + panel.divElement.id + "-linkerButton").hide();
-        }
+//        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+//            $("#" + panel.divElement.id + "-linkerButton").hide();
+//        }
 
         if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
             $("#" + panel.divElement.id + "-subscribersMarker").remove();
@@ -211,13 +201,13 @@ function conceptDetails(divElement, conceptId, options) {
         if (typeof i18n_panel_links == "undefined") {
             i18n_panel_links = 'Panel links';
         }
-        $("#" + panel.divElement.id + "-linkerButton").tooltip({
-            placement : 'left',
-            trigger: 'hover',
-            title: i18n_panel_links,
-            animation: true,
-            delay: 1000
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+//            placement : 'left',
+//            trigger: 'hover',
+//            title: i18n_panel_links,
+//            animation: true,
+//            delay: 1000
+//        });
 
         $("#" + panel.divElement.id + "-apply-button").click(function() {
             //console.log("apply!");
@@ -225,25 +215,40 @@ function conceptDetails(divElement, conceptId, options) {
             panel.updateCanvas();
         });
 
-        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
-            $("#" + panel.divElement.id + "-linkerButton").popover({
-                trigger: 'manual',
-                placement: 'bottomRight',
-                html: true,
-                content: function() {
-                    if (!panel.subscription) {
-                        linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
-                    } else {
-                        linkerHtml = '<div class="text-center"><a href="javascript:void(0);" onclick="cancelSubscription(\'' + panel.subscription.divElement.id + '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
-                    }
-                    return linkerHtml;
-                }
-            });
-            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+//            $("#" + panel.divElement.id + "-linkerButton").popover({
+//                trigger: 'manual',
+//                placement: 'bottomRight',
+//                html: true,
+//                content: function() {
+//                    if (panel.subscriptions.length == 0) {
+//                        linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
+//                    } else {
+//                        var linkHtml = '';
+//                        $.each(panel.subscriptions, function(i, field){
+//                            var panelLink = {};
+//                            $.each(componentsRegistry, function(i, panl){
+//                                if (panl.divElement.id == field.topic){
+//                                    panelLink = panl;
+//                                }
+//                            });
+//                            linkHtml = linkHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="\'' + panel.unsubscribe(panelLink) + '\'">Clear link with '+ field.topic +'</a><br></div>';
+//                        });
+//                        linkHtml = linkHtml + '';
+//                        linkerHtml = linkHtml;
+//                    }
+//                    return linkerHtml;
+//                }
+//            });
+//            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+//        });
 
         panel.updateCanvas();
         panel.setupOptionsPanel();
+        if (panel.subscriptions.length > 0){
+            $("#" + panel.divElement.id + "-subscribersMarker").css('color', panel.markerColor[0]);
+            $("#" + panel.divElement.id + "-subscribersMarker").show();
+        }
     }
 
     this.updateCanvas = function() {
@@ -763,8 +768,6 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
         }
-
-
     }
 
     this.stripDiagrammingMarkup = function(htmlString) {
@@ -777,135 +780,134 @@ function conceptDetails(divElement, conceptId, options) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
-    this.setSubscription = function(subscriptionPanel) {
-        panel.subscription = subscriptionPanel;
-        $("#" + panel.divElement.id + "-subscribersMarker").css('color', subscriptionPanel.markerColor);
+//    this.setSubscription = function(subscriptionPanel) {
+//        panel.subscription = subscriptionPanel;
+//        $("#" + panel.divElement.id + "-subscribersMarker").css('color', subscriptionPanel.markerColor);
+//        $("#" + panel.divElement.id + "-subscribersMarker").show();
+//    }
+
+//    this.clearSubscription = function() {
+//        panel.subscription = null;
+//        $("#" + panel.divElement.id + "-subscribersMarker").hide();
+//    }
+
+    this.removeSemtag = function(term) {
+        if (term.lastIndexOf("(") > 0) {
+            return term.substr(0, term.lastIndexOf("(")-1)
+        } else {
+            return term;
+        }
+    }
+
+    // Subsription methods
+    this.subscribe = function(panelToSubscribe) {
+        var panelId = panelToSubscribe.divElement.id;
+//        console.log('Subscribing to id: ' + panelId);
+        var subscription = channel.subscribe(panelId, function(data, envelope) {
+            panel.conceptId = data.conceptId;
+            panel.updateCanvas();
+        });
+        panel.subscriptions.push(subscription);
+        panelToSubscribe.subscriptions.push(panel.divElement.id);
+//        console.log(panel.subscriptions);
+        var alreadySubscribed = false;
+        $.each(panel.markerColor, function(i, field){
+            if (field == panelToSubscribe.markerColor){
+                alreadySubscribed = true;
+            }
+        });
+        if (!alreadySubscribed) {
+            panel.markerColor.push(panelToSubscribe.markerColor);
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+        }
+        var auxMarker = "";
+        $.each(panel.markerColor, function(i, field){
+            auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"'></i>";
+        });
+        $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
         $("#" + panel.divElement.id + "-subscribersMarker").show();
+        $("#" + panelId + "-subscribersMarker").css('color', panelToSubscribe.markerColor);
+        $("#" + panelId + "-subscribersMarker").show();
     }
 
-    this.clearSubscription = function() {
-        panel.subscription = null;
-        $("#" + panel.divElement.id + "-subscribersMarker").hide();
+    this.unsubscribe = function(panelToUnsubscribe) {
+        //subscription.unsubscribe()
+        var aux = [];
+        $.each(panelToUnsubscribe.subscriptions, function(i, field){
+            if (field != panel.divElement.id){
+                aux.push(field);
+            }
+        });
+        var unsubscribed = false;
+        var colors = [];
+        $.each(panel.markerColor, function(i, field){
+            if (field != panelToUnsubscribe.markerColor){
+                colors.push(field);
+            }else{
+                unsubscribed = true;
+            }
+        });
+        panel.markerColor = colors;
+        var auxMarker = "";
+        $("#" + panel.divElement.id + "-panelTitle").html($("#" + panel.divElement.id + "-panelTitle").html().replace(/&nbsp;/g, ''));
+        $.each(panel.markerColor, function(i, field){
+            auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"'></i>";
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+        });
+        $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
+//        console.log(colors);
+//        console.log(aux);
+        panelToUnsubscribe.subscriptions = aux;
+        if (panelToUnsubscribe.subscriptions.length == 0){
+            $("#" + panelToUnsubscribe.divElement.id + "-subscribersMarker").hide();
+        }
+        aux = [];
+        $.each(panel.subscriptions, function(i, field){
+            if (panelToUnsubscribe.divElement.id == field.topic){
+                field.unsubscribe();
+            }else{
+                aux.push(field);
+            }
+        });
+        panel.subscriptions = aux;
+        if (panel.subscriptions.length == 0){
+            $("#" + panel.divElement.id + "-subscribersMarker").hide();
+        }
     }
-
 
     this.setupOptionsPanel = function() {
-        optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
-
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displaySynonyms == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displaySynonymsOption"> <span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displaySynonymsOption" checked> <span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.showIds == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayIdsOption"> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayIdsOption" checked> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displayInactiveDescriptions == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption" checked> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.hideNotAcceptable == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.diagrammingMarkupEnabled == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption"> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Guideline colors enabled</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption" checked> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Guideline colors enabled</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_rels_view">Relationships View</span></label>';
-        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
-        if (typeof i18n_inferred == "undefined") {
-            i18n_inferred = "Inferred";
-        }
-        if (typeof i18n_stated == "undefined") {
-            i18n_stated = "Stated";
-        }
-        if (typeof i18n_all == "undefined") {
-            i18n_all = "All";
-        }
-        if (panel.options.selectedView == "stated") {
-            optionsHtml = optionsHtml + '<option value="stated" selected>' + i18n_stated + '</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="stated">' + i18n_stated + '</option>';
-        }
-        if (panel.options.selectedView == "inferred") {
-            optionsHtml = optionsHtml + '<option value="inferred" selected>' + i18n_inferred + '</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="inferred">' + i18n_inferred + '</option>';
-        }
-        if (panel.options.selectedView == "all") {
-            optionsHtml = optionsHtml + '<option value="all" selected>' + i18n_all + '</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="all">' + i18n_all + '</option>';
-        }
-        optionsHtml = optionsHtml + '</select>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">Language Refset</span></label>';
-        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-langRefsetOption">';
-        if (panel.options.langRefset == "900000000000508004") {
-            optionsHtml = optionsHtml + '<option value="900000000000508004" selected>GB Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="900000000000508004">GB Language Refset</option>';
-        }
-        if (panel.options.langRefset == "900000000000509007") {
-            optionsHtml = optionsHtml + '<option value="900000000000509007" selected>US Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="900000000000509007">US Language Refset</option>';
-        }
-        if (panel.options.langRefset == "450828004") {
-            optionsHtml = optionsHtml + '<option value="450828004" selected>ES Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="450828004">ES Language Refset</option>';
-        }
-        if (panel.options.langRefset == "554461000005103") {
-            optionsHtml = optionsHtml + '<option value="554461000005103" selected>DA Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="554461000005103">DA Language Refset</option>';
-        }
-        if (panel.options.langRefset == "46011000052107") {
-            optionsHtml = optionsHtml + '<option value="46011000052107" selected>SV Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="46011000052107">SV Language Refset</option>';
-        }
-        optionsHtml = optionsHtml + '</select>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</form>';
-        $("#" + panel.divElement.id + "-modal-body").html(optionsHtml);
+        var possibleSubscribers = [];
+        $.each(componentsRegistry, function(i, field){
+            if (field.type == "search" || field.type == "taxonomy"){
+                var object = {};
+                object.id = field.divElement.id;
+                possibleSubscribers.push(object);
+            }
+        });
+        var aux = false;
+        $.each(possibleSubscribers, function(i, field){
+            aux = false;
+            $.each(panel.subscriptions, function(j, subscription){
+                if (field.id == subscription.topic){
+                    aux = true;
+                }
+            });
+            field.subscribed = aux;
+        });
+        panel.options.possibleSubscribers = possibleSubscribers;
+        var context = {
+            options: panel.options,
+            divElementId: panel.divElement.id
+        };
+        Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            if (opts != "undefined") {
+                if(a == b)
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            }
+        });
+        $("#" + panel.divElement.id + "-modal-body").html(JST["views/conceptDetailsPlugin/options.hbs"](context));
     }
 
     this.readOptionsPanel = function() {
@@ -917,14 +919,20 @@ function conceptDetails(divElement, conceptId, options) {
         panel.options.diagrammingMarkupEnabled = $("#" + panel.divElement.id + "-diagrammingMarkupEnabledOption").is(':checked');
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
-    }
-
-    this.removeSemtag = function(term) {
-        if (term.lastIndexOf("(") > 0) {
-            return term.substr(0, term.lastIndexOf("(")-1)
-        } else {
-            return term;
-        }
+        $.each(panel.options.possibleSubscribers, function (i, field){
+            field.subscribed = $("#" + panel.divElement.id + "-subscribeTo-" + field.id).is(':checked');
+            var panelToSubscribe = {};
+            $.each(componentsRegistry, function(i, panelS){
+                if (panelS.divElement.id == field.id){
+                    panelToSubscribe = panelS;
+                }
+            });
+            if (field.subscribed){
+                panel.subscribe(panelToSubscribe);
+            }else{
+                panel.unsubscribe(panelToSubscribe);
+            }
+        });
     }
 }
 
@@ -939,19 +947,19 @@ function updateCD(divElementId, conceptId) {
     $('.history-button').popover('hide');
 }
 
-function cancelSubscription(divElementId1, divElementId2) {
-    var d1;
-    var d2;
-    $.each(componentsRegistry, function(i, field) {
-        if (field.divElement.id == divElementId1) {
-            d1 = field;
-        } else if (field.divElement.id == divElementId2) {
-            d2 = field;
-        }
-    });
-    d1.unsubscribe(d2);
-    $(d2.divElement).find('.linker-button').popover('toggle');
-}
+//function cancelSubscription(divElementId1, divElementId2) {
+//    var d1;
+//    var d2;
+//    $.each(componentsRegistry, function(i, field) {
+//        if (field.divElement.id == divElementId1) {
+//            d1 = field;
+//        } else if (field.divElement.id == divElementId2) {
+//            d2 = field;
+//        }
+//    });
+//    d1.unsubscribe(d2);
+//    $(d2.divElement).find('.linker-button').popover('toggle');
+//}
 
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');

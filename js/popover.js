@@ -196,7 +196,7 @@
         return this.each(function () {});
     };
 
-    $.fn.popover = function (method) {
+    $.fn.ppopover = function (method) {
         // Create some defaults, extending them with any options that were provided
         //var settings = $.extend({}, options);
         // Method calling logic
