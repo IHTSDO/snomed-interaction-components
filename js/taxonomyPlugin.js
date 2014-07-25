@@ -232,8 +232,8 @@ function taxonomyPanel(divElement, conceptId, options) {
                     $("#" + iconId).addClass("icon-spin");
                     panel.wrapInParents($(event.target).closest("li").attr('data-concept-id'), $(event.target).closest("li"));
                 } else if ($("#" + iconId).hasClass("glyphicon-minus")){
-                    $("#" + iconId).removeClass("glyphicon-minus");
-                    $("#" + iconId).addClass("glyphicon-chevron-right");
+//                    $("#" + iconId).removeClass("glyphicon-minus");
+//                    $("#" + iconId).addClass("glyphicon-chevron-right");
                 }
             } else if ($(event.target).hasClass("treeLabel")) {
                 var selectedId = $(event.target).attr('data-concept-id');
@@ -309,6 +309,7 @@ function taxonomyPanel(divElement, conceptId, options) {
             }
             $("#" + panel.divElement.id + "-treenode-" + conceptId).after(JST["views/taxonomyPlugin/body/children.hbs"](context));
             $(".treeButton").disableTextSelect();
+
         }).fail(function() {
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");

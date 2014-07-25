@@ -14,9 +14,48 @@ function removeHighlight(){
 
 function allowDrop(ev) {
     ev.preventDefault();
-    $(ev.toElement).closest("div").addClass("drop-highlighted");
-    $(ev.target).closest("div").addClass("drop-highlighted");
+    var aux;
+    if (navigator.userAgent.indexOf("Firefox") > -1){
+        aux = $(ev.toElement).closest("div");
+    }else{
+        aux = $(ev.target).closest("div");
+    }
+    $(aux).addClass("drop-highlighted");
 }
+
+//function iconToDrag(text){
+//    var CVS = document.createElement('canvas'),
+//        ctx = CVS.getContext('2d');
+//
+//    CVS.width  = 500;
+//    CVS.height = 500;
+//    document.body.appendChild(CVS); // Add canvas to DOM
+//
+//// GRAPHICS TO CANVAS /////
+//    function sendToCanvas( ob ){
+//        var img = new Image();
+//        img.onload = function(){
+//            ctx.drawImage(img, 0, 0);
+//            ctx.font = ob.fontWeight+' '+ob.fontSize+' '+ob.fontFamily;
+//            ctx.textAlign = 'center';
+//            ctx.fillStyle = ob.color;
+//            ctx.fillText(ob.text, CVS.width/2, CVS.height/2.5);
+//        };
+//        img.src = ob.image;
+//        return img;
+//    }
+/////////////////////////////
+//
+//// DO IT! /////////////////
+//    return sendToCanvas({
+//        image      : "http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Firefox-icon.png",
+//        text       : text,
+//        fontFamily : "Arial",
+//        fontWeight : "bold",
+//        fontSize   : "30px",
+//        color      : "rgba(0, 0, 0, 0.7)"
+//    });
+//}
 
 function drag(ev, id) {
     var dataText = "";
@@ -32,6 +71,11 @@ function drag(ev, id) {
             }
         }
     });
+//    var icon = document.createElement("img");
+//    var icon = iconToDrag(term);
+//    icon.src = "http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Firefox-icon.png";
+//    console.log(icon);
+//    ev.dataTransfer.setDragImage(icon, 0, 0);
     dataText = conceptId + "|" + term;
     ev.dataTransfer.setData("Text", dataText);
     ev.dataTransfer.setData("divElementId", id);
