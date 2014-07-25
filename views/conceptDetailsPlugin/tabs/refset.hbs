@@ -22,7 +22,7 @@
 
     <table class='table table-hover'>
         <thead><tr>
-            <th colspan="2"><span class='i18n' data-i18n-id='i18n_simple_refset_memberships'>Simple Refsets Memberships</span></th>
+            <th colspan="3"><span class='i18n' data-i18n-id='i18n_simple_refset_memberships'>Simple Refsets Memberships</span></th>
         </tr></thead>
     <tbody>
         {{#each firstMatch.memberships}}
@@ -36,7 +36,11 @@
                     {{/if_eq}}
                     {{refset.defaultTerm}}
                 </td>
-                <td>{{otherValue}}
+                <td>{{otherValue}}</td>
+                <td>
+                    <div class="phoca-flagbox" style="width:35px;height:35px">
+                        <span class="phoca-flag {{countryIcon refset.module}}"></span>
+                    </div>
                     <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                         <table border='1'>
                             <tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
@@ -57,7 +61,7 @@
 
     <table class='table table-hover'>
         <thead><tr>
-            <th colspan="2"><span class='i18n' data-i18n-id='i18n_simple_map_refset_name'>Simple Map Refset name</span></th>
+            <th colspan="3"><span class='i18n' data-i18n-id='i18n_simple_map_refset_name'>Simple Map Refset name</span></th>
         </tr></thead>
     <tbody>
 
@@ -72,7 +76,11 @@
                     {{/if_eq}}
                     {{refset.defaultTerm}}
                 </td>
-                <td>{{otherValue}}
+                <td>{{otherValue}}</td>
+                <td>
+                    <div class="phoca-flagbox" style="width:35px;height:35px">
+                        <span class="phoca-flag {{countryIcon refset.module}}"></span>
+                    </div>
                     <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                         <table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
                             <tr><td style='padding: 3px;'>{{refset.conceptId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
@@ -93,7 +101,7 @@
 
         <table class='table table-hover'>
             <thead><tr>
-                <th colspan="2"><span class='i18n' data-i18n-id='i18n_attribute_value_refset_name'>Attribute Value Refset name</span></th>
+                <th colspan="3"><span class='i18n' data-i18n-id='i18n_attribute_value_refset_name'>Attribute Value Refset name</span></th>
             </tr></thead>
         <tbody>
 
@@ -115,6 +123,10 @@
                             <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')"  data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}"><span  class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{cidValue.defaultTerm}}</td>
+                    <td>
+                        <div class="phoca-flagbox" style="width:35px;height:35px">
+                            <span class="phoca-flag {{countryIcon refset.module}}"></span>
+                        </div>
                         <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                             <table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
                                 <tr><td style='padding: 3px;'>{{refset.conceptId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
@@ -135,7 +147,7 @@
 
         <table class='table table-hover'>
             <thead><tr>
-                <th colspan="2"><span class='i18n' data-i18n-id='i18n_association_refset_name'>Association Refset name</span></th>
+                <th colspan="3"><span class='i18n' data-i18n-id='i18n_association_refset_name'>Association Refset name</span></th>
             </tr></thead>
         <tbody>
             {{#each firstMatch.memberships}}
@@ -156,6 +168,10 @@
                             <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{cidValue.defaultTerm}}</td>
+                    <td>
+                        <div class="phoca-flagbox" style="width:35px;height:35px">
+                            <span class="phoca-flag {{countryIcon refset.module}}"></span>
+                        </div>
                         <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                             <table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
                                 <tr>
