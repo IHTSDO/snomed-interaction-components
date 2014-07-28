@@ -55,8 +55,8 @@
 //                serverUrl: "http://browser.ihtsdotools.org/api",
 //                serverUrl: "http://107.170.33.116:3000/snomed",
                 serverUrl: "http://162.243.35.127:3000/snomed",
-                edition: "en-edition",
-                release: "v20140131",
+                edition: "gmdn-edition",
+                release: "v20140725",
                 showIds: false,
                 hideNotAcceptable: true,
                 displayInactiveDescriptions: false,
@@ -102,13 +102,13 @@
                 }
                 var edition = QueryString.edition;
                 if (typeof edition == "undefined" || edition == null || edition == "") {
-                    edition = "en-edition";
+                    edition = "gmdn-edition";
                 }
                 options.edition = edition;
 
                 var release = QueryString.release;
                 if (typeof release == "undefined" || release == null || release == "") {
-                    release = "v20140131";
+                    release = "v20140725";
                 }
                 options.release = release;
 
@@ -459,10 +459,10 @@
                                 <span class="i18n" data-i18n-id="i18n_release">Release</span>:&nbsp;<span id="editionLabel">International Edition 20140131</span> <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');reloadCurrentPerspective();">International Edition 20140131</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'multi-edition', 'v20140430', '900000000000509007');reloadCurrentPerspective();">Spanish Edition 20140430</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20131018', '554461000005103');reloadCurrentPerspective();">Danish Edition 20131018</a></li>
-                                <li><a href="javascript:void(0);" onclick="switchRelease('Swedish Edition 20131130', 'sv-edition', 'v20131130', '46011000052107');reloadCurrentPerspective();">Swedish Edition 20131130</a></li>
+                                <!--<li><a href="javascript:void(0);" onclick="switchRelease('International Edition 20140131', 'en-edition', 'v20140131', '900000000000509007');reloadCurrentPerspective();">International Edition 20140131</a></li>-->
+                                <!--<li><a href="javascript:void(0);" onclick="switchRelease('Spanish Edition 20140131', 'multi-edition', 'v20140430', '900000000000509007');reloadCurrentPerspective();">Spanish Edition 20140430</a></li>-->
+                                <!--<li><a href="javascript:void(0);" onclick="switchRelease('Danish Edition 20140131', 'da-edition', 'v20131018', '554461000005103');reloadCurrentPerspective();">Danish Edition 20131018</a></li>-->
+                                <!--<li><a href="javascript:void(0);" onclick="switchRelease('Swedish Edition 20131130', 'sv-edition', 'v20131130', '46011000052107');reloadCurrentPerspective();">Swedish Edition 20131130</a></li>-->
                             </ul>
                         </li>
                         <li class="navbar-text"></li>
@@ -519,6 +519,7 @@
                         <!--<a class="btn btn-primary btn-lg" role="button" onclick="testPostSvg();"><img src="img/flags/us.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Terms and UI in English</span></a>-->
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20140604', 'multi-edition', 'v20140701', '900000000000509007');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Multi-English Browser</span></a>
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('UK Edition 20140401', 'uk-edition', 'v20140401', '900000000000508004');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">UKTC English Extension</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('GMDN Edition 20140604', 'gmdn-edition', 'v20140725', '900000000000509007');switchLanguage('en', 'img/flags/us.png', true);switchToFullHeight(9999999999);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">GMDN</span></a>
                         &nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_or">or</span>&nbsp;&nbsp;
                         <a class="btn btn-primary btn-lg" role="button" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_take_tour">take the Tour...</span></a></p>
                     <p><span class="i18n" data-i18n-id="i18n_home3">Also, please provide any feedback by emailing <a href="mailto:otf@ihtsdo.org?subject=Browser Feedback" target="_blank">otf@ihtsdo.org</a>. Your feedback is essential to the evolution and improvement of this service.</span></p>

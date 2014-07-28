@@ -156,7 +156,7 @@ function taxonomyPanel(divElement, conceptId, options) {
             $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
             panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
         });
-        $("#" + panel.divElement.id + "-inferredViewButton").click();
+        //$("#" + panel.divElement.id + "-inferredViewButton").click();
     }
 
     this.setupOptionsPanel = function() {
@@ -570,21 +570,21 @@ function taxonomyPanel(divElement, conceptId, options) {
 
 
     this.setupCanvas();
-//    if (!conceptId || conceptId == 138875005) {
-//        this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
-//    } else {
-//        if (xhr != null) {
-//            xhr.abort();
-//            console.log("aborting call...");
-//        }
-//        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
-//
-//        }).done(function(result) {
-//            panel.setToConcept(conceptId, result.defaultTerm);
-//        }).fail(function() {
-//            console.log("Error");
-//        });
-//    }
+    if (!conceptId || conceptId == 138875005) {
+        this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+    } else {
+        if (xhr != null) {
+            xhr.abort();
+            console.log("aborting call...");
+        }
+        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
+
+        }).done(function(result) {
+            panel.setToConcept(conceptId, result.defaultTerm);
+        }).fail(function() {
+            console.log("Error");
+        });
+    }
 }
 
 function clearTaxonomyPanelSubscriptions(divElementId1) {
