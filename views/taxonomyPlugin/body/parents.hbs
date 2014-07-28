@@ -6,7 +6,7 @@
                     <i class='glyphicon glyphicon-chevron-up treeButton' id='{{../divElementId}}-treeicon-{{conceptId}}'></i>
                 </button>
                 {{#if_eq definitionStatus "Primitive"}}
-                    <span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;
+                    <span class="badge alert-warning" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" draggable="true" ondragstart="drag(event, '{{divElementId}}')">&nbsp;</span>&nbsp;&nbsp;
                 {{else}}
                     <span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;
                 {{/if_eq}}
@@ -15,7 +15,7 @@
                         <span class="phoca-flag {{countryIcon module}}"></span>
                     </div>
                 {{/hasCountryIcon}}
-                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" draggable="true" ondragstart="drag(event, '{{divElementId}}')">
+                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;">
                     <span data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" class="treeLabel selectable-row" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span>
                 </a>
         {{/each}}
@@ -26,16 +26,16 @@
             <li data-module="{{focusConcept.module}}" data-concept-id='{{focusConcept.conceptId}}' data-term='{{focusConcept.defaultTerm}}' class='treeLabel'>
                 <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='{{divElementId}}-treeicon-{{focusConcept.conceptId}}'></i></button>
                 {{#if_eq focusConcept.definitionStatus "Primitive"}}
-                    <span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;
+                    <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{focusConcept.module}}" data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}">&nbsp;</span>&nbsp;&nbsp;
                 {{else}}
-                    <span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;
+                    <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{focusConcept.module}}" data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}">&equiv;</span>&nbsp;&nbsp;
                 {{/if_eq}}
                 {{#hasCountryIcon focusConcept.module}}
                     <div class="phoca-flagbox" style="width:33px;height:33px">
                         <span class="phoca-flag {{countryIcon focusConcept.module}}"></span>
                     </div>
                 {{/hasCountryIcon}}
-                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable="true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{focusConcept.module}}" data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}">
+                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;">
                     <span data-module="{{focusConcept.module}}" data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}" class="treeLabel selectable-row" id="{{divElementId}}-treenode-{{focusConcept.conceptId}}">{{focusConcept.defaultTerm}}</span>
                 </a>
             </li>

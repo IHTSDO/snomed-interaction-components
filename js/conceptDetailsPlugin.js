@@ -38,8 +38,9 @@ function conceptDetails(divElement, conceptId, options) {
     var xhr = null;
     var xhrChildren = null;
     var conceptRequested = 0;
-    panel.markerColor = [];
+    panel.subscriptionsColor = [];
     panel.subscriptions = [];
+    panel.subscribers = [];
 
     componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
@@ -59,6 +60,26 @@ function conceptDetails(divElement, conceptId, options) {
     this.getDivId = function() {
         return this.divId;
     }
+
+    this.getNextMarkerColor = function(color) {
+//console.log(color);
+        var returnColor = 'black';
+        if (color == 'black') {
+            returnColor = 'green';
+        } else if (color == 'green') {
+            returnColor = 'purple';
+        } else if (color == 'purple') {
+            returnColor = 'red';
+        } else if (color == 'red') {
+            returnColor = 'blue';
+        } else if (color == 'blue') {
+            returnColor = 'green';
+        }
+//console.log(returnColor);
+        globalMarkerColor = returnColor;
+        return returnColor;
+    }
+    panel.markerColor = panel.getNextMarkerColor(globalMarkerColor);
 
     this.setupCanvas = function() {
         panel.attributesPId = panel.divElement.id + "-attributes-panel";
@@ -88,6 +109,10 @@ function conceptDetails(divElement, conceptId, options) {
 
         $("#" + panel.divElement.id + "-closeButton").click(function(event) {
             $(divElement).remove();
+        });
+
+        $("#" + panel.divElement.id + "-configButton").click(function (event) {
+            panel.setupOptionsPanel();
         });
 
         if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
@@ -212,7 +237,7 @@ function conceptDetails(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-apply-button").click(function() {
             //console.log("apply!");
             panel.readOptionsPanel();
-            panel.updateCanvas();
+//            panel.updateCanvas();
         });
 
 //        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
@@ -244,11 +269,13 @@ function conceptDetails(divElement, conceptId, options) {
 //        });
 
         panel.updateCanvas();
+        channel.publish(panel.divElement.id, {
+            term: panel.term,
+            module: panel.module,
+            conceptId: panel.conceptId,
+            source: panel.divElement.id
+        });
         panel.setupOptionsPanel();
-        if (panel.subscriptions.length > 0){
-            $("#" + panel.divElement.id + "-subscribersMarker").css('color', panel.markerColor[0]);
-            $("#" + panel.divElement.id + "-subscribersMarker").show();
-        }
     }
 
     this.updateCanvas = function() {
@@ -799,6 +826,16 @@ function conceptDetails(divElement, conceptId, options) {
         }
     }
 
+    this.loadMarkers = function (){
+        var auxMarker = "";
+        $("#" + panel.divElement.id + "-panelTitle").html($("#" + panel.divElement.id + "-panelTitle").html().replace(/&nbsp;/g, ''));
+        $.each(panel.subscriptionsColor, function(i, field){
+            auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"'></i>";
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+        });
+        $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
+    }
+
     // Subsription methods
     this.subscribe = function(panelToSubscribe) {
         var panelId = panelToSubscribe.divElement.id;
@@ -806,80 +843,81 @@ function conceptDetails(divElement, conceptId, options) {
         var subscription = channel.subscribe(panelId, function(data, envelope) {
             panel.conceptId = data.conceptId;
             panel.updateCanvas();
+//            This creates a cycle
+//            channel.publish(panel.divElement.id, {
+//                term: data.term,
+//                conceptId: data.conceptId,
+//                source: data.source
+//            });
         });
-        panel.subscriptions.push(subscription);
-        panelToSubscribe.subscriptions.push(panel.divElement.id);
-//        console.log(panel.subscriptions);
         var alreadySubscribed = false;
-        $.each(panel.markerColor, function(i, field){
+        $.each(panel.subscriptionsColor, function(i, field){
             if (field == panelToSubscribe.markerColor){
                 alreadySubscribed = true;
             }
         });
         if (!alreadySubscribed) {
-            panel.markerColor.push(panelToSubscribe.markerColor);
-            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+            panel.subscriptions.push(subscription);
+            if (panelToSubscribe.subscribers.length == 0){
+                panelToSubscribe.subscriptionsColor.push(panelToSubscribe.markerColor);
+            }
+            panelToSubscribe.subscribers.push(panel.divElement.id);
+            panel.subscriptionsColor.push(panelToSubscribe.markerColor);
         }
-        var auxMarker = "";
-        $.each(panel.markerColor, function(i, field){
-            auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"'></i>";
-        });
-        $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
         $("#" + panel.divElement.id + "-subscribersMarker").show();
-        $("#" + panelId + "-subscribersMarker").css('color', panelToSubscribe.markerColor);
         $("#" + panelId + "-subscribersMarker").show();
     }
 
     this.unsubscribe = function(panelToUnsubscribe) {
-        //subscription.unsubscribe()
-        var aux = [];
-        $.each(panelToUnsubscribe.subscriptions, function(i, field){
-            if (field != panel.divElement.id){
-                aux.push(field);
-            }
-        });
-        var unsubscribed = false;
-        var colors = [];
-        $.each(panel.markerColor, function(i, field){
+        var aux = [], colors = [], unsubscribed = true;
+        $.each(panel.subscriptionsColor, function(i, field){
             if (field != panelToUnsubscribe.markerColor){
                 colors.push(field);
             }else{
-                unsubscribed = true;
+                unsubscribed = false;
             }
         });
-        panel.markerColor = colors;
-        var auxMarker = "";
-        $("#" + panel.divElement.id + "-panelTitle").html($("#" + panel.divElement.id + "-panelTitle").html().replace(/&nbsp;/g, ''));
-        $.each(panel.markerColor, function(i, field){
-            auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"'></i>";
-            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
-        });
-        $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
-//        console.log(colors);
-//        console.log(aux);
-        panelToUnsubscribe.subscriptions = aux;
-        if (panelToUnsubscribe.subscriptions.length == 0){
-            $("#" + panelToUnsubscribe.divElement.id + "-subscribersMarker").hide();
-        }
-        aux = [];
-        $.each(panel.subscriptions, function(i, field){
-            if (panelToUnsubscribe.divElement.id == field.topic){
-                field.unsubscribe();
+        if (!unsubscribed){
+            panel.subscriptionsColor = colors;
+            colors = [];
+            $.each(panelToUnsubscribe.subscribers, function(i, field){
+                if (field != panel.divElement.id){
+                    aux.push(field);
+                }
+            });
+            panelToUnsubscribe.subscribers = aux;
+            $.each(panelToUnsubscribe.subscriptions, function(i, field){
+                colors.push(field);
+            });
+            if (panelToUnsubscribe.subscribers.length == 0){
+                if (panelToUnsubscribe.subscriptions.length == 0){
+                    $("#" + panelToUnsubscribe.divElement.id + "-subscribersMarker").hide();
+                }
             }else{
-                aux.push(field);
+                colors.push(panelToUnsubscribe.markerColor);
             }
-        });
-        panel.subscriptions = aux;
-        if (panel.subscriptions.length == 0){
-            $("#" + panel.divElement.id + "-subscribersMarker").hide();
+            panelToUnsubscribe.subscriptionsColor = colors;
+            aux = [];
+            $.each(panel.subscriptions, function(i, field){
+                if (panelToUnsubscribe.divElement.id == field.topic){
+                    field.unsubscribe();
+                }else{
+                    aux.push(field);
+                }
+            });
+            panel.subscriptions = aux;
+            if (panel.subscriptions.length == 0 && panel.subscribers.length == 0){
+                $("#" + panel.divElement.id + "-subscribersMarker").hide();
+            }
         }
     }
 
     this.setupOptionsPanel = function() {
         var possibleSubscribers = [];
         $.each(componentsRegistry, function(i, field){
-            if (field.type == "search" || field.type == "taxonomy"){
+            if (field.divElement.id != panel.divElement.id){
                 var object = {};
+                object.subscriptions = field.subscriptions;
                 object.id = field.divElement.id;
                 possibleSubscribers.push(object);
             }
@@ -893,6 +931,13 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             field.subscribed = aux;
+            aux = false;
+            $.each(field.subscriptions, function(i, subscription){
+                if (subscription.topic == panel.divElement.id){
+                    aux = true;
+                }
+            });
+            field.subscriptor = aux;
         });
         panel.options.possibleSubscribers = possibleSubscribers;
         var context = {
@@ -921,6 +966,7 @@ function conceptDetails(divElement, conceptId, options) {
         panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
         $.each(panel.options.possibleSubscribers, function (i, field){
             field.subscribed = $("#" + panel.divElement.id + "-subscribeTo-" + field.id).is(':checked');
+            field.subscriptor = $("#" + panel.divElement.id + "-subscriptor-" + field.id).is(':checked');
             var panelToSubscribe = {};
             $.each(componentsRegistry, function(i, panelS){
                 if (panelS.divElement.id == field.id){
@@ -932,6 +978,14 @@ function conceptDetails(divElement, conceptId, options) {
             }else{
                 panel.unsubscribe(panelToSubscribe);
             }
+            if (field.subscriptor){
+                panelToSubscribe.subscribe(panel);
+            }else{
+                panelToSubscribe.unsubscribe(panel);
+            }
+        });
+        $.each(componentsRegistry, function (i, field){
+            field.loadMarkers();
         });
     }
 }
@@ -942,6 +996,12 @@ function updateCD(divElementId, conceptId) {
         if (field.divElement.id == divElementId) {
             field.conceptId = conceptId;
             field.updateCanvas();
+            channel.publish(field.divElement.id, {
+                term: field.term,
+                conceptId: field.conceptId,
+                module: field.module,
+                source: field.divElement.id
+            });
         }
     });
     $('.history-button').popover('hide');

@@ -230,6 +230,9 @@
                 $('#searchDetails').split({orientation: 'horizontal', limit: 10});
                 $('#details').split({orientation: 'vertical', limit: 20});
                 switchLanguage(selectedLanguage, selectedFlag, false);
+                $.each(componentsRegistry, function (i, field){
+                    field.loadMarkers();
+                });
             }
             function switchToComparingConcepts(cd1Value, cd2Value) {
                 currentPerspective = "compare_concepts";
@@ -251,6 +254,9 @@
                 $('#comparing-concepts-wrapper').split({orientation: 'horizontal'});
                 $('#comparing-concept-details').split({orientation: 'vertical'});
                 switchLanguage(selectedLanguage, selectedFlag, false);
+                $.each(componentsRegistry, function (i, field){
+                    field.loadMarkers();
+                });
             }
             function switchToComparingTaxonomies(cd1Value, txValue1, txValue2) {
                 currentPerspective = "compare_hierarchies";
@@ -273,6 +279,9 @@
                 $('#taxonomies-canvas-wrapper').split({orientation: 'vertical'});
                 $('#search-cd-wrapper').split({orientation: 'vertical'});
                 switchLanguage(selectedLanguage, selectedFlag, false);
+                $.each(componentsRegistry, function (i, field){
+                    field.loadMarkers();
+                });
             }
             function switchToFullHeight(cd1Value, txValue1) {
                 currentPerspective = "full";
@@ -300,6 +309,9 @@
                     $('#fh-tabs li:eq(1) a').tab('show');
                     searchInPanel(spa.divElement.id, decodeURI(QueryString.searchTerm));
                 }
+                $.each(componentsRegistry, function (i, field){
+                    field.loadMarkers();
+                });
             }
             function switchToResponsiveLayout(cd1Value, cd2Value, txValue1) {
                 currentPerspective = "responsive";
@@ -324,6 +336,9 @@
                 $('#searchDetails').split({orientation: 'horizontal', limit: 10});
                 $('#details').split({orientation: 'vertical', limit: 20});
                 switchLanguage(selectedLanguage, selectedFlag, false);
+                $.each(componentsRegistry, function (i, field){
+                    field.loadMarkers();
+                });
             }
 
             function reloadCurrentPerspective() {

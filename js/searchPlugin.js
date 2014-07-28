@@ -7,7 +7,6 @@
 function searchPanel(divElement, options) {
     var thread = null;
     var panel = this;
-    this.subscribers = [];
     var lastT = "";
     var xhr = null;
     if (typeof componentsRegistry == "undefined") {
@@ -31,7 +30,9 @@ function searchPanel(divElement, options) {
     if (componentLoaded == false) {
         componentsRegistry.push(panel);
     }
+    panel.subscribers = [];
     panel.subscriptions = [];
+    panel.subscriptionsColor = [];
     this.history = [];
 
     this.setupCanvas = function () {
@@ -68,7 +69,8 @@ function searchPanel(divElement, options) {
         }
 
         $("#" + panel.divElement.id + "-configButton").click(function (event) {
-            $("#" + panel.divElement.id + "-searchConfigBar").slideToggle('slow');
+            panel.setupOptionsPanel();
+//            $("#" + panel.divElement.id + "-searchConfigBar").slideToggle('slow');
         });
 
         if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
@@ -131,11 +133,7 @@ function searchPanel(divElement, options) {
 //        });
         $("#" + panel.divElement.id + "-apply-button").click(function () {
             panel.readOptionsPanel();
-            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
-            console.log("searchTerm: " + searchTerm);
-            if (searchTerm.length > 0) {
-                panel.search(searchTerm + " ",0,100,false);
-            }
+
         });
         $("#" + panel.divElement.id + "-clearButton").click(function () {
             panel.options.semTagFilter = "none";
@@ -307,6 +305,67 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-partialMatchingButton").click();
     };
 
+    this.setupOptionsPanel = function() {
+        var possibleSubscribers = [];
+        $.each(componentsRegistry, function(i, field){
+            if (field.divElement.id != panel.divElement.id){
+                var object = {};
+                object.subscriptions = field.subscriptions;
+                object.id = field.divElement.id;
+                possibleSubscribers.push(object);
+            }
+        });
+        var aux = false;
+        $.each(possibleSubscribers, function(i, field){
+            aux = false;
+            $.each(panel.subscriptions, function(j, subscription){
+                if (field.id == subscription.topic){
+                    aux = true;
+                }
+            });
+            field.subscribed = aux;
+            aux = false;
+            $.each(field.subscriptions, function(i, subscription){
+                if (subscription.topic == panel.divElement.id){
+                    aux = true;
+                }
+            });
+            field.subscriptor = aux;
+        });
+        panel.options.possibleSubscribers = possibleSubscribers;
+        var context = {
+            options: panel.options,
+            divElementId: panel.divElement.id
+        };
+        $("#" + panel.divElement.id + "-modal-body").html(JST["views/taxonomyPlugin/options.hbs"](context));
+    }
+
+    this.readOptionsPanel = function() {
+        $.each(panel.options.possibleSubscribers, function (i, field){
+            field.subscribed = $("#" + panel.divElement.id + "-subscribeTo-" + field.id).is(':checked');
+            field.subscriptor = $("#" + panel.divElement.id + "-subscriptor-" + field.id).is(':checked');
+            var panelToSubscribe = {};
+            $.each(componentsRegistry, function(i, panelS){
+                if (panelS.divElement.id == field.id){
+                    panelToSubscribe = panelS;
+                }
+            });
+            if (field.subscribed){
+                panel.subscribe(panelToSubscribe);
+            }else{
+                panel.unsubscribe(panelToSubscribe);
+            }
+            if (field.subscriptor){
+                panelToSubscribe.subscribe(panel);
+            }else{
+                panelToSubscribe.unsubscribe(panel);
+            }
+        });
+        $.each(componentsRegistry, function (i, field){
+            field.loadMarkers();
+        });
+    }
+
     this.updateStatusFilterLabel = function() {
         if (typeof i18n_active_and_inactive == "undefined") {
             i18n_active_and_inactive = 'Active and Inactive';
@@ -396,28 +455,27 @@ function searchPanel(divElement, options) {
                                         return opts.inverse(this);
                                 }
                             });
-                            var res={};
-                            res.descriptions = [];
+                            var resDescriptions = [];
                             $.each(result.descriptions, function (i, field){
-                                var aux=field;
+                                var aux = field;
                                 if(field.active){
                                     if (panel.options.statusSearchFilter=="activeOnly"){
-                                        res.descriptions.push(aux);
+                                        resDescriptions.push(aux);
                                     }
                                     if (panel.options.statusSearchFilter=="activeAndInactive"){
-                                        res.descriptions.push(aux);
+                                        resDescriptions.push(aux);
                                     }
                                 }else{
                                     aux.danger = true;
                                     if (panel.options.statusSearchFilter=="inactiveOnly"){
-                                        res.descriptions.push(aux);
+                                        resDescriptions.push(aux);
                                     }
                                     if (panel.options.statusSearchFilter=="activeAndInactive"){
-                                        res.descriptions.push(aux);
+                                        resDescriptions.push(aux);
                                     }
                                 }
                             });
-                            result.descriptions = res.descriptions;
+                            result.descriptions = resDescriptions;
                             var context = {
                                 result: result
                             };
@@ -431,6 +489,8 @@ function searchPanel(divElement, options) {
 //                                    field.updateCanvas();
 //                                });
                                 channel.publish(panel.divElement.id, {
+                                    term: $(event.target).attr('data-term'),
+                                    module: $(event.target).attr("data-module"),
                                     conceptId: $(event.target).attr('data-concept-id'),
                                     source: panel.divElement.id
                                 });
@@ -460,12 +520,15 @@ function searchPanel(divElement, options) {
 //                                    field.updateCanvas();
 //                                });
                                 channel.publish(panel.divElement.id, {
+                                    term: $(event.target).attr('data-term'),
+                                    module: $(event.target).attr("data-module"),
                                     conceptId: $(event.target).attr('data-concept-id'),
                                     source: panel.divElement.id
                                 });
                             });
                         });
                     } else {
+                        console.log(t.substr(-2, 1));
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                         $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                         $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
@@ -577,6 +640,8 @@ function searchPanel(divElement, options) {
                         });
                         $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
                             channel.publish(panel.divElement.id, {
+                                term: $(event.target).attr("data-term"),
+                                module: $(event.target).attr("data-module"),
                                 conceptId: $(event.target).attr('data-concept-id'),
                                 source: panel.divElement.id
                             });
@@ -591,46 +656,6 @@ function searchPanel(divElement, options) {
         }
     }
 
-
-//    this.subscribe = function (subscriber) {
-//        var alreadySubscribed = false;
-//        $.each(panel.subscribers, function (i, field) {
-//            if (subscriber.divElement.id == field.divElement.id) {
-//                alreadySubscribed = true;
-//            }
-//        });
-//        if (!alreadySubscribed) {
-//            if (panel.subscribers.length == 0) {
-//                if (typeof globalMarkerColor == "undefined") {
-//                    globalMarkerColor = 'black';
-//                }
-//                panel.markerColor = panel.getNextMarkerColor(globalMarkerColor);
-//                //console.log(panel.markerColor);
-//                $("#" + panel.divElement.id + "-subscribersMarker").css('color', panel.markerColor);
-//                $("#" + panel.divElement.id + "-subscribersMarker").show();
-//            }
-//            panel.subscribers.push(subscriber);
-////            subscriber.setSubscription(panel);
-//        }
-//    }
-//
-//    this.unsubscribe = function (subscriber) {
-//        var indexToRemove = -1;
-//        var i = 0;
-//        $.each(panel.subscribers, function (i, field) {
-//            if (subscriber.divElement.id == field.divElement.id) {
-//                indexToRemove = i;
-//            }
-//            i = i + 1;
-//        });
-//        if (indexToRemove > -1) {
-//            panel.subscribers.splice(indexToRemove, 1);
-//        }
-//        if (panel.subscribers.length == 0) {
-//            $("#" + panel.divElement.id + "-subscribersMarker").hide();
-//        }
-//        subscriber.clearSubscription();
-//    }
 
     this.getNextMarkerColor = function(color) {
 //console.log(color);
@@ -652,14 +677,86 @@ function searchPanel(divElement, options) {
     }
     panel.markerColor = panel.getNextMarkerColor(globalMarkerColor);
 
-    this.unsubscribeAll = function () {
-        var subscribersClone = panel.subscribers.slice(0);
-        $.each(subscribersClone, function (i, field) {
-            panel.unsubscribe(field);
+    // Subsription methods
+    this.subscribe = function(panelToSubscribe) {
+        var panelId = panelToSubscribe.divElement.id;
+//        console.log('Subscribing to id: ' + panelId);
+        var subscription = channel.subscribe(panelId, function(data, envelope) {
+            panel.options.searchMode = "fullText";
+            panel.search(data.term, 0, 100, false);
+            $('#' + panel.divElement.id + '-searchBox').val(data.term);
         });
+        var alreadySubscribed = false;
+        $.each(panel.subscriptionsColor, function(i, field){
+            if (field == panelToSubscribe.markerColor){
+                alreadySubscribed = true;
+            }
+        });
+        if (!alreadySubscribed) {
+            panel.subscriptions.push(subscription);
+            if (panelToSubscribe.subscribers.length == 0){
+                panelToSubscribe.subscriptionsColor.push(panelToSubscribe.markerColor);
+            }
+            panelToSubscribe.subscribers.push(panel.divElement.id);
+            panel.subscriptionsColor.push(panelToSubscribe.markerColor);
+        }
+        $("#" + panel.divElement.id + "-subscribersMarker").show();
+        $("#" + panelId + "-subscribersMarker").show();
     }
 
+    this.unsubscribe = function(panelToUnsubscribe) {
+        var aux = [], colors = [], unsubscribed = true;
+        $.each(panel.subscriptionsColor, function(i, field){
+            if (field != panelToUnsubscribe.markerColor){
+                colors.push(field);
+            }else{
+                unsubscribed = false;
+            }
+        });
+        if (!unsubscribed){
+            panel.subscriptionsColor = colors;
+            colors = [];
+            $.each(panelToUnsubscribe.subscribers, function(i, field){
+                if (field != panel.divElement.id){
+                    aux.push(field);
+                }
+            });
+            panelToUnsubscribe.subscribers = aux;
+            $.each(panelToUnsubscribe.subscriptions, function(i, field){
+                colors.push(field);
+            });
+            if (panelToUnsubscribe.subscribers.length == 0){
+                if (panelToUnsubscribe.subscriptions.length == 0){
+                    $("#" + panelToUnsubscribe.divElement.id + "-subscribersMarker").hide();
+                }
+            }else{
+                colors.push(panelToUnsubscribe.markerColor);
+            }
+            panelToUnsubscribe.subscriptionsColor = colors;
+            aux = [];
+            $.each(panel.subscriptions, function(i, field){
+                if (panelToUnsubscribe.divElement.id == field.topic){
+                    field.unsubscribe();
+                }else{
+                    aux.push(field);
+                }
+            });
+            panel.subscriptions = aux;
+            if (panel.subscriptions.length == 0 && panel.subscribers.length == 0){
+                $("#" + panel.divElement.id + "-subscribersMarker").hide();
+            }
+        }
+    }
 
+    this.loadMarkers = function (){
+        var auxMarker = "";
+        $("#" + panel.divElement.id + "-panelTitle").html($("#" + panel.divElement.id + "-panelTitle").html().replace(/&nbsp;/g, ''));
+        $.each(panel.subscriptionsColor, function(i, field){
+            auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"'></i>";
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+        });
+        $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
+    }
 
     this.updateSearchLabel = function () {
         if (typeof panel.options.searchMode == "undefined") {

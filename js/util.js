@@ -27,12 +27,12 @@ function allowDrop(ev) {
 //    var CVS = document.createElement('canvas'),
 //        ctx = CVS.getContext('2d');
 //
-//    CVS.width  = 500;
-//    CVS.height = 500;
-//    document.body.appendChild(CVS); // Add canvas to DOM
+////    CVS.width  = 50;
+//    CVS.height = 30;
+////    document.body.appendChild(CVS); // Add canvas to DOM
 //
 //// GRAPHICS TO CANVAS /////
-//    function sendToCanvas( ob ){
+//    function sendToCanvas(ob){
 //        var img = new Image();
 //        img.onload = function(){
 //            ctx.drawImage(img, 0, 0);
@@ -42,12 +42,10 @@ function allowDrop(ev) {
 //            ctx.fillText(ob.text, CVS.width/2, CVS.height/2.5);
 //        };
 //        img.src = ob.image;
-//        return img;
+//        console.log(ctx);
 //    }
-/////////////////////////////
 //
-//// DO IT! /////////////////
-//    return sendToCanvas({
+//    sendToCanvas({
 //        image      : "http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Firefox-icon.png",
 //        text       : text,
 //        fontFamily : "Arial",
@@ -55,6 +53,10 @@ function allowDrop(ev) {
 //        fontSize   : "30px",
 //        color      : "rgba(0, 0, 0, 0.7)"
 //    });
+//    var icon = document.createElement("img");
+//    icon.src = CVS.toDataURL();
+////    document.body.appendChild(icon);
+//    return icon;
 //}
 
 function drag(ev, id) {
@@ -93,6 +95,10 @@ function dropC(ev, id) {
     if (typeof conceptId == "undefined"){
         conceptId = text.substr(0, i);
     }
+    var term = ev.dataTransfer.getData("term");
+    if (typeof term == "undefined"){
+        term = text.substr(i);
+    }
     var panelD = ev.dataTransfer.getData("panel");
     var divElementID = id;
     var panelAct;
@@ -117,6 +123,11 @@ function dropC(ev, id) {
         if (panelAct.conceptId != conceptId) {
             panelAct.conceptId = conceptId;
             panelAct.updateCanvas();
+            channel.publish(panelAct.divElement.id, {
+                term: term,
+                conceptId: panelAct.conceptId,
+                source: panelAct.divElement.id
+            });
         }
     }
 }
@@ -156,6 +167,11 @@ function dropT(ev, id) {
         }
         if (typeof conceptId != "undefined") {
             panel.setToConcept(conceptId, term, definitionStatus, module);
+            channel.publish(panel.divElement.id, {
+                term: term,
+                conceptId: conceptId,
+                source: panel.divElement.id
+            });
         }
     }
     if (!panelD) {
