@@ -13,7 +13,7 @@
                         <span class="phoca-flag {{countryIcon module}}"></span>
                     </div>
                 {{/hasCountryIcon}}
-                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="treeLabel selectable-row" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span></a>
+                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span class="treeLabel selectable-row" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span></a>
                 {{push conceptId}}
             </li>
         {{/if}}

@@ -181,7 +181,10 @@
                     switchToComparingTaxonomies(cdValue1,txValue1,txValue2);
                 } else if (QueryString.perspective == "responsive") {
                     currentPerspective = "responsive";
-                    switchToResponsiveLayout(cdValue1,cdValue2,txValue1)
+                    switchToResponsiveLayout(cdValue1,cdValue2,txValue1);
+                } else if (QueryString.perspective == "GMDN") {
+                    currentPerspective = "GMDN";
+                    switchToGMDN(cdValue1, txValue1, txValue2);
                 } else {
                     initialize();
                 }
@@ -204,6 +207,7 @@
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
                 $("#full-height-perspective").css({"display":"none"});
+                $("#GMDN-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("<em>...</em>");
             }
@@ -217,6 +221,7 @@
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
                 $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
+                $("#GMDN-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Browsing");
                 var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), txValue1, options);
                 var spa = new searchPanel(document.getElementById("bp-search_canvas"), options);
@@ -244,6 +249,7 @@
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
                 $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
+                $("#GMDN-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Comparing concepts");
                 var spa = new searchPanel(document.getElementById("cc-search_canvas"), options);
                 var cdPanel1 = new conceptDetails(document.getElementById("cc-cd1_canvas"), cd1Value, options);
@@ -267,6 +273,7 @@
                 $("#comparing-concepts-perspective").css({"display":"none"});
                 $("#comparing-taxonomies-perspective").css({"display":"block"});
                 $("#full-height-perspective").css({"display":"none"});
+                $("#GMDN-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Comparing taxonomies");
                 var tx1 = new taxonomyPanel(document.getElementById("ct-tx1_canvas"), txValue1, options);
@@ -293,6 +300,7 @@
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
                 $("#full-height-perspective").css({"display":"block"});
                 $("#responsive-perspective").css({"display":"none"});
+                $("#GMDN-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Full");
                 var fhOptions = jQuery.extend(true, {}, options);
                 fhOptions.subscribersMarker = false;
@@ -313,6 +321,33 @@
                     field.loadMarkers();
                 });
             }
+            function switchToGMDN (cd1Value, txValue1, txValue2){
+                currentPerspective = "GMDN";
+                componentsRegistry = [];
+
+                $("#welcome-perspective").css({"display":"none"});
+                $("#browsing-perspective").css({"display":"none"});
+                $("#comparing-concepts-perspective").css({"display":"none"});
+                $("#comparing-taxonomies-perspective").css({"display":"none"});
+                $("#full-height-perspective").css({"display":"none"});
+                $("#responsive-perspective").css({"display":"none"});
+                $("#GMDN-perspective").css({"display":"block"});
+                $("#perspectiveLabel").html("GMDN");
+                var tp1 = new taxonomyPanel(document.getElementById("gm-tx1_canvas"), txValue1, options);
+                var tp2 = new taxonomyPanel(document.getElementById("gm-tx2_canvas"), 9999999999, options);
+                var cdPanel = new conceptDetails(document.getElementById("gm-cd1_canvas"), cd1Value, options);
+//                tp1.subscribe(tp2);
+//                tp2.subscribe(tp1);
+                cdPanel.subscribe(tp1);
+                cdPanel.subscribe(tp2);
+                cdPanel.setupCanvas();
+                $('#GMDN-wrapper').split({orientation: 'vertical', limit: 20, position: '50%'});
+                $('#GMDN-details').split({orientation: 'horizontal', limit: 10});
+                switchLanguage(selectedLanguage, selectedFlag, false);
+                $.each(componentsRegistry, function (i, field){
+                    field.loadMarkers();
+                });
+            }
             function switchToResponsiveLayout(cd1Value, cd2Value, txValue1) {
                 currentPerspective = "responsive";
                 componentsRegistry = [];
@@ -323,6 +358,7 @@
                 $("#comparing-taxonomies-perspective").css({"display":"none"});
                 $("#full-height-perspective").css({"display":"none"});
                 $("#responsive-perspective").css({"display":"block"});
+                $("#GMDN-perspective").css({"display":"none"});
                 $("#perspectiveLabel").html("Responsive");
                 var tpt = new taxonomyPanel(document.getElementById("rp-taxonomy_canvas"), txValue1, options);
                 var spa = new searchPanel(document.getElementById("rp-search_canvas"), options);
@@ -359,9 +395,11 @@
                 } else if (currentPerspective == "compare_hierarchies") {
                     switchToComparingTaxonomies(cdValue1,txValue1,txValue2);
                 } else if (currentPerspective == "responsive") {
-                    switchToResponsiveLayout(cdValue1,cdValue2,txValue1)
+                    switchToResponsiveLayout(cdValue1,cdValue2,txValue1);
+                } else if (currentPerspective == "GMDN") {
+                    switchToGMDN(cdValue1, txValue1, txValue2);
                 } else {
-                    currentPerspective = "home"
+                    currentPerspective = "home";
                     initialize();
                 }
             }
@@ -471,10 +509,11 @@
                                 <span class="i18n" data-i18n-id="i18n_perspective">Perspective</span>:&nbsp;<span id="perspectiveLabel"><em>...</em></span> <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0);" onclick="switchToFullHeight(404684003);"><span class="i18n" data-i18n-id="i18n_full_perspective">Full</span></a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToFullHeight(404684003, 138875005);"><span class="i18n" data-i18n-id="i18n_full_perspective">Full</span></a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToBrowsing(404684003,404684003);"><span class="i18n" data-i18n-id="i18n_browsing_perspective">Browsing</span></a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToComparingConcepts(404684003,404684003);"><span class="i18n" data-i18n-id="i18n_comp_concepts_perspective">Comparing concepts</span></a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToComparingTaxonomies(404684003);"><span class="i18n" data-i18n-id="i18n_comp_hier_perspective">Comparing hierarchy</span></a></li>
+                                <li><a href="javascript:void(0);" onclick="switchToGMDN(404684003, 138875005);"><span class="i18n" data-i18n-id="i18n_comp_hier_perspective">GMDN</span></a></li>
                                 <li><a href="javascript:void(0);" onclick="switchToResponsiveLayout(404684003,404684003);"><span class="i18n" data-i18n-id="i18n_responsive_perspective">Responsive (tablets, phones)</span></a></li>
                             </ul>
                         </li>
@@ -517,9 +556,9 @@
                     <p><span class="i18n" data-i18n-id="i18n_home2">Please select a SNOMED CT release and a perspective from the top menu to start, or...</span></p>
                     <p>
                         <!--<a class="btn btn-primary btn-lg" role="button" onclick="testPostSvg();"><img src="img/flags/us.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Terms and UI in English</span></a>-->
-                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20140604', 'multi-edition', 'v20140701', '900000000000509007');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Multi-English Browser</span></a>
-                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('UK Edition 20140401', 'uk-edition', 'v20140401', '900000000000508004');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">UKTC English Extension</span></a>
-                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('GMDN Edition 20140604', 'gmdn-edition', 'v20140725', '900000000000509007');switchLanguage('en', 'img/flags/us.png', true);switchToFullHeight(9999999999);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">GMDN</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20140604', 'multi-edition', 'v20140701', '900000000000509007');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Multi-English Browser</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('UK Edition 20140401', 'uk-edition', 'v20140401', '900000000000508004');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">UKTC English Extension</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('GMDN Edition 20140604', 'gmdn-edition', 'v20140725', '900000000000509007');switchLanguage('en', 'img/flags/us.png', true);switchToFullHeight(9999999999, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">GMDN</span></a>
                         &nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_or">or</span>&nbsp;&nbsp;
                         <a class="btn btn-primary btn-lg" role="button" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_take_tour">take the Tour...</span></a></p>
                     <p><span class="i18n" data-i18n-id="i18n_home3">Also, please provide any feedback by emailing <a href="mailto:otf@ihtsdo.org?subject=Browser Feedback" target="_blank">otf@ihtsdo.org</a>. Your feedback is essential to the evolution and improvement of this service.</span></p>
@@ -604,6 +643,22 @@
                     </div>
                     <div class="" id="conceptDetails-fh">
                         <div class="col-md-12" id="fh-cd1_canvas" style="padding: 0px;margin: 0;"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- GMDN Perspective -->
+            <div id="GMDN-perspective" class="bperspective">
+                <div id="GMDN-wrapper" class="row" style="width:100%; height: 91%; position: absolute;">
+                    <div class="" id="GMDN-details" >
+                        <div class="col-md-6" style="padding: 0px;margin: 0;">
+                            <div class="col-md-12" id="gm-tx1_canvas" style="padding: 0px;margin: 0;"></div>
+                        </div>
+                        <div class="col-md-6" style="padding: 0px;margin: 0;">
+                            <div class="col-md-12" id="gm-tx2_canvas" style="padding: 0px;margin: 0;"></div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="col-md-12" id="gm-cd1_canvas" style="padding: 0px;margin: 0;"></div>
                     </div>
                 </div>
             </div>

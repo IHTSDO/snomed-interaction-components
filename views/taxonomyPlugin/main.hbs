@@ -1,8 +1,9 @@
 <div style='height:100%;margin: 5px; overflow:auto;' class='panel panel-default' id='{{divElementId}}-mainPanel'>
     <div ondrop="dropT(event, '{{divElementId}}')" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class='panel-heading' id='{{divElementId}}-panelHeading'>
-        <button id='{{divElementId}}-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-bookmark'></i></button>
+        <button id='{{divElementId}}-ownMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-book'></i></button>
+        <button id='{{divElementId}}-subscribersMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 15px;'><i class='glyphicon glyphicon-bookmark'></i></button>
         <div class='row'>
-            <div class='col-md-6' id='{{divElementId}}-panelTitle'>&nbsp&nbsp&nbsp<strong><span class='i18n' data-i18n-id='i18n_taxonomy'>Taxonomy</span></strong></div>
+            <div class='col-md-6' id='{{divElementId}}-panelTitle'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong><span class='i18n' data-i18n-id='i18n_taxonomy'>Taxonomy</span></strong></div>
             <div class='col-md-6 text-right'>
                 <button id='{{divElementId}}-resetButton' class='btn btn-link' data-panel='{{divElementId}}' style='padding:2px'><i class='glyphicon glyphicon-repeat'></i></button>
                 <!--<button id='{{divElementId}}-linkerButton' draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='btn btn-link linker-button' data-panel='{{divElementId}}' style='padding:2px'><i class='glyphicon glyphicon-link'></i></button>-->

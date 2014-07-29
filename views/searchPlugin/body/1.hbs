@@ -1,9 +1,9 @@
 {{#each result.matches}}
     <tr class='resultRow selectable-row{{#if_eq active false}}danger{{else}}{{#if_eq conceptActive false}}danger{{/if_eq}}{{/if_eq}}'>
         <td class='col-md-7'>
-            <div>
-                <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>&nbsp;</span>
-                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
+            <div class='result-item' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>&nbsp;</span>
+                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;' draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
                 <div class="phoca-flagbox" style="width:35px;height:35px">
                     <span class="phoca-flag {{countryIcon module}}"></span>
                 </div>

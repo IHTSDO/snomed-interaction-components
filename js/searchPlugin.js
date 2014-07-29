@@ -303,6 +303,7 @@ function searchPanel(divElement, options) {
             panel.updateStatusFilterLabel();
         });
         $("#" + panel.divElement.id + "-partialMatchingButton").click();
+        $("#" + panel.divElement.id + "-ownMarker").css('color', panel.markerColor);
     };
 
     this.setupOptionsPanel = function() {
@@ -677,7 +678,7 @@ function searchPanel(divElement, options) {
     }
     panel.markerColor = panel.getNextMarkerColor(globalMarkerColor);
 
-    // Subsription methods
+    // Subscription methods
     this.subscribe = function(panelToSubscribe) {
         var panelId = panelToSubscribe.divElement.id;
 //        console.log('Subscribing to id: ' + panelId);
@@ -694,12 +695,10 @@ function searchPanel(divElement, options) {
         });
         if (!alreadySubscribed) {
             panel.subscriptions.push(subscription);
-            if (panelToSubscribe.subscribers.length == 0){
-                panelToSubscribe.subscriptionsColor.push(panelToSubscribe.markerColor);
-            }
             panelToSubscribe.subscribers.push(panel.divElement.id);
             panel.subscriptionsColor.push(panelToSubscribe.markerColor);
         }
+        $("#" + panelId + "-ownMarker").show();
         $("#" + panel.divElement.id + "-subscribersMarker").show();
         $("#" + panelId + "-subscribersMarker").show();
     }
@@ -749,13 +748,35 @@ function searchPanel(divElement, options) {
     }
 
     this.loadMarkers = function (){
-        var auxMarker = "";
-        $("#" + panel.divElement.id + "-panelTitle").html($("#" + panel.divElement.id + "-panelTitle").html().replace(/&nbsp;/g, ''));
-        $.each(panel.subscriptionsColor, function(i, field){
-            auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"'></i>";
-            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+        var auxMarker = "", right = 0, top = 0, aux = false, visible = false;
+        $.each(componentsRegistry, function(i, field){
+            var panelId = field.divElement.id;
+            if ($("#" + panelId + "-subscribersMarker").is(':visible')){
+                visible = true;
+            }
         });
-        $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
+        if (panel.subscribers.length == 0){
+            right = 14;
+            $("#" + panel.divElement.id + "-ownMarker").hide();
+        }else{
+            if (!visible){
+                $("#" + panel.divElement.id + "-ownMarker").hide();
+            }
+            aux = true;
+        }
+        if ($("#" + panel.divElement.id + "-subscribersMarker").is(':visible')){
+            $("#" + panel.divElement.id + "-panelTitle").html($("#" + panel.divElement.id + "-panelTitle").html().replace(/&nbsp;/g, ''));
+            if (aux){
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+            }
+            $.each(panel.subscriptionsColor, function(i, field){
+                auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"; top:" + top + "px; right: " + right + "px;'></i>";
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+                top = top + 5;
+                right = right + 10;
+            });
+            $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
+        }
     }
 
     this.updateSearchLabel = function () {
