@@ -138,6 +138,7 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-clearButton").click(function () {
             panel.options.semTagFilter = "none";
             panel.options.langFilter = "none";
+            panel.options.moduleFilter ="none";
             $('#' + panel.divElement.id + '-searchBox').val('');
             $('#' + panel.divElement.id + '-searchFilters').html("");
             $('#' + panel.divElement.id + '-resultsTable').html("");
@@ -401,6 +402,9 @@ function searchPanel(divElement, options) {
         if (typeof panel.options.langFilter == "undefined") {
             panel.options.langFilter = "none";
         }
+        if (typeof panel.options.moduleFilter == "undefined"){
+            panel.options.moduleFilter = "none";
+        }
 
         if (typeof forceSearch == "undefined") {
             forceSearch = false;
@@ -420,6 +424,7 @@ function searchPanel(divElement, options) {
                 if (t != lastT) {
                     panel.options.semTagFilter = "none";
                     panel.options.langFilter = "none";
+                    panel.options.moduleFilter ="none";
                 }
                 lastT = t;
                 //console.log(t);
@@ -448,6 +453,7 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
                         }).done(function (result) {
+                            console.log(result.filters);
                             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                                 if (opts != "undefined") {
                                     if(a == b)
@@ -529,7 +535,7 @@ function searchPanel(divElement, options) {
                             });
                         });
                     } else {
-                        console.log(t.substr(-2, 1));
+//                        console.log(t.substr(-2, 1));
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                         $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                         $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
@@ -546,6 +552,9 @@ function searchPanel(divElement, options) {
                     if (panel.options.langFilter != "none") {
                         searchUrl = searchUrl + "&langFilter=" + panel.options.langFilter;
                     }
+                    if (panel.options.moduleFilter != 'none'){
+                        searchUrl = searchUrl + "&moduleFilter=" + panel.options.moduleFilter;
+                    }
                     xhr = $.getJSON(searchUrl,function (result) {
 
                     }).done(function (result) {
@@ -560,6 +569,12 @@ function searchPanel(divElement, options) {
                                     return opts.inverse(this);
                             }
                         });
+                        Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                            if (countryIcons[moduleId])
+                                return opts.fn(this);
+                            else
+                                return opts.inverse(this);
+                        });
                         var context = {
                             result: result,
                             elapsed: elapsed,
@@ -569,6 +584,10 @@ function searchPanel(divElement, options) {
                         $('#' + panel.divElement.id + '-searchBar').html(JST["views/searchPlugin/body/bar.hbs"](context));
                         $("#" + panel.divElement.id + '-searchBar').find('.semtag-link').click(function (event) {
                             panel.options.semTagFilter = $(event.target).attr('data-semtag');
+                            panel.search(t, 0, returnLimit, true);
+                        });
+                        $("#" + panel.divElement.id + '-searchBar').find('.module-link').click(function (event) {
+                            panel.options.moduleFilter = $(event.target).attr('data-module');
                             panel.search(t, 0, returnLimit, true);
                         });
                         $("#" + panel.divElement.id + '-searchBar').find('.lang-link').click(function (event) {
@@ -581,6 +600,10 @@ function searchPanel(divElement, options) {
                         });
                         $("#" + panel.divElement.id + '-searchBar').find('.remove-lang').click(function (event) {
                             panel.options.langFilter = "none";
+                            panel.search(t, 0, returnLimit, true);
+                        });
+                        $("#" + panel.divElement.id + '-searchBar').find('.remove-module').click(function (event) {
+                            panel.options.moduleFilter = "none";
                             panel.search(t, 0, returnLimit, true);
                         });
                         if (result.details) {

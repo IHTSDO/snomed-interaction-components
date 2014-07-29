@@ -13,6 +13,10 @@
 {{else}}
     &nbsp;&nbsp;<span class='label label-danger'>{{options.langFilter}}&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>&nbsp;&nbsp;
 {{/if_eq}}
+{{#if_eq options.moduleFilter "none"}}
+{{else}}
+    &nbsp;&nbsp;<span class='label label-danger'>{{options.moduleFilter}}&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-module'>&times;</a></span>&nbsp;&nbsp;
+{{/if_eq}}
 </span>
 <div id='{{divElementId}}-searchFiltersPanel' class='panel-collapse collapse'>
     <div class='tree'>
@@ -30,6 +34,21 @@
                 <ul>
                     {{#each result.filters.semTag}}
                         <li><a class='semtag-link' href='javascript:void(0);' data-semtag='{{@key}}'>{{@key}} ({{this}})</a></li>
+                    {{/each}}
+                </ul>
+            </li>
+        </ul>
+        <ul>
+            <li><a>Filter results by Module</a>
+                <ul>
+                    {{#each result.filters.module}}
+                        <li><a class='module-link' href='javascript:void(0);' data-module='{{@key}}'>{{@key}} ({{this}})
+                        {{#hasCountryIcon @key}}
+                            <div class="phoca-flagbox" style="width:26px;height:26px">
+                                <span class="phoca-flag {{countryIcon @key}}"></span>
+                            </div>
+                        {{/hasCountryIcon}}
+                        </a></li>
                     {{/each}}
                 </ul>
             </li>

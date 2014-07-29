@@ -350,7 +350,8 @@ function taxonomyPanel(divElement, conceptId, options) {
             //console.log(JSON.stringify(listIconIds));
             var context = {
                 result: result,
-                divElementId: panel.divElement.id
+                divElementId: panel.divElement.id,
+                selectedView: panel.options.selectedView
             };
             Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
                 if (countryIcons[moduleId])
