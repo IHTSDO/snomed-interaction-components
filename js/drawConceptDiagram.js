@@ -139,20 +139,20 @@ function drawConceptDiagram (concept, div, options) {
     $("#" + div.attr('id') + "-download-button").unbind().click(function(event) {
         $("#" + div.attr('id') + "-download-button").hide();
         $("#" + div.attr('id') + "-progress-button").show();
-        $.post("http://107.170.33.116:3000/util/svg2png", { svgContent: svgCode}).done(function( response ) {
+        $.post(options.serverUrl.replace("snomed", "") + "util/svg2png", { svgContent: svgCode}).done(function( response ) {
             //console.log(response);
             $("#" + div.attr('id') + "-progress-button").hide();
             $("#" + div.attr('id') + "-png-button").show();
             $("#" + div.attr('id') + "-svg-button").show();
 
             $("#" + div.attr('id') + "-png-button").unbind().click(function(event) {
-                window.open('http://107.170.33.116:3000/' + response);
+                window.open(options.serverUrl.replace("snomed", "") + response);
             });
             $("#" + div.attr('id') + "-svg-button").unbind().click(function(event) {
-                window.open('http://107.170.33.116:3000/' + response.replace(".png", ".svg"));
+                window.open(options.serverUrl.replace("snomed", "") + response.replace(".png", ".svg"));
             });
 
-            //$(div).prepend($("<a href-lang='image/svg+xml' href='http://107.170.33.116:3000/"+response+"' download='diagram.png'>Download as PNG</a>&nbsp;&nbsp;&nbsp;"));
+            //$(div).prepend($("<a href-lang='image/svg+xml' href=options.serverUrl.replace("snomed", "")+response+"' download='diagram.png'>Download as PNG</a>&nbsp;&nbsp;&nbsp;"));
         }).fail(function() {
             console.log("Error");
         });
