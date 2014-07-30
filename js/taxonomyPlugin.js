@@ -44,6 +44,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-resetButton").disableTextSelect();
 //        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
+        $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
         $("#" + panel.divElement.id + "-collapseButton").disableTextSelect();
         $("#" + panel.divElement.id + "-expandButton").disableTextSelect();
@@ -97,9 +98,23 @@ function taxonomyPanel(divElement, conceptId, options) {
             animation: true,
             delay: 1000
         });
+
+        if (typeof i18n_history == "undefined") {
+            i18n_history = 'History';
+        }
+
+        $("#" + panel.divElement.id + "-historyButton").tooltip({
+            placement : 'left',
+            trigger: 'hover',
+            title: i18n_history,
+            animation: true,
+            delay: 1000
+        });
+
         if (typeof i18n_reset == "undefined") {
             i18n_reset = 'Reset';
         }
+
         $("#" + panel.divElement.id + "-resetButton").tooltip({
             placement : 'left',
             trigger: 'hover',
@@ -129,7 +144,58 @@ function taxonomyPanel(divElement, conceptId, options) {
 //            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
         });
 
-
+        $("#" + panel.divElement.id + "-historyButton").click(function (event) {
+            $("#" + panel.divElement.id + "-historyButton").popover({
+                trigger: 'manual',
+                placement: 'bottomRight',
+                html: true,
+                content: function () {
+                    historyHtml = '<div style="height:100px;overflow:auto;">';
+                    if (typeof i18n_no_terms == "undefined") {
+                        i18n_no_terms = "No terms"
+                    }
+                    if (panel.history.length == 0) {
+                        historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em>'+ i18n_no_terms + '</span>...</em></div>';
+                    }
+                    historyHtml = historyHtml + '<table>';
+                    var reversedHistory = panel.history.slice(0);
+                    reversedHistory.reverse();
+                    //console.log(JSON.stringify(reversedHistory));
+                    $.each(reversedHistory, function (i, field) {
+                        var d = new Date();
+                        var curTime = d.getTime();
+                        var ago = curTime - field.time;
+                        var agoString = "";
+                        if (ago < (1000 * 60)) {
+                            if (Math.round((ago / 1000)) == 1) {
+                                agoString = Math.round((ago / 1000)) + ' second ago';
+                            } else {
+                                agoString = Math.round((ago / 1000)) + ' seconds ago';
+                            }
+                        } else if (ago < (1000 * 60 * 60)) {
+                            if (Math.round((ago / 1000) / 60) == 1) {
+                                agoString = Math.round((ago / 1000) / 60) + ' minute ago';
+                            } else {
+                                agoString = Math.round((ago / 1000) / 60) + ' minutes ago';
+                            }
+                        } else if (ago < (1000 * 60 * 60 * 60)) {
+                            if (Math.round(((ago / 1000) / 60) / 60) == 1) {
+                                agoString = Math.round(((ago / 1000) / 60) / 60) + ' hour ago';
+                            } else {
+                                agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
+                            }
+                        }
+                        historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="historyInTaxPanel(\'' + panel.divElement.id + '\',\'' + field.conceptId + '\');">' + field.term + '</a>';
+                        historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
+                        historyHtml = historyHtml + '</td></tr>';
+                    });
+                    historyHtml = historyHtml + '</table>';
+                    historyHtml = historyHtml + '</div>';
+                    return historyHtml;
+                }
+            });
+            $("#" + panel.divElement.id + "-historyButton").popover('toggle');
+        });
 //        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
 //            $("#" + panel.divElement.id + "-linkerButton").popover({
 //                trigger: 'manual',
@@ -270,9 +336,12 @@ function taxonomyPanel(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
         $("#" + panel.divElement.id + "-panelBody").dblclick(function(event) {
             if ($(event.target).hasClass("treeLabel")) {
+                var d = new Date();
+                var time = d.getTime();
                 var selectedModule = $(event.target).attr('data-module');
                 var selectedId = $(event.target).attr('data-concept-id');
                 var selectedLabel = $(event.target).attr('data-term');
+                panel.history.push({term: selectedLabel, conceptId: selectedId, time: time});
                 if (typeof selectedId != "undefined") {
                     $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
                         // done
@@ -509,6 +578,12 @@ function taxonomyPanel(divElement, conceptId, options) {
         $("#" + panelId + "-subscribersMarker").show();
     }
 
+    this.refsetSubscribe = function(refsetId){
+        channel.subscribe("refsetSubscription-" + refsetId, function(data, envelope){
+            panel.setToConcept(data.conceptId);
+        });
+    }
+
     this.unsubscribe = function(panelToUnsubscribe) {
         var aux = [], colors = [], unsubscribed = true;
         $.each(panel.subscriptionsColor, function(i, field){
@@ -635,6 +710,17 @@ function clearTaxonomyPanelSubscriptions(divElementId1) {
     $("#" + divElementId1).find('.linker-button').popover('toggle');
 }
 
+function historyInTaxPanel(divElementId, conceptId) {
+    $.each(componentsRegistry, function (i, field) {
+    //console.log(field.divElement.id + ' == ' + divElementId);
+        if (field.divElement.id == divElementId) {
+//            $('#' + divElementId + '-searchBox').val(searchTerm);
+//            field.search(searchTerm,0,100,false);
+            field.setToConcept(conceptId);
+        }
+    });
+    $('.history-button').popover('hide');
+}
 
 (function($) {
     $.fn.addTaxonomy = function(options) {

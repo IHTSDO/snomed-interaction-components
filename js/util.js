@@ -73,9 +73,9 @@ function drag(ev, id) {
             }
         }
     });
-//    var icon = document.createElement("img");
+    var icon = document.createElement("img");
 //    var icon = iconToDrag(term);
-//    icon.src = "http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Firefox-icon.png";
+    icon.src = "http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Firefox-icon.png";
 //    console.log(icon);
 //    ev.dataTransfer.setDragImage(icon, 0, 0);
     dataText = conceptId + "|" + term;
@@ -166,6 +166,9 @@ function dropT(ev, id) {
             panel.options.selectedView = "inferred";
         }
         if (typeof conceptId != "undefined") {
+            var d = new Date();
+            var time = d.getTime();
+            panel.history.push({term: term, conceptId: conceptId, time: time});
             panel.setToConcept(conceptId, term, definitionStatus, module);
             channel.publish(panel.divElement.id, {
                 term: term,

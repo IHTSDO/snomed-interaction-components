@@ -335,13 +335,17 @@
                 $("#perspectiveLabel").html("GMDN");
                 var tp1 = new taxonomyPanel(document.getElementById("gm-tx1_canvas"), txValue1, options);
                 var tp2 = new taxonomyPanel(document.getElementById("gm-tx2_canvas"), 9999999999, options);
+                var sp = new searchPanel(document.getElementById("gm-search_canvas"), options);
                 var cdPanel = new conceptDetails(document.getElementById("gm-cd1_canvas"), cd1Value, options);
 //                tp1.subscribe(tp2);
 //                tp2.subscribe(tp1);
+                tp2.refsetSubscribe("467614008");
                 cdPanel.subscribe(tp1);
                 cdPanel.subscribe(tp2);
+                cdPanel.subscribe(sp);
                 cdPanel.setupCanvas();
-                $('#GMDN-wrapper').split({orientation: 'vertical', limit: 20, position: '50%'});
+                $('#GMDN-wrapper').split({orientation: 'vertical', limit: 20, position: '33%'});
+                $('#GMDN-wrapper2').split({orientation:'vertical', limit: 20, position: '50%'});
                 $('#GMDN-details').split({orientation: 'horizontal', limit: 10});
                 switchLanguage(selectedLanguage, selectedFlag, false);
                 $.each(componentsRegistry, function (i, field){
@@ -657,7 +661,8 @@
                             <div class="col-md-12" id="gm-tx2_canvas" style="padding: 0px;margin: 0;"></div>
                         </div>
                     </div>
-                    <div class="">
+                    <div id="GMDN-wrapper2">
+                        <div class="col-md-12" id="gm-search_canvas" style="padding: 0px;margin: 0;"></div>
                         <div class="col-md-12" id="gm-cd1_canvas" style="padding: 0px;margin: 0;"></div>
                     </div>
                 </div>

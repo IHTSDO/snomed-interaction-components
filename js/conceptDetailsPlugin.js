@@ -708,6 +708,16 @@ function conceptDetails(divElement, conceptId, options) {
             };
             $('#refsets-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/refset.hbs"](context));
 
+            $.each($("#refsets-" + panel.divElement.id).find('.refset-simplemap'), function(i, field){
+//                console.log(field);
+//                console.log($(field).attr('data-refsetId'));
+                if ($(field).attr('data-refsetId') == "467614008"){
+                    channel.publish("refsetSubscription-467614008", {
+                        conceptId: $(field).attr('data-conceptId')
+                    });
+                }
+            });
+
             if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
                 $("#diagram-canvas-" + panel.divElement.id).html("");
                 drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
