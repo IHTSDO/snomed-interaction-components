@@ -815,8 +815,10 @@ function conceptDetails(divElement, conceptId, options) {
 
     this.loadMembers = function(returnLimit, skipTo){
         var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members?limit=" + returnLimit;
-        if (skipTo){
+        if (skipTo > 0){
             membersUrl = membersUrl + "&skip=" + skipTo;
+        }else{
+            $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><i class='glyphicon glyphicon-refresh icon-spin'></i></td></tr>");
         }
 //        console.log(membersUrl);
         $.getJSON(membersUrl, function(result){

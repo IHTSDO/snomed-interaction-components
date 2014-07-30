@@ -9,7 +9,10 @@
 <tbody>
     {{#each result.members}}
         <tr>
-            <td>{{defaultTerm}}</td>
+            <td>
+                <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;</span>
+                {{defaultTerm}}
+            </td>
             <td>{{conceptId}}</td>
         </tr>
     {{/each}}

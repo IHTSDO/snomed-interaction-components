@@ -23,41 +23,17 @@ function allowDrop(ev) {
     $(aux).addClass("drop-highlighted");
 }
 
-//function iconToDrag(text){
-//    var CVS = document.createElement('canvas'),
-//        ctx = CVS.getContext('2d');
-//
-////    CVS.width  = 50;
-//    CVS.height = 30;
-////    document.body.appendChild(CVS); // Add canvas to DOM
-//
-//// GRAPHICS TO CANVAS /////
-//    function sendToCanvas(ob){
-//        var img = new Image();
-//        img.onload = function(){
-//            ctx.drawImage(img, 0, 0);
-//            ctx.font = ob.fontWeight+' '+ob.fontSize+' '+ob.fontFamily;
-//            ctx.textAlign = 'center';
-//            ctx.fillStyle = ob.color;
-//            ctx.fillText(ob.text, CVS.width/2, CVS.height/2.5);
-//        };
-//        img.src = ob.image;
-//        console.log(ctx);
-//    }
-//
-//    sendToCanvas({
-//        image      : "http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Firefox-icon.png",
-//        text       : text,
-//        fontFamily : "Arial",
-//        fontWeight : "bold",
-//        fontSize   : "30px",
-//        color      : "rgba(0, 0, 0, 0.7)"
-//    });
-//    var icon = document.createElement("img");
-//    icon.src = CVS.toDataURL();
-////    document.body.appendChild(icon);
-//    return icon;
-//}
+function iconToDrag(text){
+    var CVS = document.createElement('canvas'),
+        ctx = CVS.getContext('2d');
+    CVS.width  = 300;
+    CVS.height = 300;
+    ctx.font = "15px sans-serif";
+    ctx.strokeText(text, 10, 20);
+    var icon = document.createElement("img");
+    icon.src = CVS.toDataURL();
+    return icon;
+}
 
 function drag(ev, id) {
     var dataText = "";
@@ -73,11 +49,11 @@ function drag(ev, id) {
             }
         }
     });
-    var icon = document.createElement("img");
-//    var icon = iconToDrag(term);
-    icon.src = "http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Firefox-icon.png";
+//    var icon = document.createElement("img");
+    var icon = iconToDrag(term);
+//    icon.src = "http://icons.iconarchive.com/icons/media-design/hydropro/512/HP-Firefox-icon.png";
 //    console.log(icon);
-//    ev.dataTransfer.setDragImage(icon, 0, 0);
+    ev.dataTransfer.setDragImage(icon, 0, 0);
     dataText = conceptId + "|" + term;
     ev.dataTransfer.setData("Text", dataText);
     ev.dataTransfer.setData("divElementId", id);
