@@ -1,5 +1,5 @@
 <div style='margin: 5px; height:98%; overflow:auto;' class='panel panel-default'>
-    <div class='panel-heading' id='{{divElementId}}-panelHeading'>
+    <div class='panel-heading' id='{{divElementId}}-panelHeading' ondrop="dropC(event, '{{divElementId}}')" ondragleave="removeHighlight();" ondragover="allowDrop(event)">
         <button id='{{divElementId}}-ownMarker' class='btn btn-link btn-lg' style='padding: 2px; position: absolute;top: 1px;left: 0px;'><i class='glyphicon glyphicon-book'></i></button>
         <button id='{{divElementId}}-subscribersMarker' class='btn btn-link btn-lg' style='padding:2px;position: absolute;top: 1px;'><i class='glyphicon glyphicon-bookmark'></i></button>
         <div class='row'>
@@ -21,6 +21,7 @@
             <li><a href="#details-{{divElementId}}" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;"><span class="i18n" data-i18n-id="i18n_details">Details</span></a></li>
             <li id="diagram-tab"><a href="#diagram-{{divElementId}}" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;" id="diagram-tab-link-{{divElementId}}"><span class="i18n" data-i18n-id="i18n_diagram">Diagram</span></a></li>
             <li><a href="#refsets-{{divElementId}}" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;"><span class="i18n" data-i18n-id="i18n_refsets">Refsets</span></a></li>
+            <li id="{{divElementId}}-members-tab"><a href="#members-{{divElementId}}" data-toggle="tab" style="padding-top: 3px; padding-bottom:3px;"><span class="i18n" data-i18n-id="i18n_members">Members</span></a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content" id="details-tab-content-{{divElementId}}">
@@ -46,6 +47,11 @@
                 <div id="diagram-canvas-{{divElementId}}"></div>
             </div>
             <div class="tab-pane fade" id="refsets-{{divElementId}}">
+            </div>
+            <div class="tab-pane fade" id="members-{{divElementId}}">
+                <br>
+                <table id="members-{{divElementId}}-resultsTable" class="table table-hover table-bordered">
+                </table>
             </div>
         </div>
     </div>

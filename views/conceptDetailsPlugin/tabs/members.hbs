@@ -1,0 +1,32 @@
+{{#if_eq skipTo 0}}
+    <thead>
+        <tr>
+            <th>Term</th>
+            <th>ConceptId</th>
+        </tr>
+    </thead>
+{{/if_eq}}
+<tbody>
+    {{#each result.members}}
+        <tr>
+            <td>{{defaultTerm}}</td>
+            <td>{{conceptId}}</td>
+        </tr>
+    {{/each}}
+
+    <tr class="more-row">
+        {{#if_eq remaining 0}}
+            <td class="text-muted" class="text-center" colspan="2">All members shown</td>
+        {{else}}
+            {{#if_gr remaining returnLimit}}
+                <td class="text-center" id="{{divElementId}}-moreMembers" colspan="2">
+                    <button class='btn btn-link' id='{{divElementId}}-moreMembers'>Load {{returnLimit}} more ({{remaining}} remaining)</button>
+                </td>
+            {{else}}
+                <td class="text-center" colspan="2">
+                    <button class='btn btn-link' id='{{divElementId}}-moreMembers'>Load {{remaining}} more ({{remaining}} remaining)</button>
+                </td>
+            {{/if_gr}}
+        {{/if_eq}}
+    </tr>
+</tbody>

@@ -462,6 +462,12 @@ function searchPanel(divElement, options) {
                                         return opts.inverse(this);
                                 }
                             });
+                            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                                if (countryIcons[moduleId])
+                                    return opts.fn(this);
+                                else
+                                    return opts.inverse(this);
+                            });
                             var resDescriptions = [];
                             $.each(result.descriptions, function (i, field){
                                 var aux = field;
@@ -514,6 +520,12 @@ function searchPanel(divElement, options) {
                                     else
                                         return opts.inverse(this);
                                 }
+                            });
+                            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                                if (countryIcons[moduleId])
+                                    return opts.fn(this);
+                                else
+                                    return opts.inverse(this);
                             });
                             var context = {
                                 result: result
@@ -646,6 +658,12 @@ function searchPanel(divElement, options) {
                                 else
                                     return opts.inverse(this);
                             }
+                        });
+                        Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                            if (countryIcons[moduleId])
+                                return opts.fn(this);
+                            else
+                                return opts.inverse(this);
                         });
                         var context = {
                             result: result,

@@ -283,6 +283,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.updateCanvas = function() {
+//        $("#members-" + panel.divElement.id).html("");
         $('.more-fields-button').popover('hide');
         if (conceptRequested == panel.conceptId) {
             return;
@@ -763,6 +764,7 @@ function conceptDetails(divElement, conceptId, options) {
             }
             conceptRequested = 0;
 
+//            membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members";
 
         }).fail(function() {
             $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
@@ -797,8 +799,67 @@ function conceptDetails(divElement, conceptId, options) {
             }).fail(function() {
                 $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             });
-
         }
+        panel.loadMembers(50, 0);
+    }
+
+    this.loadMembers = function(returnLimit, skipTo){
+        var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members?limit=" + returnLimit;
+        if (skipTo){
+            membersUrl = membersUrl + "&skip=" + skipTo;
+        }
+//        console.log(membersUrl);
+        $.getJSON(membersUrl, function(result){
+
+        }).done(function(result){
+//            console.log(result);
+            var remaining;
+            if (result.details.total > (skipTo + returnLimit)){
+                remaining = result.details.total - (skipTo + returnLimit);
+            }else{
+                remaining = result.details.total;
+            }
+            var context = {
+                result: result,
+                returnLimit: returnLimit,
+                remaining: remaining,
+                divElementId: panel.divElement.id,
+                skipTo: skipTo
+            };
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if (a){
+                    if(a > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            if (result.details.total != 0){
+                $("#" + panel.divElement.id + "-moreMembers").remove();
+                $("#members-" + panel.divElement.id + "-resultsTable").find(".more-row").remove();
+                if (skipTo == 0) {
+                    $('#members-' + panel.divElement.id + "-resultsTable").html(JST["views/conceptDetailsPlugin/tabs/members.hbs"](context));
+                }else{
+                    $('#members-' + panel.divElement.id + "-resultsTable").append(JST["views/conceptDetailsPlugin/tabs/members.hbs"](context));
+                }
+                $("#" + panel.divElement.id + "-moreMembers").click(function(){
+                    $("#" + panel.divElement.id + "-moreMembers").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                    panel.loadMembers(returnLimit, skipTo + 50);
+                });
+            }else{
+                $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'>This concept has no members</td></tr>");
+            }
+        }).fail(function(){
+            $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'>This concept has no members</td></tr>");
+        });
     }
 
     this.stripDiagrammingMarkup = function(htmlString) {
@@ -1069,6 +1130,3 @@ $(document).keypress(function(event) {
     }
 }
 );
-
-
-

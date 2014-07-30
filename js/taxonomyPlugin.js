@@ -250,6 +250,12 @@ function taxonomyPanel(divElement, conceptId, options) {
             else
                 return opts.inverse(this);
         });
+        Handlebars.registerHelper('if_def', function(conceptId, opts){
+            if (conceptId == panel.default.conceptId)
+                return opts.fn(this);
+            else
+                return opts.inverse(this);
+        });
         var context = {
             parents: parents,
             focusConcept: focusConcept,
@@ -397,7 +403,13 @@ function taxonomyPanel(divElement, conceptId, options) {
                 var parentsStrs = [];
                 $.each(parents, function(i, parent) {
                     var parentLiHtml = "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
-                    parentLiHtml = parentLiHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-up treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
+                    parentLiHtml = parentLiHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-";
+                    if (parent.conceptId == panel.default.conceptId){
+                        parentLiHtml = parentLiHtml + "down";
+                    }else{
+                        parentLiHtml = parentLiHtml + "up";
+                    }
+                    parentLiHtml = parentLiHtml + " treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
                     if (parent.definitionStatus == "Primitive") {
                         parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
                     } else {

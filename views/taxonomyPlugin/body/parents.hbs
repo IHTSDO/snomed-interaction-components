@@ -3,7 +3,7 @@
         {{#each parents}}
             <li data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' class='treeLabel'>
                 <button class='btn btn-link btn-xs treeButton' style='padding:2px'>
-                    <i class='glyphicon glyphicon-chevron-up treeButton' id='{{../divElementId}}-treeicon-{{conceptId}}'></i>
+                    <i class='glyphicon glyphicon-chevron-{{#if_def conceptId}}down{{else}}up{{/if_def}} treeButton' id='{{../divElementId}}-treeicon-{{conceptId}}'></i>
                 </button>
                 {{#if_eq definitionStatus "Primitive"}}
                     <span class="badge alert-warning" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" draggable="true" ondragstart="drag(event, '{{divElementId}}')">&nbsp;</span>&nbsp;&nbsp;
