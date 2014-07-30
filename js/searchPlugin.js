@@ -156,6 +156,9 @@ function searchPanel(divElement, options) {
                 html: true,
                 content: function () {
                     historyHtml = '<div style="height:100px;overflow:auto;">';
+                    if (typeof i18n_no_search_terms == "undefined") {
+                        i18n_no_search_terms = "No search terms"
+                    }
                     if (panel.history.length == 0) {
                         historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em>'+ i18n_no_search_terms + '</span>...</em></div>';
                     }
