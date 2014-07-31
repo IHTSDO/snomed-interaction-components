@@ -5,9 +5,9 @@
             {{#eqLastGroup groupId}}
                 {{setLastGroup groupId}}
                 {{lastColor getRandomColor}}
-                &nbsp;&nbsp;&nbsp;<span style='background-color: {{lastColor "get"}}'>&nbsp;&nbsp;</span>
+                <span style='background-color: {{lastColor "get"}}'></span>
             {{else}}
-                &nbsp;&nbsp;&nbsp;<span style='background-color: {{lastColor "get"}}'>&nbsp;&nbsp;</span>
+                <span style='background-color: {{lastColor "get"}}'></span>
             {{/eqLastGroup}}
             &nbsp;<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
                 {{removeSemtag type.defaultTerm}}</span>&nbsp;&rarr;&nbsp;
@@ -29,11 +29,11 @@
             {{#eqLastGroup groupId}}
                 {{setLastGroup groupId}}
                 {{lastColor getRandomColor}}
-                &nbsp;&nbsp;&nbsp;<span style='background-color: {{lastColor "get"}}'>&nbsp;&nbsp;</span>
+                <span style='background-color: {{lastColor "get"}}'></span>
             {{else}}
-                &nbsp;&nbsp;&nbsp;<span style='background-color: {{lastColor "get"}}'>&nbsp;&nbsp;</span>
+                <span style='background-color: {{lastColor "get"}}'></span>
             {{/eqLastGroup}}
-            &nbsp;<span draggable = "true" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
+            &nbsp;<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
                 {{removeSemtag type.defaultTerm}}</span>&nbsp;&rarr;&nbsp;
             <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='
                 {{#if_eq target.definitionStatus "Primitive"}}
