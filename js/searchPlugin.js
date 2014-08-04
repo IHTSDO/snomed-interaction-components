@@ -736,7 +736,7 @@ function searchPanel(divElement, options) {
             var subscription = channel.subscribe(panelId, function(data, envelope) {
 //                console.log("listening in " + panel.divElement.id);
                 panel.options.searchMode = "fullText";
-                panel.search(data.term, 0, 100, false);
+                panel.search(data.conceptId, 0, 100, false);
                 $('#' + panel.divElement.id + '-searchBox').val(data.term);
             });
             panel.subscriptions.push(subscription);
