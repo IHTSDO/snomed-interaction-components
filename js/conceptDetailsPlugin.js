@@ -939,16 +939,6 @@ function conceptDetails(divElement, conceptId, options) {
     this.subscribe = function(panelToSubscribe) {
         var panelId = panelToSubscribe.divElement.id;
 //        console.log('Subscribing to id: ' + panelId);
-        var subscription = channel.subscribe(panelId, function(data, envelope) {
-            panel.conceptId = data.conceptId;
-            panel.updateCanvas();
-//            This creates a cycle
-//            channel.publish(panel.divElement.id, {
-//                term: data.term,
-//                conceptId: data.conceptId,
-//                source: data.source
-//            });
-        });
         var alreadySubscribed = false;
         $.each(panel.subscriptionsColor, function(i, field){
             if (field == panelToSubscribe.markerColor){
@@ -956,6 +946,17 @@ function conceptDetails(divElement, conceptId, options) {
             }
         });
         if (!alreadySubscribed) {
+            var subscription = channel.subscribe(panelId, function(data, envelope) {
+//                console.log("listening in " + panel.divElement.id);
+                panel.conceptId = data.conceptId;
+                panel.updateCanvas();
+//            This creates a cycle
+//            channel.publish(panel.divElement.id, {
+//                term: data.term,
+//                conceptId: data.conceptId,
+//                source: data.source
+//            });
+            });
             panel.subscriptions.push(subscription);
             panelToSubscribe.subscribers.push(panel.divElement.id);
             panel.subscriptionsColor.push(panelToSubscribe.markerColor);

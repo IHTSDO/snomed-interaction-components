@@ -726,11 +726,6 @@ function searchPanel(divElement, options) {
     this.subscribe = function(panelToSubscribe) {
         var panelId = panelToSubscribe.divElement.id;
 //        console.log('Subscribing to id: ' + panelId);
-        var subscription = channel.subscribe(panelId, function(data, envelope) {
-            panel.options.searchMode = "fullText";
-            panel.search(data.term, 0, 100, false);
-            $('#' + panel.divElement.id + '-searchBox').val(data.term);
-        });
         var alreadySubscribed = false;
         $.each(panel.subscriptionsColor, function(i, field){
             if (field == panelToSubscribe.markerColor){
@@ -738,6 +733,12 @@ function searchPanel(divElement, options) {
             }
         });
         if (!alreadySubscribed) {
+            var subscription = channel.subscribe(panelId, function(data, envelope) {
+//                console.log("listening in " + panel.divElement.id);
+                panel.options.searchMode = "fullText";
+                panel.search(data.term, 0, 100, false);
+                $('#' + panel.divElement.id + '-searchBox').val(data.term);
+            });
             panel.subscriptions.push(subscription);
             panelToSubscribe.subscribers.push(panel.divElement.id);
             panel.subscriptionsColor.push(panelToSubscribe.markerColor);
