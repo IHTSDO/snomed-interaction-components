@@ -114,7 +114,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">No parents</div>\n                <div style=\"margin-left: 10%; margin-bottom: 10px; margin-top: 10px; width: 40%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;\" id=\"home-attributes-";
+    + "\">No parents</div>\n                <div style=\"display: inline-block; margin-left: 10%; margin-bottom: 10px; margin-top: 10px; width: 40%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;\" id=\"home-attributes-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -122,7 +122,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "')\" ondragleave=\"removeHighlight();\" ondragover=\"allowDrop(event)\">Attributes</div>\n                <div style=\"margin-left: 52%; margin-bottom: 10px; margin-top: 10px; width: 40%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;\" id=\"home-roles-";
+    + "')\" ondragleave=\"removeHighlight();\" ondragover=\"allowDrop(event)\">Attributes</div>\n                <div style=\"display: inline-block; margin-bottom: 10px; width: 40%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;\" id=\"home-roles-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
