@@ -456,7 +456,7 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
                         }).done(function (result) {
-                            console.log(result.filters);
+//                            console.log(result.filters);
                             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                                 if (opts != "undefined") {
                                     if(a == b)

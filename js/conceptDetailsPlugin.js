@@ -89,7 +89,7 @@ function conceptDetails(divElement, conceptId, options) {
         panel.defaultTerm = "";
         $(divElement).html();
         var context = {
-            divElementId: panel.divElement.id
+            divElementId: panel.divElement.id,
         };
         //        options statedParents inferredParents firstMatch statedRoles inferredRoles allDescriptions
         // dataContentValue = document.URL.split("?")[0].split("#")[0]
@@ -289,6 +289,7 @@ function conceptDetails(divElement, conceptId, options) {
             return;
         }
         conceptRequested = panel.conceptId;
+        $("#home-children-" + panel.divElement.id + "-body").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.attributesPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#home-attributes-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.descsPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
@@ -632,6 +633,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             var context = {
+                divElementId: panel.divElement.id,
                 statedParents: panel.statedParents,
                 inferredParents: panel.inferredParents,
                 options: panel.options
@@ -640,7 +642,38 @@ function conceptDetails(divElement, conceptId, options) {
             if (!panel.options.diagrammingMarkupEnabled) {
                 $('#home-parents-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-parents-' + panel.divElement.id).html()));
             }
+            $(".treeButton").disableTextSelect();
+            $("#home-parents-" + panel.divElement.id).unbind();
+            $("#home-parents-" + panel.divElement.id).click(function(event) {
+                if ($(event.target).hasClass("treeButton")) {
+                    var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                    event.preventDefault();
+                    if ($(event.target).hasClass("glyphicon-chevron-down")) {
+                        $(event.target).closest("li").find("ul").remove();
+                        $(event.target).removeClass("glyphicon-chevron-down");
+                        $(event.target).addClass("glyphicon-chevron-right");
+                    } else if ($(event.target).hasClass("glyphicon-chevron-right")){
+                        $(event.target).removeClass("glyphicon-chevron-right");
+                        $(event.target).addClass("glyphicon-refresh");
+                        $(event.target).addClass("icon-spin");
+                        panel.getParent(conceptId, event.target);
+                    } else if ($(event.target).hasClass("glyphicon-minus")){
+//                    $("#" + iconId).removeClass("glyphicon-minus");
+//                    $("#" + iconId).addClass("glyphicon-chevron-right");
+                    }
+                } else if ($(event.target).hasClass("treeLabel")) {
+                    var selectedId = $(event.target).attr('data-concept-id');
+                    if (typeof selectedId != "undefined") {
+                        channel.publish(panel.divElement.id, {
+                            term: $(event.target).attr('data-term'),
+                            module: $(event.target).attr("data-module"),
+                            conceptId: selectedId,
+                            source: panel.divElement.id
+                        });
+                    }
+                }
 
+            });
 
             Handlebars.registerHelper('eqLastGroup', function (a, opts){
                 if(!a == panel.lastGroup)
@@ -786,31 +819,177 @@ function conceptDetails(divElement, conceptId, options) {
 //            console.log("aborting call...");
 //
 //        }
+        if (panel.options.displayChildren) {
+            var context = {
+
+            };
+        }else{
+        }
+
         if (panel.options.displayChildren == false) {
+            $("#home-children-" + panel.divElement.id).hide();
             $('#' + panel.childrenPId).html("");
             $('#' + panel.childrenPId).hide();
         } else {
-            $('#' + panel.childrenPId).show();
+            $("#home-children-" + panel.divElement.id).show();
+//            $('#' + panel.childrenPId).show();
             if (xhrChildren != null) {
                 xhrChildren.abort();
                 console.log("aborting children call...");
             }
-            xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=inferred", function(result) {
+            xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
                 //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
             }).done(function(result) {
                 // load relationships panel
                 xhrChildren = null;
                 panel.childrenPId = divElement.id + "-children-panel";
-
+//                console.log(result);
                 var context = {
-                    childrenResult: result
+                    divElementId: panel.divElement.id,
+                    childrenResult: result,
+                    selectedView: panel.options.selectedView
                 };
                 $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
+                $("#home-children-" + panel.divElement.id + "-body").html(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
+                $(".treeButton").disableTextSelect();
+                $("#home-children-" + panel.divElement.id + "-body").click(function(event) {
+                    if ($(event.target).hasClass("treeButton")) {
+                        var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                        var iconId = panel.divElement.id + "-treeicon-" + conceptId;
+                        event.preventDefault();
+                        if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
+                            //console.log("close");
+                            $(event.target).closest("li").find("ul").remove();
+                            $("#" + iconId).removeClass("glyphicon-chevron-down");
+                            $("#" + iconId).addClass("glyphicon-chevron-right");
+                        } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
+                            //console.log("open");
+                            $("#" + iconId).removeClass("glyphicon-chevron-right");
+                            $("#" + iconId).addClass("glyphicon-refresh");
+                            $("#" + iconId).addClass("icon-spin");
+                            panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                        } else if ($("#" + iconId).hasClass("glyphicon-minus")){
+//                    $("#" + iconId).removeClass("glyphicon-minus");
+//                    $("#" + iconId).addClass("glyphicon-chevron-right");
+                        }
+                    } else if ($(event.target).hasClass("treeLabel")) {
+                        var selectedId = $(event.target).attr('data-concept-id');
+                        if (typeof selectedId != "undefined") {
+                            channel.publish(panel.divElement.id, {
+                                term: $(event.target).attr('data-term'),
+                                module: $(event.target).attr("data-module"),
+                                conceptId: selectedId,
+                                source: panel.divElement.id
+                            });
+                        }
+                    }
+
+                });
             }).fail(function() {
                 $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             });
         }
         panel.loadMembers(50, 0);
+    }
+
+    this.getChildren = function(conceptId) {
+        if (typeof panel.options.selectedView == "undefined") {
+            panel.options.selectedView = "inferred";
+        }
+
+        if (panel.options.selectedView == "inferred") {
+            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+        } else {
+            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+        }
+
+        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
+        }).done(function(result) {
+            result.sort(function(a, b) {
+                if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
+                    return -1;
+                if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
+                    return 1;
+                return 0;
+            });
+            //console.log(JSON.stringify(result));
+            var listIconIds = [];
+            //console.log(JSON.stringify(listIconIds));
+            var context = {
+                childrenResult: result,
+                divElementId: panel.divElement.id,
+                selectedView: panel.options.selectedView
+            };
+            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                if (countryIcons[moduleId])
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            });
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('push', function (element){
+                listIconIds.push(element);
+            });
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
+            if (result.length > 0) {
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-chevron-down");
+            } else {
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
+            }
+            $("#" + panel.divElement.id + "-treenode-" + conceptId).after(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
+            $(".treeButton").disableTextSelect();
+
+        }).fail(function() {
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
+        });
+    }
+
+    this.getParent = function(conceptId, target){
+        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents", function(result) {
+            //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
+        }).done(function(result) {
+            var auxHtml = "";
+            var ind = $(target).attr('data-ind');
+            if (result.length > 0){
+                auxHtml = "<ul style='list-style-type: none; padding-left: 15px'>";
+                $.each(result, function(i, field){
+//                    console.log(field);
+                    auxHtml = auxHtml + "<li class='treeLabel' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'><button class='btn btn-link btn-xs treeButton' style='padding:2px'>";
+                    auxHtml = auxHtml + "<i class='glyphicon glyphicon-chevron-right treeButton' data-ind='" + ind + "'></i></button>";
+                    if (field.definitionStatus == "Primitive"){
+                        auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>&nbsp;</span>&nbsp;&nbsp";
+                    }else{
+                        auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>&equiv;</span>&nbsp;&nbsp";
+                    }
+                    if (countryIcons[field.module]){
+                        auxHtml = auxHtml + "<div class='phoca-flagbox' style='width:26px;height:26px'><span class='phoca-flag " + countryIcons[field.module] + "'></span></div>&nbsp";
+                    }
+                    auxHtml = auxHtml + "<a id='" + ind + panel.divElement.id + "-treeicon-" + field.conceptId + "' href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'>";
+                    auxHtml = auxHtml + "<span class='treeLabel selectable-row' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>" + field.defaultTerm + "</span></a></li>";
+                });
+                auxHtml = auxHtml + "</ul>";
+            }
+            $(target).removeClass("glyphicon-refresh");
+            $(target).removeClass("icon-spin");
+            if (result.length > 0) {
+                $(target).addClass("glyphicon-chevron-down");
+            } else {
+                $(target).addClass("glyphicon-minus");
+            }
+            $("#" + ind + panel.divElement.id + "-treeicon-" + conceptId).after(auxHtml);
+            $(".treeButton").disableTextSelect();
+        }).fail(function(){
+        });
     }
 
     this.loadMembers = function(returnLimit, skipTo){
@@ -1062,6 +1241,7 @@ function conceptDetails(divElement, conceptId, options) {
         panel.options.diagrammingMarkupEnabled = $("#" + panel.divElement.id + "-diagrammingMarkupEnabledOption").is(':checked');
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
+        panel.options.displayChildren = $("#" + panel.divElement.id + "-displayChildren").is(':checked');
         $.each(panel.options.possibleSubscribers, function (i, field){
             field.subscribed = $("#" + panel.divElement.id + "-subscribeTo-" + field.id).is(':checked');
             field.subscriptor = $("#" + panel.divElement.id + "-subscriptor-" + field.id).is(':checked');
@@ -1085,6 +1265,7 @@ function conceptDetails(divElement, conceptId, options) {
         $.each(componentsRegistry, function (i, field){
             field.loadMarkers();
         });
+        panel.updateCanvas();
     }
 }
 
