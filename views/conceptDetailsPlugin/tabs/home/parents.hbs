@@ -12,19 +12,19 @@
                         <!--{{type.defaultTerm}}-->
                     <!--{{/if_gr}}-->
                 <!--</span>&nbsp;&rArr;&nbsp;-->
-                    {{#if_eq target.definitionStatus "Primitive"}}
-                        <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
-                    {{else}}
-                        <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
-                    {{/if_eq}}
                     <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' data-first="true" data-ind="{{@index}}"></i></button>
                     {{#if_eq target.definitionStatus "Primitive"}}
                         <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}">&nbsp;</span>&nbsp;&nbsp;
                     {{else}}
                         <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}">&equiv;</span>&nbsp;&nbsp;
                     {{/if_eq}}
+                    {{#if_eq target.definitionStatus "Primitive"}}
+                    <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+                    {{else}}
+                    <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+                    {{/if_eq}}
                     {{target.defaultTerm}}
-                </span>
+                    </span>
                 </li>
             {{/each}}
         </ul>
@@ -39,16 +39,16 @@
                 <!--<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='text-warning' data-module="{{target.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>-->
                     <!--{{type.defaultTerm}}-->
                 <!--</span>&nbsp;&rArr;&nbsp;-->
-                    {{#if_eq target.definitionStatus "Primitive"}}
-                        <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
-                    {{else}}
-                        <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
-                    {{/if_eq}}
                     <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' data-first="true" data-ind="{{@index}}"></i></button>
                     {{#if_eq target.definitionStatus "Primitive"}}
                         <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}">&nbsp;</span>&nbsp;&nbsp;
                     {{else}}
                         <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}">&equiv;</span>&nbsp;&nbsp;
+                    {{/if_eq}}
+                    {{#if_eq target.definitionStatus "Primitive"}}
+                        <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+                    {{else}}
+                        <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
                     {{/if_eq}}
                     {{target.defaultTerm}}
                 </span>
