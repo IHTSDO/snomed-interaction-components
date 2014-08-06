@@ -18,6 +18,11 @@
                     {{else}}
                         <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}">&equiv;</span>&nbsp;&nbsp;
                     {{/if_eq}}
+                    {{#hasCountryIcon module}}
+                        <div class="phoca-flagbox" style="width:26px;height:26px">
+                            <span class="phoca-flag {{countryIcon module}}"></span>
+                        </div>
+                    {{/hasCountryIcon}}
                     {{#if_eq target.definitionStatus "Primitive"}}
                     <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
                     {{else}}
@@ -45,6 +50,11 @@
                     {{else}}
                         <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}">&equiv;</span>&nbsp;&nbsp;
                     {{/if_eq}}
+                    {{#hasCountryIcon module}}
+                        <div class="phoca-flagbox" style="width:26px;height:26px">
+                            <span class="phoca-flag {{countryIcon module}}"></span>
+                        </div>
+                    {{/hasCountryIcon}}
                     {{#if_eq target.definitionStatus "Primitive"}}
                         <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
                     {{else}}
