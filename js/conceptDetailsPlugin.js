@@ -305,9 +305,9 @@ function conceptDetails(divElement, conceptId, options) {
             xhr.abort();
             console.log("aborting call...");
         }
-        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function(result) {
+        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function (result) {
 
-        }).done(function(result) {
+        }).done(function (result) {
             var firstMatch = result;
             xhr = null;
             panel.attributesPId = divElement.id + "-attributes-panel";
@@ -315,9 +315,9 @@ function conceptDetails(divElement, conceptId, options) {
             var d = new Date();
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
@@ -330,18 +330,17 @@ function conceptDetails(divElement, conceptId, options) {
             };
             $('#' + panel.attributesPId).html(JST["views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs"](context));
             $('#' + 'share-link-' + panel.divElement.id).disableTextSelect();
-            $('#' + 'share-link-' + panel.divElement.id).click(function(event) {
+            $('#' + 'share-link-' + panel.divElement.id).click(function (event) {
                 setTimeout(function () {
                     $('#' + 'share-field-' + panel.divElement.id).select();
-                },300);
+                }, 300);
             });
 
 
-
             // load home-attributes
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
@@ -357,7 +356,7 @@ function conceptDetails(divElement, conceptId, options) {
             if (!firstMatch.active) {
                 $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
             } else {
-                $('#home-attributes-' + panel.divElement.id).css("background-color", "white");
+                $('#home-attributes-' + panel.divElement.id).css("background-color", "#428bca");
             }
 
             if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
@@ -366,8 +365,8 @@ function conceptDetails(divElement, conceptId, options) {
             if (typeof i18n_drag_this == "undefined") {
                 i18n_drag_this = "Drag this";
             }
-            $( "[draggable='true']" ).tooltip({
-                placement : 'left auto',
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
                 trigger: 'hover',
                 title: i18n_drag_this,
                 animation: true,
@@ -388,7 +387,7 @@ function conceptDetails(divElement, conceptId, options) {
             }
 
             var allDescriptions = firstMatch.descriptions.slice(0);
-            allDescriptions.sort(function(a, b) {
+            allDescriptions.sort(function (a, b) {
                 if (a.type.conceptId < b.type.conceptId)
                     return -1;
                 if (a.type.conceptId > b.type.conceptId)
@@ -402,7 +401,7 @@ function conceptDetails(divElement, conceptId, options) {
                 return 0;
             });
             var homeDescriptionsHtml = "";
-            $.each(allDescriptions, function(i, field) {
+            $.each(allDescriptions, function (i, field) {
                 if (panel.options.displayInactiveDescriptions || field.active == true) {
                     if (field.active == true) {
                         if (homeDescriptionsHtml != "") {
@@ -412,80 +411,79 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 }
             });
-                Handlebars.registerHelper('removeSemtag', function (term){
-                    return panel.removeSemtag(term);
-                });
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                Handlebars.registerHelper('preferred', function (a, opts) {
-                    if (a == "get") {
-                        if (panel.preferred) {
-                            return opts.fn(this);
-                        }else{
-                            return opts.inverse(this);
-                        }
-                    }else {
-                        panel.preferred = a;
-                    }
-                });
-                Handlebars.registerHelper('acceptable', function (a, opts) {
-                    if (a == "get") {
-                        if (panel.acceptable) {
-                            return opts.fn(this);
-                        }else{
-                            return opts.inverse(this);
-                        }
-                    }else {
-                        panel.acceptable = a;
-                    }
-                });
-                Handlebars.registerHelper('included', function (a, opts) {
-                    if (a == "get") {
-                        if (panel.included) {
-                            return opts.fn(this);
-                        }else{
-                            return opts.inverse(this);
-                        }
-                    }else {
-                        panel.included = a;
-                    }
-                });
-                var context = {
-                    options: panel.options,
-                    languageName: languageName,
-                    divElementId: panel.divElement.id,
-                    allDescriptions: allDescriptions
-                };
-                $("#" + panel.descsPId).html(JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context));
-                if (panel.options.displaySynonyms) {
-                    $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
+            Handlebars.registerHelper('removeSemtag', function (term) {
+                return panel.removeSemtag(term);
+            });
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
+                if (opts != "undefined") {
+                    if (a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
                 }
-
-                if (panel.options.displaySynonyms != true) { // hide synonyms
-                    $('#' + panel.descsPId).find('.synonym-row').each(function(i, val) {
-                        $(val).toggle();
-                    });
-                    $(this).toggleClass('glyphicon-plus');
-                    $(this).toggleClass('glyphicon-minus');
+            });
+            Handlebars.registerHelper('preferred', function (a, opts) {
+                if (a == "get") {
+                    if (panel.preferred) {
+                        return opts.fn(this);
+                    } else {
+                        return opts.inverse(this);
+                    }
+                } else {
+                    panel.preferred = a;
                 }
-                $("#" + panel.descsPId + "-descButton").disableTextSelect();
-                $("#" + panel.descsPId + "-descButton").click(function() {
-                    table = $(this).closest("table").first();
-                    $(this).toggleClass('glyphicon-plus');
-                    $(this).toggleClass('glyphicon-minus');
-                    table.find('.synonym-row').each(function(i, val) {
-                        $(val).toggle();
-                    });
+            });
+            Handlebars.registerHelper('acceptable', function (a, opts) {
+                if (a == "get") {
+                    if (panel.acceptable) {
+                        return opts.fn(this);
+                    } else {
+                        return opts.inverse(this);
+                    }
+                } else {
+                    panel.acceptable = a;
+                }
+            });
+            Handlebars.registerHelper('included', function (a, opts) {
+                if (a == "get") {
+                    if (panel.included) {
+                        return opts.fn(this);
+                    } else {
+                        return opts.inverse(this);
+                    }
+                } else {
+                    panel.included = a;
+                }
+            });
+            var context = {
+                options: panel.options,
+                languageName: languageName,
+                divElementId: panel.divElement.id,
+                allDescriptions: allDescriptions
+            };
+            $("#" + panel.descsPId).html(JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context));
+            if (panel.options.displaySynonyms) {
+                $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
+            }
+
+            if (panel.options.displaySynonyms != true) { // hide synonyms
+                $('#' + panel.descsPId).find('.synonym-row').each(function (i, val) {
+                    $(val).toggle();
                 });
+                $(this).toggleClass('glyphicon-plus');
+                $(this).toggleClass('glyphicon-minus');
+            }
+            $("#" + panel.descsPId + "-descButton").disableTextSelect();
+            $("#" + panel.descsPId + "-descButton").click(function () {
+                table = $(this).closest("table").first();
+                $(this).toggleClass('glyphicon-plus');
+                $(this).toggleClass('glyphicon-minus');
+                table.find('.synonym-row').each(function (i, val) {
+                    $(val).toggle();
+                });
+            });
 
-                $('#' + panel.descsPId).find("[rel=tooltip-right]").tooltip({ placement: 'right'});
-
+            $('#' + panel.descsPId).find("[rel=tooltip-right]").tooltip({ placement: 'right'});
 
 
             // load relationships panel and home parents/roles
@@ -503,8 +501,8 @@ function conceptDetails(divElement, conceptId, options) {
             panel.inferredRoles = [];
 
 
-            if (firstMatch.relationships){
-                firstMatch.relationships.sort(function(a, b) {
+            if (firstMatch.relationships) {
+                firstMatch.relationships.sort(function (a, b) {
                     if (a.groupId < b.groupId) {
                         return -1;
                     } else if (a.groupId > b.groupId) {
@@ -524,8 +522,8 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
             }
-            if (firstMatch.statedRelationships){
-                firstMatch.statedRelationships.sort(function(a, b) {
+            if (firstMatch.statedRelationships) {
+                firstMatch.statedRelationships.sort(function (a, b) {
                     if (a.groupId < b.groupId) {
                         return -1;
                     } else if (a.groupId > b.groupId) {
@@ -545,13 +543,13 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
             }
-            Handlebars.registerHelper('push', function (element, array){
+            Handlebars.registerHelper('push', function (element, array) {
                 array.push(element);
                 // return ;
             });
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
@@ -567,7 +565,7 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.relsPId).html(JST["views/conceptDetailsPlugin/tabs/details/rels-panel.hbs"](context));
 
 
-            panel.inferredParents.sort(function(a, b) {
+            panel.inferredParents.sort(function (a, b) {
                 if (a.target.defaultTerm < b.target.defaultTerm)
                     return -1;
                 if (a.target.defaultTerm > b.target.defaultTerm)
@@ -575,7 +573,7 @@ function conceptDetails(divElement, conceptId, options) {
                 return 0;
             });
 
-            panel.statedParents.sort(function(a, b) {
+            panel.statedParents.sort(function (a, b) {
                 if (a.target.defaultTerm < b.target.defaultTerm)
                     return -1;
                 if (a.target.defaultTerm > b.target.defaultTerm)
@@ -583,7 +581,7 @@ function conceptDetails(divElement, conceptId, options) {
                 return 0;
             });
 
-            panel.inferredRoles.sort(function(a, b) {
+            panel.inferredRoles.sort(function (a, b) {
                 if (a.groupId < b.groupId) {
                     return -1;
                 } else if (a.groupId > b.groupId) {
@@ -597,7 +595,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
 
-            panel.statedRoles.sort(function(a, b) {
+            panel.statedRoles.sort(function (a, b) {
                 if (a.groupId < b.groupId) {
                     return -1;
                 } else if (a.groupId > b.groupId) {
@@ -611,22 +609,22 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
 
-            Handlebars.registerHelper('substr', function (string, start){
+            Handlebars.registerHelper('substr', function (string, start) {
                 var l = string.lastIndexOf("(") - 1;
                 return string.substr(start, l);
             });
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
                 }
             });
-            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                if (a){
+            Handlebars.registerHelper('if_gr', function (a, b, opts) {
+                if (a) {
                     var s = a.lastIndexOf("(");
-                    if(s > b)
+                    if (s > b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
@@ -644,20 +642,20 @@ function conceptDetails(divElement, conceptId, options) {
             }
             $(".treeButton").disableTextSelect();
             $("#home-parents-" + panel.divElement.id).unbind();
-            $("#home-parents-" + panel.divElement.id).click(function(event) {
+            $("#home-parents-" + panel.divElement.id).click(function (event) {
                 if ($(event.target).hasClass("treeButton")) {
                     var conceptId = $(event.target).closest("li").attr('data-concept-id');
                     event.preventDefault();
-                    if ($(event.target).hasClass("glyphicon-chevron-down")) {
+                    if ($(event.target).hasClass("glyphicon-chevron-up")) {
                         $(event.target).closest("li").find("ul").remove();
-                        $(event.target).removeClass("glyphicon-chevron-down");
+                        $(event.target).removeClass("glyphicon-chevron-up");
                         $(event.target).addClass("glyphicon-chevron-right");
-                    } else if ($(event.target).hasClass("glyphicon-chevron-right")){
+                    } else if ($(event.target).hasClass("glyphicon-chevron-right")) {
                         $(event.target).removeClass("glyphicon-chevron-right");
                         $(event.target).addClass("glyphicon-refresh");
                         $(event.target).addClass("icon-spin");
                         panel.getParent(conceptId, event.target);
-                    } else if ($(event.target).hasClass("glyphicon-minus")){
+                    } else if ($(event.target).hasClass("glyphicon-minus")) {
 //                    $("#" + iconId).removeClass("glyphicon-minus");
 //                    $("#" + iconId).addClass("glyphicon-chevron-right");
                     }
@@ -675,34 +673,34 @@ function conceptDetails(divElement, conceptId, options) {
 
             });
 
-            Handlebars.registerHelper('eqLastGroup', function (a, opts){
-                if(!a == panel.lastGroup)
+            Handlebars.registerHelper('eqLastGroup', function (a, opts) {
+                if (!a == panel.lastGroup)
                     return opts.fn(this);
                 else
                     return opts.inverse(this);
             });
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
                 }
             });
-            Handlebars.registerHelper('removeSemtag', function (term){
+            Handlebars.registerHelper('removeSemtag', function (term) {
                 return panel.removeSemtag(term);
             });
-            Handlebars.registerHelper('setLastGroup', function (a){
+            Handlebars.registerHelper('setLastGroup', function (a) {
                 panel.lastGroup = a;
             });
             Handlebars.registerHelper('lastColor', function (a) {
                 if (a == "get") {
                     return panel.color;
-                }else {
+                } else {
                     panel.color = a;
                 }
             });
-            Handlebars.registerHelper('getRandomColor' , function (){
+            Handlebars.registerHelper('getRandomColor', function () {
                 return getRandomColor();
             });
             var context = {
@@ -717,22 +715,22 @@ function conceptDetails(divElement, conceptId, options) {
             }
 
 
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
                 }
             });
-            Handlebars.registerHelper('refset', function(type, data, opts){
-                if (data == "get"){
+            Handlebars.registerHelper('refset', function (type, data, opts) {
+                if (data == "get") {
                     if (panel.refset[type]) {
                         return opts.fn(this);
-                    }else{
+                    } else {
                         return opts.inverse(this);
                     }
-                }else{
+                } else {
                     panel.refset[type] = data;
                 }
             });
@@ -741,10 +739,10 @@ function conceptDetails(divElement, conceptId, options) {
             };
             $('#refsets-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/refset.hbs"](context));
 
-            $.each($("#refsets-" + panel.divElement.id).find('.refset-simplemap'), function(i, field){
+            $.each($("#refsets-" + panel.divElement.id).find('.refset-simplemap'), function (i, field) {
 //                console.log(field);
 //                console.log($(field).attr('data-refsetId'));
-                if ($(field).attr('data-refsetId') == "467614008"){
+                if ($(field).attr('data-refsetId') == "467614008") {
                     channel.publish("refsetSubscription-467614008", {
                         conceptId: $(field).attr('data-conceptId')
                     });
@@ -771,31 +769,31 @@ function conceptDetails(divElement, conceptId, options) {
             $('.more-fields-button').popover();
 
 //          firefox popover
-            if (navigator.userAgent.indexOf("Firefox") > -1){
+            if (navigator.userAgent.indexOf("Firefox") > -1) {
                 $(".more-fields-button").optionsPopover({
                     contents: "",
                     disableBackButton: true
                 });
 
-                $(".more-fields-button").click(function(e){
+                $(".more-fields-button").click(function (e) {
                     var auxHtml = $(e.target).attr('data-content');
                     $("#popoverContent").html(auxHtml);
                 });
             }
 
             if (panel.options.selectedView == "stated") {
-                $('#' + panel.relsPId).find('.inferred-rel').each(function(i, val) {
+                $('#' + panel.relsPId).find('.inferred-rel').each(function (i, val) {
                     $(val).toggle();
                 });
             } else if (panel.options.selectedView == "inferred") {
-                $('#' + panel.relsPId).find('.stated-rel').each(function(i, val) {
+                $('#' + panel.relsPId).find('.stated-rel').each(function (i, val) {
                     $(val).toggle();
                 });
             } else if (panel.options.selectedView != "all") {
                 // show all
             }
-            $( "[draggable='true']" ).tooltip({
-                placement : 'left auto',
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
                 trigger: 'hover',
                 title: i18n_drag_this,
                 animation: true,
@@ -809,7 +807,7 @@ function conceptDetails(divElement, conceptId, options) {
 
 //            membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members";
 
-        }).fail(function() {
+        }).fail(function () {
             $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             $('#' + panel.descsPId).html("");
             $('#' + panel.relsPId).html("");
@@ -823,72 +821,83 @@ function conceptDetails(divElement, conceptId, options) {
             var context = {
 
             };
-        }else{
+        } else {
         }
 
-        if (panel.options.displayChildren == false) {
-            $("#home-children-" + panel.divElement.id).hide();
-            $('#' + panel.childrenPId).html("");
-            $('#' + panel.childrenPId).hide();
-        } else {
-            $("#home-children-" + panel.divElement.id).show();
+//        if (panel.options.displayChildren == false) {
+////            $("#home-children-" + panel.divElement.id).hide();
+//            $('#' + panel.childrenPId).html("");
+//            $('#' + panel.childrenPId).hide();
+//        } else {
+//            $("#home-children-" + panel.divElement.id).show();
 //            $('#' + panel.childrenPId).show();
-            if (xhrChildren != null) {
-                xhrChildren.abort();
-                console.log("aborting children call...");
-            }
-            xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
-                //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
-            }).done(function(result) {
-                // load relationships panel
-                xhrChildren = null;
-                panel.childrenPId = divElement.id + "-children-panel";
+        if (xhrChildren != null) {
+            xhrChildren.abort();
+            console.log("aborting children call...");
+        }
+        xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function (result) {
+            //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
+        }).done(function (result) {
+            // load relationships panel
+            xhrChildren = null;
+            panel.childrenPId = divElement.id + "-children-panel";
 //                console.log(result);
-                var context = {
-                    divElementId: panel.divElement.id,
-                    childrenResult: result,
-                    selectedView: panel.options.selectedView
-                };
-                $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
-                $("#home-children-" + panel.divElement.id + "-body").html(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
-                $(".treeButton").disableTextSelect();
-                $("#home-children-" + panel.divElement.id + "-body").click(function(event) {
-                    if ($(event.target).hasClass("treeButton")) {
-                        var conceptId = $(event.target).closest("li").attr('data-concept-id');
-                        var iconId = panel.divElement.id + "-treeicon-" + conceptId;
-                        event.preventDefault();
-                        if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
-                            //console.log("close");
-                            $(event.target).closest("li").find("ul").remove();
-                            $("#" + iconId).removeClass("glyphicon-chevron-down");
-                            $("#" + iconId).addClass("glyphicon-chevron-right");
-                        } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")){
-                            //console.log("open");
-                            $("#" + iconId).removeClass("glyphicon-chevron-right");
-                            $("#" + iconId).addClass("glyphicon-refresh");
-                            $("#" + iconId).addClass("icon-spin");
-                            panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
-                        } else if ($("#" + iconId).hasClass("glyphicon-minus")){
+            var context = {
+                displayChildren: panel.options.displayChildren,
+                divElementId: panel.divElement.id,
+                childrenResult: result,
+                selectedView: panel.options.selectedView
+            };
+            $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
+            $("#home-children-" + panel.divElement.id + "-body").html(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
+            $(".treeButton").disableTextSelect();
+            $("#home-children-" + panel.divElement.id + "-body").click(function (event) {
+                if ($(event.target).hasClass("treeButton")) {
+                    var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                    var iconId = panel.divElement.id + "-treeicon-" + conceptId;
+                    event.preventDefault();
+                    if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
+                        //console.log("close");
+                        $(event.target).closest("li").find("ul").remove();
+                        $("#" + iconId).removeClass("glyphicon-chevron-down");
+                        $("#" + iconId).addClass("glyphicon-chevron-right");
+                    } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")) {
+                        //console.log("open");
+                        $("#" + iconId).removeClass("glyphicon-chevron-right");
+                        $("#" + iconId).addClass("glyphicon-refresh");
+                        $("#" + iconId).addClass("icon-spin");
+                        panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                    } else if ($("#" + iconId).hasClass("glyphicon-minus")) {
 //                    $("#" + iconId).removeClass("glyphicon-minus");
 //                    $("#" + iconId).addClass("glyphicon-chevron-right");
-                        }
-                    } else if ($(event.target).hasClass("treeLabel")) {
-                        var selectedId = $(event.target).attr('data-concept-id');
-                        if (typeof selectedId != "undefined") {
-                            channel.publish(panel.divElement.id, {
-                                term: $(event.target).attr('data-term'),
-                                module: $(event.target).attr("data-module"),
-                                conceptId: selectedId,
-                                source: panel.divElement.id
-                            });
-                        }
                     }
-
-                });
-            }).fail(function() {
-                $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+                } else if ($(event.target).hasClass("treeLabel")) {
+                    var selectedId = $(event.target).attr('data-concept-id');
+                    if (typeof selectedId != "undefined") {
+                        channel.publish(panel.divElement.id, {
+                            term: $(event.target).attr('data-term'),
+                            module: $(event.target).attr("data-module"),
+                            conceptId: selectedId,
+                            source: panel.divElement.id
+                        });
+                    }
+                }
             });
-        }
+            $("#" + panel.divElement.id + "-showChildren").tooltip({
+                placement : 'right',
+                trigger: 'hover',
+                title: "Click here to display the children",
+                animation: true,
+                delay: 500
+            });
+            $("#" + panel.divElement.id + "-showChildren").click(function(){
+                panel.options.displayChildren = true;
+                panel.updateCanvas();
+            });
+        }).fail(function () {
+            $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+        });
+//    }
         panel.loadMembers(50, 0);
     }
 
@@ -916,6 +925,7 @@ function conceptDetails(divElement, conceptId, options) {
             var listIconIds = [];
             //console.log(JSON.stringify(listIconIds));
             var context = {
+                displayChildren: panel.options.displayChildren,
                 childrenResult: result,
                 divElementId: panel.divElement.id,
                 selectedView: panel.options.selectedView
@@ -961,7 +971,11 @@ function conceptDetails(divElement, conceptId, options) {
             var auxHtml = "";
             var ind = $(target).attr('data-ind');
             if (result.length > 0){
-                auxHtml = "<ul style='list-style-type: none; padding-left: 15px'>";
+                if ($(target).attr('data-firstt')){
+                    auxHtml = "<ul style='margin-left: 95px; list-style-type: none; padding-left: 15px'>";
+                }else{
+                    auxHtml = "<ul style='list-style-type: none; padding-left: 15px'>";
+                }
                 $.each(result, function(i, field){
 //                    console.log(field);
                     auxHtml = auxHtml + "<li class='treeLabel' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'><button class='btn btn-link btn-xs treeButton' style='padding:2px'>";
@@ -982,7 +996,7 @@ function conceptDetails(divElement, conceptId, options) {
             $(target).removeClass("glyphicon-refresh");
             $(target).removeClass("icon-spin");
             if (result.length > 0) {
-                $(target).addClass("glyphicon-chevron-down");
+                $(target).addClass("glyphicon-chevron-up");
             } else {
                 $(target).addClass("glyphicon-minus");
             }

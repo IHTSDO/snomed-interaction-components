@@ -28,9 +28,11 @@
             <div class="tab-pane fade in active" id="home-{{divElementId}}" style="padding: 5px;">
                 <div class="row" style="margin-right: 20px"><span class="pull-right text-muted" id="home-{{divElementId}}-viewLabel"></span></div>
                 <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;" id="home-parents-{{divElementId}}">No parents</div>
-                <div style="display: inline-block; margin-left: 10%; margin-bottom: 10px; margin-top: 10px; width: 40%;border: 2px solid saddlebrown; border-radius: 4px; padding: 5px;" id="home-attributes-{{divElementId}}" ondrop="dropC(event, '{{divElementId}}')" ondragleave="removeHighlight();" ondragover="allowDrop(event)">Attributes</div>
-                <div style="display: inline-block; margin-bottom: 10px; width: 40%;border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-{{divElementId}}">Relationships</div>
-                <div style="display: none; margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid chartreuse; border-radius: 4px; padding: 5px;" id="home-children-{{divElementId}}">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-4" style="color: #ffffff;background-color: #1e90ff;display: inline-block; border: 2px solid #357ebd; border-radius: 4px; padding: 5px;" id="home-attributes-{{divElementId}}" ondrop="dropC(event, '{{divElementId}}')" ondragleave="removeHighlight();" ondragover="allowDrop(event)">Attributes</div>
+                    <div class="col-md-4" style="background-color: #b7e2f0; display: inline-block; min-height: 100%; margin-left: 10px; border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;" id="home-roles-{{divElementId}}">Relationships</div>
+                </div>
+                <div style="margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid chartreuse; border-radius: 4px; padding: 5px;" id="home-children-{{divElementId}}">
                     <div class="panel-heading">
                         <h4>Children</h4>
                     </div>
