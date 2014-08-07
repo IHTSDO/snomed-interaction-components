@@ -384,6 +384,12 @@ function conceptDetails(divElement, conceptId, options) {
                 languageName = "(ES)";
             } else if (panel.options.langRefset == "554461000005103") {
                 languageName = "(DA)";
+            } else if (panel.options.langRefset == "46011000052107") {
+                languageName = "(SV)";
+            } else if (panel.options.langRefset == "32570271000036106") {
+                languageName = "(AU)";
+            } else if (panel.options.langRefset == "999001251000000103") {
+                languageName = "(UK)";
             }
 
             var allDescriptions = firstMatch.descriptions.slice(0);
