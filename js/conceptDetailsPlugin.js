@@ -1025,10 +1025,18 @@ function conceptDetails(divElement, conceptId, options) {
         }).done(function(result){
 //            console.log(result);
             var remaining;
-            if (result.details.total > (skipTo + returnLimit)){
-                remaining = result.details.total - (skipTo + returnLimit);
+            if (result.details.total == skipTo){
+                remaining = 0;
             }else{
-                remaining = result.details.total;
+                if (result.details.total > (skipTo + returnLimit)){
+                    remaining = result.details.total - (skipTo + returnLimit);
+                }else{
+                    if (result.details.total < returnLimit && skipTo == 0){
+                        remaining = 0;
+                    }else{
+                        remaining = result.details.total;
+                    }
+                }
             }
             var context = {
                 result: result,

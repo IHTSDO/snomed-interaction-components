@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th>Term</th>
-            <th>ConceptId</th>
+            <th>Concept Id</th>
         </tr>
     </thead>
 {{/if_eq}}
@@ -19,7 +19,7 @@
 
     <tr class="more-row">
         {{#if_eq remaining 0}}
-            <td class="text-muted" class="text-center" colspan="2">All members shown</td>
+            <td class="text-muted" class="text-center" colspan="2">{{result.details.total}} members</td>
         {{else}}
             {{#if_gr remaining returnLimit}}
                 <td class="text-center" id="{{divElementId}}-moreMembers" colspan="2">

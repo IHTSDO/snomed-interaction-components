@@ -2906,7 +2906,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   
-  return "\n    <thead>\n        <tr>\n            <th>Term</th>\n            <th>ConceptId</th>\n        </tr>\n    </thead>\n";
+  return "\n    <thead>\n        <tr>\n            <th>Term</th>\n            <th>Concept Id</th>\n        </tr>\n    </thead>\n";
   }
 
 function program3(depth0,data,depth1) {
@@ -2940,8 +2940,11 @@ function program3(depth0,data,depth1) {
 
 function program5(depth0,data) {
   
-  
-  return "\n            <td class=\"text-muted\" class=\"text-center\" colspan=\"2\">All members shown</td>\n        ";
+  var buffer = "", stack1;
+  buffer += "\n            <td class=\"text-muted\" class=\"text-center\" colspan=\"2\">"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.details)),stack1 == null || stack1 === false ? stack1 : stack1.total)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " members</td>\n        ";
+  return buffer;
   }
 
 function program7(depth0,data) {
