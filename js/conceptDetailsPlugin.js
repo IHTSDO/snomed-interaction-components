@@ -1031,10 +1031,18 @@ function conceptDetails(divElement, conceptId, options) {
         }).done(function(result){
 //            console.log(result);
             var remaining;
-            if (result.details.total > (skipTo + returnLimit)){
-                remaining = result.details.total - (skipTo + returnLimit);
+            if (result.details.total == skipTo){
+                remaining = 0;
             }else{
-                remaining = result.details.total;
+                if (result.details.total > (skipTo + returnLimit)){
+                    remaining = result.details.total - (skipTo + returnLimit);
+                }else{
+                    if (result.details.total < returnLimit && skipTo == 0){
+                        remaining = 0;
+                    }else{
+                        remaining = result.details.total;
+                    }
+                }
             }
             var context = {
                 result: result,
@@ -1182,6 +1190,8 @@ function conceptDetails(divElement, conceptId, options) {
         });
         if (!unsubscribed){
             panel.subscriptionsColor = colors;
+//            console.log(panel.divElement.id);
+//            console.log(panel.subscriptionsColor);
             colors = [];
             $.each(panelToUnsubscribe.subscribers, function(i, field){
                 if (field != panel.divElement.id){
@@ -1197,9 +1207,11 @@ function conceptDetails(divElement, conceptId, options) {
                     $("#" + panelToUnsubscribe.divElement.id + "-subscribersMarker").hide();
                 }
             }else{
-                colors.push(panelToUnsubscribe.markerColor);
+//                colors.push(panelToUnsubscribe.markerColor);
             }
             panelToUnsubscribe.subscriptionsColor = colors;
+//            console.log(panelToUnsubscribe.divElement.id);
+//            console.log(panelToUnsubscribe.subscriptionsColor);
             aux = [];
             $.each(panel.subscriptions, function(i, field){
                 if (panelToUnsubscribe.divElement.id == field.topic){
