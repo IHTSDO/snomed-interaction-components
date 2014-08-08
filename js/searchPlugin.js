@@ -599,28 +599,30 @@ function searchPanel(divElement, options) {
                         });
 //                        console.log(panel.options.manifest);
                         var auxArray = [];
-                        $.each(result.filters.module, function (i, field){
-                            var found = false;
-                            var auxObject = {};
-                            $.each(panel.options.manifest.modules, function(j, module){
-                                if (i == module.conceptId){
-                                    auxObject.term = module.defaultTerm;
+                        if (result.filters){
+                            $.each(result.filters.module, function (i, field){
+                                var found = false;
+                                var auxObject = {};
+                                $.each(panel.options.manifest.modules, function(j, module){
+                                    if (i == module.conceptId){
+                                        auxObject.term = module.defaultTerm;
+                                        auxObject.value = i;
+                                        auxObject.cant = field;
+                                        found = true;
+                                    }
+                                })
+                                if (!found){
+                                    auxObject.term = null;
                                     auxObject.value = i;
                                     auxObject.cant = field;
-                                    found = true;
                                 }
-                            })
-                            if (!found){
-                                auxObject.term = null;
-                                auxObject.value = i;
-                                auxObject.cant = field;
-                            }
-                            auxArray.push(auxObject);
+                                auxArray.push(auxObject);
 //                            console.log(auxObject);
-                        });
+                            });
+                            result.filters.module = [];
+                            result.filters.module = auxArray;
+                        }
 //                        console.log(auxArray);
-                        result.filters.module = [];
-                        result.filters.module = auxArray;
 //                        console.log(result.filters.module);
                         var context = {
                             result: result,

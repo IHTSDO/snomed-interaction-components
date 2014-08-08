@@ -851,6 +851,13 @@ function conceptDetails(divElement, conceptId, options) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function (result) {
             // load relationships panel
+            result.sort(function(a, b) {
+                if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
+                    return -1;
+                if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
+                    return 1;
+                return 0;
+            });
             xhrChildren = null;
             panel.childrenPId = divElement.id + "-children-panel";
 //                console.log(result);
@@ -980,6 +987,13 @@ function conceptDetails(divElement, conceptId, options) {
         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents", function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
+            result.sort(function(a, b) {
+                if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
+                    return -1;
+                if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
+                    return 1;
+                return 0;
+            });
             var auxHtml = "";
             var ind = $(target).attr('data-ind');
             if (result.length > 0){
