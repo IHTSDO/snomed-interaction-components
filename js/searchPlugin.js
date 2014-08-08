@@ -408,6 +408,9 @@ function searchPanel(divElement, options) {
         if (typeof panel.options.moduleFilter == "undefined"){
             panel.options.moduleFilter = "none";
         }
+        if (typeof panel.options.textIndexNormalized == "undefined"){
+            panel.options.textIndexNormalized = "none";
+        }
 
         if (typeof forceSearch == "undefined") {
             forceSearch = false;
@@ -428,6 +431,7 @@ function searchPanel(divElement, options) {
                     panel.options.semTagFilter = "none";
                     panel.options.langFilter = "none";
                     panel.options.moduleFilter ="none";
+                    panel.options.textIndexNormalized = "none";
                 }
                 lastT = t;
                 //console.log(t);
@@ -570,6 +574,9 @@ function searchPanel(divElement, options) {
                     if (panel.options.moduleFilter != 'none'){
                         searchUrl = searchUrl + "&moduleFilter=" + panel.options.moduleFilter;
                     }
+                    if (panel.options.textIndexNormalized != "none"){
+                        searchUrl = searchUrl + "&normalize=" + panel.options.textIndexNormalized;
+                    }
                     xhr = $.getJSON(searchUrl,function (result) {
 
                     }).done(function (result) {
@@ -590,6 +597,31 @@ function searchPanel(divElement, options) {
                             else
                                 return opts.inverse(this);
                         });
+//                        console.log(panel.options.manifest);
+                        var auxArray = [];
+                        $.each(result.filters.module, function (i, field){
+                            var found = false;
+                            var auxObject = {};
+                            $.each(panel.options.manifest.modules, function(j, module){
+                                if (i == module.conceptId){
+                                    auxObject.term = module.defaultTerm;
+                                    auxObject.value = i;
+                                    auxObject.cant = field;
+                                    found = true;
+                                }
+                            })
+                            if (!found){
+                                auxObject.term = null;
+                                auxObject.value = i;
+                                auxObject.cant = field;
+                            }
+                            auxArray.push(auxObject);
+//                            console.log(auxObject);
+                        });
+//                        console.log(auxArray);
+                        result.filters.module = [];
+                        result.filters.module = auxArray;
+//                        console.log(result.filters.module);
                         var context = {
                             result: result,
                             elapsed: elapsed,
@@ -603,6 +635,7 @@ function searchPanel(divElement, options) {
                         });
                         $("#" + panel.divElement.id + '-searchBar').find('.module-link').click(function (event) {
                             panel.options.moduleFilter = $(event.target).attr('data-module');
+                            panel.options.moduleFilterName = $(event.target).attr('data-term');
                             panel.search(t, 0, returnLimit, true);
                         });
                         $("#" + panel.divElement.id + '-searchBar').find('.lang-link').click(function (event) {
@@ -619,6 +652,7 @@ function searchPanel(divElement, options) {
                         });
                         $("#" + panel.divElement.id + '-searchBar').find('.remove-module').click(function (event) {
                             panel.options.moduleFilter = "none";
+                            panel.options.moduleFilterName = null;
                             panel.search(t, 0, returnLimit, true);
                         });
                         if (result.details) {

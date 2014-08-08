@@ -991,7 +991,11 @@ function conceptDetails(divElement, conceptId, options) {
                 $.each(result, function(i, field){
 //                    console.log(field);
                     auxHtml = auxHtml + "<li class='treeLabel' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'><button class='btn btn-link btn-xs treeButton' style='padding:2px'>";
-                    auxHtml = auxHtml + "<i class='glyphicon glyphicon-chevron-right treeButton' data-ind='" + ind + "'></i></button>";
+                    if (field.conceptId == "138875005"){
+                        auxHtml = auxHtml + "<i class='glyphicon glyphicon-minus treeButton' data-ind='" + ind + "'></i></button>";
+                    }else{
+                        auxHtml = auxHtml + "<i class='glyphicon glyphicon-chevron-right treeButton' data-ind='" + ind + "'></i></button>";
+                    }
                     if (field.definitionStatus == "Primitive"){
                         auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>&nbsp;</span>&nbsp;&nbsp";
                     }else{
@@ -1012,7 +1016,8 @@ function conceptDetails(divElement, conceptId, options) {
             } else {
                 $(target).addClass("glyphicon-minus");
             }
-            $("#" + ind + panel.divElement.id + "-treeicon-" + conceptId).after(auxHtml);
+            $(target).closest("li").prepend(auxHtml);
+//            $("#" + ind + panel.divElement.id + "-treeicon-" + conceptId).after(auxHtml);
             $(".treeButton").disableTextSelect();
         }).fail(function(){
         });

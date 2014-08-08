@@ -82,11 +82,8 @@
                 // nothing
             }).done(function (result) {
                 manifests = result;
-                console.log(manifests);
+//                console.log(manifests);
             });
-
-
-
 
             var QueryString = function () {
                 var query_string = {};
@@ -443,11 +440,24 @@
                 }
             }
 
-            function switchRelease(label, edition, release, langRefset) {
+            function switchRelease(label, edition, release, langRefset, serverUrl) {
                 verifyDate(release);
+                $.each(manifests, function (i, field){
+                    if (edition == field.databaseName){
+                        options.manifest = field;
+                    }
+                });
+                options.textIndexNormalized = options.manifest.textIndexNormalized;
+                currentPerspective = "home";
+                componentsRegistry = [];
                 options.edition = edition;
                 options.release = release;
                 options.langRefset = langRefset;
+                if (serverUrl){
+                    options.serverUrl = serverUrl;
+                }else{
+                    options.serverUrl = "http://104.131.195.232/api/snomed";
+                }
                 $("#editionLabel").html(label);
             }
 
@@ -595,7 +605,8 @@
                     <p><span class="i18n" data-i18n-id="i18n_home2">Please select a SNOMED CT release and a perspective from the top menu to start, or...</span></p>
                     <p>
                         <!--<a class="btn btn-primary btn-lg" role="button" onclick="testPostSvg();"><img src="img/flags/us.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Terms and UI in English</span></a>-->
-                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20140604', 'multi-edition', 'v20140701', '900000000000509007');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Multi-English Browser</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20140430', 'es-edition', 'v20140430', '450828004');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003, 138875005);"><img src="img/flags/es.png">&nbsp;&nbsp;&nbsp;Ir al Navegador...</span><br><span class="small">Edición en español</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20140604', 'multi-edition', 'v20140701', '900000000000509007', 'http://107.170.98.11/api/snomed');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Multi-English Browser</span></a>
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('UK Edition 20140401', 'uk-edition', 'v20140401', '900000000000508004');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">UKTC English Extension</span></a>
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('GMDN Edition 20140604', 'gmdn-edition', 'v20140725', '900000000000509007');switchLanguage('en', 'img/flags/us.png', true);switchToFullHeight(9999999999, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">GMDN</span></a>
                         &nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_or">or</span>&nbsp;&nbsp;

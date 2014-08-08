@@ -12,7 +12,7 @@
                         <!--{{type.defaultTerm}}-->
                     <!--{{/if_gr}}-->
                 <!--</span>&nbsp;&rArr;&nbsp;-->
-                    <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' data-first="true" data-ind="{{@index}}"></i></button>
+                    <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-{{#if_eq target.conceptId "138875005"}}minus{{else}}chevron-right{{/if_eq}} treeButton' data-first="true" data-ind="{{@index}}"></i></button>
                     {{#if_eq target.definitionStatus "Primitive"}}
                         <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}">&nbsp;</span>&nbsp;&nbsp;
                     {{else}}
@@ -44,7 +44,7 @@
                 <!--<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='text-warning' data-module="{{target.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>-->
                     <!--{{type.defaultTerm}}-->
                 <!--</span>&nbsp;&rArr;&nbsp;-->
-                    <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton' data-first="true" data-ind="{{@index}}"></i></button>
+                    <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-{{#if_eq target.conceptId "138875005"}}minus{{else}}chevron-right{{/if_eq}} treeButton' data-first="true" data-ind="{{@index}}"></i></button>
                     {{#if_eq target.definitionStatus "Primitive"}}
                         <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}">&nbsp;</span>&nbsp;&nbsp;
                     {{else}}
