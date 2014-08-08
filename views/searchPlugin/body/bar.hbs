@@ -15,7 +15,7 @@
 {{/if_eq}}
 {{#if_eq options.moduleFilter "none"}}
 {{else}}
-    &nbsp;&nbsp;<span class='label label-danger'>{{options.moduleFilter}}&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-module'>&times;</a></span>&nbsp;&nbsp;
+    &nbsp;&nbsp;<span class='label label-danger'>{{#if options.moduleFilterName}}{{options.moduleFilterName}}{{else}}{{options.moduleFilter}}{{/if}} &nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-module'>&times;</a></span>&nbsp;&nbsp;
 {{/if_eq}}
 </span>
 <div id='{{divElementId}}-searchFiltersPanel' class='panel-collapse collapse'>
@@ -42,10 +42,10 @@
             <li><a>Filter results by Module</a>
                 <ul>
                     {{#each result.filters.module}}
-                        <li><a class='module-link' href='javascript:void(0);' data-module='{{@key}}'>{{@key}} ({{this}})
-                        {{#hasCountryIcon @key}}
+                        <li><a class='module-link' href='javascript:void(0);' data-term="{{term}}" data-module='{{value}}'>{{#if term}}{{term}}{{else}}{{value}}{{/if}} ({{cant}})
+                        {{#hasCountryIcon value}}
                             <div class="phoca-flagbox" style="width:26px;height:26px">
-                                <span class="phoca-flag {{countryIcon @key}}"></span>
+                                <span class="phoca-flag {{countryIcon value}}"></span>
                             </div>
                         {{/hasCountryIcon}}
                         </a></li>
