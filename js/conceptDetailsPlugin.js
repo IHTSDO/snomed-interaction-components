@@ -686,7 +686,12 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             Handlebars.registerHelper('eqLastGroup', function (a, opts) {
-                if (!a == panel.lastGroup)
+                console.log(a, panel.lastGroup);
+                if(panel.lastGroup == null){
+                    panel.lastGroup = a;
+                    return opts.fn(this);
+                }
+                if (a != panel.lastGroup)
                     return opts.fn(this);
                 else
                     return opts.inverse(this);
@@ -720,6 +725,8 @@ function conceptDetails(divElement, conceptId, options) {
                 statedRoles: panel.statedRoles,
                 inferredRoles: panel.inferredRoles
             };
+//            console.log(panel.statedRoles);
+//            console.log(panel.inferredRoles);
             $('#home-roles-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/roles.hbs"](context));
 
             if (!panel.options.diagrammingMarkupEnabled) {

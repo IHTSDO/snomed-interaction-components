@@ -110,7 +110,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-viewLabel\"></span></div>\n                <div style=\"margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid forestgreen; border-radius: 4px; padding: 5px;\">\n                    <div class=\"panel-heading\">\n                        <h4>Parents</h4>\n                    </div>\n                    <div class=\"panel-body\" id=\"home-parents-";
+    + "-viewLabel\"></span></div>\n                <div style=\"margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid #357ebd; border-radius: 4px; padding: 5px;\">\n                    <div class=\"panel-heading\">\n                        <h4>Parents</h4>\n                    </div>\n                    <div class=\"panel-body\" id=\"home-parents-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -122,11 +122,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "')\" ondragleave=\"removeHighlight();\" ondragover=\"allowDrop(event)\">Attributes</div>\n                    <div class=\"col-md-4\" style=\"background-color: #c2effd; display: inline-block; min-height: 100%; margin-left: 10px; border: 2px solid darkslateblue; border-radius: 4px; padding: 5px;\" id=\"home-roles-";
+    + "')\" ondragleave=\"removeHighlight();\" ondragover=\"allowDrop(event)\">Attributes</div>\n                    <div class=\"col-md-4\" style=\"background-color: #c2effd; display: inline-block; min-height: 100%; margin-left: 10px; border: 2px solid #357ebd; border-radius: 4px; padding: 5px;\" id=\"home-roles-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">Relationships</div>\n                </div>\n                <div style=\"margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid chartreuse; border-radius: 4px; padding: 5px;\" id=\"home-children-";
+    + "\">Relationships</div>\n                </div>\n                <div style=\"margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid #357ebd; border-radius: 4px; padding: 5px;\" id=\"home-children-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -2808,7 +2808,7 @@ function program2(depth0,data) {
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n            "
     + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options)))
-    + "\n        </span><br>\n        ";
+    + "\n            </span><br>\n        ";
   return buffer;
   }
 function program3(depth0,data) {
@@ -2879,8 +2879,8 @@ function program13(depth0,data) {
   buffer += "\n        ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.inferredRoles), {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n        ";
-  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.noop,fn:self.program(19, program19, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.inferredRoles)),stack1 == null || stack1 === false ? stack1 : stack1.length), 0, options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.inferredRoles)),stack1 == null || stack1 === false ? stack1 : stack1.length), 0, options));
+  buffer += "\n        </div>\n        ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.noop,fn:self.program(26, program26, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.inferredRoles)),stack1 == null || stack1 === false ? stack1 : stack1.length), 0, options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.inferredRoles)),stack1 == null || stack1 === false ? stack1 : stack1.length), 0, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    ";
   return buffer;
@@ -2888,10 +2888,10 @@ function program13(depth0,data) {
 function program14(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n            <!--<br>-->\n            ";
-  stack1 = (helper = helpers.eqLastGroup || (depth0 && depth0.eqLastGroup),options={hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), options) : helperMissing.call(depth0, "eqLastGroup", (depth0 && depth0.groupId), options));
+  buffer += "\n            <!--<br>inferred-->\n                    ";
+  stack1 = (helper = helpers.eqLastGroup || (depth0 && depth0.eqLastGroup),options={hash:{},inverse:self.program(20, program20, data),fn:self.programWithDepth(15, program15, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), options) : helperMissing.call(depth0, "eqLastGroup", (depth0 && depth0.groupId), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            &nbsp;<span draggable = \"true\" ondragstart=\"drag(event, '";
+  buffer += "\n                    &nbsp;<span draggable = \"true\" ondragstart=\"drag(event, '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -2901,14 +2901,14 @@ function program14(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "'>\n                "
+    + "'>\n                    "
     + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options)))
     + "</span>&nbsp;&rarr;&nbsp;\n            <span draggable = \"true\" ondragstart=\"drag(event, '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "')\" class='\n                ";
-  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(17, program17, data),fn:self.program(15, program15, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options));
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(24, program24, data),fn:self.program(22, program22, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "Primitive", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                ' data-module=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.module)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -2921,19 +2921,55 @@ function program14(depth0,data) {
     + "</span><br>\n        ";
   return buffer;
   }
-function program15(depth0,data) {
+function program15(depth0,data,depth1) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n                        </div>\n                        "
+    + escapeExpression((helper = helpers.setLastGroup || (depth0 && depth0.setLastGroup),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), options) : helperMissing.call(depth0, "setLastGroup", (depth0 && depth0.groupId), options)))
+    + "\n                        "
+    + escapeExpression((helper = helpers.lastColor || (depth1 && depth1.lastColor),options={hash:{},data:data},helper ? helper.call(depth0, (depth1 && depth1.getRandomColor), options) : helperMissing.call(depth0, "lastColor", (depth1 && depth1.getRandomColor), options)))
+    + "\n                        <div ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(18, program18, data),fn:self.program(16, program16, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), 0, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.groupId), 0, options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += ">\n                        <span style='background-color: "
+    + escapeExpression((helper = helpers.lastColor || (depth0 && depth0.lastColor),options={hash:{},data:data},helper ? helper.call(depth0, "get", options) : helperMissing.call(depth0, "lastColor", "get", options)))
+    + "'></span>\n                    ";
+  return buffer;
+  }
+function program16(depth0,data) {
+  
+  var buffer = "";
+  return buffer;
+  }
+
+function program18(depth0,data) {
+  
+  
+  return "style=\"border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;\"";
+  }
+
+function program20(depth0,data) {
+  
+  var buffer = "", helper, options;
+  buffer += "\n                        <span style='background-color: "
+    + escapeExpression((helper = helpers.lastColor || (depth0 && depth0.lastColor),options={hash:{},data:data},helper ? helper.call(depth0, "get", options) : helperMissing.call(depth0, "lastColor", "get", options)))
+    + "'></span>\n                    ";
+  return buffer;
+  }
+
+function program22(depth0,data) {
   
   
   return "\n                     sct-primitive-concept-compact\n                ";
   }
 
-function program17(depth0,data) {
+function program24(depth0,data) {
   
   
   return "\n                     sct-defined-concept-compact\n                ";
   }
 
-function program19(depth0,data) {
+function program26(depth0,data) {
   
   
   return "\n            <span class='i18n text-muted' data-i18n-id='i18n_no_relationships'>No attributes</span>\n        ";
@@ -3598,7 +3634,7 @@ function program2(depth0,data) {
 function program4(depth0,data) {
   
   var buffer = "", helper, options;
-  buffer += "\n                    <div class=\"phoca-flagbox\" style=\"width:35px;height:35px\">\n                        <span class=\"phoca-flag "
+  buffer += "\n                    <div class=\"phoca-flagbox\" style=\"width:20px;height:20px\">\n                        <span class=\"phoca-flag "
     + escapeExpression((helper = helpers.countryIcon || (depth0 && depth0.countryIcon),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.module), options) : helperMissing.call(depth0, "countryIcon", (depth0 && depth0.module), options)))
     + "\"></span>\n                    </div>\n                ";
   return buffer;
@@ -3715,7 +3751,7 @@ function program4(depth0,data) {
 function program6(depth0,data) {
   
   var buffer = "", helper, options;
-  buffer += "\n                    <div class=\"phoca-flagbox\" style=\"width:35px;height:35px\">\n                        <span class=\"phoca-flag "
+  buffer += "\n                    <div class=\"phoca-flagbox\" style=\"width:20px;height:20px\">\n                        <span class=\"phoca-flag "
     + escapeExpression((helper = helpers.countryIcon || (depth0 && depth0.countryIcon),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.module), options) : helperMissing.call(depth0, "countryIcon", (depth0 && depth0.module), options)))
     + "\"></span>\n                    </div>\n                ";
   return buffer;
@@ -4016,7 +4052,7 @@ function program8(depth0,data) {
 function program10(depth0,data) {
   
   var buffer = "", helper, options;
-  buffer += "\n                            <div class=\"phoca-flagbox\" style=\"width:35px;height:35px\">\n                                <span class=\"phoca-flag "
+  buffer += "\n                            <div class=\"phoca-flagbox\" style=\"width:20px;height:20px\">\n                                <span class=\"phoca-flag "
     + escapeExpression((helper = helpers.countryIcon || (depth0 && depth0.countryIcon),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.module), options) : helperMissing.call(depth0, "countryIcon", (depth0 && depth0.module), options)))
     + "\"></span>\n                            </div>\n                        ";
   return buffer;

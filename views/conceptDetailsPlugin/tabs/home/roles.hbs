@@ -3,8 +3,10 @@
         {{#each statedRoles}}
             <!--<br>-->
             {{#eqLastGroup groupId}}
+                </div>
                 {{setLastGroup groupId}}
                 {{lastColor getRandomColor}}
+                <div {{#if_eq groupId 0}}{{else}}style="border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;"{{/if_eq}}>
                 <span style='background-color: {{lastColor "get"}}'></span>
             {{else}}
                 <span style='background-color: {{lastColor "get"}}'></span>
@@ -18,23 +20,26 @@
                 <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
             {{/if_eq}}
             {{removeSemtag target.defaultTerm}}
-        </span><br>
+            </span><br>
         {{/each}}
+        </div>
         {{#if_eq statedRoles.length 0}}
             <span class='i18n text-muted' data-i18n-id='i18n_no_relationships'>No relationships</span>
         {{/if_eq}}
     {{else}}
         {{#each inferredRoles}}
-            <!--<br>-->
-            {{#eqLastGroup groupId}}
-                {{setLastGroup groupId}}
-                {{lastColor getRandomColor}}
-                <span style='background-color: {{lastColor "get"}}'></span>
-            {{else}}
-                <span style='background-color: {{lastColor "get"}}'></span>
-            {{/eqLastGroup}}
-            &nbsp;<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
-                {{removeSemtag type.defaultTerm}}</span>&nbsp;&rarr;&nbsp;
+            <!--<br>inferred-->
+                    {{#eqLastGroup groupId}}
+                        </div>
+                        {{setLastGroup groupId}}
+                        {{lastColor ../getRandomColor}}
+                        <div {{#if_eq groupId 0}}{{else}}style="border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;"{{/if_eq}}>
+                        <span style='background-color: {{lastColor "get"}}'></span>
+                    {{else}}
+                        <span style='background-color: {{lastColor "get"}}'></span>
+                    {{/eqLastGroup}}
+                    &nbsp;<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
+                    {{removeSemtag type.defaultTerm}}</span>&nbsp;&rarr;&nbsp;
             <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='
                 {{#if_eq target.definitionStatus "Primitive"}}
                      sct-primitive-concept-compact
@@ -44,6 +49,7 @@
                 ' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
                 {{removeSemtag target.defaultTerm}}</span><br>
         {{/each}}
+        </div>
         {{#if_eq inferredRoles.length 0}}
             <span class='i18n text-muted' data-i18n-id='i18n_no_relationships'>No attributes</span>
         {{/if_eq}}
