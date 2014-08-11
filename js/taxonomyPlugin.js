@@ -480,7 +480,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                     }
                     parentLiHtml = parentLiHtml + " treeButton'  id='" + panel.divElement.id + "-treeicon-" + parent.conceptId + "'></i></button>";
                     if (parent.definitionStatus == "Primitive") {
-                        parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&nbsp;</span>&nbsp;&nbsp;';
+                        parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&nbsp;&nbsp;</span>&nbsp;&nbsp;';
                     } else {
                         parentLiHtml = parentLiHtml + '<span class="badge alert-warning">&equiv;</span>&nbsp;&nbsp;';
                     }

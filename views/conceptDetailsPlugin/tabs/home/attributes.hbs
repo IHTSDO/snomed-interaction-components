@@ -2,7 +2,7 @@
     <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"  draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">
         <span class="badge alert-warning">&nbsp;
         {{#if_eq firstMatch.definitionStatus "Primitive"}}
-            &nbsp;
+            &nbsp;&nbsp;
         {{else}}
             &equiv;
         {{/if_eq}}
