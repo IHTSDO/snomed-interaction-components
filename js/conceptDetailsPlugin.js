@@ -323,11 +323,17 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
+
             var context = {
                 firstMatch: firstMatch,
                 divElementId: panel.divElement.id,
+                edition: options.edition,
+                release: options.release,
+                server: options.serverUrl.substr(0, options.serverUrl.length - 10),
+//                dataContentValue: options.serverUrl.substr(0, options.serverUrl.length - 10)
                 dataContentValue: document.URL.split("?")[0].split("#")[0]
             };
+
             $('#' + panel.attributesPId).html(JST["views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs"](context));
             $('#' + 'share-link-' + panel.divElement.id).disableTextSelect();
             $('#' + 'share-link-' + panel.divElement.id).click(function (event) {
@@ -390,6 +396,8 @@ function conceptDetails(divElement, conceptId, options) {
                 languageName = "(AU)";
             } else if (panel.options.langRefset == "999001251000000103") {
                 languageName = "(UK)";
+            } else if (panel.options.langRefset == "31000146106") {
+                languageName = "(NL)";
             }
 
             var allDescriptions = firstMatch.descriptions.slice(0);
@@ -682,7 +690,17 @@ function conceptDetails(divElement, conceptId, options) {
                         });
                     }
                 }
-
+            });
+            $("#home-parents-" + panel.divElement.id).dblclick(function (event){
+                var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                panel.conceptId = conceptId;
+                panel.updateCanvas();
+                channel.publish(panel.divElement.id, {
+                    term: $(event.target).attr('data-term'),
+                    module: $(event.target).attr("data-module"),
+                    conceptId: conceptId,
+                    source: panel.divElement.id
+                });
             });
 
             Handlebars.registerHelper('eqLastGroup', function (a, opts) {
@@ -909,6 +927,19 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 }
             });
+
+            $("#home-children-" + panel.divElement.id + "-body").dblclick(function (event){
+                var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                panel.conceptId = conceptId;
+                panel.updateCanvas();
+                channel.publish(panel.divElement.id, {
+                    term: $(event.target).attr('data-term'),
+                    module: $(event.target).attr("data-module"),
+                    conceptId: conceptId,
+                    source: panel.divElement.id
+                });
+            });
+
             $("#" + panel.divElement.id + "-showChildren").tooltip({
                 placement : 'right',
                 trigger: 'hover',
