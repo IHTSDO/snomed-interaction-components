@@ -330,6 +330,7 @@ function conceptDetails(divElement, conceptId, options) {
                 edition: options.edition,
                 release: options.release,
                 server: options.serverUrl.substr(0, options.serverUrl.length - 10),
+                langRefset: panel.options.langRefset,
 //                dataContentValue: options.serverUrl.substr(0, options.serverUrl.length - 10)
                 dataContentValue: document.URL.split("?")[0].split("#")[0]
             };
@@ -377,6 +378,15 @@ function conceptDetails(divElement, conceptId, options) {
                 title: i18n_drag_this,
                 animation: true,
                 delay: 500
+            });
+
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
             });
 
             // load descriptions panel
@@ -661,6 +671,22 @@ function conceptDetails(divElement, conceptId, options) {
                 $('#home-parents-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-parents-' + panel.divElement.id).html()));
             }
             $(".treeButton").disableTextSelect();
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
             $("#home-parents-" + panel.divElement.id).unbind();
             $("#home-parents-" + panel.divElement.id).click(function (event) {
                 if ($(event.target).hasClass("treeButton")) {
@@ -704,7 +730,7 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             Handlebars.registerHelper('eqLastGroup', function (a, opts) {
-                console.log(a, panel.lastGroup);
+//                console.log(a, panel.lastGroup);
                 if(panel.lastGroup == null){
                     panel.lastGroup = a;
                     return opts.fn(this);
@@ -837,6 +863,15 @@ function conceptDetails(divElement, conceptId, options) {
                 delay: 500
             });
 
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
+
             if (typeof(switchLanguage) == "function") {
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
@@ -895,6 +930,23 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
             $("#home-children-" + panel.divElement.id + "-body").html(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
             $(".treeButton").disableTextSelect();
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
+            $("#home-children-" + panel.divElement.id + "-body").unbind();
             $("#home-children-" + panel.divElement.id + "-body").click(function (event) {
                 if ($(event.target).hasClass("treeButton")) {
                     var conceptId = $(event.target).closest("li").attr('data-concept-id');
@@ -1011,8 +1063,24 @@ function conceptDetails(divElement, conceptId, options) {
             } else {
                 $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
             }
-            $("#" + panel.divElement.id + "-treenode-" + conceptId).after(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
+            $("#" + panel.divElement.id + "-treenode-" + conceptId).closest("li").append(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
             $(".treeButton").disableTextSelect();
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
 
         }).fail(function() {
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
@@ -1071,6 +1139,22 @@ function conceptDetails(divElement, conceptId, options) {
             $(target).closest("li").prepend(auxHtml);
 //            $("#" + ind + panel.divElement.id + "-treeicon-" + conceptId).after(auxHtml);
             $(".treeButton").disableTextSelect();
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
         }).fail(function(){
         });
     }

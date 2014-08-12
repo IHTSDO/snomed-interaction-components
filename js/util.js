@@ -1,7 +1,7 @@
 /**
  * Created by alo on 7/18/14.
  */
-
+icon = document.createElement("img");
 channel = postal.channel("Selections");
 
 $(document).on('dragend', function(){
@@ -14,7 +14,11 @@ function removeHighlight(){
 
 function allowDrop(ev) {
     ev.preventDefault();
+
     var aux = $(ev.target).closest("div");
+//    while (typeof $(aux).closest('div').attr('ondrop') != "undefined"){
+//        aux = $(aux).closest('div');
+//    }
     $(aux).addClass("drop-highlighted");
 }
 
@@ -44,7 +48,13 @@ function drag(ev, id) {
             }
         }
     });
-    var icon = iconToDrag(term);
+    icon = iconToDrag(term);
+    if (navigator.userAgent.indexOf("Chrome") > -1){
+        icon = iconToDrag(term);
+        ev.dataTransfer.setDragImage(icon, 0, 0);
+    }else{
+//            icon = iconToDrag(term);
+    }
     ev.dataTransfer.setDragImage(icon, 0, 0);
     dataText = conceptId + "|" + term;
     ev.dataTransfer.setData("Text", dataText);

@@ -727,6 +727,22 @@ function searchPanel(divElement, options) {
                                 source: panel.divElement.id
                             });
                         });
+                        $("[draggable='true']").tooltip({
+                            placement: 'left auto',
+                            trigger: 'hover',
+                            title: i18n_drag_this,
+                            animation: true,
+                            delay: 500
+                        });
+
+                        $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                            var term = $(e.target).attr("data-term");
+                            if (typeof term == "undefined"){
+                                term = $($(e.target).parent()).attr("data-term");
+                            }
+                            icon = iconToDrag(term);
+                        });
 
                     }).fail(function () {
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
