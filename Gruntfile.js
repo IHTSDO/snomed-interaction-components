@@ -6,21 +6,25 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        clean: ["build", "dist", "views/compiled"],
+        clean: ["dist", "views/compiled"],
         concat: {
-            options: {
-                separator: ';'
-            },
-            dist: {
+            js: {
                 src: [
                     'js/conceptDetailsPlugin.js',
+                    'js/countryIcons.js',
                     'js/drawConceptDiagram.js',
+                    'js/popover.js',
                     'js/searchPlugin.js',
                     'js/svgdiagrammingv2.js',
                     'js/taxonomyPlugin.js',
+                    'js/util.js',
                     'views/compiled/templates.js'
                 ],
-                dest: 'build/<%= pkg.name %>-<%= pkg.version %>.js'
+                dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js'
+            },
+            css: {
+                src: 'css/*.css',
+                dest: 'dist/css/<%= pkg.name %>-<%= pkg.version %>.css'
             }
         },
         uglify: {
@@ -28,41 +32,14 @@ module.exports = function(grunt) {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             build: {
-                src: 'build/<%= pkg.name %>-<%= pkg.version %>.js',
-                dest: 'build/<%= pkg.name %>-<%= pkg.version %>.min.js'
+                src: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js',
+                dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js'
             }
         },
         cssmin: {
-            minify: {
-                expand: true,
-                cwd: 'dist/css/',
-                src: ['*.css', '!*.min.css'],
-                dest: 'dist/css/',
-                ext: '.min.css'
-            }
-        },
-        copy: {
-            main: {
-                files:
-                [
-                    {
-                        expand: true,
-                        cwd: 'build',
-                        src: '*.js',
-                        dest: 'dist/js/',
-                        options: {
-                            process: function (content) {
-                                return content.replace(new RegExp('views/', 'g'), 'snomed-interaction-components/views/');
-                            }
-                        }
-                    },
-                    {
-                        expand: true,
-                        cwd: 'css',
-                        src: 'sct-diagram.css',
-                        dest: 'dist/css/'
-                    }
-                ]
+            css: {
+                src: 'dist/css/<%= pkg.name %>-<%= pkg.version %>.css',
+                dest: 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css'
             }
         },
         handlebars: {
@@ -75,14 +52,30 @@ module.exports = function(grunt) {
                 }
             }
         },
+        bump: {
+            options: {
+                files: ['package.json'],
+                updateConfigs: [],
+                commit: true,
+                commitMessage: 'Release v%VERSION%',
+                commitFiles: ['-A'],
+                createTag: true,
+                tagName: 'v%VERSION%',
+                tagMessage: 'Version %VERSION%',
+                push: true,
+                pushTo: 'origin',
+                gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d'
+            }
+        },
         release: {
             options: {
-                npm: false,
-                tagName: 'snomed-interaction-components-<%= version %>',
+                bump: false, //default: true
+                npm: false, //default: true
+                npmtag: true, //default: no tag
                 github: {
-                    repo: 'termMed/snomed-interaction-components',
-                    usernameVar: 'GITHUB_USERNAME',
-                    passwordVar: 'GITHUB_PASSWORD'
+                    repo: 'termmed/snomed-interaction-components', //put your user/repo here
+                    usernameVar: 'GITHUB_USERNAME', //ENVIRONMENT VARIABLE that contains Github username
+                    passwordVar: 'GITHUB_PASSWORD' //ENVIRONMENT VARIABLE that contains Github password
                 }
             }
         },
@@ -91,6 +84,11 @@ module.exports = function(grunt) {
             options: {
                 reporter: require('jshint-stylish'),
                 reporterOutput: 'dist/jshint-output.txt'
+            }
+        },
+        changelog: {
+            options: {
+                // Task-specific options go here.
             }
         }
 
@@ -102,9 +100,18 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
-    grunt.loadNpmTasks('grunt-release');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-bump');
+    grunt.loadNpmTasks('grunt-conventional-changelog');
+    grunt.loadNpmTasks('grunt-release');
 
     // Default task(s).
-    grunt.registerTask('default', ['clean', 'handlebars', 'concat','uglify', 'copy', 'cssmin']);
+    grunt.registerTask('default', ['clean', 'handlebars', 'concat','uglify', 'cssmin']);
+
+    grunt.registerTask('releaseit', function(target) {
+        grunt.task.run([
+            'bump-only:' + target,
+            'default'
+        ]);
+    });
 };

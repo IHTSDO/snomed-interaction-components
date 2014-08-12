@@ -1,83 +1,26 @@
 {{#each result.descriptions}}
-    {{#if_eq active false}}
-        {{#if_eq options.statusSearchFilter "inactiveOnly"}}
-            <tr class='resultRow selectable-row danger'>
-                <td class='col-md-7'>
-                    <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                        <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
+    <tr class='resultRow selectable-row {{#if danger}}danger{{/if}}'>
+        <td class='col-md-7'>
+            <div class='result-item' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                {{#if_eq definitionStatus "Primitive"}}
+                    <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{term}}">&nbsp;&nbsp;</span>&nbsp;&nbsp;
+                {{else}}
+                    <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{term}}">&equiv;</span>&nbsp;&nbsp;
+                {{/if_eq}}
+                {{#hasCountryIcon module}}
+                    <div class="phoca-flagbox" style="width:20px;height:20px">
+                        <span class="phoca-flag {{countryIcon module}}"></span>
                     </div>
-                </td>
-                <td class='text-muted small-text col-md-5 result-item'  data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                    {{../../../result.defaultTerm}}
-                </td>
-            </tr>
-        {{else}}
-            {{#if_eq options.statusSearchFilter "activeAndInactive"}}
-                <tr class='resultRow selectable-row danger'>
-                    <td class='col-md-7'>
-                        <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                            <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
-                        </div>
-                    </td>
-                    <td class='text-muted small-text col-md-5 result-item'  data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                        {{../../../../result.defaultTerm}}
-                    </td>
-                </tr>
-            {{/if_eq}}
-        {{/if_eq}}
-    {{else}}
-        {{#if_eq conceptActive false}}
-            {{#if_eq options.statusSearchFilter "inactiveOnly"}}
-                <tr class='resultRow selectable-row danger'>
-                    <td class='col-md-7'>
-                        <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                            <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
-                        </div>
-                    </td>
-                    <td class='text-muted small-text col-md-5 result-item'  data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                        {{../../../../result.defaultTerm}}
-                    </td>
-                </tr>
-            {{else}}
-                {{#if_eq options.statusSearchFilter "activeAndInactive"}}
-                    <tr class='resultRow selectable-row danger'>
-                        <td class='col-md-7'>
-                            <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
-                            </div>
-                        </td>
-                        <td class='text-muted small-text col-md-5 result-item'  data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                            {{../../../../../result.defaultTerm}}
-                        </td>
-                    </tr>
-                {{/if_eq}}
-            {{/if_eq}}
-        {{else}}
-            {{#if_eq options.statusSearchFilter "inactiveOnly"}}
-                <tr class='resultRow selectable-row'>
-                    <td class='col-md-7'>
-                        <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                            <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
-                        </div>
-                    </td>
-                    <td class='text-muted small-text col-md-5 result-item'  data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                        {{../../../../result.defaultTerm}}
-                    </td>
-                </tr>
-            {{else}}
-                {{#if_eq options.statusSearchFilter "activeAndInactive"}}
-                    <tr class='resultRow selectable-row'>
-                        <td class='col-md-7'>
-                            <div draggable="true" ondragstart="drag(event, '{{divElementId}}')" class='result-item' data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
-                            </div>
-                        </td>
-                        <td class='text-muted small-text col-md-5 result-item'  data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                            {{../../../../../result.defaultTerm}}
-                        </td>
-                    </tr>
-                {{/if_eq}}
-            {{/if_eq}}
-        {{/if_eq}}
-    {{/if_eq}}
+                {{/hasCountryIcon}}
+                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;' draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-term='{{term}}' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
+            </div>
+        </td>
+        <td class='text-muted small-text col-md-5 result-item' data-term='{{term}}' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>
+            {{../result.defaultTerm}}
+        </td>
+    </tr>
 {{/each}}
+
+{{#if_eq result.descriptions.length 0}}
+    <tr><td class='text-muted'>No results</td></tr>
+{{/if_eq}}

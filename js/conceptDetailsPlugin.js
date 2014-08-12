@@ -38,6 +38,9 @@ function conceptDetails(divElement, conceptId, options) {
     var xhr = null;
     var xhrChildren = null;
     var conceptRequested = 0;
+    panel.subscriptionsColor = [];
+    panel.subscriptions = [];
+    panel.subscribers = [];
 
     componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
@@ -58,6 +61,26 @@ function conceptDetails(divElement, conceptId, options) {
         return this.divId;
     }
 
+    this.getNextMarkerColor = function(color) {
+//console.log(color);
+        var returnColor = 'black';
+        if (color == 'black') {
+            returnColor = 'green';
+        } else if (color == 'green') {
+            returnColor = 'purple';
+        } else if (color == 'purple') {
+            returnColor = 'red';
+        } else if (color == 'red') {
+            returnColor = 'blue';
+        } else if (color == 'blue') {
+            returnColor = 'green';
+        }
+//console.log(returnColor);
+        globalMarkerColor = returnColor;
+        return returnColor;
+    }
+    panel.markerColor = panel.getNextMarkerColor(globalMarkerColor);
+
     this.setupCanvas = function() {
         panel.attributesPId = panel.divElement.id + "-attributes-panel";
         panel.descsPId = panel.divElement.id + "-descriptions-panel";
@@ -66,14 +89,14 @@ function conceptDetails(divElement, conceptId, options) {
         panel.defaultTerm = "";
         $(divElement).html();
         var context = {
-            divElementId: panel.divElement.id
+            divElementId: panel.divElement.id,
         };
         //        options statedParents inferredParents firstMatch statedRoles inferredRoles allDescriptions
         // dataContentValue = document.URL.split("?")[0].split("#")[0]
 
         $(divElement).html(JST["views/conceptDetailsPlugin/main.hbs"](context));
 
-        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+//        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
         $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
@@ -88,13 +111,17 @@ function conceptDetails(divElement, conceptId, options) {
             $(divElement).remove();
         });
 
+        $("#" + panel.divElement.id + "-configButton").click(function (event) {
+            panel.setupOptionsPanel();
+        });
+
         if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
 
-        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-            $("#" + panel.divElement.id + "-linkerButton").hide();
-        }
+//        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+//            $("#" + panel.divElement.id + "-linkerButton").hide();
+//        }
 
         if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
             $("#" + panel.divElement.id + "-subscribersMarker").remove();
@@ -199,76 +226,70 @@ function conceptDetails(divElement, conceptId, options) {
         if (typeof i18n_panel_links == "undefined") {
             i18n_panel_links = 'Panel links';
         }
-        $("#" + panel.divElement.id + "-linkerButton").tooltip({
-            placement : 'left',
-            trigger: 'hover',
-            title: i18n_panel_links,
-            animation: true,
-            delay: 1000
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+//            placement : 'left',
+//            trigger: 'hover',
+//            title: i18n_panel_links,
+//            animation: true,
+//            delay: 1000
+//        });
 
         $("#" + panel.divElement.id + "-apply-button").click(function() {
             //console.log("apply!");
             panel.readOptionsPanel();
-            panel.updateCanvas();
+//            panel.updateCanvas();
         });
 
-        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
-            $("#" + panel.divElement.id + "-linkerButton").popover({
-                trigger: 'manual',
-                placement: 'bottomRight',
-                html: true,
-                content: function() {
-                    if (!panel.subscription) {
-                        linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
-                    } else {
-                        linkerHtml = '<div class="text-center"><a href="javascript:void(0);" onclick="cancelSubscription(\'' + panel.subscription.divElement.id + '\',\'' + panel.divElement.id + '\');">Clear link</a></div>';
-                    }
-                    return linkerHtml;
-                }
-            });
-            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
+//            $("#" + panel.divElement.id + "-linkerButton").popover({
+//                trigger: 'manual',
+//                placement: 'bottomRight',
+//                html: true,
+//                content: function() {
+//                    if (panel.subscriptions.length == 0) {
+//                        linkerHtml = '<div class="text-center text-muted"><em>Not linked yet<br>Drag to link with other panels</em></div>';
+//                    } else {
+//                        var linkHtml = '';
+//                        $.each(panel.subscriptions, function(i, field){
+//                            var panelLink = {};
+//                            $.each(componentsRegistry, function(i, panl){
+//                                if (panl.divElement.id == field.topic){
+//                                    panelLink = panl;
+//                                }
+//                            });
+//                            linkHtml = linkHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="\'' + panel.unsubscribe(panelLink) + '\'">Clear link with '+ field.topic +'</a><br></div>';
+//                        });
+//                        linkHtml = linkHtml + '';
+//                        linkerHtml = linkHtml;
+//                    }
+//                    return linkerHtml;
+//                }
+//            });
+//            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+//        });
 
         panel.updateCanvas();
+        channel.publish(panel.divElement.id, {
+            term: panel.term,
+            module: panel.module,
+            conceptId: panel.conceptId,
+            source: panel.divElement.id
+        });
         panel.setupOptionsPanel();
-    }
-
-    this.handleDropEvent = function(event, ui) {
-        var draggable = ui.draggable;
-        //console.log(draggable.html() + " |  " + draggable.attr('data-concept-id') + ' was dropped onto me!');
-        if (!draggable.attr('data-concept-id')) {
-            if (!draggable.attr('data-panel')) {
-                //console.log("ignore");
-            } else {
-                //console.log("OK : " + draggable.attr('data-panel'));
-                $.each(componentsRegistry, function(i, field) {
-                    if (field.divElement.id == draggable.attr('data-panel')) {
-                        if (field.type == "search" || field.type == "taxonomy") {
-                            field.subscribe(panel);
-                        }
-                    }
-                });
-            }
-        } else {
-            if (panel.conceptId != draggable.attr('data-concept-id')) {
-                if ($.contains($("#" + panel.divElement.id).get(0), $(draggable).get(0))) {
-                    draggable.remove();
-                }
-                panel.conceptId = draggable.attr('data-concept-id');
-                panel.updateCanvas();
-            }
+        if (panel.subscriptions.length > 0 || panel.subscribers.length > 0){
+            $("#" + panel.divElement.id + "-subscribersMarker").show();
         }
-
-
+        $("#" + panel.divElement.id + "-ownMarker").css('color', panel.markerColor);
     }
 
     this.updateCanvas = function() {
+//        $("#members-" + panel.divElement.id).html("");
         $('.more-fields-button').popover('hide');
         if (conceptRequested == panel.conceptId) {
             return;
         }
         conceptRequested = panel.conceptId;
+        $("#home-children-" + panel.divElement.id + "-body").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.attributesPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#home-attributes-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#' + panel.descsPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
@@ -284,9 +305,9 @@ function conceptDetails(divElement, conceptId, options) {
             xhr.abort();
             console.log("aborting call...");
         }
-        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function(result) {
+        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function (result) {
 
-        }).done(function(result) {
+        }).done(function (result) {
             var firstMatch = result;
             xhr = null;
             panel.attributesPId = divElement.id + "-attributes-panel";
@@ -294,32 +315,38 @@ function conceptDetails(divElement, conceptId, options) {
             var d = new Date();
             var time = d.getTime();
             panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
                 }
             });
+
             var context = {
                 firstMatch: firstMatch,
                 divElementId: panel.divElement.id,
+                edition: options.edition,
+                release: options.release,
+                server: options.serverUrl.substr(0, options.serverUrl.length - 10),
+//                dataContentValue: options.serverUrl.substr(0, options.serverUrl.length - 10)
                 dataContentValue: document.URL.split("?")[0].split("#")[0]
             };
+
             $('#' + panel.attributesPId).html(JST["views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs"](context));
             $('#' + 'share-link-' + panel.divElement.id).disableTextSelect();
-            $('#' + 'share-link-' + panel.divElement.id).click(function(event) {
+            $('#' + 'share-link-' + panel.divElement.id).click(function (event) {
                 setTimeout(function () {
                     $('#' + 'share-field-' + panel.divElement.id).select();
-                },300);
+                }, 300);
             });
 
 
             // load home-attributes
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
@@ -335,7 +362,7 @@ function conceptDetails(divElement, conceptId, options) {
             if (!firstMatch.active) {
                 $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
             } else {
-                $('#home-attributes-' + panel.divElement.id).css("background-color", "white");
+                $('#home-attributes-' + panel.divElement.id).css("background-color", "#428bca");
             }
 
             if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
@@ -344,15 +371,13 @@ function conceptDetails(divElement, conceptId, options) {
             if (typeof i18n_drag_this == "undefined") {
                 i18n_drag_this = "Drag this";
             }
-            $( "span[draggable='true']" ).tooltip({
-                placement : 'left auto',
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
                 trigger: 'hover',
                 title: i18n_drag_this,
                 animation: true,
                 delay: 500
             });
-
-
 
             // load descriptions panel
             panel.descsPId = divElement.id + "-descriptions-panel";
@@ -365,10 +390,18 @@ function conceptDetails(divElement, conceptId, options) {
                 languageName = "(ES)";
             } else if (panel.options.langRefset == "554461000005103") {
                 languageName = "(DA)";
+            } else if (panel.options.langRefset == "46011000052107") {
+                languageName = "(SV)";
+            } else if (panel.options.langRefset == "32570271000036106") {
+                languageName = "(AU)";
+            } else if (panel.options.langRefset == "999001251000000103") {
+                languageName = "(UK)";
+            } else if (panel.options.langRefset == "31000146106") {
+                languageName = "(NL)";
             }
 
             var allDescriptions = firstMatch.descriptions.slice(0);
-            allDescriptions.sort(function(a, b) {
+            allDescriptions.sort(function (a, b) {
                 if (a.type.conceptId < b.type.conceptId)
                     return -1;
                 if (a.type.conceptId > b.type.conceptId)
@@ -382,7 +415,7 @@ function conceptDetails(divElement, conceptId, options) {
                 return 0;
             });
             var homeDescriptionsHtml = "";
-            $.each(allDescriptions, function(i, field) {
+            $.each(allDescriptions, function (i, field) {
                 if (panel.options.displayInactiveDescriptions || field.active == true) {
                     if (field.active == true) {
                         if (homeDescriptionsHtml != "") {
@@ -392,79 +425,79 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 }
             });
-                Handlebars.registerHelper('removeSemtag', function (term){
-                    return panel.removeSemtag(term);
-                });
-                Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                    if (opts != "undefined") {
-                        if(a == b)
-                            return opts.fn(this);
-                        else
-                            return opts.inverse(this);
-                    }
-                });
-                Handlebars.registerHelper('preferred', function (a, opts) {
-                    if (a == "get") {
-                        if (panel.preferred) {
-                            return opts.fn(this);
-                        }else{
-                            return opts.inverse(this);
-                        }
-                    }else {
-                        panel.preferred = a;
-                    }
-                });
-                Handlebars.registerHelper('acceptable', function (a, opts) {
-                    if (a == "get") {
-                        if (panel.acceptable) {
-                            return opts.fn(this);
-                        }else{
-                            return opts.inverse(this);
-                        }
-                    }else {
-                        panel.acceptable = a;
-                    }
-                });
-                Handlebars.registerHelper('included', function (a, opts) {
-                    if (a == "get") {
-                        if (panel.included) {
-                            return opts.fn(this);
-                        }else{
-                            return opts.inverse(this);
-                        }
-                    }else {
-                        panel.included = a;
-                    }
-                });
-                var context = {
-                    options: panel.options,
-                    languageName: languageName,
-                    divElementId: panel.divElement.id,
-                    allDescriptions: allDescriptions
-                };
-                $("#" + panel.descsPId).html(JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context));
-                if (panel.options.displaySynonyms) {
-                    $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
+            Handlebars.registerHelper('removeSemtag', function (term) {
+                return panel.removeSemtag(term);
+            });
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
+                if (opts != "undefined") {
+                    if (a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
                 }
-
-                if (panel.options.displaySynonyms != true) { // hide synonyms
-                    $('#' + panel.descsPId).find('.synonym-row').each(function(i, val) {
-                        $(val).toggle();
-                    });
-                    $(this).toggleClass('glyphicon-plus');
-                    $(this).toggleClass('glyphicon-minus');
+            });
+            Handlebars.registerHelper('preferred', function (a, opts) {
+                if (a == "get") {
+                    if (panel.preferred) {
+                        return opts.fn(this);
+                    } else {
+                        return opts.inverse(this);
+                    }
+                } else {
+                    panel.preferred = a;
                 }
-                $("#" + panel.descsPId + "-descButton").disableTextSelect();
-                $("#" + panel.descsPId + "-descButton").click(function() {
-                    table = $(this).closest("table").first();
-                    $(this).toggleClass('glyphicon-plus');
-                    $(this).toggleClass('glyphicon-minus');
-                    table.find('.synonym-row').each(function(i, val) {
-                        $(val).toggle();
-                    });
-                });
-                $('#' + panel.descsPId).find("[rel=tooltip-right]").tooltip({ placement: 'right'});
+            });
+            Handlebars.registerHelper('acceptable', function (a, opts) {
+                if (a == "get") {
+                    if (panel.acceptable) {
+                        return opts.fn(this);
+                    } else {
+                        return opts.inverse(this);
+                    }
+                } else {
+                    panel.acceptable = a;
+                }
+            });
+            Handlebars.registerHelper('included', function (a, opts) {
+                if (a == "get") {
+                    if (panel.included) {
+                        return opts.fn(this);
+                    } else {
+                        return opts.inverse(this);
+                    }
+                } else {
+                    panel.included = a;
+                }
+            });
+            var context = {
+                options: panel.options,
+                languageName: languageName,
+                divElementId: panel.divElement.id,
+                allDescriptions: allDescriptions
+            };
+            $("#" + panel.descsPId).html(JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context));
+            if (panel.options.displaySynonyms) {
+                $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
+            }
 
+            if (panel.options.displaySynonyms != true) { // hide synonyms
+                $('#' + panel.descsPId).find('.synonym-row').each(function (i, val) {
+                    $(val).toggle();
+                });
+                $(this).toggleClass('glyphicon-plus');
+                $(this).toggleClass('glyphicon-minus');
+            }
+            $("#" + panel.descsPId + "-descButton").disableTextSelect();
+            $("#" + panel.descsPId + "-descButton").click(function () {
+                table = $(this).closest("table").first();
+                $(this).toggleClass('glyphicon-plus');
+                $(this).toggleClass('glyphicon-minus');
+                table.find('.synonym-row').each(function (i, val) {
+                    $(val).toggle();
+                });
+            });
+
+            $('#' + panel.descsPId).find("[rel=tooltip-right]").tooltip({ placement: 'right'});
 
 
             // load relationships panel and home parents/roles
@@ -482,8 +515,8 @@ function conceptDetails(divElement, conceptId, options) {
             panel.inferredRoles = [];
 
 
-            if (firstMatch.relationships){
-                firstMatch.relationships.sort(function(a, b) {
+            if (firstMatch.relationships) {
+                firstMatch.relationships.sort(function (a, b) {
                     if (a.groupId < b.groupId) {
                         return -1;
                     } else if (a.groupId > b.groupId) {
@@ -503,8 +536,8 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
             }
-            if (firstMatch.statedRelationships){
-                firstMatch.statedRelationships.sort(function(a, b) {
+            if (firstMatch.statedRelationships) {
+                firstMatch.statedRelationships.sort(function (a, b) {
                     if (a.groupId < b.groupId) {
                         return -1;
                     } else if (a.groupId > b.groupId) {
@@ -524,13 +557,13 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
             }
-            Handlebars.registerHelper('push', function (element, array){
+            Handlebars.registerHelper('push', function (element, array) {
                 array.push(element);
                 // return ;
             });
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
@@ -546,7 +579,7 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.relsPId).html(JST["views/conceptDetailsPlugin/tabs/details/rels-panel.hbs"](context));
 
 
-            panel.inferredParents.sort(function(a, b) {
+            panel.inferredParents.sort(function (a, b) {
                 if (a.target.defaultTerm < b.target.defaultTerm)
                     return -1;
                 if (a.target.defaultTerm > b.target.defaultTerm)
@@ -554,7 +587,7 @@ function conceptDetails(divElement, conceptId, options) {
                 return 0;
             });
 
-            panel.statedParents.sort(function(a, b) {
+            panel.statedParents.sort(function (a, b) {
                 if (a.target.defaultTerm < b.target.defaultTerm)
                     return -1;
                 if (a.target.defaultTerm > b.target.defaultTerm)
@@ -562,7 +595,7 @@ function conceptDetails(divElement, conceptId, options) {
                 return 0;
             });
 
-            panel.inferredRoles.sort(function(a, b) {
+            panel.inferredRoles.sort(function (a, b) {
                 if (a.groupId < b.groupId) {
                     return -1;
                 } else if (a.groupId > b.groupId) {
@@ -576,7 +609,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
 
-            panel.statedRoles.sort(function(a, b) {
+            panel.statedRoles.sort(function (a, b) {
                 if (a.groupId < b.groupId) {
                     return -1;
                 } else if (a.groupId > b.groupId) {
@@ -590,28 +623,35 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
 
-            Handlebars.registerHelper('substr', function (string, start){
+            Handlebars.registerHelper('substr', function (string, start) {
                 var l = string.lastIndexOf("(") - 1;
                 return string.substr(start, l);
             });
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
                 }
             });
-            Handlebars.registerHelper('if_gr', function(a,b, opts) {
-                if (a){
+            Handlebars.registerHelper('if_gr', function (a, b, opts) {
+                if (a) {
                     var s = a.lastIndexOf("(");
-                    if(s > b)
+                    if (s > b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
                 }
+            });
+            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                if (countryIcons[moduleId])
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
             });
             var context = {
+                divElementId: panel.divElement.id,
                 statedParents: panel.statedParents,
                 inferredParents: panel.inferredParents,
                 options: panel.options
@@ -620,36 +660,82 @@ function conceptDetails(divElement, conceptId, options) {
             if (!panel.options.diagrammingMarkupEnabled) {
                 $('#home-parents-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-parents-' + panel.divElement.id).html()));
             }
+            $(".treeButton").disableTextSelect();
+            $("#home-parents-" + panel.divElement.id).unbind();
+            $("#home-parents-" + panel.divElement.id).click(function (event) {
+                if ($(event.target).hasClass("treeButton")) {
+                    var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                    event.preventDefault();
+                    if ($(event.target).hasClass("glyphicon-chevron-up")) {
+                        $(event.target).closest("li").find("ul").remove();
+                        $(event.target).removeClass("glyphicon-chevron-up");
+                        $(event.target).addClass("glyphicon-chevron-right");
+                    } else if ($(event.target).hasClass("glyphicon-chevron-right")) {
+                        $(event.target).removeClass("glyphicon-chevron-right");
+                        $(event.target).addClass("glyphicon-refresh");
+                        $(event.target).addClass("icon-spin");
+                        panel.getParent(conceptId, event.target);
+                    } else if ($(event.target).hasClass("glyphicon-minus")) {
+//                    $("#" + iconId).removeClass("glyphicon-minus");
+//                    $("#" + iconId).addClass("glyphicon-chevron-right");
+                    }
+                } else if ($(event.target).hasClass("treeLabel")) {
+                    var selectedId = $(event.target).attr('data-concept-id');
+                    if (typeof selectedId != "undefined") {
+                        channel.publish(panel.divElement.id, {
+                            term: $(event.target).attr('data-term'),
+                            module: $(event.target).attr("data-module"),
+                            conceptId: selectedId,
+                            source: panel.divElement.id
+                        });
+                    }
+                }
+            });
+            $("#home-parents-" + panel.divElement.id).dblclick(function (event){
+                var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                panel.conceptId = conceptId;
+                panel.updateCanvas();
+                channel.publish(panel.divElement.id, {
+                    term: $(event.target).attr('data-term'),
+                    module: $(event.target).attr("data-module"),
+                    conceptId: conceptId,
+                    source: panel.divElement.id
+                });
+            });
 
-
-            Handlebars.registerHelper('eqLastGroup', function (a, opts){
-                if(!a == panel.lastGroup)
+            Handlebars.registerHelper('eqLastGroup', function (a, opts) {
+                console.log(a, panel.lastGroup);
+                if(panel.lastGroup == null){
+                    panel.lastGroup = a;
+                    return opts.fn(this);
+                }
+                if (a != panel.lastGroup)
                     return opts.fn(this);
                 else
                     return opts.inverse(this);
             });
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
                 }
             });
-            Handlebars.registerHelper('removeSemtag', function (term){
+            Handlebars.registerHelper('removeSemtag', function (term) {
                 return panel.removeSemtag(term);
             });
-            Handlebars.registerHelper('setLastGroup', function (a){
+            Handlebars.registerHelper('setLastGroup', function (a) {
                 panel.lastGroup = a;
             });
             Handlebars.registerHelper('lastColor', function (a) {
                 if (a == "get") {
                     return panel.color;
-                }else {
+                } else {
                     panel.color = a;
                 }
             });
-            Handlebars.registerHelper('getRandomColor' , function (){
+            Handlebars.registerHelper('getRandomColor', function () {
                 return getRandomColor();
             });
             var context = {
@@ -657,6 +743,8 @@ function conceptDetails(divElement, conceptId, options) {
                 statedRoles: panel.statedRoles,
                 inferredRoles: panel.inferredRoles
             };
+//            console.log(panel.statedRoles);
+//            console.log(panel.inferredRoles);
             $('#home-roles-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/roles.hbs"](context));
 
             if (!panel.options.diagrammingMarkupEnabled) {
@@ -664,22 +752,22 @@ function conceptDetails(divElement, conceptId, options) {
             }
 
 
-            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
-                    if(a == b)
+                    if (a == b)
                         return opts.fn(this);
                     else
                         return opts.inverse(this);
                 }
             });
-            Handlebars.registerHelper('refset', function(type, data, opts){
-                if (data == "get"){
+            Handlebars.registerHelper('refset', function (type, data, opts) {
+                if (data == "get") {
                     if (panel.refset[type]) {
                         return opts.fn(this);
-                    }else{
+                    } else {
                         return opts.inverse(this);
                     }
-                }else{
+                } else {
                     panel.refset[type] = data;
                 }
             });
@@ -688,11 +776,23 @@ function conceptDetails(divElement, conceptId, options) {
             };
             $('#refsets-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/refset.hbs"](context));
 
+            $.each($("#refsets-" + panel.divElement.id).find('.refset-simplemap'), function (i, field) {
+//                console.log(field);
+//                console.log($(field).attr('data-refsetId'));
+                if ($(field).attr('data-refsetId') == "467614008") {
+                    channel.publish("refsetSubscription-467614008", {
+                        conceptId: $(field).attr('data-conceptId')
+                    });
+                }
+            });
+
             if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
                 $("#diagram-canvas-" + panel.divElement.id).html("");
                 drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
             }
 
+
+            $("#diagram-tab-link-" + panel.divElement.id).unbind();
             $("#diagram-tab-link-" + panel.divElement.id).click(function (e) {
                 $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
                 setTimeout(function () {
@@ -705,31 +805,46 @@ function conceptDetails(divElement, conceptId, options) {
             $('.more-fields-button').disableTextSelect();
             $('.more-fields-button').popover();
 
+//          firefox popover
+            if (navigator.userAgent.indexOf("Firefox") > -1) {
+                $(".more-fields-button").optionsPopover({
+                    contents: "",
+                    disableBackButton: true
+                });
+
+                $(".more-fields-button").click(function (e) {
+                    var auxHtml = $(e.target).attr('data-content');
+                    $("#popoverContent").html(auxHtml);
+                });
+            }
+
             if (panel.options.selectedView == "stated") {
-                $('#' + panel.relsPId).find('.inferred-rel').each(function(i, val) {
+                $('#' + panel.relsPId).find('.inferred-rel').each(function (i, val) {
                     $(val).toggle();
                 });
             } else if (panel.options.selectedView == "inferred") {
-                $('#' + panel.relsPId).find('.stated-rel').each(function(i, val) {
+                $('#' + panel.relsPId).find('.stated-rel').each(function (i, val) {
                     $(val).toggle();
                 });
             } else if (panel.options.selectedView != "all") {
                 // show all
             }
-            $( "span[draggable='true']" ).tooltip({
-                placement : 'left auto',
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
                 trigger: 'hover',
                 title: i18n_drag_this,
                 animation: true,
                 delay: 500
             });
+
             if (typeof(switchLanguage) == "function") {
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
             conceptRequested = 0;
 
+//            membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members";
 
-        }).fail(function() {
+        }).fail(function () {
             $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             $('#' + panel.descsPId).html("");
             $('#' + panel.relsPId).html("");
@@ -739,31 +854,294 @@ function conceptDetails(divElement, conceptId, options) {
 //            console.log("aborting call...");
 //
 //        }
-        if (panel.options.displayChildren == false) {
-            $('#' + panel.childrenPId).html("");
-            $('#' + panel.childrenPId).hide();
-        } else {
-            $('#' + panel.childrenPId).show();
-            if (xhrChildren != null) {
-                xhrChildren.abort();
-                console.log("aborting children call...");
-            }
-            xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=inferred", function(result) {
-                //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
-            }).done(function(result) {
-                // load relationships panel
-                xhrChildren = null;
-                panel.childrenPId = divElement.id + "-children-panel";
+        if (panel.options.displayChildren) {
+            var context = {
 
-                var context = {
-                    childrenResult: result
-                };
-                $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
-            }).fail(function() {
-                $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+            };
+        } else {
+        }
+
+//        if (panel.options.displayChildren == false) {
+////            $("#home-children-" + panel.divElement.id).hide();
+//            $('#' + panel.childrenPId).html("");
+//            $('#' + panel.childrenPId).hide();
+//        } else {
+//            $("#home-children-" + panel.divElement.id).show();
+//            $('#' + panel.childrenPId).show();
+        if (xhrChildren != null) {
+            xhrChildren.abort();
+            console.log("aborting children call...");
+        }
+        xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function (result) {
+            //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
+        }).done(function (result) {
+            // load relationships panel
+            result.sort(function(a, b) {
+                if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
+                    return -1;
+                if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
+                    return 1;
+                return 0;
+            });
+            xhrChildren = null;
+            panel.childrenPId = divElement.id + "-children-panel";
+//                console.log(result);
+            var context = {
+                displayChildren: panel.options.displayChildren,
+                divElementId: panel.divElement.id,
+                childrenResult: result,
+                selectedView: panel.options.selectedView
+            };
+            $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
+            $("#home-children-" + panel.divElement.id + "-body").html(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
+            $(".treeButton").disableTextSelect();
+            $("#home-children-" + panel.divElement.id + "-body").click(function (event) {
+                if ($(event.target).hasClass("treeButton")) {
+                    var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                    var iconId = panel.divElement.id + "-treeicon-" + conceptId;
+                    event.preventDefault();
+                    if ($("#" + iconId).hasClass("glyphicon-chevron-down")) {
+                        //console.log("close");
+                        $(event.target).closest("li").find("ul").remove();
+                        $("#" + iconId).removeClass("glyphicon-chevron-down");
+                        $("#" + iconId).addClass("glyphicon-chevron-right");
+                    } else if ($("#" + iconId).hasClass("glyphicon-chevron-right")) {
+                        //console.log("open");
+                        $("#" + iconId).removeClass("glyphicon-chevron-right");
+                        $("#" + iconId).addClass("glyphicon-refresh");
+                        $("#" + iconId).addClass("icon-spin");
+                        panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                    } else if ($("#" + iconId).hasClass("glyphicon-minus")) {
+//                    $("#" + iconId).removeClass("glyphicon-minus");
+//                    $("#" + iconId).addClass("glyphicon-chevron-right");
+                    }
+                } else if ($(event.target).hasClass("treeLabel")) {
+                    var selectedId = $(event.target).attr('data-concept-id');
+                    if (typeof selectedId != "undefined") {
+                        channel.publish(panel.divElement.id, {
+                            term: $(event.target).attr('data-term'),
+                            module: $(event.target).attr("data-module"),
+                            conceptId: selectedId,
+                            source: panel.divElement.id
+                        });
+                    }
+                }
             });
 
+            $("#home-children-" + panel.divElement.id + "-body").dblclick(function (event){
+                var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                panel.conceptId = conceptId;
+                panel.updateCanvas();
+                channel.publish(panel.divElement.id, {
+                    term: $(event.target).attr('data-term'),
+                    module: $(event.target).attr("data-module"),
+                    conceptId: conceptId,
+                    source: panel.divElement.id
+                });
+            });
+
+            $("#" + panel.divElement.id + "-showChildren").tooltip({
+                placement : 'right',
+                trigger: 'hover',
+                title: "Click here to display the children",
+                animation: true,
+                delay: 500
+            });
+            $("#" + panel.divElement.id + "-showChildren").click(function(){
+                panel.options.displayChildren = true;
+                panel.updateCanvas();
+            });
+        }).fail(function () {
+            $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+        });
+//    }
+        panel.loadMembers(50, 0);
+    }
+
+    this.getChildren = function(conceptId) {
+        if (typeof panel.options.selectedView == "undefined") {
+            panel.options.selectedView = "inferred";
         }
+
+        if (panel.options.selectedView == "inferred") {
+            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+        } else {
+            $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+        }
+
+        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
+        }).done(function(result) {
+            result.sort(function(a, b) {
+                if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
+                    return -1;
+                if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
+                    return 1;
+                return 0;
+            });
+            //console.log(JSON.stringify(result));
+            var listIconIds = [];
+            //console.log(JSON.stringify(listIconIds));
+            var context = {
+                displayChildren: panel.options.displayChildren,
+                childrenResult: result,
+                divElementId: panel.divElement.id,
+                selectedView: panel.options.selectedView
+            };
+            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                if (countryIcons[moduleId])
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            });
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('push', function (element){
+                listIconIds.push(element);
+            });
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
+            if (result.length > 0) {
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-chevron-down");
+            } else {
+                $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
+            }
+            $("#" + panel.divElement.id + "-treenode-" + conceptId).after(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
+            $(".treeButton").disableTextSelect();
+
+        }).fail(function() {
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("glyphicon-refresh");
+            $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
+        });
+    }
+
+    this.getParent = function(conceptId, target){
+        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents", function(result) {
+            //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
+        }).done(function(result) {
+            result.sort(function(a, b) {
+                if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
+                    return -1;
+                if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
+                    return 1;
+                return 0;
+            });
+            var auxHtml = "";
+            var ind = $(target).attr('data-ind');
+            if (result.length > 0){
+                if ($(target).attr('data-firstt')){
+                    auxHtml = "<ul style='margin-left: 95px; list-style-type: none; padding-left: 15px'>";
+                }else{
+                    auxHtml = "<ul style='list-style-type: none; padding-left: 15px'>";
+                }
+                $.each(result, function(i, field){
+//                    console.log(field);
+                    auxHtml = auxHtml + "<li class='treeLabel' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'><button class='btn btn-link btn-xs treeButton' style='padding:2px'>";
+                    if (field.conceptId == "138875005"){
+                        auxHtml = auxHtml + "<i class='glyphicon glyphicon-minus treeButton' data-ind='" + ind + "'></i></button>";
+                    }else{
+                        auxHtml = auxHtml + "<i class='glyphicon glyphicon-chevron-right treeButton' data-ind='" + ind + "'></i></button>";
+                    }
+                    if (field.definitionStatus == "Primitive"){
+                        auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>&nbsp;&nbsp;</span>&nbsp;&nbsp";
+                    }else{
+                        auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>&equiv;</span>&nbsp;&nbsp";
+                    }
+                    if (countryIcons[field.module]){
+                        auxHtml = auxHtml + "<div class='phoca-flagbox' style='width:26px;height:26px'><span class='phoca-flag " + countryIcons[field.module] + "'></span></div>&nbsp";
+                    }
+                    auxHtml = auxHtml + "<a id='" + ind + panel.divElement.id + "-treeicon-" + field.conceptId + "' href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'>";
+                    auxHtml = auxHtml + "<span class='treeLabel selectable-row' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>" + field.defaultTerm + "</span></a></li>";
+                });
+                auxHtml = auxHtml + "</ul>";
+            }
+            $(target).removeClass("glyphicon-refresh");
+            $(target).removeClass("icon-spin");
+            if (result.length > 0) {
+                $(target).addClass("glyphicon-chevron-up");
+            } else {
+                $(target).addClass("glyphicon-minus");
+            }
+            $(target).closest("li").prepend(auxHtml);
+//            $("#" + ind + panel.divElement.id + "-treeicon-" + conceptId).after(auxHtml);
+            $(".treeButton").disableTextSelect();
+        }).fail(function(){
+        });
+    }
+
+    this.loadMembers = function(returnLimit, skipTo){
+        var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members?limit=" + returnLimit;
+        if (skipTo > 0){
+            membersUrl = membersUrl + "&skip=" + skipTo;
+        }else{
+            $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><i class='glyphicon glyphicon-refresh icon-spin'></i></td></tr>");
+        }
+//        console.log(membersUrl);
+        $.getJSON(membersUrl, function(result){
+
+        }).done(function(result){
+//            console.log(result);
+            var remaining;
+            if (result.details.total == skipTo){
+                remaining = 0;
+            }else{
+                if (result.details.total > (skipTo + returnLimit)){
+                    remaining = result.details.total - (skipTo + returnLimit);
+                }else{
+                    if (result.details.total < returnLimit && skipTo == 0){
+                        remaining = 0;
+                    }else{
+                        remaining = result.details.total;
+                    }
+                }
+            }
+            var context = {
+                result: result,
+                returnLimit: returnLimit,
+                remaining: remaining,
+                divElementId: panel.divElement.id,
+                skipTo: skipTo
+            };
+            Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                if (opts != "undefined") {
+                    if(a == b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if (a){
+                    if(a > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            if (result.details.total != 0){
+                $("#" + panel.divElement.id + "-moreMembers").remove();
+                $("#members-" + panel.divElement.id + "-resultsTable").find(".more-row").remove();
+                if (skipTo == 0) {
+                    $('#members-' + panel.divElement.id + "-resultsTable").html(JST["views/conceptDetailsPlugin/tabs/members.hbs"](context));
+                }else{
+                    $('#members-' + panel.divElement.id + "-resultsTable").append(JST["views/conceptDetailsPlugin/tabs/members.hbs"](context));
+                }
+                $("#" + panel.divElement.id + "-moreMembers").click(function(){
+                    $("#" + panel.divElement.id + "-moreMembers").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                    panel.loadMembers(returnLimit, skipTo + 50);
+                });
+            }else{
+                $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'>This concept has no members</td></tr>");
+            }
+        }).fail(function(){
+            $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'>This concept has no members</td></tr>");
+        });
     }
 
     this.stripDiagrammingMarkup = function(htmlString) {
@@ -776,135 +1154,177 @@ function conceptDetails(divElement, conceptId, options) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
-    this.setSubscription = function(subscriptionPanel) {
-        panel.subscription = subscriptionPanel;
-        $("#" + panel.divElement.id + "-subscribersMarker").css('color', subscriptionPanel.markerColor);
+//    this.setSubscription = function(subscriptionPanel) {
+//        panel.subscription = subscriptionPanel;
+//        $("#" + panel.divElement.id + "-subscribersMarker").css('color', subscriptionPanel.markerColor);
+//        $("#" + panel.divElement.id + "-subscribersMarker").show();
+//    }
+
+//    this.clearSubscription = function() {
+//        panel.subscription = null;
+//        $("#" + panel.divElement.id + "-subscribersMarker").hide();
+//    }
+
+    this.removeSemtag = function(term) {
+        if (term.lastIndexOf("(") > 0) {
+            return term.substr(0, term.lastIndexOf("(")-1)
+        } else {
+            return term;
+        }
+    }
+
+    this.loadMarkers = function (){
+        var auxMarker = "", right = 0, top = 0, aux = false, visible = false;
+        $.each(componentsRegistry, function(i, field){
+            var panelId = field.divElement.id;
+            if ($("#" + panelId + "-subscribersMarker").is(':visible')){
+                visible = true;
+            }
+        });
+        if (panel.subscribers.length == 0){
+            right = 14;
+            $("#" + panel.divElement.id + "-ownMarker").hide();
+        }else{
+            if (!visible){
+                $("#" + panel.divElement.id + "-ownMarker").hide();
+            }
+            aux = true;
+        }
+        if ($("#" + panel.divElement.id + "-subscribersMarker").is(':visible')){
+            $("#" + panel.divElement.id + "-panelTitle").html($("#" + panel.divElement.id + "-panelTitle").html().replace(/&nbsp;/g, ''));
+            if (aux){
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+            }
+            $.each(panel.subscriptionsColor, function(i, field){
+                auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"; top:" + top + "px; right: " + right + "px;'></i>";
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+                top = top + 5;
+                right = right + 10;
+            });
+            $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
+        }
+    }
+
+    // Subsription methods
+    this.subscribe = function(panelToSubscribe) {
+        var panelId = panelToSubscribe.divElement.id;
+//        console.log('Subscribing to id: ' + panelId);
+        var alreadySubscribed = false;
+        $.each(panel.subscriptionsColor, function(i, field){
+            if (field == panelToSubscribe.markerColor){
+                alreadySubscribed = true;
+            }
+        });
+        if (!alreadySubscribed) {
+            var subscription = channel.subscribe(panelId, function(data, envelope) {
+//                console.log("listening in " + panel.divElement.id);
+                panel.conceptId = data.conceptId;
+                panel.updateCanvas();
+//            This creates a cycle
+//            channel.publish(panel.divElement.id, {
+//                term: data.term,
+//                conceptId: data.conceptId,
+//                source: data.source
+//            });
+            });
+            panel.subscriptions.push(subscription);
+            panelToSubscribe.subscribers.push(panel.divElement.id);
+            panel.subscriptionsColor.push(panelToSubscribe.markerColor);
+        }
+        $("#" + panelId + "-ownMarker").show();
         $("#" + panel.divElement.id + "-subscribersMarker").show();
+        $("#" + panelId + "-ownMarker").show();
     }
 
-    this.clearSubscription = function() {
-        panel.subscription = null;
-        $("#" + panel.divElement.id + "-subscribersMarker").hide();
+    this.unsubscribe = function(panelToUnsubscribe) {
+        var aux = [], colors = [], unsubscribed = true;
+        $.each(panel.subscriptionsColor, function(i, field){
+            if (field != panelToUnsubscribe.markerColor){
+                colors.push(field);
+            }else{
+                unsubscribed = false;
+            }
+        });
+        if (!unsubscribed){
+            panel.subscriptionsColor = colors;
+//            console.log(panel.divElement.id);
+//            console.log(panel.subscriptionsColor);
+            colors = [];
+            $.each(panelToUnsubscribe.subscribers, function(i, field){
+                if (field != panel.divElement.id){
+                    aux.push(field);
+                }
+            });
+            panelToUnsubscribe.subscribers = aux;
+            $.each(panelToUnsubscribe.subscriptionsColor, function(i, field){
+                colors.push(field);
+            });
+            if (panelToUnsubscribe.subscribers.length == 0){
+                if (panelToUnsubscribe.subscriptions.length == 0){
+                    $("#" + panelToUnsubscribe.divElement.id + "-subscribersMarker").hide();
+                }
+            }else{
+//                colors.push(panelToUnsubscribe.markerColor);
+            }
+            panelToUnsubscribe.subscriptionsColor = colors;
+//            console.log(panelToUnsubscribe.divElement.id);
+//            console.log(panelToUnsubscribe.subscriptionsColor);
+            aux = [];
+            $.each(panel.subscriptions, function(i, field){
+                if (panelToUnsubscribe.divElement.id == field.topic){
+                    field.unsubscribe();
+                }else{
+                    aux.push(field);
+                }
+            });
+            panel.subscriptions = aux;
+            if (panel.subscriptions.length == 0 && panel.subscribers.length == 0){
+                $("#" + panel.divElement.id + "-subscribersMarker").hide();
+            }
+        }
     }
-
 
     this.setupOptionsPanel = function() {
-        optionsHtml = '<form role="form" id="' + panel.divElement.id + '-options-form">';
-
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displaySynonyms == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displaySynonymsOption"> <span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displaySynonymsOption" checked> <span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.showIds == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayIdsOption"> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayIdsOption" checked> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.displayInactiveDescriptions == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-displayInactiveDescriptionsOption" checked> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.hideNotAcceptable == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="checkbox">';
-        optionsHtml = optionsHtml + '<label>';
-        if (panel.options.diagrammingMarkupEnabled == false) {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption"> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Guideline colors enabled</span>';
-        } else {
-            optionsHtml = optionsHtml + '<input type="checkbox" id="' + panel.divElement.id + '-diagrammingMarkupEnabledOption" checked> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Guideline colors enabled</span>';
-        }
-        optionsHtml = optionsHtml + '</label>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_rels_view">Relationships View</span></label>';
-        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-relsViewOption">';
-        if (typeof i18n_inferred == "undefined") {
-            i18n_inferred = "Inferred";
-        }
-        if (typeof i18n_stated == "undefined") {
-            i18n_stated = "Stated";
-        }
-        if (typeof i18n_all == "undefined") {
-            i18n_all = "All";
-        }
-        if (panel.options.selectedView == "stated") {
-            optionsHtml = optionsHtml + '<option value="stated" selected>' + i18n_stated + '</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="stated">' + i18n_stated + '</option>';
-        }
-        if (panel.options.selectedView == "inferred") {
-            optionsHtml = optionsHtml + '<option value="inferred" selected>' + i18n_inferred + '</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="inferred">' + i18n_inferred + '</option>';
-        }
-        if (panel.options.selectedView == "all") {
-            optionsHtml = optionsHtml + '<option value="all" selected>' + i18n_all + '</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="all">' + i18n_all + '</option>';
-        }
-        optionsHtml = optionsHtml + '</select>';
-        optionsHtml = optionsHtml + '</div>';
-
-        optionsHtml = optionsHtml + '<div class="form-group">';
-        optionsHtml = optionsHtml + '<label for="' + panel.divElement.id + '-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">Language Refset</span></label>';
-        optionsHtml = optionsHtml + '<select class="form-control" id="' + panel.divElement.id + '-langRefsetOption">';
-        if (panel.options.langRefset == "900000000000508004") {
-            optionsHtml = optionsHtml + '<option value="900000000000508004" selected>GB Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="900000000000508004">GB Language Refset</option>';
-        }
-        if (panel.options.langRefset == "900000000000509007") {
-            optionsHtml = optionsHtml + '<option value="900000000000509007" selected>US Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="900000000000509007">US Language Refset</option>';
-        }
-        if (panel.options.langRefset == "450828004") {
-            optionsHtml = optionsHtml + '<option value="450828004" selected>ES Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="450828004">ES Language Refset</option>';
-        }
-        if (panel.options.langRefset == "554461000005103") {
-            optionsHtml = optionsHtml + '<option value="554461000005103" selected>DA Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="554461000005103">DA Language Refset</option>';
-        }
-        if (panel.options.langRefset == "46011000052107") {
-            optionsHtml = optionsHtml + '<option value="46011000052107" selected>SV Language Refset</option>';
-        } else {
-            optionsHtml = optionsHtml + '<option value="46011000052107">SV Language Refset</option>';
-        }
-        optionsHtml = optionsHtml + '</select>';
-        optionsHtml = optionsHtml + '</div>';
-        optionsHtml = optionsHtml + '</form>';
-        $("#" + panel.divElement.id + "-modal-body").html(optionsHtml);
+        var possibleSubscribers = [];
+        $.each(componentsRegistry, function(i, field){
+            if (field.divElement.id != panel.divElement.id){
+                var object = {};
+                object.subscriptions = field.subscriptions;
+                object.id = field.divElement.id;
+                possibleSubscribers.push(object);
+            }
+        });
+        var aux = false;
+        $.each(possibleSubscribers, function(i, field){
+            aux = false;
+            $.each(panel.subscriptions, function(j, subscription){
+                if (field.id == subscription.topic){
+                    aux = true;
+                }
+            });
+            field.subscribed = aux;
+            aux = false;
+            $.each(field.subscriptions, function(i, subscription){
+                if (subscription.topic == panel.divElement.id){
+                    aux = true;
+                }
+            });
+            field.subscriptor = aux;
+        });
+        panel.options.possibleSubscribers = possibleSubscribers;
+        var context = {
+            options: panel.options,
+            divElementId: panel.divElement.id
+        };
+        Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            if (opts != "undefined") {
+                if(a == b)
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            }
+        });
+        $("#" + panel.divElement.id + "-modal-body").html(JST["views/conceptDetailsPlugin/options.hbs"](context));
     }
 
     this.readOptionsPanel = function() {
@@ -916,14 +1336,31 @@ function conceptDetails(divElement, conceptId, options) {
         panel.options.diagrammingMarkupEnabled = $("#" + panel.divElement.id + "-diagrammingMarkupEnabledOption").is(':checked');
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
         panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
-    }
-
-    this.removeSemtag = function(term) {
-        if (term.lastIndexOf("(") > 0) {
-            return term.substr(0, term.lastIndexOf("(")-1)
-        } else {
-            return term;
-        }
+        panel.options.displayChildren = $("#" + panel.divElement.id + "-displayChildren").is(':checked');
+        $.each(panel.options.possibleSubscribers, function (i, field){
+            field.subscribed = $("#" + panel.divElement.id + "-subscribeTo-" + field.id).is(':checked');
+            field.subscriptor = $("#" + panel.divElement.id + "-subscriptor-" + field.id).is(':checked');
+            var panelToSubscribe = {};
+            $.each(componentsRegistry, function(i, panelS){
+                if (panelS.divElement.id == field.id){
+                    panelToSubscribe = panelS;
+                }
+            });
+            if (field.subscribed){
+                panel.subscribe(panelToSubscribe);
+            }else{
+                panel.unsubscribe(panelToSubscribe);
+            }
+            if (field.subscriptor){
+                panelToSubscribe.subscribe(panel);
+            }else{
+                panelToSubscribe.unsubscribe(panel);
+            }
+        });
+        $.each(componentsRegistry, function (i, field){
+            field.loadMarkers();
+        });
+        panel.updateCanvas();
     }
 }
 
@@ -933,24 +1370,30 @@ function updateCD(divElementId, conceptId) {
         if (field.divElement.id == divElementId) {
             field.conceptId = conceptId;
             field.updateCanvas();
+            channel.publish(field.divElement.id, {
+                term: field.term,
+                conceptId: field.conceptId,
+                module: field.module,
+                source: field.divElement.id
+            });
         }
     });
     $('.history-button').popover('hide');
 }
 
-function cancelSubscription(divElementId1, divElementId2) {
-    var d1;
-    var d2;
-    $.each(componentsRegistry, function(i, field) {
-        if (field.divElement.id == divElementId1) {
-            d1 = field;
-        } else if (field.divElement.id == divElementId2) {
-            d2 = field;
-        }
-    });
-    d1.unsubscribe(d2);
-    $(d2.divElement).find('.linker-button').popover('toggle');
-}
+//function cancelSubscription(divElementId1, divElementId2) {
+//    var d1;
+//    var d2;
+//    $.each(componentsRegistry, function(i, field) {
+//        if (field.divElement.id == divElementId1) {
+//            d1 = field;
+//        } else if (field.divElement.id == divElementId2) {
+//            d2 = field;
+//        }
+//    });
+//    d1.unsubscribe(d2);
+//    $(d2.divElement).find('.linker-button').popover('toggle');
+//}
 
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');
@@ -959,49 +1402,6 @@ function getRandomColor() {
         color += letters[Math.round(Math.random() * 15)];
     }
     return color;
-}
-
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-
-function drag(ev, id) {
-    $.each(ev.target.attributes, function (){
-        if (this.name.substr(0, 4) == "data"){
-            ev.dataTransfer.setData(this.name.substr(5), this.value);
-        }
-    });
-    ev.dataTransfer.setData("divElementId", id);
-}
-
-function dropC(ev, id) {
-    ev.preventDefault();
-    var conceptId = ev.dataTransfer.getData("concept-id");
-    var panelD = ev.dataTransfer.getData("panel");
-    var divElementID = id;
-    var panelAct;
-    $.each(componentsRegistry, function (i, field){
-        if (field.divElement.id == divElementID){
-            panelAct = field;
-        }
-    });
-    if (!conceptId) {
-        if (!panelD) {
-        } else {
-            $.each(componentsRegistry, function(i, field) {
-                if (field.divElement.id == panelD) {
-                    if (field.type == "search" || field.type == "taxonomy") {
-                        field.subscribe(panelAct);
-                    }
-                }
-            });
-        }
-    } else {
-        if (panelAct.conceptId != conceptId) {
-            panelAct.conceptId = conceptId;
-            panelAct.updateCanvas();
-        }
-    }
 }
 
 (function($) {
@@ -1019,6 +1419,3 @@ $(document).keypress(function(event) {
     }
 }
 );
-
-
-

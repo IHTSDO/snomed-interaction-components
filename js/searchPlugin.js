@@ -7,7 +7,6 @@
 function searchPanel(divElement, options) {
     var thread = null;
     var panel = this;
-    this.subscribers = [];
     var lastT = "";
     var xhr = null;
     if (typeof componentsRegistry == "undefined") {
@@ -15,10 +14,14 @@ function searchPanel(divElement, options) {
     }
 
     this.markerColor = 'black';
+    if (typeof globalMarkerColor == "undefined") {
+        globalMarkerColor = 'black';
+    }
     this.type = "search";
     this.divElement = divElement;
     this.options = jQuery.extend(true, {}, options);
     var componentLoaded = false;
+    panel.shown0 = false;
     $.each(componentsRegistry, function (i, field) {
         if (field.divElement.id == panel.divElement.id) {
             componentLoaded = true;
@@ -27,8 +30,11 @@ function searchPanel(divElement, options) {
     if (componentLoaded == false) {
         componentsRegistry.push(panel);
     }
-
+    panel.subscribers = [];
+    panel.subscriptions = [];
+    panel.subscriptionsColor = [];
     this.history = [];
+
     this.setupCanvas = function () {
         var context = {
             divElementId: panel.divElement.id
@@ -42,7 +48,7 @@ function searchPanel(divElement, options) {
                 panel.search($this.val(),0,100,false);
             }, 500);
         });
-        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
+//        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
         $("#" + panel.divElement.id + "-configButton").disableTextSelect();
         $("#" + panel.divElement.id + "-historyButton").disableTextSelect();
@@ -63,16 +69,17 @@ function searchPanel(divElement, options) {
         }
 
         $("#" + panel.divElement.id + "-configButton").click(function (event) {
-            $("#" + panel.divElement.id + "-searchConfigBar").slideToggle('slow');
+            panel.setupOptionsPanel();
+//            $("#" + panel.divElement.id + "-searchConfigBar").slideToggle('slow');
         });
 
         if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
             $("#" + panel.divElement.id + "-closeButton").hide();
         }
 
-        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
-            $("#" + panel.divElement.id + "-linkerButton").hide();
-        }
+//        if (typeof panel.options.linkerButton != "undefined" && panel.options.linkerButton == false) {
+//            $("#" + panel.divElement.id + "-linkerButton").hide();
+//        }
 
         if (typeof panel.options.subscribersMarker != "undefined" && panel.options.subscribersMarker == false) {
             $("#" + panel.divElement.id + "-subscribersMarker").remove();
@@ -117,24 +124,21 @@ function searchPanel(divElement, options) {
         if (typeof i18n_panel_links == "undefined") {
             i18n_panel_links = 'Panel links';
         }
-        $("#" + panel.divElement.id + "-linkerButton").tooltip({
-            placement : 'left',
-            trigger: 'hover',
-            title: i18n_panel_links,
-            animation: true,
-            delay: 1000
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").tooltip({
+//            placement : 'left',
+//            trigger: 'hover',
+//            title: i18n_panel_links,
+//            animation: true,
+//            delay: 1000
+//        });
         $("#" + panel.divElement.id + "-apply-button").click(function () {
             panel.readOptionsPanel();
-            var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
-            console.log("searchTerm: " + searchTerm);
-            if (searchTerm.length > 0) {
-                panel.search(searchTerm + " ",0,100,false);
-            }
+
         });
         $("#" + panel.divElement.id + "-clearButton").click(function () {
             panel.options.semTagFilter = "none";
             panel.options.langFilter = "none";
+            panel.options.moduleFilter ="none";
             $('#' + panel.divElement.id + '-searchBox').val('');
             $('#' + panel.divElement.id + '-searchFilters').html("");
             $('#' + panel.divElement.id + '-resultsTable').html("");
@@ -152,6 +156,9 @@ function searchPanel(divElement, options) {
                 html: true,
                 content: function () {
                     historyHtml = '<div style="height:100px;overflow:auto;">';
+                    if (typeof i18n_no_search_terms == "undefined") {
+                        i18n_no_search_terms = "No search terms"
+                    }
                     if (panel.history.length == 0) {
                         historyHtml = historyHtml + '<div class="text-center text-muted" style="width:100%"><em>'+ i18n_no_search_terms + '</span>...</em></div>';
                     }
@@ -194,24 +201,24 @@ function searchPanel(divElement, options) {
             });
             $("#" + panel.divElement.id + "-historyButton").popover('toggle');
         });
-        $("#" + panel.divElement.id + "-linkerButton").click(function (event) {
-            $("#" + panel.divElement.id + "-linkerButton").popover({
-                trigger: 'manual',
-                placement: 'bottomRight',
-                html: true,
-                content: function () {
-                    var linkerHtml = '<div class="text-center text-muted"><em><span class="i18n" data-i18n-id="i18n_drag_to_link">Drag to link with other panels</span><br>';
-                    if (panel.subscribers.length == 1) {
-                        linkerHtml = linkerHtml + panel.subscribers.length + ' link established</em></div>';
-                    } else {
-                        linkerHtml = linkerHtml + panel.subscribers.length + ' links established</em></div>';
-                    }
-                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearSearchPanelSubscriptions(\'' + panel.divElement.id + '\');"><span class="i18n" data-i18n-id="i18n_clear_links">Clear links</span></a></div>';
-                    return linkerHtml;
-                }
-            });
-            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
-        });
+//        $("#" + panel.divElement.id + "-linkerButton").click(function (event) {
+//            $("#" + panel.divElement.id + "-linkerButton").popover({
+//                trigger: 'manual',
+//                placement: 'bottomRight',
+//                html: true,
+//                content: function () {
+//                    var linkerHtml = '<div class="text-center text-muted"><em><span class="i18n" data-i18n-id="i18n_drag_to_link">Drag to link with other panels</span><br>';
+//                    if (panel.subscriptions.length == 1) {
+//                        linkerHtml = linkerHtml + panel.subscriptions.length + ' link established</em></div>';
+//                    } else {
+//                        linkerHtml = linkerHtml + panel.subscriptions.length + ' links established</em></div>';
+//                    }
+//                    linkerHtml = linkerHtml + '<div class="text-center"><a href="javascript:void(0);" onclick="clearSearchPanelSubscriptions(\'' + panel.divElement.id + '\');"><span class="i18n" data-i18n-id="i18n_clear_links">Clear links</span></a></div>';
+//                    return linkerHtml;
+//                }
+//            });
+//            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
+//        });
 
         $("#" + panel.divElement.id + "-fullTextButton").click(function (event) {
             panel.options.searchMode = 'fullText';
@@ -300,7 +307,69 @@ function searchPanel(divElement, options) {
             panel.updateStatusFilterLabel();
         });
         $("#" + panel.divElement.id + "-partialMatchingButton").click();
+        $("#" + panel.divElement.id + "-ownMarker").css('color', panel.markerColor);
     };
+
+    this.setupOptionsPanel = function() {
+        var possibleSubscribers = [];
+        $.each(componentsRegistry, function(i, field){
+            if (field.divElement.id != panel.divElement.id){
+                var object = {};
+                object.subscriptions = field.subscriptions;
+                object.id = field.divElement.id;
+                possibleSubscribers.push(object);
+            }
+        });
+        var aux = false;
+        $.each(possibleSubscribers, function(i, field){
+            aux = false;
+            $.each(panel.subscriptions, function(j, subscription){
+                if (field.id == subscription.topic){
+                    aux = true;
+                }
+            });
+            field.subscribed = aux;
+            aux = false;
+            $.each(field.subscriptions, function(i, subscription){
+                if (subscription.topic == panel.divElement.id){
+                    aux = true;
+                }
+            });
+            field.subscriptor = aux;
+        });
+        panel.options.possibleSubscribers = possibleSubscribers;
+        var context = {
+            options: panel.options,
+            divElementId: panel.divElement.id
+        };
+        $("#" + panel.divElement.id + "-modal-body").html(JST["views/taxonomyPlugin/options.hbs"](context));
+    }
+
+    this.readOptionsPanel = function() {
+        $.each(panel.options.possibleSubscribers, function (i, field){
+            field.subscribed = $("#" + panel.divElement.id + "-subscribeTo-" + field.id).is(':checked');
+            field.subscriptor = $("#" + panel.divElement.id + "-subscriptor-" + field.id).is(':checked');
+            var panelToSubscribe = {};
+            $.each(componentsRegistry, function(i, panelS){
+                if (panelS.divElement.id == field.id){
+                    panelToSubscribe = panelS;
+                }
+            });
+            if (field.subscribed){
+                panel.subscribe(panelToSubscribe);
+            }else{
+                panel.unsubscribe(panelToSubscribe);
+            }
+            if (field.subscriptor){
+                panelToSubscribe.subscribe(panel);
+            }else{
+                panelToSubscribe.unsubscribe(panel);
+            }
+        });
+        $.each(componentsRegistry, function (i, field){
+            field.loadMarkers();
+        });
+    }
 
     this.updateStatusFilterLabel = function() {
         if (typeof i18n_active_and_inactive == "undefined") {
@@ -326,22 +395,6 @@ function searchPanel(divElement, options) {
         }
     }
 
-    this.handlePanelDropEvent = function (event, ui) {
-        var draggable = ui.draggable;
-        if (!draggable.attr('data-panel')) {
-            //console.log("ignore");
-        } else {
-            //console.log("OK : " + draggable.attr('data-panel'));
-            $.each(componentsRegistry, function (i, field) {
-                if (field.divElement.id == draggable.attr('data-panel')) {
-                    if (field.type == "concept-details") {
-                        panel.subscribe(field);
-                    }
-                }
-            });
-        }
-    }
-
     this.search = function (t, skipTo, returnLimit, forceSearch) {
         if (typeof panel.options.searchMode == "undefined") {
             panel.options.searchMode = "partialMatching";
@@ -351,6 +404,12 @@ function searchPanel(divElement, options) {
         }
         if (typeof panel.options.langFilter == "undefined") {
             panel.options.langFilter = "none";
+        }
+        if (typeof panel.options.moduleFilter == "undefined"){
+            panel.options.moduleFilter = "none";
+        }
+        if (typeof panel.options.textIndexNormalized == "undefined"){
+            panel.options.textIndexNormalized = "none";
         }
 
         if (typeof forceSearch == "undefined") {
@@ -371,6 +430,8 @@ function searchPanel(divElement, options) {
                 if (t != lastT) {
                     panel.options.semTagFilter = "none";
                     panel.options.langFilter = "none";
+                    panel.options.moduleFilter ="none";
+                    panel.options.textIndexNormalized = "none";
                 }
                 lastT = t;
                 //console.log(t);
@@ -399,6 +460,7 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
                         }).done(function (result) {
+//                            console.log(result.filters);
                             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                                 if (opts != "undefined") {
                                     if(a == b)
@@ -407,6 +469,33 @@ function searchPanel(divElement, options) {
                                         return opts.inverse(this);
                                 }
                             });
+                            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                                if (countryIcons[moduleId])
+                                    return opts.fn(this);
+                                else
+                                    return opts.inverse(this);
+                            });
+                            var resDescriptions = [];
+                            $.each(result.descriptions, function (i, field){
+                                var aux = field;
+                                if(field.active){
+                                    if (panel.options.statusSearchFilter=="activeOnly"){
+                                        resDescriptions.push(aux);
+                                    }
+                                    if (panel.options.statusSearchFilter=="activeAndInactive"){
+                                        resDescriptions.push(aux);
+                                    }
+                                }else{
+                                    aux.danger = true;
+                                    if (panel.options.statusSearchFilter=="inactiveOnly"){
+                                        resDescriptions.push(aux);
+                                    }
+                                    if (panel.options.statusSearchFilter=="activeAndInactive"){
+                                        resDescriptions.push(aux);
+                                    }
+                                }
+                            });
+                            result.descriptions = resDescriptions;
                             var context = {
                                 result: result
                             };
@@ -414,28 +503,18 @@ function searchPanel(divElement, options) {
                             $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/0.hbs"](context));
                             $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                             $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                                $.each(panel.subscribers, function (i, field) {
-                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                    field.conceptId = $(event.target).attr('data-concept-id');
-                                    field.updateCanvas();
+//                                $.each(panel.subscribers, function (i, field) {
+//                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+//                                    field.conceptId = $(event.target).attr('data-concept-id');
+//                                    field.updateCanvas();
+//                                });
+                                channel.publish(panel.divElement.id, {
+                                    term: $(event.target).attr('data-term'),
+                                    module: $(event.target).attr("data-module"),
+                                    conceptId: $(event.target).attr('data-concept-id'),
+                                    source: panel.divElement.id
                                 });
                             });
-//                            $.each(result.descriptions, function (i, field) {
-//                                if (field.active === false || field.conceptActive == false) {
-//                                    if (panel.options.statusSearchFilter == "inactiveOnly" ||
-//                                        panel.options.statusSearchFilter == "activeAndInactive") {
-//                                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-//                                        resultsHtml = resultsHtml + " danger";
-//                                        resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
-//                                    }
-//                                } else {
-//                                    if (panel.options.statusSearchFilter == "activeOnly" ||
-//                                        panel.options.statusSearchFilter == "activeAndInactive") {
-//                                        resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-//                                        resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + result.defaultTerm + "</td></tr>";
-//                                    }
-//                                }
-//                            });
                         });
                     } else if (t.substr(-2, 1) == "1") {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
@@ -449,27 +528,33 @@ function searchPanel(divElement, options) {
                                         return opts.inverse(this);
                                 }
                             });
+                            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                                if (countryIcons[moduleId])
+                                    return opts.fn(this);
+                                else
+                                    return opts.inverse(this);
+                            });
                             var context = {
                                 result: result
                             };
                             $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/1.hbs"](context));
                             $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                             $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                                $.each(panel.subscribers, function (i, field) {
-                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                    field.conceptId = $(event.target).attr('data-concept-id');
-                                    field.updateCanvas();
+//                                $.each(panel.subscribers, function (i, field) {
+//                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+//                                    field.conceptId = $(event.target).attr('data-concept-id');
+//                                    field.updateCanvas();
+//                                });
+                                channel.publish(panel.divElement.id, {
+                                    term: $(event.target).attr('data-term'),
+                                    module: $(event.target).attr("data-module"),
+                                    conceptId: $(event.target).attr('data-concept-id'),
+                                    source: panel.divElement.id
                                 });
                             });
-//                            $.each(result.matches, function (i, field) {
-//                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-//                                if (field.active == false || field.conceptActive == false) {
-//                                    resultsHtml = resultsHtml + " danger";
-//                                }
-//                                resultsHtml = resultsHtml + "'><td class='col-md-7'><div class='jqui-draggable result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-5 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
-//                            });
                         });
                     } else {
+//                        console.log(t.substr(-2, 1));
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
                         $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
                         $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
@@ -486,6 +571,12 @@ function searchPanel(divElement, options) {
                     if (panel.options.langFilter != "none") {
                         searchUrl = searchUrl + "&langFilter=" + panel.options.langFilter;
                     }
+                    if (panel.options.moduleFilter != 'none'){
+                        searchUrl = searchUrl + "&moduleFilter=" + panel.options.moduleFilter;
+                    }
+                    if (panel.options.textIndexNormalized != "none"){
+                        searchUrl = searchUrl + "&normalize=" + panel.options.textIndexNormalized;
+                    }
                     xhr = $.getJSON(searchUrl,function (result) {
 
                     }).done(function (result) {
@@ -500,6 +591,39 @@ function searchPanel(divElement, options) {
                                     return opts.inverse(this);
                             }
                         });
+                        Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                            if (countryIcons[moduleId])
+                                return opts.fn(this);
+                            else
+                                return opts.inverse(this);
+                        });
+//                        console.log(panel.options.manifest);
+                        var auxArray = [];
+                        if (result.filters){
+                            $.each(result.filters.module, function (i, field){
+                                var found = false;
+                                var auxObject = {};
+                                $.each(panel.options.manifest.modules, function(j, module){
+                                    if (i == module.conceptId){
+                                        auxObject.term = module.defaultTerm;
+                                        auxObject.value = i;
+                                        auxObject.cant = field;
+                                        found = true;
+                                    }
+                                })
+                                if (!found){
+                                    auxObject.term = null;
+                                    auxObject.value = i;
+                                    auxObject.cant = field;
+                                }
+                                auxArray.push(auxObject);
+//                            console.log(auxObject);
+                            });
+                            result.filters.module = [];
+                            result.filters.module = auxArray;
+                        }
+//                        console.log(auxArray);
+//                        console.log(result.filters.module);
                         var context = {
                             result: result,
                             elapsed: elapsed,
@@ -509,6 +633,11 @@ function searchPanel(divElement, options) {
                         $('#' + panel.divElement.id + '-searchBar').html(JST["views/searchPlugin/body/bar.hbs"](context));
                         $("#" + panel.divElement.id + '-searchBar').find('.semtag-link').click(function (event) {
                             panel.options.semTagFilter = $(event.target).attr('data-semtag');
+                            panel.search(t, 0, returnLimit, true);
+                        });
+                        $("#" + panel.divElement.id + '-searchBar').find('.module-link').click(function (event) {
+                            panel.options.moduleFilter = $(event.target).attr('data-module');
+                            panel.options.moduleFilterName = $(event.target).attr('data-term');
                             panel.search(t, 0, returnLimit, true);
                         });
                         $("#" + panel.divElement.id + '-searchBar').find('.lang-link').click(function (event) {
@@ -523,6 +652,11 @@ function searchPanel(divElement, options) {
                             panel.options.langFilter = "none";
                             panel.search(t, 0, returnLimit, true);
                         });
+                        $("#" + panel.divElement.id + '-searchBar').find('.remove-module').click(function (event) {
+                            panel.options.moduleFilter = "none";
+                            panel.options.moduleFilterName = null;
+                            panel.search(t, 0, returnLimit, true);
+                        });
                         if (result.details) {
                             var searchComment = "<span class='text-muted'>" + result.details.total + " matches found in " + elapsed + " seconds.</span>";
                         }
@@ -531,29 +665,6 @@ function searchPanel(divElement, options) {
                         //console.log(JSON.stringify(result));
                         var remaining = result.details.total - (skipTo + returnLimit);
 
-//                        if (!matchedDescriptions || matchedDescriptions.length <= 0) {
-//                            resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
-//                            $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-//                        } else {
-//                            var searchFiltersHtml = "<span class='pull right'><a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#" + panel.divElement.id + "-searchFiltersPanel'><span class='i18n' data-i18n-id='i18n_filters'>Filters</span></a>";
-//                            if (panel.options.semTagFilter != "none") {
-//                                searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.semTagFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-semtag'>&times;</a></span>&nbsp;&nbsp;";
-//                            }
-//                            if (panel.options.langFilter != "none") {
-//                                searchFiltersHtml = searchFiltersHtml + "&nbsp;&nbsp;<span class='label label-danger'>" + panel.options.langFilter + "&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>&nbsp;&nbsp;";
-//                            }
-//                            searchFiltersHtml = searchFiltersHtml + "</span><div id='" + panel.divElement.id + "-searchFiltersPanel' class='panel-collapse collapse'>";
-//                            searchFiltersHtml = searchFiltersHtml + "<div class='tree'><ul><li><a>Filter results by Language</a><ul>";
-//                            for(var key in result.filters.lang) {
-//                                searchFiltersHtml = searchFiltersHtml + "<li><a class='lang-link' href='javascript:void(0);' data-lang='" + key + "'>" + key + " (" + result.filters.lang[key] + ")</a></li>";
-//                            }
-//                            searchFiltersHtml = searchFiltersHtml + "</ul></li></ul>";
-//                            searchFiltersHtml = searchFiltersHtml + "<ul><li><a>Filter results by Semantic Tag</a><ul>";
-//                            for(var key in result.filters.semTag) {
-//                                searchFiltersHtml = searchFiltersHtml + "<li><a class='semtag-link' href='javascript:void(0);' data-semtag='" + key + "'>" + key + " (" + result.filters.semTag[key] + ")</a></li>";
-//                            }
-//                            searchFiltersHtml = searchFiltersHtml + "</ul></li></ul></div>";
-                            //$('#' + panel.divElement.id + '-searchBar').html($('#' + panel.divElement.id + '-searchBar').html() + searchFiltersHtml);
                         if (panel.options.searchMode == "regex") {
                             result.matches.sort(function (a, b) {
                                 if (a.term.length < b.term.length)
@@ -563,20 +674,6 @@ function searchPanel(divElement, options) {
                                 return 0;
                             });
                         }
-//                            $.each(matchedDescriptions, function (i, field) {
-//                                resultsHtml = resultsHtml + "<tr class='resultRow selectable-row";
-//                                //console.log(field.active + " " + field.conceptActive);
-//                                if (field.active == false || field.conceptActive == false) {
-//                                    resultsHtml = resultsHtml + " danger";
-//                                }
-//                                resultsHtml = resultsHtml + "'><td class='col-md-6'><div draggable='true' ondragstart='drag(event)' class='result-item' data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'><a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.term + "</a></div></td><td class='text-muted small-text col-md-6 result-item'  data-concept-id='" + field.conceptId + "' data-term='" + field.term + "'>" + field.fsn + "</td></tr>";
-//                            });
-//                            if (remaining > 0) {
-//                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='" + panel.divElement.id + "-more'>Load " + returnLimit +  " more (" + remaining + " remaining on server)</button></td></tr>"
-//                            } else {
-//                                resultsHtml = resultsHtml + "<tr class='more-row'><td colspan='2' class='text-center text-muted'>All " + result.details.total + " results are displayed</td></tr>"
-//                            }
-//                        }
                         Handlebars.registerHelper('if_eq', function(a, b, opts) {
                             if (opts != "undefined") {
                                 if(a == b)
@@ -601,6 +698,12 @@ function searchPanel(divElement, options) {
                                     return opts.inverse(this);
                             }
                         });
+                        Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                            if (countryIcons[moduleId])
+                                return opts.fn(this);
+                            else
+                                return opts.inverse(this);
+                        });
                         var context = {
                             result: result,
                             divElementId: panel.divElement.id,
@@ -617,12 +720,11 @@ function searchPanel(divElement, options) {
                             panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
                         });
                         $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
-                            $.each(panel.subscribers, function (i, field) {
-                                //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                field.conceptId = $(event.target).attr('data-concept-id');
-                                field.updateCanvas();
-                                lastClickedSctid = $(event.target).attr('data-concept-id');
-                                lastClickTime = Date.now();
+                            channel.publish(panel.divElement.id, {
+                                term: $(event.target).attr("data-term"),
+                                module: $(event.target).attr("data-module"),
+                                conceptId: $(event.target).attr('data-concept-id'),
+                                source: panel.divElement.id
                             });
                         });
 
@@ -635,54 +737,8 @@ function searchPanel(divElement, options) {
         }
     }
 
-    this.subscribe = function (subscriber) {
-        var alreadySubscribed = false;
-        $.each(panel.subscribers, function (i, field) {
-            if (subscriber.divElement.id == field.divElement.id) {
-                alreadySubscribed = true;
-            }
-        });
-        if (!alreadySubscribed) {
-            if (panel.subscribers.length == 0) {
-                if (typeof globalMarkerColor == "undefined") {
-                    globalMarkerColor = 'black';
-                }
-                panel.markerColor = panel.getNextMarkerColor(globalMarkerColor);
-                //console.log(panel.markerColor);
-                $("#" + panel.divElement.id + "-subscribersMarker").css('color', panel.markerColor);
-                $("#" + panel.divElement.id + "-subscribersMarker").show();
-            }
-            panel.subscribers.push(subscriber);
-            subscriber.setSubscription(panel);
-        }
-    }
 
-    this.unsubscribe = function (subscriber) {
-        var indexToRemove = -1;
-        var i = 0;
-        $.each(panel.subscribers, function (i, field) {
-            if (subscriber.divElement.id == field.divElement.id) {
-                indexToRemove = i;
-            }
-            i = i + 1;
-        });
-        if (indexToRemove > -1) {
-            panel.subscribers.splice(indexToRemove, 1);
-        }
-        if (panel.subscribers.length == 0) {
-            $("#" + panel.divElement.id + "-subscribersMarker").hide();
-        }
-        subscriber.clearSubscription();
-    }
-
-    this.unsubscribeAll = function () {
-        var subscribersClone = panel.subscribers.slice(0);
-        $.each(subscribersClone, function (i, field) {
-            panel.unsubscribe(field);
-        });
-    }
-
-    this.getNextMarkerColor = function (color) {
+    this.getNextMarkerColor = function(color) {
 //console.log(color);
         var returnColor = 'black';
         if (color == 'black') {
@@ -699,6 +755,113 @@ function searchPanel(divElement, options) {
 //console.log(returnColor);
         globalMarkerColor = returnColor;
         return returnColor;
+    }
+    panel.markerColor = panel.getNextMarkerColor(globalMarkerColor);
+
+    // Subscription methods
+    this.subscribe = function(panelToSubscribe) {
+        var panelId = panelToSubscribe.divElement.id;
+//        console.log('Subscribing to id: ' + panelId);
+        var alreadySubscribed = false;
+        $.each(panel.subscriptionsColor, function(i, field){
+            if (field == panelToSubscribe.markerColor){
+                alreadySubscribed = true;
+            }
+        });
+        if (!alreadySubscribed) {
+            var subscription = channel.subscribe(panelId, function(data, envelope) {
+//                console.log("listening in " + panel.divElement.id);
+                panel.options.searchMode = "fullText";
+                panel.search(data.conceptId, 0, 100, false);
+                $('#' + panel.divElement.id + '-searchBox').val(data.term);
+            });
+            panel.subscriptions.push(subscription);
+            panelToSubscribe.subscribers.push(panel.divElement.id);
+            panel.subscriptionsColor.push(panelToSubscribe.markerColor);
+        }
+        $("#" + panelId + "-ownMarker").show();
+        $("#" + panel.divElement.id + "-subscribersMarker").show();
+        $("#" + panelId + "-subscribersMarker").show();
+    }
+
+    this.unsubscribe = function(panelToUnsubscribe) {
+        var aux = [], colors = [], unsubscribed = true;
+        $.each(panel.subscriptionsColor, function(i, field){
+            if (field != panelToUnsubscribe.markerColor){
+                colors.push(field);
+            }else{
+                unsubscribed = false;
+            }
+        });
+        if (!unsubscribed){
+            panel.subscriptionsColor = colors;
+//            console.log(panel.divElement.id);
+//            console.log(panel.subscriptionsColor);
+            colors = [];
+            $.each(panelToUnsubscribe.subscribers, function(i, field){
+                if (field != panel.divElement.id){
+                    aux.push(field);
+                }
+            });
+            panelToUnsubscribe.subscribers = aux;
+            $.each(panelToUnsubscribe.subscriptionsColor, function(i, field){
+                colors.push(field);
+            });
+            if (panelToUnsubscribe.subscribers.length == 0){
+                if (panelToUnsubscribe.subscriptions.length == 0){
+                    $("#" + panelToUnsubscribe.divElement.id + "-subscribersMarker").hide();
+                }
+            }else{
+//                colors.push(panelToUnsubscribe.markerColor);
+            }
+            panelToUnsubscribe.subscriptionsColor = colors;
+//            console.log(panelToUnsubscribe.divElement.id);
+//            console.log(panelToUnsubscribe.subscriptionsColor);
+            aux = [];
+            $.each(panel.subscriptions, function(i, field){
+                if (panelToUnsubscribe.divElement.id == field.topic){
+                    field.unsubscribe();
+                }else{
+                    aux.push(field);
+                }
+            });
+            panel.subscriptions = aux;
+            if (panel.subscriptions.length == 0 && panel.subscribers.length == 0){
+                $("#" + panel.divElement.id + "-subscribersMarker").hide();
+            }
+        }
+    }
+
+    this.loadMarkers = function (){
+        var auxMarker = "", right = 0, top = 0, aux = false, visible = false;
+        $.each(componentsRegistry, function(i, field){
+            var panelId = field.divElement.id;
+            if ($("#" + panelId + "-subscribersMarker").is(':visible')){
+                visible = true;
+            }
+        });
+        if (panel.subscribers.length == 0){
+            right = 14;
+            $("#" + panel.divElement.id + "-ownMarker").hide();
+        }else{
+            if (!visible){
+                $("#" + panel.divElement.id + "-ownMarker").hide();
+            }
+            aux = true;
+        }
+        if ($("#" + panel.divElement.id + "-subscribersMarker").is(':visible')){
+            $("#" + panel.divElement.id + "-panelTitle").html($("#" + panel.divElement.id + "-panelTitle").html().replace(/&nbsp;/g, ''));
+            if (aux){
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+            }
+            $.each(panel.subscriptionsColor, function(i, field){
+                auxMarker = auxMarker + "<i class='glyphicon glyphicon-bookmark' style='color: "+ field +"; top:" + top + "px; right: " + right + "px;'></i>";
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp" + $("#" + panel.divElement.id + "-panelTitle").html());
+                top = top + 5;
+                right = right + 10;
+            });
+            $("#" + panel.divElement.id + "-subscribersMarker").html(auxMarker);
+        }
     }
 
     this.updateSearchLabel = function () {

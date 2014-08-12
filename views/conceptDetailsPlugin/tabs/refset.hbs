@@ -1,187 +1,192 @@
-{{#if firstMatch.memberships}}
-    {{refset "simple" false}}
-    {{refset "simplemap" false}}
-    {{refset "attr" false}}
-    {{refset "assoc" false}}
+{{refset "simple" false}}
+{{refset "simplemap" false}}
+{{refset "attr" false}}
+{{refset "assoc" false}}
 
-    {{#each firstMatch.memberships}}
-        {{#if_eq type "SIMPLE_REFSET"}}
-            {{refset "simple" true}}
+{{#each firstMatch.memberships}}
+    {{#if_eq type "SIMPLE_REFSET"}}
+        {{refset "simple" true}}
+    {{else}}
+        {{#if_eq type "SIMPLEMAP"}}
+            {{refset "simplemap" true}}
         {{else}}
-            {{#if_eq type "SIMPLEMAP"}}
-                {{refset "simplemap" true}}
+            {{#if_eq type "ATTRIBUTE_VALUE"}}
+                {{refset "attr" true}}
             {{else}}
-                {{#if_eq type "ATTRIBUTE_VALUE"}}
-                    {{refset "attr" true}}
-                {{else}}
-                    {{refset "assoc" true}}
-                {{/if_eq}}
+                {{refset "assoc" true}}
             {{/if_eq}}
         {{/if_eq}}
+    {{/if_eq}}
+{{/each}}
+
+<table class='table table-hover'>
+    <thead><tr>
+        <th colspan="3"><span class='i18n' data-i18n-id='i18n_simple_refset_memberships'>Simple Refsets Memberships</span></th>
+    </tr></thead>
+<tbody>
+    {{#each firstMatch.memberships}}
+        {{#if_eq type "SIMPLE_REFSET"}}
+        <tr class='{{#if active}}{{else}}danger{{/if}}'>
+            <td>
+                {{#if_eq refset.definitionStatus "Primitive"}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                {{else}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                {{/if_eq}}
+                {{refset.defaultTerm}}
+            </td>
+            <td>{{otherValue}}</td>
+            <td>
+                <div class="phoca-flagbox" style="width:35px;height:35px">
+                    <span class="phoca-flag {{countryIcon refset.module}}"></span>
+                </div>
+                <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                    <table border='1'>
+                        <tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
+                        <tr><td style='padding: 3px;'>{{refset.conceptId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
+                    </table>"data-html="true"><i class="glyphicon glyphicon-info-sign"></i>
+                </button>
+            </td>
+        </tr>
+        {{/if_eq}}
     {{/each}}
-
     {{#refset "simple" "get"}}
-        <table class='table table-bordered'>
-            <thead><tr>
-                <th colspan="2"><span class='i18n' data-i18n-id='i18n_simple_refset_memberships'>Simple Refsets Memberships</span></th>
-            </tr></thead>
-        <tbody>
-            {{#each firstMatch.memberships}}
-                {{#if_eq type "SIMPLE_REFSET"}}
-                <tr class='{{#if active}}{{else}}danger{{/if}}'>
-                    <td>
-                        {{#if_eq refset.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
-                        {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
-                        {{/if_eq}}
-                        {{refset.defaultTerm}}
-                    </td>
-                    <td>{{otherValue}}
-                        <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
-                            <table border='1'>
-                                <tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
-                                <tr><td style='padding: 3px;'>{{refset.conceptId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
-                            </table>"data-html="true"><i class="glyphicon glyphicon-info-sign"></i>
-                        </button>
-                    </td>
-                </tr>
-                {{/if_eq}}
-            {{/each}}
-            {{#if_eq firstMatch.memberships.length 0}}
-            <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
-            </tbody>
-            {{else}}
-                </tbody>
-            {{/if_eq}}
-        </table>
+        </tbody>
+    {{else}}
+        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
+        </tbody>
     {{/refset}}
+</table>
 
+<table class='table table-hover'>
+    <thead><tr>
+        <th colspan="3"><span class='i18n' data-i18n-id='i18n_simple_map_refset_name'>Simple Map Refset name</span></th>
+    </tr></thead>
+<tbody>
+    {{#each firstMatch.memberships}}
+        {{#if_eq type "SIMPLEMAP"}}
+        <tr class='{{#if active}}{{else}}danger{{/if}}'>
+            <td>
+                {{#if_eq refset.definitionStatus "Primitive"}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                {{else}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                {{/if_eq}}
+                {{refset.defaultTerm}}
+            </td>
+            <td class="refset-simplemap" data-refsetId="{{refset.conceptId}}" data-conceptId="{{otherValue}}">{{otherValue}}</td>
+            <td>
+                <div class="phoca-flagbox" style="width:35px;height:35px">
+                    <span class="phoca-flag {{countryIcon refset.module}}"></span>
+                </div>
+                <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                    <table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
+                        <tr><td style='padding: 3px;'>{{refset.conceptId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
+                    </table>
+                    " data-html="true"><i class="glyphicon glyphicon-info-sign"></i>
+                </button>
+            </td>
+        </tr>
+        {{/if_eq}}
+    {{/each}}
     {{#refset "simplemap" "get"}}
-        <table class='table table-bordered'>
-            <thead><tr>
-                <th colspan="2"><span class='i18n' data-i18n-id='i18n_simple_map_refset_name'>Simple Map Refset name</span></th>
-            </tr></thead>
-        <tbody>
-
-            {{#each firstMatch.memberships}}
-                {{#if_eq type "SIMPLEMAP"}}
-                <tr class='{{#if active}}{{else}}danger{{/if}}'>
-                    <td>
-                        {{#if_eq refset.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
-                        {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
-                        {{/if_eq}}
-                        {{refset.defaultTerm}}
-                    </td>
-                    <td>{{otherValue}}
-                        <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
-                            <table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
-                                <tr><td style='padding: 3px;'>{{refset.conceptId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
-                            </table>
-                            " data-html="true"><i class="glyphicon glyphicon-info-sign"></i>
-                        </button>
-                    </td>
-                </tr>
-                {{/if_eq}}
-            {{/each}}
-            {{#if_eq firstMatch.memberships.length 0}}
-            <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
-            </tbody>
-            {{else}}
-                </tbody>
-            {{/if_eq}}
-        </table>
+        </tbody>
+    {{else}}
+        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
+        </tbody>
     {{/refset}}
+</table>
 
+<table class='table table-hover'>
+    <thead><tr>
+        <th colspan="3"><span class='i18n' data-i18n-id='i18n_attribute_value_refset_name'>Attribute Value Refset name</span></th>
+    </tr></thead>
+<tbody>
+
+    {{#each firstMatch.memberships}}
+        {{#if_eq type "ATTRIBUTE_VALUE"}}
+        <tr class='{{#if active}}{{else}}danger{{/if}}'>
+            <td>
+                {{#if_eq refset.definitionStatus "Primitive"}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                {{else}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                {{/if_eq}}
+                {{refset.defaultTerm}}
+            </td>
+            <td>
+                {{#if_eq cidValue.definitionStatus "Primitive"}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')"  data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}"><span  class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                {{else}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')"  data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}"><span  class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                {{/if_eq}}
+                {{cidValue.defaultTerm}}</td>
+            <td>
+                <div class="phoca-flagbox" style="width:35px;height:35px">
+                    <span class="phoca-flag {{countryIcon refset.module}}"></span>
+                </div>
+                <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                    <table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
+                        <tr><td style='padding: 3px;'>{{refset.conceptId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
+                    </table>
+                    " data-html="true"><i class="glyphicon glyphicon-info-sign"></i>
+                </button>
+            </td>
+        </tr>
+        {{/if_eq}}
+    {{/each}}
     {{#refset "attr" "get"}}
-        <table class='table table-bordered'>
-            <thead><tr>
-                <th colspan="2"><span class='i18n' data-i18n-id='i18n_attribute_value_refset_name'>Attribute Value Refset name</span></th>
-            </tr></thead>
-        <tbody>
-
-            {{#each firstMatch.memberships}}
-                {{#if_eq type "ATTRIBUTE_VALUE"}}
-                <tr class='{{#if active}}{{else}}danger{{/if}}'>
-                    <td>
-                        {{#if_eq refset.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
-                        {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
-                        {{/if_eq}}
-                        {{refset.defaultTerm}}
-                    </td>
-                    <td>
-                        {{#if_eq cidValue.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
-                        {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
-                        {{/if_eq}}
-                        {{cidValue.defaultTerm}}</td>
-                    <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
-                            <table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
-                                <tr><td style='padding: 3px;'>{{refset.conceptId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
-                            </table>
-                            " data-html="true"><i class="glyphicon glyphicon-info-sign"></i>
-                    </button>
-                    </td>
-                </tr>
-                {{/if_eq}}
-            {{/each}}
-            {{#if_eq firstMatch.memberships.length 0}}
-            <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
-            </tbody>
-            {{else}}
-                </tbody>
-            {{/if_eq}}
-        </table>
+        </tbody>
+    {{else}}
+        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
+        </tbody>
     {{/refset}}
+</table>
 
+<table class='table table-hover'>
+    <thead><tr>
+        <th colspan="3"><span class='i18n' data-i18n-id='i18n_association_refset_name'>Association Refset name</span></th>
+    </tr></thead>
+<tbody>
+    {{#each firstMatch.memberships}}
+        {{#if_eq type "ASSOCIATION"}}
+        <tr class='{{#if active}}{{else}}danger{{/if}}'>
+            <td>
+                {{#if_eq refset.definitionStatus "Primitive"}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                {{else}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{refset.module}}" data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                {{/if_eq}}
+                {{refset.defaultTerm}}
+            </td>
+            <td>
+                {{#if_eq cidValue.definitionStatus "Primitive"}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                {{else}}
+                    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" data-module="{{cidValue.module}}" data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                {{/if_eq}}
+                {{cidValue.defaultTerm}}</td>
+            <td>
+                <div class="phoca-flagbox" style="width:35px;height:35px">
+                    <span class="phoca-flag {{countryIcon refset.module}}"></span>
+                </div>
+                <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                    <table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
+                        <tr>
+                            <td style='padding: 3px;'>{{refset.conceptId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}
+                            </td>
+                        </tr>
+                    </table>
+                    " data-html="true"><i class="glyphicon glyphicon-info-sign"></i>
+                </button>
+            </td>
+        </tr>
+        {{/if_eq}}
+    {{/each}}
     {{#refset "assoc" "get"}}
-        <table class='table table-bordered'>
-            <thead><tr>
-                <th colspan="2"><span class='i18n' data-i18n-id='i18n_association_refset_name'>Association Refset name</span></th>
-            </tr></thead>
-        <tbody>
-            {{#each firstMatch.memberships}}
-                {{#if_eq type "ASSOCIATION"}}
-                <tr class='{{#if active}}{{else}}danger{{/if}}'>
-                    <td>
-                        {{#if_eq refset.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
-                        {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{refset.conceptId}}" data-term="{{refset.defaultTerm}}" data-def-status="{{refset.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
-                        {{/if_eq}}
-                        {{refset.defaultTerm}}
-                    </td>
-                    <td>
-                        {{#if_eq cidValue.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&nbsp;</span></a>&nbsp;&nbsp;
-                        {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"><span draggable = "true" ondragstart = "drag(event, '{{divElementId}}')" class="badge alert-warning"  data-concept-id="{{cidValue.conceptId}}" data-term="{{cidValue.defaultTerm}}" data-def-status="{{cidValue.definitionStatus}}">&equiv;</span></a>&nbsp;&nbsp;
-                        {{/if_eq}}
-                        {{cidValue.defaultTerm}}</td>
-                    <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
-                                <table border='1'><tr><th style='padding: 3px;'>RefsetId</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
-                                    <tr>
-                                        <td style='padding: 3px;'>{{refset.conceptId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}
-                                        </td>
-                                    </tr>
-                                </table>
-                                " data-html="true"><i class="glyphicon glyphicon-info-sign"></i>
-                    </button>
-                    </td>
-                </tr>
-                {{/if_eq}}
-            {{/each}}
-            {{#if_eq firstMatch.memberships.length 0}}
-            <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
-            </tbody>
-            {{else}}
-                </tbody>
-            {{/if_eq}}
-        </table>
+        </tbody>
+    {{else}}
+        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
+        </tbody>
     {{/refset}}
-{{/if}}
+</table>
