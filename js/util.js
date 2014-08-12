@@ -15,7 +15,13 @@ function removeHighlight(){
 function allowDrop(ev) {
     ev.preventDefault();
 
-    var aux = $(ev.target).closest("div");
+    var aux;
+    if ($(ev.target).attr("data-droppable") == "true"){
+        console.log("asdasd");
+        aux = $(ev.target);
+    }else{
+        aux = $(ev.target).closest("div");
+    }
 //    while (typeof $(aux).closest('div').attr('ondrop') != "undefined"){
 //        aux = $(aux).closest('div');
 //    }
