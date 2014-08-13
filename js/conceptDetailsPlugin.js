@@ -690,19 +690,24 @@ function conceptDetails(divElement, conceptId, options) {
             $("#home-parents-" + panel.divElement.id).unbind();
             $("#home-parents-" + panel.divElement.id).click(function (event) {
                 if ($(event.target).hasClass("treeButton")) {
-                    var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                    var ev = event.target;
+                    //firefox issue!
+                    if (navigator.userAgent.indexOf("Firefox") > -1) {
+                        ev = $(ev).context.children;
+                    }
+                    var conceptId = $(ev).closest("li").attr('data-concept-id');
                     event.preventDefault();
-                    if ($(event.target).hasClass("glyphicon-chevron-up")) {
-                        $(event.target).closest("li").find("ul").remove();
-                        $(event.target).removeClass("glyphicon-chevron-up");
-                        $(event.target).addClass("glyphicon-chevron-right");
-                    } else if ($(event.target).hasClass("glyphicon-chevron-right")) {
-                        $(event.target).removeClass("glyphicon-chevron-right");
-                        $(event.target).addClass("glyphicon-refresh");
-                        $(event.target).addClass("icon-spin");
-                        panel.getParent(conceptId, event.target);
-                    } else if ($(event.target).hasClass("glyphicon-minus")) {
-//                    $("#" + iconId).removeClass("glyphicon-minus");
+                    if ($(ev).hasClass("glyphicon-chevron-up")) {
+                        $(ev).closest("li").find("ul").remove();
+                        $(ev).removeClass("glyphicon-chevron-up");
+                        $(ev).addClass("glyphicon-chevron-right");
+                    } else if ($(ev).hasClass("glyphicon-chevron-right")) {
+                        $(ev).removeClass("glyphicon-chevron-right");
+                        $(ev).addClass("glyphicon-refresh");
+                        $(ev).addClass("icon-spin");
+                        panel.getParent(conceptId, ev);
+                    } else if ($(ev).hasClass("glyphicon-minus")) {
+//                      $("#" + iconId).removeClass("glyphicon-minus");
 //                    $("#" + iconId).addClass("glyphicon-chevron-right");
                     }
                 } else if ($(event.target).hasClass("treeLabel")) {
@@ -1111,7 +1116,7 @@ function conceptDetails(divElement, conceptId, options) {
                 $.each(result, function(i, field){
 //                    console.log(field);
                     auxHtml = auxHtml + "<li class='treeLabel' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'><button class='btn btn-link btn-xs treeButton' style='padding:2px'>";
-                    if (field.conceptId == "138875005"){
+                    if (field.conceptId == "138875005" || field.conceptId == "9999999999"){
                         auxHtml = auxHtml + "<i class='glyphicon glyphicon-minus treeButton' data-ind='" + ind + "'></i></button>";
                     }else{
                         auxHtml = auxHtml + "<i class='glyphicon glyphicon-chevron-right treeButton' data-ind='" + ind + "'></i></button>";

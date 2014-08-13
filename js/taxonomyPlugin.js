@@ -489,7 +489,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 $.each(parents, function(i, parent) {
                     var parentLiHtml = "<li data-concept-id='" + parent.conceptId + "' data-term='" + parent.defaultTerm + "' class='treeLabel'>";
                     parentLiHtml = parentLiHtml + "<button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-";
-                    if (parent.conceptId == panel.default.conceptId){
+                    if (parent.conceptId == "138875005" || parent.conceptId == "9999999999"){
                         parentLiHtml = parentLiHtml + "down";
                     }else{
                         parentLiHtml = parentLiHtml + "up";
