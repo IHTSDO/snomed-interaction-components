@@ -1,6 +1,6 @@
 {{#if displayChildren}}
     {{#if_eq childrenResult.length 0}}
-        <span class="text-muted">No children</span>
+        <span data-i18n-id="i18n_no_children" class="text-muted i18n">{{i18n "i18n_no_children" "No Children"}}</span>
     {{else}}
         <ul style='list-style-type: none; padding-left: 15px;'>
             {{#each childrenResult}}
@@ -27,9 +27,9 @@
     {{/if_eq}}
 {{else}}
     {{#if_eq childrenResult.length 0}}
-        <span class="text-muted">No children</span>
+        <span data-i18n-id="i18n_no_children" class="text-muted i18n">{{i18n "i18n_no_children" "No children"}}</span>
     {{else}}
-        <button id="{{divElementId}}-showChildren" class="btn btn-link">{{childrenResult.length}} children</button>
+        <button id="{{divElementId}}-showChildren" class="btn btn-link">{{childrenResult.length}} <span data-i18n-id="i18n_children" class="i18n">{{i18n "i18n_children" "children"}}</span></button>
     {{/if_eq}}
 {{/if}}
 

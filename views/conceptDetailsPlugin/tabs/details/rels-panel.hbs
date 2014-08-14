@@ -1,10 +1,10 @@
 <table class='table table-bordered'>
     <thead>
     <tr>
-        <th><span class='i18n' data-i18n-id='i18n_type'>Type</span></th>
-        <th><span class='i18n' data-i18n-id='i18n_destination'>Destination</span></th>
-        <th><span class='i18n' data-i18n-id='i18n_group'>Group</span></th>
-        <th><span class='i18n' data-i18n-id='i18n_char_type'>CharType</span></th>
+        <th><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
+        <th><span class='i18n' data-i18n-id='i18n_destination'>{{i18n "i18n_destination" "Destination"}}</span></th>
+        <th><span class='i18n' data-i18n-id='i18n_group'>{{i18n "i18n_group" "Group"}}</span></th>
+        <th><span class='i18n' data-i18n-id='i18n_char_type'>{{i18n "i18n_char_type" "CharType"}}</span></th>
     </tr>
     </thead>
     <tbody>
@@ -43,12 +43,12 @@
                         {{target.defaultTerm}}</td>
                     <td>{{groupId}}</td>
                     {{#if_eq charType.conceptId "900000000000010007"}}
-                    <td><span class='i18n' data-i18n-id='i18n_stated'>Stated</span>
+                    <td><span class='i18n' data-i18n-id='i18n_stated'>{{i18n "i18n_stated" "Stated"}}</span>
                     {{else}}
                         {{#if_eq charType.conceptId "900000000000011006"}}
-                        <td><span class='i18n' data-i18n-id='i18n_inferred'>Inferred</span>
+                        <td><span class='i18n' data-i18n-id='i18n_inferred'>{{i18n "i18n_inferred" "Inferred"}}</span>
                         {{else}}
-                        <td><span class='i18n' data-i18n-id='i18n_other'>Other</span>
+                        <td><span class='i18n' data-i18n-id='i18n_other'>{{i18n "i18n_other" "Other"}}</span>
                         {{/if_eq}}
                     {{/if_eq}}
                     <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
@@ -92,12 +92,12 @@
                         {{target.defaultTerm}}</td>
                     <td>{{groupId}}</td>
                     {{#if_eq charType.conceptId "900000000000010007"}}
-                    <td><span class='i18n' data-i18n-id='i18n_stated'>Stated</span>
+                    <td><span class='i18n' data-i18n-id='i18n_stated'>{{i18n "i18n_stated" "Stated"}}</span>
                     {{else}}
                         {{#if_eq charType.conceptId "900000000000011006"}}
-                        <td><span class='i18n' data-i18n-id='i18n_inferred'>Inferred</span>
+                        <td><span class='i18n' data-i18n-id='i18n_inferred'>{{i18n "i18n_inferred" "Inferred"}}</span>
                         {{else}}
-                        <td><span class='i18n' data-i18n-id='i18n_other'>Other</span>
+                        <td><span class='i18n' data-i18n-id='i18n_other'>{{i18n "i18n_other" "Other"}}</span>
                         {{/if_eq}}
                     {{/if_eq}}
                     <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="

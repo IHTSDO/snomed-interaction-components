@@ -1000,7 +1000,7 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-showChildren").tooltip({
                 placement : 'right',
                 trigger: 'hover',
-                title: "Click here to display the children",
+                title: i18n_display_children,
                 animation: true,
                 delay: 500
             });
@@ -1226,10 +1226,10 @@ function conceptDetails(divElement, conceptId, options) {
                     panel.loadMembers(returnLimit, skipTo + 50);
                 });
             }else{
-                $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'>This concept has no members</td></tr>");
+                $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
             }
         }).fail(function(){
-            $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'>This concept has no members</td></tr>");
+            $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
         });
     }
 

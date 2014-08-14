@@ -4,6 +4,14 @@
 icon = document.createElement("img");
 channel = postal.channel("Selections");
 
+Handlebars.registerHelper('i18n', function (i18n, defaultV){
+    if (typeof window[i18n] == "undefined"){
+        return defaultV;
+    }else{
+        return window[i18n];
+    }
+});
+
 $(document).on('dragend', function(){
     removeHighlight();
 });

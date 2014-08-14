@@ -3,7 +3,7 @@
 {{/if}}
 <span class='pull right'>
 <a class='btm btn-xs' style='margin: 3px; color: #777; background-color: #fff; border: 1px #ccc solid; margin-left: 25px;' data-toggle='collapse' href='#{{divElementId}}-searchFiltersPanel'>
-    <span class='i18n' data-i18n-id='i18n_filters'>Filters</span>
+    <span class='i18n' data-i18n-id='i18n_filters'>{{i18n "i18n_filters" "Filters"}}</span>
 </a>
 {{#if_eq options.semTagFilter "none"}}
 {{else}}
@@ -21,7 +21,7 @@
 <div id='{{divElementId}}-searchFiltersPanel' class='panel-collapse collapse'>
     <div class='tree'>
         <ul>
-            <li><a>Filter results by Language</a>
+            <li><a><span data-i18n-id="i18n_filters_language" class="i18n">{{i18n "i18n_filters_language" "Filter results by Language"}}</span></a>
                 <ul>
                     {{#each result.filters.lang}}
                         <li><a class='lang-link' href='javascript:void(0);' data-lang='{{@key}}'>{{@key}} ({{this}})</a></li>
@@ -30,7 +30,7 @@
             </li>
         </ul>
         <ul>
-            <li><a>Filter results by Semantic Tag</a>
+            <li><a><span data-i18n-id="i18n_filters_semtag" class="i18n">{{i18n "i18n_filters_semtag" "Filter results by Semantic Tag"}}</span></a>
                 <ul>
                     {{#each result.filters.semTag}}
                         <li><a class='semtag-link' href='javascript:void(0);' data-semtag='{{@key}}'>{{@key}} ({{this}})</a></li>
@@ -39,7 +39,7 @@
             </li>
         </ul>
         <ul>
-            <li><a>Filter results by Module</a>
+            <li><a><span data-i18n-id="i18n_filters_module" class="i18n">{{i18n "i18n_filters_module" "Filter results by Module"}}</span></a>
                 <ul>
                     {{#each result.filters.module}}
                         <li><a class='module-link' href='javascript:void(0);' data-term="{{term}}" data-module='{{value}}'>{{#if term}}{{term}}{{else}}{{value}}{{/if}} ({{cant}})
