@@ -18,8 +18,6 @@ countryIcons = {
     '9999999998': 'gmdn',
     '466707005': 'mdp',
     '11000146104': 'nl'
-
-
 }
 
 Handlebars.registerHelper('countryIcon', function(moduleId) {

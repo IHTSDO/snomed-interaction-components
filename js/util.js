@@ -17,7 +17,6 @@ function allowDrop(ev) {
 
     var aux;
     if ($(ev.target).attr("data-droppable") == "true"){
-        console.log("asdasd");
         aux = $(ev.target);
     }else{
         aux = $(ev.target).closest("div");

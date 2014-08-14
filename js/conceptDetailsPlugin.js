@@ -406,7 +406,7 @@ function conceptDetails(divElement, conceptId, options) {
                 languageName = "(AU)";
             } else if (panel.options.langRefset == "999001251000000103") {
                 languageName = "(UK)";
-            } else if (panel.options.langRefset == "31000146106") {
+            } else if (panel.options.langRefset == "11000146104") {
                 languageName = "(NL)";
             }
 
