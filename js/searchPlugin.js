@@ -577,6 +577,7 @@ function searchPanel(divElement, options) {
                     if (panel.options.textIndexNormalized != "none"){
                         searchUrl = searchUrl + "&normalize=" + panel.options.textIndexNormalized;
                     }
+                    console.log(searchUrl);
                     xhr = $.getJSON(searchUrl,function (result) {
 
                     }).done(function (result) {

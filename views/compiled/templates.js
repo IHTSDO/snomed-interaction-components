@@ -2562,8 +2562,11 @@ function program20(depth0,data) {
   }
 function program21(depth0,data) {
   
-  
-  return "\n        <span class=\"text-muted\">No children</span>\n    ";
+  var buffer = "", helper, options;
+  buffer += "\n        <span data-i18n-id=\"i18n_no_children\" class=\"text-muted i18n\">"
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_no_children", "No children", options) : helperMissing.call(depth0, "i18n", "i18n_no_children", "No children", options)))
+    + "</span>\n    ";
+  return buffer;
   }
 
 function program23(depth0,data) {
@@ -2874,7 +2877,7 @@ function program3(depth0,data) {
   buffer += "\n                </div>\n                "
     + escapeExpression((helper = helpers.setLastGroup || (depth0 && depth0.setLastGroup),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), options) : helperMissing.call(depth0, "setLastGroup", (depth0 && depth0.groupId), options)))
     + "\n                "
-    + escapeExpression((helper = helpers.lastColor || (depth0 && depth0.lastColor),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.getRandomColor), options) : helperMissing.call(depth0, "lastColor", (depth0 && depth0.getRandomColor), options)))
+    + escapeExpression((helper = helpers.lastColor || (depth0 && depth0.lastColor),options={hash:{},data:data},helper ? helper.call(depth0, "random", options) : helperMissing.call(depth0, "lastColor", "random", options)))
     + "\n                <div ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), 0, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.groupId), 0, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
@@ -2963,9 +2966,11 @@ function program17(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n            <!--<br>inferred-->\n                    ";
-  stack1 = (helper = helpers.eqLastGroup || (depth0 && depth0.eqLastGroup),options={hash:{},inverse:self.program(20, program20, data),fn:self.programWithDepth(18, program18, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), options) : helperMissing.call(depth0, "eqLastGroup", (depth0 && depth0.groupId), options));
+  stack1 = (helper = helpers.eqLastGroup || (depth0 && depth0.eqLastGroup),options={hash:{},inverse:self.program(20, program20, data),fn:self.program(18, program18, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), options) : helperMissing.call(depth0, "eqLastGroup", (depth0 && depth0.groupId), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n                    &nbsp;<span draggable = \"true\" ondragstart=\"drag(event, '";
+  buffer += "\n                    &nbsp;<span style='background-color: "
+    + escapeExpression((helper = helpers.lastColor || (depth0 && depth0.lastColor),options={hash:{},data:data},helper ? helper.call(depth0, "get", options) : helperMissing.call(depth0, "lastColor", "get", options)))
+    + "' draggable = \"true\" ondragstart=\"drag(event, '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -2995,13 +3000,13 @@ function program17(depth0,data) {
     + "</span><br>\n        ";
   return buffer;
   }
-function program18(depth0,data,depth1) {
+function program18(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n                        </div>\n                        "
     + escapeExpression((helper = helpers.setLastGroup || (depth0 && depth0.setLastGroup),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), options) : helperMissing.call(depth0, "setLastGroup", (depth0 && depth0.groupId), options)))
     + "\n                        "
-    + escapeExpression((helper = helpers.lastColor || (depth1 && depth1.lastColor),options={hash:{},data:data},helper ? helper.call(depth0, (depth1 && depth1.getRandomColor), options) : helperMissing.call(depth0, "lastColor", (depth1 && depth1.getRandomColor), options)))
+    + escapeExpression((helper = helpers.lastColor || (depth0 && depth0.lastColor),options={hash:{},data:data},helper ? helper.call(depth0, "random", options) : helperMissing.call(depth0, "lastColor", "random", options)))
     + "\n                        <div ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.groupId), 0, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.groupId), 0, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
@@ -3057,7 +3062,7 @@ function program1(depth0,data) {
 
 function program3(depth0,data,depth1) {
   
-  var buffer = "", stack1, helper;
+  var buffer = "", stack1, helper, options;
   buffer += "\n        <tr>\n            <td>\n                <span class=\"badge alert-warning\" draggable='true' ondragstart=\"drag(event, '"
     + escapeExpression(((stack1 = (depth1 && depth1.divElementId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "')\" data-module=\"";
@@ -3073,6 +3078,9 @@ function program3(depth0,data,depth1) {
   else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "'>&nbsp;&nbsp;</span>\n                ";
+  stack1 = (helper = helpers.hasCountryIcon || (depth0 && depth0.hasCountryIcon),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.module), options) : helperMissing.call(depth0, "hasCountryIcon", (depth0 && depth0.module), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n                ";
   if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -3083,8 +3091,16 @@ function program3(depth0,data,depth1) {
     + "</td>\n        </tr>\n    ";
   return buffer;
   }
+function program4(depth0,data) {
+  
+  var buffer = "", helper, options;
+  buffer += "\n                    <div class=\"phoca-flagbox\" style=\"width:22px;height:22px\">\n                        <span class=\"phoca-flag "
+    + escapeExpression((helper = helpers.countryIcon || (depth0 && depth0.countryIcon),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.module), options) : helperMissing.call(depth0, "countryIcon", (depth0 && depth0.module), options)))
+    + "\"></span>\n                    </div>\n                ";
+  return buffer;
+  }
 
-function program5(depth0,data) {
+function program6(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n            <td class=\"text-muted\" class=\"text-center\" colspan=\"2\">"
@@ -3093,16 +3109,16 @@ function program5(depth0,data) {
   return buffer;
   }
 
-function program7(depth0,data) {
+function program8(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n            ";
-  stack1 = (helper = helpers.if_gr || (depth0 && depth0.if_gr),options={hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), (depth0 && depth0.returnLimit), options) : helperMissing.call(depth0, "if_gr", (depth0 && depth0.remaining), (depth0 && depth0.returnLimit), options));
+  stack1 = (helper = helpers.if_gr || (depth0 && depth0.if_gr),options={hash:{},inverse:self.program(11, program11, data),fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), (depth0 && depth0.returnLimit), options) : helperMissing.call(depth0, "if_gr", (depth0 && depth0.remaining), (depth0 && depth0.returnLimit), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n        ";
   return buffer;
   }
-function program8(depth0,data) {
+function program9(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n                <td class=\"text-center\" id=\"";
@@ -3131,7 +3147,7 @@ function program8(depth0,data) {
   return buffer;
   }
 
-function program10(depth0,data) {
+function program11(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n                <td class=\"text-center\" colspan=\"2\">\n                    <button class='btn btn-link' id='";
@@ -3162,7 +3178,7 @@ function program10(depth0,data) {
   stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.members), {hash:{},inverse:self.noop,fn:self.programWithDepth(3, program3, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n    <tr class=\"more-row\">\n        ";
-  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), 0, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.remaining), 0, options));
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), 0, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.remaining), 0, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </tr>\n</tbody>";
   return buffer;
@@ -5007,8 +5023,8 @@ function program2(depth0,data) {
   buffer += escapeExpression(stack1)
     + "-options-form\">\n    <div class=\"form-group\">\n        <table class='table table-bordered table-hover'>\n            <thead>\n            <tr>\n                <th>Panel</th>\n                <th><span class=\"i18n\" data-i18n-id=\"i18n_subscribed\">"
     + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_subscribe", "Subscribed", options) : helperMissing.call(depth0, "i18n", "i18n_subscribe", "Subscribed", options)))
-    + "</span></th>\n                <th><span class=\"i18n\" data-i18n-id=\"i18n_subscribptor\">"
-    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_subscribptor", "Subscribptor", options) : helperMissing.call(depth0, "i18n", "i18n_subscribptor", "Subscribptor", options)))
+    + "</span></th>\n                <th><span class=\"i18n\" data-i18n-id=\"i18n_subscriptor\">"
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_subscriptor", "Subscriptor", options) : helperMissing.call(depth0, "i18n", "i18n_subscriptor", "Subscriptor", options)))
     + "</span></th>\n            </tr>\n            </thead>\n            <tbody>\n            ";
   stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.possibleSubscribers), {hash:{},inverse:self.noop,fn:self.programWithDepth(1, program1, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }

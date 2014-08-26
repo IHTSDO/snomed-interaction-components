@@ -763,7 +763,11 @@ function conceptDetails(divElement, conceptId, options) {
                 if (a == "get") {
                     return panel.color;
                 } else {
-                    panel.color = a;
+                    if (a == "random"){
+                        panel.color = getRandomColor();
+                    }else{
+                        panel.color = a;
+                    }
                 }
             });
             Handlebars.registerHelper('getRandomColor', function () {
@@ -1212,6 +1216,12 @@ function conceptDetails(divElement, conceptId, options) {
                     else
                         return opts.inverse(this);
                 }
+            });
+            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                if (countryIcons[moduleId])
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
             });
             if (result.details.total != 0){
                 $("#" + panel.divElement.id + "-moreMembers").remove();
