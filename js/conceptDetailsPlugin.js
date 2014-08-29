@@ -761,7 +761,8 @@ function conceptDetails(divElement, conceptId, options) {
             });
             Handlebars.registerHelper('lastColor', function (a) {
                 if (a == "get") {
-                    return panel.color;
+                    return "";
+//                    return panel.color;
                 } else {
                     if (a == "random"){
                         panel.color = getRandomColor();
@@ -771,7 +772,8 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             Handlebars.registerHelper('getRandomColor', function () {
-                return getRandomColor();
+//                return getRandomColor();
+                return "";
             });
             var context = {
                 options: options,
@@ -821,12 +823,21 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
 
+            if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "references-tab") {
+                $("#references-" + panel.divElement.id + "-resultsTable").html("");
+//                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+                panel.getReferences(firstMatch.conceptId);
+            }
+
             if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
-                $("#diagram-canvas-" + panel.divElement.id).html("");
-                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+
             }
 
 
+            $("#references-tab-link-" + panel.divElement.id).click(function (e) {
+                $("#references-" + panel.divElement.id + "-resultsTable").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                panel.getReferences(firstMatch.conceptId);
+            });
             $("#diagram-tab-link-" + panel.divElement.id).unbind();
             $("#diagram-tab-link-" + panel.divElement.id).click(function (e) {
                 $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
@@ -927,6 +938,14 @@ function conceptDetails(divElement, conceptId, options) {
                     return 1;
                 return 0;
             });
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if (a){
+                    if(a > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
             xhrChildren = null;
             panel.childrenPId = divElement.id + "-children-panel";
 //                console.log(result);
@@ -1017,6 +1036,42 @@ function conceptDetails(divElement, conceptId, options) {
         });
 //    }
         panel.loadMembers(50, 0);
+    }
+
+    this.getReferences = function (conceptId){
+        console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
+        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
+
+        }).done(function(result){
+            $.each(result, function (i, field){
+                if (field.statedRelationships){
+                    field.relationship = field.statedRelationships[0].type.defaultTerm;
+                }else{
+                    field.relationship = field.relationships[0].type.defaultTerm;
+                }
+            });
+            result.sort(function (a, b) {
+                if (a.relationship < b.relationship)
+                    return -1;
+                if (a.relationship > b.relationship)
+                    return 1;
+                if (a.relationship == b.relationship) {
+                    if (a.defaultTerm < b.defaultTerm)
+                        return -1;
+                    if (a.defaultTerm > b.defaultTerm)
+                        return 1;
+                }
+                return 0;
+            });
+            var context = {
+                divElementId: panel.divElement.id,
+                result: result
+            }
+            $("#references-" + panel.divElement.id + "-total").html(result.length  + " references");
+            $("#references-" + panel.divElement.id + "-resultsTable").html(JST["views/conceptDetailsPlugin/tabs/references.hbs"](context));
+            console.log(result, result.length);
+        });
+
     }
 
     this.getChildren = function(conceptId) {

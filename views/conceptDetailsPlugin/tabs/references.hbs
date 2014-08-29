@@ -1,0 +1,32 @@
+<thead>
+    <tr>
+        <th>Term</th>
+        <th>ConceptId</th>
+        <th>Relationships Type</th>
+    </tr>
+</thead>
+<tbody>
+    {{#each result}}
+        <tr>
+            <td>
+                <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;&nbsp;</span>
+                {{#hasCountryIcon module}}
+                    <div class="phoca-flagbox" style="width:22px;height:22px">
+                        <span class="phoca-flag {{countryIcon module}}"></span>
+                    </div>
+                {{/hasCountryIcon}}
+                {{defaultTerm}}
+            </td>
+            <td>{{conceptId}}</td>
+            <td>
+                {{#each relationships}}
+                    {{type.defaultTerm}}
+                {{/each}}
+
+                {{#each statedRelationships}}
+                    {{type.defaultTerm}}
+                {{/each}}
+            </td>
+        </tr>
+    {{/each}}
+</tbody>
