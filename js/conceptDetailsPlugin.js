@@ -1039,6 +1039,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.getReferences = function (conceptId){
+        $("#references-" + panel.divElement.id + "-accordion").html("");
         console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
 
@@ -1098,6 +1099,19 @@ function conceptDetails(divElement, conceptId, options) {
 
 //            $("#references-" + panel.divElement.id + "-total").html(result.length  + " references");
             $("#references-" + panel.divElement.id + "-accordion").html(JST["views/conceptDetailsPlugin/tabs/references.hbs"](context));
+            $("#references-" + panel.divElement.id + "-accordion").click(function(e){
+                if ($($(e.target).closest("a").attr("href")).hasClass("collapse")){
+                    console.log("finded");
+                    var target = $($(e.target).closest("a").attr("href") + "-span");
+                    if (target.hasClass("glyphicon-minus")){
+                        target.removeClass("glyphicon-minus");
+                        target.addClass("glyphicon-plus");
+                    }else{
+                        target.addClass("glyphicon-minus");
+                        target.removeClass("glyphicon-plus");
+                    }
+                }
+            });
             console.log(result, result.length);
         });
 
