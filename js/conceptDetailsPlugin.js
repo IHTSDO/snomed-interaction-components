@@ -1043,6 +1043,14 @@ function conceptDetails(divElement, conceptId, options) {
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
 
         }).done(function(result){
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if (a){
+                    if(a > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
             $.each(result, function (i, field){
                 if (field.statedRelationships){
                     field.relationship = field.statedRelationships[0].type.defaultTerm;
@@ -1063,12 +1071,33 @@ function conceptDetails(divElement, conceptId, options) {
                 }
                 return 0;
             });
+            result.groups = [];
+            var lastR = "", auxArray = [];
+            $.each(result, function(i, field){
+                if (lastR == ""){
+                    auxArray.push(field);
+                    lastR = field.relationship;
+                }else{
+                    if (lastR == field.relationship){
+                        auxArray.push(field);
+                    }else{
+                        result.groups.push(auxArray);
+                        auxArray = [];
+                        auxArray.push(field);
+                        lastR = field.relationship;
+                    }
+                }
+            });
+            result.groups.push(auxArray);
+            console.log(result.groups);
             var context = {
                 divElementId: panel.divElement.id,
-                result: result
+                result: result,
+                groups: result.groups
             }
-            $("#references-" + panel.divElement.id + "-total").html(result.length  + " references");
-            $("#references-" + panel.divElement.id + "-resultsTable").html(JST["views/conceptDetailsPlugin/tabs/references.hbs"](context));
+
+//            $("#references-" + panel.divElement.id + "-total").html(result.length  + " references");
+            $("#references-" + panel.divElement.id + "-accordion").html(JST["views/conceptDetailsPlugin/tabs/references.hbs"](context));
             console.log(result, result.length);
         });
 
