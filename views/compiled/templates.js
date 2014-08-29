@@ -3355,18 +3355,18 @@ function program1(depth0,data) {
   buffer += escapeExpression(stack1)
     + "-accordion\" href=\"#references-"
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n                    "
+    + "\">\n                    <span id=\"references-"
+    + escapeExpression(((stack1 = (data == null || data === false ? data : data.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "-span\" class=\"references glyphicon glyphicon-";
+  stack1 = (helper = helpers.if_gr || (depth0 && depth0.if_gr),options={hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.length), 10, options) : helperMissing.call(depth0, "if_gr", (depth0 && depth0.length), 10, options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\"></span>\n                </a>&nbsp;"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0[0])),stack1 == null || stack1 === false ? stack1 : stack1.relationship)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " (";
   if (helper = helpers.length) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.length); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + ") <span id=\"references-"
-    + escapeExpression(((stack1 = (data == null || data === false ? data : data.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "-span\" class=\"references glyphicon glyphicon-";
-  stack1 = (helper = helpers.if_gr || (depth0 && depth0.if_gr),options={hash:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.length), 10, options) : helperMissing.call(depth0, "if_gr", (depth0 && depth0.length), 10, options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></span>\n                </a>\n            </h3>\n        </div>\n        <div id=\"references-"
+    + ")\n            </h3>\n        </div>\n        <div id=\"references-"
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" class=\"panel-collapse collapse ";
   stack1 = (helper = helpers.if_gr || (depth0 && depth0.if_gr),options={hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.length), 10, options) : helperMissing.call(depth0, "if_gr", (depth0 && depth0.length), 10, options));
@@ -3380,13 +3380,13 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   
-  return "plus";
+  return "chevron-right";
   }
 
 function program4(depth0,data) {
   
   
-  return "minus";
+  return "chevron-down";
   }
 
 function program6(depth0,data) {

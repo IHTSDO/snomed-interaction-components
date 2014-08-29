@@ -1103,12 +1103,12 @@ function conceptDetails(divElement, conceptId, options) {
                 if ($($(e.target).closest("a").attr("href")).hasClass("collapse")){
                     console.log("finded");
                     var target = $($(e.target).closest("a").attr("href") + "-span");
-                    if (target.hasClass("glyphicon-minus")){
-                        target.removeClass("glyphicon-minus");
-                        target.addClass("glyphicon-plus");
+                    if (target.hasClass("glyphicon-chevron-right")){
+                        target.removeClass("glyphicon-chevron-right");
+                        target.addClass("glyphicon-chevron-down");
                     }else{
-                        target.addClass("glyphicon-minus");
-                        target.removeClass("glyphicon-plus");
+                        target.addClass("glyphicon-chevron-right");
+                        target.removeClass("glyphicon-chevron-down");
                     }
                 }
             });
