@@ -182,19 +182,19 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">\n                <div style=\"padding: 5px\">\n                    <button id=\"members-";
+    + "\">\n                <div class=\"pull-right\" style=\"padding: 5px\">\n                    <button id=\"members-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-sort\" class=\"btn btn-default\">Sort results <span class=\"text-muted\">This operation may time-out for large refsets</span></button>\n                    <button id=\"members-";
+    + "-sort\" class=\"btn btn-default\">Sort results</button>\n                    <span class=\"text-muted\">This operation may time-out for large refsets</span>\n                </div>\n                <br>\n                <table id=\"members-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-normal\" class=\"btn btn-default\">100 first members</button>\n                </div>\n                <br>\n                <table id=\"members-";
+    + "-resultsTable\" class=\"table table-hover table-bordered\">\n                </table>\n                <!--<button id=\"members-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-resultsTable\" class=\"table table-hover table-bordered\">\n                </table>\n            </div>\n            <div class=\"tab-pane fade\" id=\"references-";
+    + "-normal\" class=\"btn btn-default\">100 first members</button>-->\n            </div>\n            <div class=\"tab-pane fade\" id=\"references-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
