@@ -1,4 +1,9 @@
 <h4 data-droppable="true" ondrop="dropC(event, '{{divElementId}}')" ondragleave="removeHighlight();" ondragover="allowDrop(event)">
+    <span class="pull-right">
+        <a href="javascript:void(0);" style="font-size: 20px; color: white; padding: 5px;">
+            <span data-conceptId="{{firstMatch.conceptId}}" class="glyphicon glyphicon-star{{#if_fav firstMatch.conceptId}}{{else}}-empty{{/if_fav}}"></span>
+        </a>
+    </span>
     <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"  draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">
         <span class="badge alert-warning">
         {{#if_eq firstMatch.definitionStatus "Primitive"}}

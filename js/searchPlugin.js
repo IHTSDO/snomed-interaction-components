@@ -469,6 +469,7 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
                         }).done(function (result) {
+                            console.log(result);
 //                            console.log(result.filters);
                             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                                 if (opts != "undefined") {
@@ -524,11 +525,16 @@ function searchPanel(divElement, options) {
                                     source: panel.divElement.id
                                 });
                             });
+                        }).fail(function(){
+                            resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
+                            $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                            $('#' + panel.divElement.id + '-searchBar2').html("");
                         });
                     } else if (t.substr(-2, 1) == "1") {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
 
                         }).done(function (result) {
+                            console.log(result);
                             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                                 if (opts != "undefined") {
                                     if(a == b)
@@ -561,6 +567,10 @@ function searchPanel(divElement, options) {
                                     source: panel.divElement.id
                                 });
                             });
+                        }).fail(function(){
+                            resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
+                            $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
+                            $('#' + panel.divElement.id + '-searchBar2').html("");
                         });
                     } else {
 //                        console.log(t.substr(-2, 1));
@@ -673,6 +683,20 @@ function searchPanel(divElement, options) {
                                     return 1;
                                 return 0;
                             });
+                            if(result.filters.lang && result.filters.semTag){
+                                function sortObject(object){
+                                    var sortable = [], sortedObj = {};
+                                    for (var attr in object)
+                                        sortable.push([attr, object[attr]]);
+                                    sortable.sort(function(a, b) {return b[1] - a[1]});
+                                    $.each(sortable, function (i, field){
+                                        sortedObj[field[0]] = field[1];
+                                    });
+                                    return sortedObj;
+                                }
+                                result.filters.lang = sortObject(result.filters.lang);
+                                result.filters.semTag = sortObject(result.filters.semTag);
+                            }
                         }
 //                        console.log(auxArray);
 //                        console.log(result.filters.module);
@@ -683,20 +707,6 @@ function searchPanel(divElement, options) {
 //                        if (ind == 0){
 //                            result.filters.refsetId = 0;
 //                        }
-                        if(result.filters.lang && result.filters.semTag){
-                            function sortObject(object){
-                                var sortable = [], sortedObj = {};
-                                for (var attr in object)
-                                sortable.push([attr, object[attr]]);
-                                sortable.sort(function(a, b) {return b[1] - a[1]});
-                                $.each(sortable, function (i, field){
-                                    sortedObj[field[0]] = field[1];
-                                });
-                                return sortedObj;
-                            }
-                            result.filters.lang = sortObject(result.filters.lang);
-                            result.filters.semTag = sortObject(result.filters.semTag);
-                        }
                         var context = {
                             result: result,
                             elapsed: elapsed,

@@ -584,6 +584,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 panel.setupParents(result, {conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus, module: module});
             }
         }).fail(function() {
+            $("#" + panel.divElement.id + "-panelBody").html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
         });
     }
 

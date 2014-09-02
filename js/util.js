@@ -126,6 +126,43 @@ function dropC(ev, id) {
 
 }
 
+function dropF(ev, id) {
+    var text = ev.dataTransfer.getData("Text");
+    if (text != "javascript:void(0);"){
+        var i = 0;
+        while (text.charAt(i) != "|"){
+            i++;
+        }
+        var conceptId = ev.dataTransfer.getData("concept-id");
+        if (typeof conceptId == "undefined"){
+            conceptId = text.substr(0, i);
+        }
+        var term = ev.dataTransfer.getData("term");
+        var module = ev.dataTransfer.getData("module");
+        if (typeof term == "undefined"){
+            term = text.substr(i);
+        }
+        var favs = stringToArray(localStorage.getItem("favs")), found = false;
+        $.each(favs, function(i,field){
+            if (field == conceptId){
+                found = true;
+            }
+        });
+        var concept = {
+            defaultTerm: term,
+            conceptId: conceptId,
+            module: module
+        };
+        if (!found){
+//            console.log(concept);
+            favs.push(conceptId);
+            localStorage.setItem("favs", favs);
+            localStorage.setItem("conceptId:" + conceptId, JSON.stringify(concept));
+        }
+        channel.publish("favsAction");
+    }
+}
+
 function dropT(ev, id) {
     $(document).find('.drop-highlighted').removeClass('drop-highlighted');
     ev.preventDefault();
@@ -184,6 +221,24 @@ function dropT(ev, id) {
                 }
             });
         }
+    }
+}
+
+function stringToArray (string){
+    if (typeof string == "string"){
+        var ind = 0, auxString, array = [];
+        while (ind < string.length){
+            auxString = "";
+            while (string.substr(ind, 1) != "," && ind < string.length){
+                auxString = auxString + string.substr(ind,1);
+                ind++;
+            }
+            array.push(auxString);
+            ind++;
+        }
+        return(array);
+    }else{
+        return false;
     }
 }
 

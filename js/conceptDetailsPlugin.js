@@ -353,12 +353,112 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
+            Handlebars.registerHelper("if_fav", function (concept, opts){
+                var favs = stringToArray(localStorage.getItem("favs"));
+                var found = false;
+                if (favs){
+                    $.each(favs, function (i, field){
+                        if (field == concept){
+                            found = true;
+                        }
+                    });
+                    if (found){
+                        return opts.fn(this);
+                    }else{
+                        return opts.inverse(this);
+                    }
+                }else{
+                    return opts.inverse(this);
+                }
+            });
             var context = {
                 panel: panel,
                 firstMatch: firstMatch,
                 divElementId: panel.divElement.id
             };
             $('#home-attributes-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/attributes.hbs"](context));
+
+            $(".glyphicon-star-empty").click(function(e){
+                var concept = {
+                    module: firstMatch.module,
+                    conceptId: firstMatch.conceptId,
+                    defaultTerm: firstMatch.defaultTerm
+                };
+                if ($(e.target).hasClass("glyphicon-star")){
+                    var favs = stringToArray(localStorage.getItem("favs")), auxFavs = [];
+                    $.each(favs, function(i,field){
+                        if (field != $(e.target).attr("data-conceptId")){
+                            auxFavs.push(field);
+                        }
+                    });
+                    localStorage.setItem("favs", auxFavs);
+                    localStorage.removeItem("conceptId:" + $(e.target).attr("data-conceptId"));
+                    $(e.target).addClass("glyphicon-star-empty");
+                    $(e.target).removeClass("glyphicon-star");
+//                            console.log("removed from favs");
+                }else{
+                    var favs = stringToArray(localStorage.getItem("favs")), auxFavs = [];
+                    if (!favs){
+                        favs = [];
+                        favs.push($(e.target).attr("data-conceptId"));
+                        localStorage.setItem("favs", favs);
+                        localStorage.setItem("conceptId:" + $(e.target).attr("data-conceptId"), JSON.stringify(concept));
+                    }else{
+                        $.each(favs, function(i,field){
+                            if (field != $(e.target).attr("data-conceptId")){
+                                auxFavs.push(field);
+                            }
+                        });
+                        auxFavs.push($(e.target).attr("data-conceptId"));
+                        localStorage.setItem("favs", auxFavs);
+                        localStorage.setItem("conceptId:" + $(e.target).attr("data-conceptId"), JSON.stringify(concept));
+                    }
+                    $(e.target).addClass("glyphicon-star");
+                    $(e.target).removeClass("glyphicon-star-empty");
+                }
+                channel.publish("favsAction");
+            });
+
+            $(".glyphicon-star").click(function(e){
+                var concept = {
+                    module: firstMatch.module,
+                    conceptId: firstMatch.conceptId,
+                    defaultTerm: firstMatch.defaultTerm
+                };
+                if ($(e.target).hasClass("glyphicon-star")){
+                    var favs = stringToArray(localStorage.getItem("favs")), auxFavs = [];
+                    $.each(favs, function(i,field){
+                        if (field != $(e.target).attr("data-conceptId")){
+                            auxFavs.push(field);
+                        }
+                    });
+                    localStorage.setItem("favs", auxFavs);
+                    localStorage.removeItem("conceptId:" + $(e.target).attr("data-conceptId"));
+                    $(e.target).addClass("glyphicon-star-empty");
+                    $(e.target).removeClass("glyphicon-star");
+//                            console.log("removed from favs");
+                }else{
+                    var favs = stringToArray(localStorage.getItem("favs")), auxFavs = [];
+                    if (!favs){
+                        favs = [];
+                        favs.push($(e.target).attr("data-conceptId"));
+                        localStorage.setItem("favs", favs);
+                        localStorage.setItem("conceptId:" + $(e.target).attr("data-conceptId"), JSON.stringify(concept));
+                    }else{
+                        $.each(favs, function(i,field){
+                            if (field != $(e.target).attr("data-conceptId")){
+                                auxFavs.push(field);
+                            }
+                        });
+                        auxFavs.push($(e.target).attr("data-conceptId"));
+                        localStorage.setItem("favs", auxFavs);
+                        localStorage.setItem("conceptId:" + $(e.target).attr("data-conceptId"), JSON.stringify(concept));
+                    }
+                    $(e.target).addClass("glyphicon-star");
+                    $(e.target).removeClass("glyphicon-star-empty");
+                }
+                channel.publish("favsAction");
+            });
 
             if (!firstMatch.active) {
                 $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
@@ -900,9 +1000,16 @@ function conceptDetails(divElement, conceptId, options) {
 //            membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members";
 
         }).fail(function () {
+            panel.relsPId = divElement.id + "-rels-panel";
+            panel.attributesPId = divElement.id + "-attributes-panel";
+            panel.descsPId = divElement.id + "-descriptions-panel";
+            $("#home-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+            $("#diagram-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+            $("#members-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+            $("#references-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+            $("#refsets-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             $('#' + panel.descsPId).html("");
-            $('#' + panel.relsPId).html("");
             $('#' + panel.relsPId).html("");
         });
 //        if (typeof xhr != "undefined") {
@@ -1416,6 +1523,11 @@ function conceptDetails(divElement, conceptId, options) {
             var subscription = channel.subscribe(panelId, function(data, envelope) {
 //                console.log("listening in " + panel.divElement.id);
                 panel.conceptId = data.conceptId;
+                if ($("#home-children-" + panel.divElement.id + "-body").length > 0){
+                }else{
+                    panel.setupCanvas();
+                    panel.loadMarkers();
+                }
                 panel.updateCanvas();
 //            This creates a cycle
 //            channel.publish(panel.divElement.id, {
