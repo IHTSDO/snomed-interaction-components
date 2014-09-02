@@ -862,6 +862,9 @@ function searchPanel(divElement, options) {
                         } else {
                             $('#' + panel.divElement.id + '-resultsTable').append(JST["views/searchPlugin/body/default.hbs"](context));
                         }
+                        $("#" + panel.divElement.id + "-groupConcept").click(function(){
+                            panel.search(t, parseInt(skipTo), returnLimit, true);
+                        });
                         $("#" + panel.divElement.id + "-more").click(function (event) {
                             panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
                         });
