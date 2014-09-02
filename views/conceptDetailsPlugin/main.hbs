@@ -65,6 +65,10 @@
             <div class="tab-pane fade" id="refsets-{{divElementId}}">
             </div>
             <div class="tab-pane fade" id="members-{{divElementId}}">
+                <div style="padding: 5px">
+                    <button id="members-{{divElementId}}-sort" class="btn btn-default">Sort results <span class="text-muted">This operation may time-out for large refsets</span></button>
+                    <button id="members-{{divElementId}}-normal" class="btn btn-default">100 first members</button>
+                </div>
                 <br>
                 <table id="members-{{divElementId}}-resultsTable" class="table table-hover table-bordered">
                 </table>

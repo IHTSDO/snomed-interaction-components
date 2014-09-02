@@ -627,33 +627,37 @@ function searchPanel(divElement, options) {
 //                        console.log(panel.options.manifest);
                         var auxArray = [];
                         if (result.filters && panel.options.manifest){
-                            $.each(result.filters.refsetId, function (i, refset){
-                                var found = false;
-                                var auxObject = {};
-                                $.each(panel.options.manifest.refsets, function(j, field){
-                                    if (i == field.conceptId){
-                                        auxObject.term = field.defaultTerm;
+                            if (result.filters.refsetId){
+                                $.each(result.filters.refsetId, function (i, refset){
+                                    var found = false;
+                                    var auxObject = {};
+                                    $.each(panel.options.manifest.refsets, function(j, field){
+                                        if (i == field.conceptId){
+                                            auxObject.term = field.defaultTerm;
+                                            auxObject.value = i;
+                                            auxObject.cant = refset;
+                                            found = true;
+                                        }
+                                    })
+                                    if (!found){
+                                        auxObject.term = null;
                                         auxObject.value = i;
                                         auxObject.cant = refset;
-                                        found = true;
                                     }
-                                })
-                                if (!found){
-                                    auxObject.term = null;
-                                    auxObject.value = i;
-                                    auxObject.cant = refset;
-                                }
-                                auxArray.push(auxObject);
-                            });
-                            result.filters.refsetId = [];
-                            result.filters.refsetId = auxArray;
-                            result.filters.refsetId.sort(function (a, b) {
-                                if (a.cant > b.cant)
-                                    return -1;
-                                if (a.cant < b.cant)
-                                    return 1;
-                                return 0;
-                            });
+                                    auxArray.push(auxObject);
+                                });
+                                result.filters.refsetId = [];
+                                result.filters.refsetId = auxArray;
+                                result.filters.refsetId.sort(function (a, b) {
+                                    if (a.cant > b.cant)
+                                        return -1;
+                                    if (a.cant < b.cant)
+                                        return 1;
+                                    return 0;
+                                });
+                            }else{
+                                result.filters.refsetId = [];
+                            }
                             auxArray = [];
                             $.each(result.filters.module, function (i, field){
                                 var found = false;

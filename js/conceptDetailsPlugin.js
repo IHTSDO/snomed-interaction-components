@@ -1097,7 +1097,7 @@ function conceptDetails(divElement, conceptId, options) {
                         $("#" + iconId).removeClass("glyphicon-chevron-right");
                         $("#" + iconId).addClass("glyphicon-refresh");
                         $("#" + iconId).addClass("icon-spin");
-                        panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                        panel.getChildren($(event.target).closest("li").attr('data-concept-id'), true);
                     } else if ($("#" + iconId).hasClass("glyphicon-minus")) {
 //                    $("#" + iconId).removeClass("glyphicon-minus");
 //                    $("#" + iconId).addClass("glyphicon-chevron-right");
@@ -1142,7 +1142,7 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
         });
 //    }
-        panel.loadMembers(50, 0);
+        panel.loadMembers(100, 0);
     }
 
     this.getReferences = function (conceptId){
@@ -1220,11 +1220,13 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             console.log(result, result.length);
+        }).fail(function(){
+            $("#references-" + panel.divElement.id + "-accordion").html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
         });
 
     }
 
-    this.getChildren = function(conceptId) {
+    this.getChildren = function(conceptId, forceShow) {
         if (typeof panel.options.selectedView == "undefined") {
             panel.options.selectedView = "inferred";
         }
@@ -1253,6 +1255,11 @@ function conceptDetails(divElement, conceptId, options) {
                 divElementId: panel.divElement.id,
                 selectedView: panel.options.selectedView
             };
+            if (typeof forceShow != "undefined"){
+                if (forceShow){
+                    context.displayChildren = forceShow;
+                }
+            }
             Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
                 if (countryIcons[moduleId])
                     return opts.fn(this);
@@ -1373,29 +1380,34 @@ function conceptDetails(divElement, conceptId, options) {
         });
     }
 
-    this.loadMembers = function(returnLimit, skipTo){
+    this.loadMembers = function(returnLimit, skipTo, paginate){
         var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members?limit=" + returnLimit;
         if (skipTo > 0){
             membersUrl = membersUrl + "&skip=" + skipTo;
         }else{
             $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><i class='glyphicon glyphicon-refresh icon-spin'></i></td></tr>");
         }
+        if (typeof paginate != "undefined"){
+            membersUrl = membersUrl + "&paginate=" + paginate;
+        }
 //        console.log(membersUrl);
         $.getJSON(membersUrl, function(result){
 
         }).done(function(result){
 //            console.log(result);
-            var remaining;
-            if (result.details.total == skipTo){
-                remaining = 0;
-            }else{
-                if (result.details.total > (skipTo + returnLimit)){
-                    remaining = result.details.total - (skipTo + returnLimit);
+            var remaining = "asd";
+            if (typeof paginate != "undefined"){
+                if (result.details.total == skipTo){
+                    remaining = 0;
                 }else{
-                    if (result.details.total < returnLimit && skipTo == 0){
-                        remaining = 0;
+                    if (result.details.total > (skipTo + returnLimit)){
+                        remaining = result.details.total - (skipTo + returnLimit);
                     }else{
-                        remaining = result.details.total;
+                        if (result.details.total < returnLimit && skipTo == 0){
+                            remaining = 0;
+                        }else{
+                            remaining = result.details.total;
+                        }
                     }
                 }
             }
@@ -1428,7 +1440,7 @@ function conceptDetails(divElement, conceptId, options) {
                 else
                     return opts.inverse(this);
             });
-            if (result.details.total != 0){
+            if (result.members.length != 0){
                 $("#" + panel.divElement.id + "-moreMembers").remove();
                 $("#members-" + panel.divElement.id + "-resultsTable").find(".more-row").remove();
                 if (skipTo == 0) {
@@ -1438,7 +1450,17 @@ function conceptDetails(divElement, conceptId, options) {
                 }
                 $("#" + panel.divElement.id + "-moreMembers").click(function(){
                     $("#" + panel.divElement.id + "-moreMembers").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-                    panel.loadMembers(returnLimit, skipTo + 50);
+                    panel.loadMembers(returnLimit, skipTo + 50, paginate);
+                });
+                $("#members-" + panel.divElement.id + "-normal").unbind();
+                $("#members-" + panel.divElement.id + "-normal").click(function(){
+                    $("#members-" + panel.divElement.id + "-normal").blur();
+                    panel.loadMembers(returnLimit, 0);
+                });
+                $("#members-" + panel.divElement.id + "-sort").unbind();
+                $("#members-" + panel.divElement.id + "-sort").click(function(){
+                    $("#members-" + panel.divElement.id + "-sort").blur();
+                    panel.loadMembers(returnLimit, 0, 1);
                 });
             }else{
                 $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
