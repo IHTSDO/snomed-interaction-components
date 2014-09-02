@@ -1065,6 +1065,9 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
             $("#home-children-" + panel.divElement.id + "-body").html(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
             $(".treeButton").disableTextSelect();
+            if (typeof i18n_drag_this == "undefined"){
+                i18n_drag_this = "Drag this";
+            }
             $("[draggable='true']").tooltip({
                 placement: 'left auto',
                 trigger: 'hover',
@@ -1126,7 +1129,9 @@ function conceptDetails(divElement, conceptId, options) {
                     source: panel.divElement.id
                 });
             });
-
+            if (typeof i18n_display_children == "undefined"){
+                i18n_display_children = "Display Children";
+            }
             $("#" + panel.divElement.id + "-showChildren").tooltip({
                 placement : 'right',
                 trigger: 'hover',
@@ -1403,18 +1408,24 @@ function conceptDetails(divElement, conceptId, options) {
                     if (result.details.total > (skipTo + returnLimit)){
                         remaining = result.details.total - (skipTo + returnLimit);
                     }else{
-                        if (result.details.total < returnLimit && skipTo == 0){
+//                        if (result.details.total < returnLimit && skipTo != 0){
                             remaining = 0;
-                        }else{
-                            remaining = result.details.total;
-                        }
+//                        }else{
+//                            remaining = result.details.total;
+//                        }
                     }
                 }
                 if (remaining < returnLimit){
                     var returnLimit2 = remaining;
                 }else{
-                    var returnLimit2 = returnLimit;
+                    if (remaining != 0){
+                        var returnLimit2 = returnLimit;
+                    }else{
+                        var returnLimit2 = 0;
+                    }
                 }
+            }else{
+                var returnLimit2 = returnLimit;
             }
             var context = {
                 result: result,
@@ -1423,7 +1434,6 @@ function conceptDetails(divElement, conceptId, options) {
                 divElementId: panel.divElement.id,
                 skipTo: skipTo
             };
-            console.log(context);
             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                 if (opts != "undefined") {
                     if(a == b)

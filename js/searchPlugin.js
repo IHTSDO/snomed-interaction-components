@@ -600,7 +600,10 @@ function searchPanel(divElement, options) {
                     if (panel.options.textIndexNormalized != "none"){
                         searchUrl = searchUrl + "&normalize=" + panel.options.textIndexNormalized;
                     }
-                    console.log(searchUrl);
+                    if ($("#" + panel.divElement.id + "-groupConcept").is(":checked")){
+                        searchUrl = searchUrl + "&groupByConcept=1";
+                    }
+//                    console.log(searchUrl);
                     xhr = $.getJSON(searchUrl,function (result) {
 
                     }).done(function (result) {

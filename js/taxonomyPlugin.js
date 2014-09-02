@@ -454,6 +454,9 @@ function taxonomyPanel(divElement, conceptId, options) {
             }
             $("#" + panel.divElement.id + "-treenode-" + conceptId).closest("li").append(JST["views/taxonomyPlugin/body/children.hbs"](context));
             $(".treeButton").disableTextSelect();
+            if (typeof i18n_drag_this == "undefined"){
+                i18n_drag_this = "Drag this";
+            }
             $("[draggable='true']").tooltip({
                 placement: 'left auto',
                 trigger: 'hover',
