@@ -800,7 +800,7 @@ function program2(depth0,data) {
 this["JST"]["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data,depth1) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, self=this, helperMissing=helpers.helperMissing, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this, functionType="function";
 
 function program1(depth0,data) {
   
@@ -892,8 +892,11 @@ function program12(depth0,data) {
 
 function program14(depth0,data) {
   
-  
-  return "\n                            <span rel=\"tooltip-right\" title=\"F\">F</span>\n                        ";
+  var buffer = "", helper, options;
+  buffer += "\n                            <span rel=\"tooltip-right\" title=\""
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_fsn", "FSN", options) : helperMissing.call(depth0, "i18n", "i18n_fsn", "FSN", options)))
+    + "\">F</span>\n                        ";
+  return buffer;
   }
 
 function program16(depth0,data) {
@@ -907,8 +910,11 @@ function program16(depth0,data) {
   }
 function program17(depth0,data) {
   
-  
-  return "\n                                <span rel=\"tooltip-right\" title=\"S\">S</span>\n                            ";
+  var buffer = "", helper, options;
+  buffer += "\n                                <span rel=\"tooltip-right\" title=\""
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_synonym", "Synonym", options) : helperMissing.call(depth0, "i18n", "i18n_synonym", "Synonym", options)))
+    + "\">S</span>\n                            ";
+  return buffer;
   }
 
 function program19(depth0,data) {
@@ -922,8 +928,11 @@ function program19(depth0,data) {
   }
 function program20(depth0,data) {
   
-  
-  return "\n                                    <span rel=\"tooltip-right\" title=\"D\">D</span>\n                                ";
+  var buffer = "", helper, options;
+  buffer += "\n                                    <span rel=\"tooltip-right\" title=\""
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_definition", "Definition", options) : helperMissing.call(depth0, "i18n", "i18n_definition", "Definition", options)))
+    + "\">D</span>\n                                ";
+  return buffer;
   }
 
 function program22(depth0,data) {
@@ -937,14 +946,20 @@ function program22(depth0,data) {
   }
 function program23(depth0,data) {
   
-  
-  return "\n                                &nbsp;<span class=\"glyphicon glyphicon-star-empty\" rel=\"tooltip-right\" title=\"Preferred\"></span>\n                            ";
+  var buffer = "", helper, options;
+  buffer += "\n                                &nbsp;<span class=\"glyphicon glyphicon-star-empty\" rel=\"tooltip-right\" title=\""
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_preferred", "Preferred", options) : helperMissing.call(depth0, "i18n", "i18n_preferred", "Preferred", options)))
+    + "\"></span>\n                            ";
+  return buffer;
   }
 
 function program25(depth0,data) {
   
-  
-  return "\n                                &nbsp;<span class=\"glyphicon glyphicon-star\" rel=\"tooltip-right\" title=\"Preferred\"></span>\n                            ";
+  var buffer = "", helper, options;
+  buffer += "\n                                &nbsp;<span class=\"glyphicon glyphicon-star\" rel=\"tooltip-right\" title=\""
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_preferred", "Preferred", options) : helperMissing.call(depth0, "i18n", "i18n_preferred", "Preferred", options)))
+    + "\"></span>\n                            ";
+  return buffer;
   }
 
 function program27(depth0,data) {
@@ -958,8 +973,11 @@ function program27(depth0,data) {
   }
 function program28(depth0,data) {
   
-  
-  return "\n                                &nbsp;<span rel=\"tooltip-right\" title=\"Acceptable\">&#10004;</span></span>\n                            ";
+  var buffer = "", helper, options;
+  buffer += "\n                                &nbsp;<span rel=\"tooltip-right\" title=\""
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_acceptable", "Acceptable", options) : helperMissing.call(depth0, "i18n", "i18n_acceptable", "Acceptable", options)))
+    + "\">&#10004;</span></span>\n                            ";
+  return buffer;
   }
 
 function program30(depth0,data) {
@@ -981,8 +999,11 @@ function program32(depth0,data) {
 
 function program34(depth0,data) {
   
-  
-  return "\n                            <span class='i18n' data-i18n-id='i18n_preferred'>Preferred</span>\n                        ";
+  var buffer = "", helper, options;
+  buffer += "\n                            <span class='i18n' data-i18n-id='i18n_preferred'>"
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_preferred", "Preferred", options) : helperMissing.call(depth0, "i18n", "i18n_preferred", "Preferred", options)))
+    + "</span>\n                        ";
+  return buffer;
   }
 
 function program36(depth0,data) {
@@ -996,14 +1017,20 @@ function program36(depth0,data) {
   }
 function program37(depth0,data) {
   
-  
-  return "\n                                <span class='i18n' data-i18n-id='i18n_acceptable'>Acceptable</span>\n                            ";
+  var buffer = "", helper, options;
+  buffer += "\n                                <span class='i18n' data-i18n-id='i18n_acceptable'>"
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_acceptable", "Acceptable", options) : helperMissing.call(depth0, "i18n", "i18n_acceptable", "Acceptable", options)))
+    + "</span>\n                            ";
+  return buffer;
   }
 
 function program39(depth0,data) {
   
-  
-  return "\n                            <span class='i18n' data-i18n-id='i18n_not_acceptable'>Not acceptable</span>\n                        ";
+  var buffer = "", helper, options;
+  buffer += "\n                            <span class='i18n' data-i18n-id='i18n_not_acceptable'>"
+    + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_not_acceptable", "Not acceptable", options) : helperMissing.call(depth0, "i18n", "i18n_not_acceptable", "Not acceptable", options)))
+    + "</span>\n                        ";
+  return buffer;
   }
 
   buffer += "<table class='table table-bordered' id = '";
