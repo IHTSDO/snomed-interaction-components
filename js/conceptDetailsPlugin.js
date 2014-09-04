@@ -546,39 +546,44 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
-            Handlebars.registerHelper('preferred', function (a, opts) {
-                if (a == "get") {
-                    if (panel.preferred) {
-                        return opts.fn(this);
-                    } else {
-                        return opts.inverse(this);
+            var auxDescriptions = [];
+            $.each(allDescriptions, function (i, description){
+                var included = false;
+                if (description.langMemberships){
+                    $.each(description.langMemberships, function (i, langMembership){
+                        if (langMembership.refset.conceptId == panel.options.langRefset){
+                            included = true;
+                            if (langMembership.acceptability.conceptId == "900000000000548007"){
+                                description.preferred = true;
+                            }else{
+                                if (langMembership.acceptability.conceptId == "900000000000549004"){
+                                    description.acceptable = true;
+                                }
+                            }
+                        }
+                    });
+                }
+                if (included){
+                    auxDescriptions.push(description);
+                }else{
+                    description.acceptable = false;
+                    if (panel.options.hideNotAcceptable){
+                        if (panel.options.displayInactiveDescriptions){
+                            auxDescriptions.push(description);
+                        }
+                    }else{
+                        if (options.displayInactiveDescriptions){
+                            auxDescriptions.push(description);
+                        }else{
+                            if (description.active){
+                                auxDescriptions.push(description);
+                            }
+                        }
                     }
-                } else {
-                    panel.preferred = a;
                 }
             });
-            Handlebars.registerHelper('acceptable', function (a, opts) {
-                if (a == "get") {
-                    if (panel.acceptable) {
-                        return opts.fn(this);
-                    } else {
-                        return opts.inverse(this);
-                    }
-                } else {
-                    panel.acceptable = a;
-                }
-            });
-            Handlebars.registerHelper('included', function (a, opts) {
-                if (a == "get") {
-                    if (panel.included) {
-                        return opts.fn(this);
-                    } else {
-                        return opts.inverse(this);
-                    }
-                } else {
-                    panel.included = a;
-                }
-            });
+            allDescriptions = auxDescriptions;
+            console.log(auxDescriptions);
             var context = {
                 options: panel.options,
                 languageName: languageName,
@@ -1392,14 +1397,29 @@ function conceptDetails(divElement, conceptId, options) {
         }else{
             $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><i class='glyphicon glyphicon-refresh icon-spin'></i></td></tr>");
         }
-        if (typeof paginate != "undefined"){
-            membersUrl = membersUrl + "&paginate=" + paginate;
+        var total;
+        if (panel.options.manifest){
+//                console.log(panel.options.manifest);
+            $.each(panel.options.manifest.refsets, function (i, field){
+                if (field.conceptId == panel.conceptId){
+                    if (field.count){
+                        total = field.count;
+                    }
+                }
+            });
+        }
+        if (typeof total != "undefined"){
+//            console.log(total);
+            if (total < 25000){
+                paginate = 1;
+                membersUrl = membersUrl + "&paginate=1";
+            }
+
         }
 //        console.log(membersUrl);
         $.getJSON(membersUrl, function(result){
 
         }).done(function(result){
-//            console.log(result);
             var remaining = "asd";
             if (typeof paginate != "undefined"){
                 if (result.details.total == skipTo){
