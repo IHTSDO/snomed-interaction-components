@@ -583,7 +583,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             allDescriptions = auxDescriptions;
-            console.log(auxDescriptions);
+//            console.log(auxDescriptions);
             var context = {
                 options: panel.options,
                 languageName: languageName,
