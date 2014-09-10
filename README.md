@@ -1,40 +1,56 @@
 # SNOMED Interaction Components
 
-SNOMED Interaction Components are Javascript widgets that can be easily integrated in any website.
+SNOMED Interaction Components are Javascript widgets that can be easily integrated in any website to provide SNOMED CT Navigation features, querying an IHTSDO Snapshot Backend Server.
 
-[Click here for the Beta deployment](http://browser.ihtsdotools.org/)
+## Distribution
 
-## Concept Details and Search Widgets Example 
+This project gould be compiled using Grunt.js (http://gruntjs.com/) creating the distribution files:
 
-The ConceptDetails panel is a proof of concept for a panel that displays the details of a SNOMED CT concept. The search widget provides a search as you type UI for SNOMED CT. Search works with the following pattern: `^text text*`.
+* js
+  * snomed-interaction-components-1.0.0.js
+  * snomed-interaction-components-1.0.0.min.js
+* css
+  * snomed-interaction-components-1.0.0.css
+  * snomed-interaction-components-1.0.0.min.css
 
-This example loads these two widgets in a simple HTML page, and add some javascript code to add new instances in a fluid row of widgets.
+The Grunt default task will create all these components, running `grunt` in the root folder of the project will create the distribution artifacts.
 
-Each widge has two modes, plain Javascript object, or JQuery plugin. We will explain both approaches in this tutorial. Both modes provide similar features, and the decision to use one or the other depends on personal preferences of the user.
+## Use components in your project
 
-### Importing dependencies
-
-This widget depends on JQuery (js) and Bootstrap (js + css), so any recent version of both needs to be made available.
-
+Use the js and css files resulting from Grunt.js build, import them in your project and add these import references in your HTML file:
 ```HTML
-<script src="lib/jquery-2.1.0.min.js" type="text/javascript"></script>
-<script src="lib/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
-<script src="lib/bootstrap.min.js"></script>
+<link rel="stylesheet" href="snomed-interaction-components/css/snomed-interaction-components-1.19.0.min.css">
+<script src="snomed-interaction-components/js/snomed-interaction-components-1.19.0.min.js"></script>
+```
+The SNOMED Interaction Componets require you to have JQuery 2.1.x and Boostrap 3.x imported in your project also, fo example:
+```HTML
+<script src="external-libs/jquery-2.1.0.min.js" type="text/javascript"></script>
+<script src="external-libs/bootstrap.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css">
+```
+## Included Components
+
+The included components are:
+* Taxonomy: A tree view of the SNOMED CT Content, selectable logic view and it can be refocused to any concept.
+* Search: Search SNOMED CT Content with multiple modes and filters.
+* Concept Details: A full concept data display, including a summary, advanced details, navigation to parents and children, diagrams, etc.
+* Refsets: List of available Reference Sets in the environment.
+
+## Instantiating components in your project
+
+These components can be included in your app by creating an empty div in HTML and using javascript to instantiate a complete view inside it.
+
+```javascript
+var tpt = new taxonomyPanel(document.getElementById("div-1-id"), conceptId, options);
+var spa = new searchPanel(document.getElementById("div-2-id"), options);
+var ref = new refsetPanel(document.getElementById("div-3-id"), options);
+var cdp = new conceptDetails(document.getElementById("div-4-id"), conceptId, options);
 ```
 
-### Importing the Concept Details widget library
+Concept Details and Taxonomy have a conceptId parameter that will focus the panel in the provided concept.
+All components require an Options object that will configure preferences and the access to the backend server.
 
-The SNOMED CT widgets are distributed as a Javascript file (.js), available [here](https://github.com/termMed/snomed-interaction-components/raw/master/js). It needs to be imported in the HTML page also.
-
-```HTML
-<script src="js/conceptDetailsPlugIn.js" type="text/javascript"></script>
-<script src="js/searchPlugin.js" type="text/javascript"></script>
-```
-
-### Preparing the canvas for the Concept Details panel
+### Example: Preparing the canvas for the Concept Details panel
 
 The body of the HTML page needs to include a div element that will contain the widget. This div needs to have a unique id. In this example we also assign the `onload` event of the body to the `initialize()` javascript function (that we will create later).
 
@@ -63,121 +79,42 @@ After that, 2 panels are created using the 2 different modes.
         function initialize() {
             // Example: common options object
             var options = {
-                languageRefset: "bca0a686-3516-3daf-8fcf-fe396d13cfad",
-                showIds: "true"
+                serverUrl: "http://127.0.0.1/api/snomed",
+                edition: "en-edition",
+                release: "v20140731",
+                showIds: false,
+                hideNotAcceptable: true,
+                displayInactiveDescriptions: false,
+                displaySynonyms: true,
+                selectedView: "inferred",
+                displayChildren: false,
+                langRefset: "900000000000509007",
+                closeButton: false,
+                collapseButton: false,
+                linkerButton: true,
+                subscribersMarker: true,
+                searchMode: "partialMatching",
+                searchLang: "english",
+                diagrammingMarkupEnabled: false,
+                statusSearchFilter: "activeOnly",
+                highlightByEffectiveTime: "false"
             };
 
             // Example: load first widget using plain javascript
-            var cdPanel = new conceptDetails(document.getElementById("concept_details_canvas"),
-                    "c265cf22-2a11-3488-b71e-296ec0317f96", options);
+            var cdPanel = new conceptDetails(document.getElementById("concept_details_canvas"), "404684003", options);
             cdPanel.updateDivContent();
-
-            // Example: load second widget using JQery
-            $("#concept_details_canvas_jquery").addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
 
         }
     </script>
 ```
-
-#### Defining the connection to the Terminology Server
-
 The `options` object can include a property called `url` that would allow to connect to any provided terminology server, that follows a pre-defined rest methods API. In this example we don't provide any `url` value and the plugin will default to a development Terminology Server.
-
-#### Defining the Concept to display
-
-In both calls, one of the parameters is the concept UUID, in the example the UUID is `"c265cf22-2a11-3488-b71e-296ec0317f96"`, in future iteration of the widgets it will be possible to use SCTIDs instead of UUIDs.
-
-Some example UUIDs to test:
-
-* SNOMED CT (Root): ee9ac5d2-a07c-3981-a57a-f7f26baf38d8
-* Clinical finding: bd83b1dd-5a82-34fa-bb52-06f666420a1c
-* Asthma: c265cf22-2a11-3488-b71e-296ec0317f96 - 195967001
-* Atenolol: f4298478-304f-36ca-bf05-7e14fbaebc5a - 87652004
 
 After the initial load, it is possible to set the panel to a different concept by using the Javascript object methods.
 
 ```JavaScript
-panel.conceptId = "ee9ac5d2-a07c-3981-a57a-f7f26baf38d8";
+panel.conceptId = "4046840038";
 panel.updateDivContent();
 ```
 
-## Full Example HTML
-```HTML
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <title>SNOMED CT Interaction Components</title>
 
-        <script src="lib/jquery-2.1.0.min.js" type="text/javascript"></script>
-        <script src="lib/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
-        <script src="js/conceptDetailsPlugin.js" type="text/javascript"></script>
-        <script src="js/searchPlugin.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/sct-widgets.css">
-        <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css">
-        <script src="lib/bootstrap.min.js"></script>
 
-        <script type="text/javascript">
-            function initialize() {
-                // Example: common options object
-                var options = {
-                    languageRefset: "bca0a686-3516-3daf-8fcf-fe396d13cfad",
-                    showIds: true,
-                    displaySynonyms: false,
-                    selectedView: "stated",
-                    displayChildren: false
-                };
-
-                // Example: load first widget using plain javascript
-                var sp = new searchPanel(document.getElementById("search_canvas"), options);
-
-                // Example: load first widget using plain javascript
-                var cdPanel = new conceptDetails(document.getElementById("concept_details_canvas"),
-                        "195967001", options);
-                cdPanel.setupCanvas();
-
-                // Example: load second widget using JQery
-                //$("#concept_details_canvas_jquery").addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
-                var count = 1;
-                $("#addSearchButton").click(function() {
-                    count = count + 1;
-                    $("#searchRow").append('<div class ="col-md-6"><div id="search_auto_canvas_' + count + '"></div></div>');
-                    var spa = new searchPanel(document.getElementById("search_auto_canvas_" + count), options);
-                });
-                $("#addCDButton").click(function() {
-                    count = count + 1;
-                    $("#cdRow").append('<div class ="col-md-6"><div id="cd_auto_canvas_' + count + '"></div></div>');
-                    $("#cd_auto_canvas_" + count).addConceptDetails("195967001", options);
-                });
-
-                //$("#concept_details_canvas_3").addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
-                //$("#concept_details_canvas_4").addConceptDetails("c265cf22-2a11-3488-b71e-296ec0317f96", options);
-
-            }
-        </script>
-    </head>
-    <body onload="initialize()">
-        <div class="container">
-            <div class="row container">
-                <h1>Testing SCT Interaction Components</h1>
-            </div>
-            <div class="row container">
-                <button type="button" class="btn btn-primary" id="addSearchButton">Add Search</button>
-            </div>
-            <div class="row" id="searchRow">
-                <div id="search_canvas" class ="col-md-6"></div>
-            </div>
-            <div class="row container">
-                <button type="button" class="btn btn-primary" id="addCDButton">Add Concept Details</button>
-            </div>
-            <div class="row" id="cdRow">
-                <div class ="col-md-6">
-                    <div id="concept_details_canvas"></div>
-                </div>
-            </div>
-        </div>
-    </body>
-</html>
-```
