@@ -284,6 +284,7 @@ function conceptDetails(divElement, conceptId, options) {
 
     this.updateCanvas = function() {
 //        $("#members-" + panel.divElement.id).html("");
+        $("#home-children-cant-" + panel.divElement.id).html("");
         $('.more-fields-button').popover('hide');
         if (conceptRequested == panel.conceptId) {
             return;
@@ -1067,6 +1068,7 @@ function conceptDetails(divElement, conceptId, options) {
                 childrenResult: result,
                 selectedView: panel.options.selectedView
             };
+            $("#home-children-cant-" + panel.divElement.id).html("(" + result.length + ")");
             $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
             $("#home-children-" + panel.divElement.id + "-body").html(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
             $(".treeButton").disableTextSelect();
