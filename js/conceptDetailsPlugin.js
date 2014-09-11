@@ -284,6 +284,7 @@ function conceptDetails(divElement, conceptId, options) {
 
     this.updateCanvas = function() {
 //        $("#members-" + panel.divElement.id).html("");
+        $("#home-children-cant-" + panel.divElement.id).html("");
         $('.more-fields-button').popover('hide');
         if (conceptRequested == panel.conceptId) {
             return;
@@ -330,6 +331,7 @@ function conceptDetails(divElement, conceptId, options) {
                 edition: options.edition,
                 release: options.release,
                 server: options.serverUrl.substr(0, options.serverUrl.length - 10),
+                langRefset: panel.options.langRefset,
 //                dataContentValue: options.serverUrl.substr(0, options.serverUrl.length - 10)
                 dataContentValue: document.URL.split("?")[0].split("#")[0]
             };
@@ -352,12 +354,112 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
+            Handlebars.registerHelper("if_fav", function (concept, opts){
+                var favs = stringToArray(localStorage.getItem("favs"));
+                var found = false;
+                if (favs){
+                    $.each(favs, function (i, field){
+                        if (field == concept){
+                            found = true;
+                        }
+                    });
+                    if (found){
+                        return opts.fn(this);
+                    }else{
+                        return opts.inverse(this);
+                    }
+                }else{
+                    return opts.inverse(this);
+                }
+            });
             var context = {
                 panel: panel,
                 firstMatch: firstMatch,
                 divElementId: panel.divElement.id
             };
             $('#home-attributes-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/attributes.hbs"](context));
+
+            $(".glyphicon-star-empty").click(function(e){
+                var concept = {
+                    module: firstMatch.module,
+                    conceptId: firstMatch.conceptId,
+                    defaultTerm: firstMatch.defaultTerm
+                };
+                if ($(e.target).hasClass("glyphicon-star")){
+                    var favs = stringToArray(localStorage.getItem("favs")), auxFavs = [];
+                    $.each(favs, function(i,field){
+                        if (field != $(e.target).attr("data-conceptId")){
+                            auxFavs.push(field);
+                        }
+                    });
+                    localStorage.setItem("favs", auxFavs);
+                    localStorage.removeItem("conceptId:" + $(e.target).attr("data-conceptId"));
+                    $(e.target).addClass("glyphicon-star-empty");
+                    $(e.target).removeClass("glyphicon-star");
+//                            console.log("removed from favs");
+                }else{
+                    var favs = stringToArray(localStorage.getItem("favs")), auxFavs = [];
+                    if (!favs){
+                        favs = [];
+                        favs.push($(e.target).attr("data-conceptId"));
+                        localStorage.setItem("favs", favs);
+                        localStorage.setItem("conceptId:" + $(e.target).attr("data-conceptId"), JSON.stringify(concept));
+                    }else{
+                        $.each(favs, function(i,field){
+                            if (field != $(e.target).attr("data-conceptId")){
+                                auxFavs.push(field);
+                            }
+                        });
+                        auxFavs.push($(e.target).attr("data-conceptId"));
+                        localStorage.setItem("favs", auxFavs);
+                        localStorage.setItem("conceptId:" + $(e.target).attr("data-conceptId"), JSON.stringify(concept));
+                    }
+                    $(e.target).addClass("glyphicon-star");
+                    $(e.target).removeClass("glyphicon-star-empty");
+                }
+                channel.publish("favsAction");
+            });
+
+            $(".glyphicon-star").click(function(e){
+                var concept = {
+                    module: firstMatch.module,
+                    conceptId: firstMatch.conceptId,
+                    defaultTerm: firstMatch.defaultTerm
+                };
+                if ($(e.target).hasClass("glyphicon-star")){
+                    var favs = stringToArray(localStorage.getItem("favs")), auxFavs = [];
+                    $.each(favs, function(i,field){
+                        if (field != $(e.target).attr("data-conceptId")){
+                            auxFavs.push(field);
+                        }
+                    });
+                    localStorage.setItem("favs", auxFavs);
+                    localStorage.removeItem("conceptId:" + $(e.target).attr("data-conceptId"));
+                    $(e.target).addClass("glyphicon-star-empty");
+                    $(e.target).removeClass("glyphicon-star");
+//                            console.log("removed from favs");
+                }else{
+                    var favs = stringToArray(localStorage.getItem("favs")), auxFavs = [];
+                    if (!favs){
+                        favs = [];
+                        favs.push($(e.target).attr("data-conceptId"));
+                        localStorage.setItem("favs", favs);
+                        localStorage.setItem("conceptId:" + $(e.target).attr("data-conceptId"), JSON.stringify(concept));
+                    }else{
+                        $.each(favs, function(i,field){
+                            if (field != $(e.target).attr("data-conceptId")){
+                                auxFavs.push(field);
+                            }
+                        });
+                        auxFavs.push($(e.target).attr("data-conceptId"));
+                        localStorage.setItem("favs", auxFavs);
+                        localStorage.setItem("conceptId:" + $(e.target).attr("data-conceptId"), JSON.stringify(concept));
+                    }
+                    $(e.target).addClass("glyphicon-star");
+                    $(e.target).removeClass("glyphicon-star-empty");
+                }
+                channel.publish("favsAction");
+            });
 
             if (!firstMatch.active) {
                 $('#home-attributes-' + panel.divElement.id).css("background-color", "LightPink");
@@ -379,6 +481,15 @@ function conceptDetails(divElement, conceptId, options) {
                 delay: 500
             });
 
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
+
             // load descriptions panel
             panel.descsPId = divElement.id + "-descriptions-panel";
             var languageName = "";
@@ -396,7 +507,7 @@ function conceptDetails(divElement, conceptId, options) {
                 languageName = "(AU)";
             } else if (panel.options.langRefset == "999001251000000103") {
                 languageName = "(UK)";
-            } else if (panel.options.langRefset == "31000146106") {
+            } else if (panel.options.langRefset == "11000146104") {
                 languageName = "(NL)";
             }
 
@@ -436,39 +547,44 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
-            Handlebars.registerHelper('preferred', function (a, opts) {
-                if (a == "get") {
-                    if (panel.preferred) {
-                        return opts.fn(this);
-                    } else {
-                        return opts.inverse(this);
+            var auxDescriptions = [];
+            $.each(allDescriptions, function (i, description){
+                var included = false;
+                if (description.langMemberships){
+                    $.each(description.langMemberships, function (i, langMembership){
+                        if (langMembership.refset.conceptId == panel.options.langRefset){
+                            included = true;
+                            if (langMembership.acceptability.conceptId == "900000000000548007"){
+                                description.preferred = true;
+                            }else{
+                                if (langMembership.acceptability.conceptId == "900000000000549004"){
+                                    description.acceptable = true;
+                                }
+                            }
+                        }
+                    });
+                }
+                if (included){
+                    auxDescriptions.push(description);
+                }else{
+                    description.acceptable = false;
+                    if (panel.options.hideNotAcceptable){
+                        if (panel.options.displayInactiveDescriptions){
+                            auxDescriptions.push(description);
+                        }
+                    }else{
+                        if (options.displayInactiveDescriptions){
+                            auxDescriptions.push(description);
+                        }else{
+                            if (description.active){
+                                auxDescriptions.push(description);
+                            }
+                        }
                     }
-                } else {
-                    panel.preferred = a;
                 }
             });
-            Handlebars.registerHelper('acceptable', function (a, opts) {
-                if (a == "get") {
-                    if (panel.acceptable) {
-                        return opts.fn(this);
-                    } else {
-                        return opts.inverse(this);
-                    }
-                } else {
-                    panel.acceptable = a;
-                }
-            });
-            Handlebars.registerHelper('included', function (a, opts) {
-                if (a == "get") {
-                    if (panel.included) {
-                        return opts.fn(this);
-                    } else {
-                        return opts.inverse(this);
-                    }
-                } else {
-                    panel.included = a;
-                }
-            });
+            allDescriptions = auxDescriptions;
+//            console.log(auxDescriptions);
             var context = {
                 options: panel.options,
                 languageName: languageName,
@@ -661,22 +777,43 @@ function conceptDetails(divElement, conceptId, options) {
                 $('#home-parents-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-parents-' + panel.divElement.id).html()));
             }
             $(".treeButton").disableTextSelect();
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
             $("#home-parents-" + panel.divElement.id).unbind();
             $("#home-parents-" + panel.divElement.id).click(function (event) {
                 if ($(event.target).hasClass("treeButton")) {
-                    var conceptId = $(event.target).closest("li").attr('data-concept-id');
+                    var ev = event.target;
+                    //firefox issue!
+                    if (navigator.userAgent.indexOf("Firefox") > -1) {
+                        ev = $(ev).context.children;
+                    }
+                    var conceptId = $(ev).closest("li").attr('data-concept-id');
                     event.preventDefault();
-                    if ($(event.target).hasClass("glyphicon-chevron-up")) {
-                        $(event.target).closest("li").find("ul").remove();
-                        $(event.target).removeClass("glyphicon-chevron-up");
-                        $(event.target).addClass("glyphicon-chevron-right");
-                    } else if ($(event.target).hasClass("glyphicon-chevron-right")) {
-                        $(event.target).removeClass("glyphicon-chevron-right");
-                        $(event.target).addClass("glyphicon-refresh");
-                        $(event.target).addClass("icon-spin");
-                        panel.getParent(conceptId, event.target);
-                    } else if ($(event.target).hasClass("glyphicon-minus")) {
-//                    $("#" + iconId).removeClass("glyphicon-minus");
+                    if ($(ev).hasClass("glyphicon-chevron-up")) {
+                        $(ev).closest("li").find("ul").remove();
+                        $(ev).removeClass("glyphicon-chevron-up");
+                        $(ev).addClass("glyphicon-chevron-right");
+                    } else if ($(ev).hasClass("glyphicon-chevron-right")) {
+                        $(ev).removeClass("glyphicon-chevron-right");
+                        $(ev).addClass("glyphicon-refresh");
+                        $(ev).addClass("icon-spin");
+                        panel.getParent(conceptId, ev);
+                    } else if ($(ev).hasClass("glyphicon-minus")) {
+//                      $("#" + iconId).removeClass("glyphicon-minus");
 //                    $("#" + iconId).addClass("glyphicon-chevron-right");
                     }
                 } else if ($(event.target).hasClass("treeLabel")) {
@@ -704,7 +841,7 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             Handlebars.registerHelper('eqLastGroup', function (a, opts) {
-                console.log(a, panel.lastGroup);
+//                console.log(a, panel.lastGroup);
                 if(panel.lastGroup == null){
                     panel.lastGroup = a;
                     return opts.fn(this);
@@ -730,13 +867,19 @@ function conceptDetails(divElement, conceptId, options) {
             });
             Handlebars.registerHelper('lastColor', function (a) {
                 if (a == "get") {
-                    return panel.color;
+                    return "";
+//                    return panel.color;
                 } else {
-                    panel.color = a;
+                    if (a == "random"){
+                        panel.color = getRandomColor();
+                    }else{
+                        panel.color = a;
+                    }
                 }
             });
             Handlebars.registerHelper('getRandomColor', function () {
-                return getRandomColor();
+//                return getRandomColor();
+                return "";
             });
             var context = {
                 options: options,
@@ -786,12 +929,21 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
 
+            if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "references-tab") {
+                $("#references-" + panel.divElement.id + "-resultsTable").html("");
+//                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+                panel.getReferences(firstMatch.conceptId);
+            }
+
             if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
-                $("#diagram-canvas-" + panel.divElement.id).html("");
-                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+
             }
 
 
+            $("#references-tab-link-" + panel.divElement.id).click(function (e) {
+                $("#references-" + panel.divElement.id + "-resultsTable").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                panel.getReferences(firstMatch.conceptId);
+            });
             $("#diagram-tab-link-" + panel.divElement.id).unbind();
             $("#diagram-tab-link-" + panel.divElement.id).click(function (e) {
                 $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
@@ -837,6 +989,15 @@ function conceptDetails(divElement, conceptId, options) {
                 delay: 500
             });
 
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
+
             if (typeof(switchLanguage) == "function") {
                 switchLanguage(selectedLanguage, selectedFlag, false);
             }
@@ -845,9 +1006,16 @@ function conceptDetails(divElement, conceptId, options) {
 //            membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members";
 
         }).fail(function () {
+            panel.relsPId = divElement.id + "-rels-panel";
+            panel.attributesPId = divElement.id + "-attributes-panel";
+            panel.descsPId = divElement.id + "-descriptions-panel";
+            $("#home-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+            $("#diagram-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+            $("#members-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+            $("#references-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+            $("#refsets-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
             $('#' + panel.descsPId).html("");
-            $('#' + panel.relsPId).html("");
             $('#' + panel.relsPId).html("");
         });
 //        if (typeof xhr != "undefined") {
@@ -883,6 +1051,14 @@ function conceptDetails(divElement, conceptId, options) {
                     return 1;
                 return 0;
             });
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if (a){
+                    if(a > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
             xhrChildren = null;
             panel.childrenPId = divElement.id + "-children-panel";
 //                console.log(result);
@@ -892,9 +1068,30 @@ function conceptDetails(divElement, conceptId, options) {
                 childrenResult: result,
                 selectedView: panel.options.selectedView
             };
+            $("#home-children-cant-" + panel.divElement.id).html("(" + result.length + ")");
             $('#' + panel.childrenPId).html(JST["views/conceptDetailsPlugin/tabs/details/children-panel.hbs"](context));
             $("#home-children-" + panel.divElement.id + "-body").html(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
             $(".treeButton").disableTextSelect();
+            if (typeof i18n_drag_this == "undefined"){
+                i18n_drag_this = "Drag this";
+            }
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
+            $("#home-children-" + panel.divElement.id + "-body").unbind();
             $("#home-children-" + panel.divElement.id + "-body").click(function (event) {
                 if ($(event.target).hasClass("treeButton")) {
                     var conceptId = $(event.target).closest("li").attr('data-concept-id');
@@ -910,7 +1107,7 @@ function conceptDetails(divElement, conceptId, options) {
                         $("#" + iconId).removeClass("glyphicon-chevron-right");
                         $("#" + iconId).addClass("glyphicon-refresh");
                         $("#" + iconId).addClass("icon-spin");
-                        panel.getChildren($(event.target).closest("li").attr('data-concept-id'));
+                        panel.getChildren($(event.target).closest("li").attr('data-concept-id'), true);
                     } else if ($("#" + iconId).hasClass("glyphicon-minus")) {
 //                    $("#" + iconId).removeClass("glyphicon-minus");
 //                    $("#" + iconId).addClass("glyphicon-chevron-right");
@@ -939,11 +1136,13 @@ function conceptDetails(divElement, conceptId, options) {
                     source: panel.divElement.id
                 });
             });
-
+            if (typeof i18n_display_children == "undefined"){
+                i18n_display_children = "Display Children";
+            }
             $("#" + panel.divElement.id + "-showChildren").tooltip({
                 placement : 'right',
                 trigger: 'hover',
-                title: "Click here to display the children",
+                title: i18n_display_children,
                 animation: true,
                 delay: 500
             });
@@ -955,10 +1154,91 @@ function conceptDetails(divElement, conceptId, options) {
             $('#' + panel.childrenPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
         });
 //    }
-        panel.loadMembers(50, 0);
+        panel.loadMembers(100, 0);
     }
 
-    this.getChildren = function(conceptId) {
+    this.getReferences = function (conceptId){
+        $("#references-" + panel.divElement.id + "-accordion").html("");
+        console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
+        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
+
+        }).done(function(result){
+            Handlebars.registerHelper('if_gr', function(a,b, opts) {
+                if (a){
+                    if(a > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            $.each(result, function (i, field){
+                if (field.statedRelationships){
+                    field.relationship = field.statedRelationships[0].type.defaultTerm;
+                }else{
+                    field.relationship = field.relationships[0].type.defaultTerm;
+                }
+            });
+            result.sort(function (a, b) {
+                if (a.relationship < b.relationship)
+                    return -1;
+                if (a.relationship > b.relationship)
+                    return 1;
+                if (a.relationship == b.relationship) {
+                    if (a.defaultTerm < b.defaultTerm)
+                        return -1;
+                    if (a.defaultTerm > b.defaultTerm)
+                        return 1;
+                }
+                return 0;
+            });
+            result.groups = [];
+            var lastR = "", auxArray = [];
+            $.each(result, function(i, field){
+                if (lastR == ""){
+                    auxArray.push(field);
+                    lastR = field.relationship;
+                }else{
+                    if (lastR == field.relationship){
+                        auxArray.push(field);
+                    }else{
+                        result.groups.push(auxArray);
+                        auxArray = [];
+                        auxArray.push(field);
+                        lastR = field.relationship;
+                    }
+                }
+            });
+            result.groups.push(auxArray);
+            console.log(result.groups);
+            var context = {
+                divElementId: panel.divElement.id,
+                result: result,
+                groups: result.groups
+            }
+
+//            $("#references-" + panel.divElement.id + "-total").html(result.length  + " references");
+            $("#references-" + panel.divElement.id + "-accordion").html(JST["views/conceptDetailsPlugin/tabs/references.hbs"](context));
+            $("#references-" + panel.divElement.id + "-accordion").click(function(e){
+                if ($($(e.target).closest("a").attr("href")).hasClass("collapse")){
+                    console.log("finded");
+                    var target = $($(e.target).closest("a").attr("href") + "-span");
+                    if (target.hasClass("glyphicon-chevron-right")){
+                        target.removeClass("glyphicon-chevron-right");
+                        target.addClass("glyphicon-chevron-down");
+                    }else{
+                        target.addClass("glyphicon-chevron-right");
+                        target.removeClass("glyphicon-chevron-down");
+                    }
+                }
+            });
+            console.log(result, result.length);
+        }).fail(function(){
+            $("#references-" + panel.divElement.id + "-accordion").html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+        });
+
+    }
+
+    this.getChildren = function(conceptId, forceShow) {
         if (typeof panel.options.selectedView == "undefined") {
             panel.options.selectedView = "inferred";
         }
@@ -987,6 +1267,11 @@ function conceptDetails(divElement, conceptId, options) {
                 divElementId: panel.divElement.id,
                 selectedView: panel.options.selectedView
             };
+            if (typeof forceShow != "undefined"){
+                if (forceShow){
+                    context.displayChildren = forceShow;
+                }
+            }
             Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
                 if (countryIcons[moduleId])
                     return opts.fn(this);
@@ -1011,8 +1296,24 @@ function conceptDetails(divElement, conceptId, options) {
             } else {
                 $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
             }
-            $("#" + panel.divElement.id + "-treenode-" + conceptId).after(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
+            $("#" + panel.divElement.id + "-treenode-" + conceptId).closest("li").append(JST["views/conceptDetailsPlugin/tabs/home/children.hbs"](context));
             $(".treeButton").disableTextSelect();
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
 
         }).fail(function() {
             $("#" + panel.divElement.id + "-treeicon-" + conceptId).removeClass("icon-spin");
@@ -1043,7 +1344,7 @@ function conceptDetails(divElement, conceptId, options) {
                 $.each(result, function(i, field){
 //                    console.log(field);
                     auxHtml = auxHtml + "<li class='treeLabel' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'><button class='btn btn-link btn-xs treeButton' style='padding:2px'>";
-                    if (field.conceptId == "138875005"){
+                    if (field.conceptId == "138875005" || field.conceptId == "9999999999"){
                         auxHtml = auxHtml + "<i class='glyphicon glyphicon-minus treeButton' data-ind='" + ind + "'></i></button>";
                     }else{
                         auxHtml = auxHtml + "<i class='glyphicon glyphicon-chevron-right treeButton' data-ind='" + ind + "'></i></button>";
@@ -1071,39 +1372,86 @@ function conceptDetails(divElement, conceptId, options) {
             $(target).closest("li").prepend(auxHtml);
 //            $("#" + ind + panel.divElement.id + "-treeicon-" + conceptId).after(auxHtml);
             $(".treeButton").disableTextSelect();
+            $("[draggable='true']").tooltip({
+                placement: 'left auto',
+                trigger: 'hover',
+                title: i18n_drag_this,
+                animation: true,
+                delay: 500
+            });
+
+            $("[draggable='true']").mouseover(function(e){
+//                console.log(e);
+                var term = $(e.target).attr("data-term");
+                if (typeof term == "undefined"){
+                    term = $($(e.target).parent()).attr("data-term");
+                }
+                icon = iconToDrag(term);
+            });
         }).fail(function(){
         });
     }
 
-    this.loadMembers = function(returnLimit, skipTo){
+    this.loadMembers = function(returnLimit, skipTo, paginate){
         var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members?limit=" + returnLimit;
         if (skipTo > 0){
             membersUrl = membersUrl + "&skip=" + skipTo;
         }else{
             $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><i class='glyphicon glyphicon-refresh icon-spin'></i></td></tr>");
         }
+        var total;
+        if (panel.options.manifest){
+//                console.log(panel.options.manifest);
+            $.each(panel.options.manifest.refsets, function (i, field){
+                if (field.conceptId == panel.conceptId){
+                    if (field.count){
+                        total = field.count;
+                    }
+                }
+            });
+        }
+        if (typeof total != "undefined"){
+//            console.log(total);
+            if (total < 25000){
+                paginate = 1;
+                membersUrl = membersUrl + "&paginate=1";
+            }
+
+        }
 //        console.log(membersUrl);
         $.getJSON(membersUrl, function(result){
 
         }).done(function(result){
-//            console.log(result);
-            var remaining;
-            if (result.details.total == skipTo){
-                remaining = 0;
-            }else{
-                if (result.details.total > (skipTo + returnLimit)){
-                    remaining = result.details.total - (skipTo + returnLimit);
+            var remaining = "asd";
+            if (typeof paginate != "undefined"){
+                if (result.details.total == skipTo){
+                    remaining = 0;
                 }else{
-                    if (result.details.total < returnLimit && skipTo == 0){
-                        remaining = 0;
+                    if (result.details.total > (skipTo + returnLimit)){
+                        remaining = result.details.total - (skipTo + returnLimit);
                     }else{
-                        remaining = result.details.total;
+//                        if (result.details.total < returnLimit && skipTo != 0){
+                            remaining = 0;
+//                        }else{
+//                            remaining = result.details.total;
+//                        }
                     }
                 }
+                if (remaining < returnLimit){
+                    var returnLimit2 = remaining;
+                }else{
+                    if (remaining != 0){
+                        var returnLimit2 = returnLimit;
+                    }else{
+                        var returnLimit2 = 0;
+                    }
+                }
+            }else{
+                var returnLimit2 = returnLimit;
             }
             var context = {
                 result: result,
-                returnLimit: returnLimit,
+                returnLimit: returnLimit2,
                 remaining: remaining,
                 divElementId: panel.divElement.id,
                 skipTo: skipTo
@@ -1124,7 +1472,13 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
-            if (result.details.total != 0){
+            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts){
+                if (countryIcons[moduleId])
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            });
+            if (result.members.length != 0){
                 $("#" + panel.divElement.id + "-moreMembers").remove();
                 $("#members-" + panel.divElement.id + "-resultsTable").find(".more-row").remove();
                 if (skipTo == 0) {
@@ -1134,13 +1488,37 @@ function conceptDetails(divElement, conceptId, options) {
                 }
                 $("#" + panel.divElement.id + "-moreMembers").click(function(){
                     $("#" + panel.divElement.id + "-moreMembers").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-                    panel.loadMembers(returnLimit, skipTo + 50);
+                    panel.loadMembers(returnLimit2, skipTo + returnLimit, paginate);
+                });
+                $("#members-" + panel.divElement.id + "-sort").unbind();
+                $("#members-" + panel.divElement.id + "-sort").click(function(){
+                    $("#members-" + panel.divElement.id + "-sort").blur();
+                    panel.loadMembers(returnLimit, 0, 1);
                 });
             }else{
-                $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'>This concept has no members</td></tr>");
+                if (skipTo != 0){
+                    $("#" + panel.divElement.id + "-moreMembers").remove();
+                    $("#members-" + panel.divElement.id + "-resultsTable").find(".more-row").remove();
+                    if (skipTo == 0) {
+                        $('#members-' + panel.divElement.id + "-resultsTable").html(JST["views/conceptDetailsPlugin/tabs/members.hbs"](context));
+                    }else{
+                        $('#members-' + panel.divElement.id + "-resultsTable").append(JST["views/conceptDetailsPlugin/tabs/members.hbs"](context));
+                    }
+                    $("#" + panel.divElement.id + "-moreMembers").click(function(){
+                        $("#" + panel.divElement.id + "-moreMembers").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                        panel.loadMembers(returnLimit2, skipTo + returnLimit, paginate);
+                    });
+                    $("#members-" + panel.divElement.id + "-sort").unbind();
+                    $("#members-" + panel.divElement.id + "-sort").click(function(){
+                        $("#members-" + panel.divElement.id + "-sort").blur();
+                        panel.loadMembers(returnLimit, 0, 1);
+                    });
+                }else{
+                    $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
+                }
             }
         }).fail(function(){
-            $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'>This concept has no members</td></tr>");
+            $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
         });
     }
 
@@ -1219,6 +1597,11 @@ function conceptDetails(divElement, conceptId, options) {
             var subscription = channel.subscribe(panelId, function(data, envelope) {
 //                console.log("listening in " + panel.divElement.id);
                 panel.conceptId = data.conceptId;
+                if ($("#home-children-" + panel.divElement.id + "-body").length > 0){
+                }else{
+                    panel.setupCanvas();
+                    panel.loadMarkers();
+                }
                 panel.updateCanvas();
 //            This creates a cycle
 //            channel.publish(panel.divElement.id, {

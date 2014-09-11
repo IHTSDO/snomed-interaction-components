@@ -1,8 +1,16 @@
 /**
  * Created by alo on 7/18/14.
  */
-
+icon = document.createElement("img");
 channel = postal.channel("Selections");
+
+Handlebars.registerHelper('i18n', function (i18n, defaultV){
+    if (typeof window[i18n] == "undefined"){
+        return defaultV;
+    }else{
+        return window[i18n];
+    }
+});
 
 $(document).on('dragend', function(){
     removeHighlight();
@@ -14,7 +22,16 @@ function removeHighlight(){
 
 function allowDrop(ev) {
     ev.preventDefault();
-    var aux = $(ev.target).closest("div");
+
+    var aux;
+    if ($(ev.target).attr("data-droppable") == "true"){
+        aux = $(ev.target);
+    }else{
+        aux = $(ev.target).closest("div");
+    }
+//    while (typeof $(aux).closest('div').attr('ondrop') != "undefined"){
+//        aux = $(aux).closest('div');
+//    }
     $(aux).addClass("drop-highlighted");
 }
 
@@ -44,7 +61,13 @@ function drag(ev, id) {
             }
         }
     });
-    var icon = iconToDrag(term);
+    icon = iconToDrag(term);
+    if (navigator.userAgent.indexOf("Chrome") > -1){
+        icon = iconToDrag(term);
+        ev.dataTransfer.setDragImage(icon, 0, 0);
+    }else{
+//            icon = iconToDrag(term);
+    }
     ev.dataTransfer.setDragImage(icon, 0, 0);
     dataText = conceptId + "|" + term;
     ev.dataTransfer.setData("Text", dataText);
@@ -101,6 +124,43 @@ function dropC(ev, id) {
         }
     }
 
+}
+
+function dropF(ev, id) {
+    var text = ev.dataTransfer.getData("Text");
+    if (text != "javascript:void(0);"){
+        var i = 0;
+        while (text.charAt(i) != "|"){
+            i++;
+        }
+        var conceptId = ev.dataTransfer.getData("concept-id");
+        if (typeof conceptId == "undefined"){
+            conceptId = text.substr(0, i);
+        }
+        var term = ev.dataTransfer.getData("term");
+        var module = ev.dataTransfer.getData("module");
+        if (typeof term == "undefined"){
+            term = text.substr(i);
+        }
+        var favs = stringToArray(localStorage.getItem("favs")), found = false;
+        $.each(favs, function(i,field){
+            if (field == conceptId){
+                found = true;
+            }
+        });
+        var concept = {
+            defaultTerm: term,
+            conceptId: conceptId,
+            module: module
+        };
+        if (!found){
+//            console.log(concept);
+            favs.push(conceptId);
+            localStorage.setItem("favs", favs);
+            localStorage.setItem("conceptId:" + conceptId, JSON.stringify(concept));
+        }
+        channel.publish("favsAction");
+    }
 }
 
 function dropT(ev, id) {
@@ -161,6 +221,24 @@ function dropT(ev, id) {
                 }
             });
         }
+    }
+}
+
+function stringToArray (string){
+    if (typeof string == "string"){
+        var ind = 0, auxString, array = [];
+        while (ind < string.length){
+            auxString = "";
+            while (string.substr(ind, 1) != "," && ind < string.length){
+                auxString = auxString + string.substr(ind,1);
+                ind++;
+            }
+            array.push(auxString);
+            ind++;
+        }
+        return(array);
+    }else{
+        return false;
     }
 }
 

@@ -1,6 +1,6 @@
 {{#if result.matches}}
     {{#if_gre "0" result.matches.length}}
-        <tr><td class='text-muted'>No results</td></tr>
+        <tr><td class='text-muted'><span data-i18n-id="i18n_no_results" class="i18n">{{i18n "i18n_no_results" "No results"}}</span></td></tr>
     {{else}}
         {{#each result.matches}}
             <tr class='resultRow selectable-row{{#if_eq active false}} danger{{else}}{{#if_eq conceptActive false}} danger{{/if_eq}}{{/if_eq}}'>
@@ -24,11 +24,11 @@
             </tr>
         {{/each}}
         {{#if_gr remaining 0}}
-            <tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='{{divElementId}}-more'>Load {{returnLimit}} more ({{remaining}} remaining on server)</button></td></tr>
+            <tr class='more-row'><td colspan='2' class='text-center'><button class='btn btn-link' id='{{divElementId}}-more'><span data-i18n-id="i18n_load" class="i18n">{{i18n "i18n_load" "Load"}}</span> {{returnLimit}} <span data-i18n-id="i18n_more" class="i18n">{{i18n "i18n_more" "more"}}</span> ({{remaining}} <span data-i18n-id="i18n_remaining_server" class="i18n">{{i18n "i18n_remaining_server" "remaining on server"}}</span>)</button></td></tr>
         {{else}}
-            <tr class='more-row'><td colspan='2' class='text-center text-muted'>All {{result.details.total}} results are displayed</td></tr>
+            <tr class='more-row'><td colspan='2' class='text-center text-muted'><span data-i18n-id="i18n_all_res" class="i18n">{{i18n "i18n_all_res" "All"}}</span> {{result.details.total}} <span data-i18n-id="i18n_results_displayed" class="i18n">{{i18n "i18n_results_displayed" "results are displayed"}}</span></td></tr>
         {{/if_gr}}
     {{/if_gre}}
 {{else}}
-    <tr><td class='text-muted'>No results</td></tr>
+    <tr><td class='text-muted'><span data-i18n-id="i18n_no_results" class="i18n">{{i18n "i18n_no_results" "No results"}}</span></td></tr>
 {{/if}}

@@ -17,6 +17,8 @@ module.exports = function(grunt) {
                     'js/searchPlugin.js',
                     'js/svgdiagrammingv2.js',
                     'js/taxonomyPlugin.js',
+                    'js/refsetPlugin.js',
+                    'js/favoritesPlugin.js',
                     'js/util.js',
                     'views/compiled/templates.js'
                 ],

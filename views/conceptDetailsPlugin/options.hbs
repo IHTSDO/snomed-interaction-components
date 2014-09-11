@@ -3,56 +3,56 @@
         <div class="checkbox">
             <label>
                 {{#if options.displaySynonyms}}
-                    <input type="checkbox" id="{{divElementId}}-displaySynonymsOption" checked> <span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>
+                    <input type="checkbox" id="{{divElementId}}-displaySynonymsOption" checked> <span class="i18n" data-i18n-id="i18n_display_synonyms2">{{i18n "i18n_display_synonyms2" "Display Synonyms along with FSN and preferred terms"}}</span>
                 {{else}}
-                    <input type="checkbox" id="{{divElementId}}-displaySynonymsOption"> <span class="i18n" data-i18n-id="i18n_display_synonyms2">Display Synonyms along with FSN and preferred terms</span>
+                    <input type="checkbox" id="{{divElementId}}-displaySynonymsOption"> <span class="i18n" data-i18n-id="i18n_display_synonyms2">{{i18n "i18n_display_synonyms2" "Display Synonyms along with FSN and preferred terms"}}</span>
                 {{/if}}
             </label>
         </div>
         <div class="checkbox">
             <label>
                 {{#if options.showIds}}
-                    <input type="checkbox" id="{{divElementId}}-displayIdsOption" checked> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>
+                    <input type="checkbox" id="{{divElementId}}-displayIdsOption" checked> <span class="i18n" data-i18n-id="i18n_display_ids">{{i18n "i18n_display_ids" "Display Ids"}}</span>
                 {{else}}
-                    <input type="checkbox" id="{{divElementId}}-displayIdsOption"> <span class="i18n" data-i18n-id="i18n_display_ids">Display Ids</span>
+                    <input type="checkbox" id="{{divElementId}}-displayIdsOption"> <span class="i18n" data-i18n-id="i18n_display_ids">{{i18n "i18n_display_ids" "Display Ids"}}</span>
                 {{/if}}
             </label>
         </div>
         <div class="checkbox">
             <label>
                 {{#if options.displayInactiveDescriptions}}
-                    <input type="checkbox" id="{{divElementId}}-displayInactiveDescriptionsOption" checked> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>
+                    <input type="checkbox" id="{{divElementId}}-displayInactiveDescriptionsOption" checked> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">{{i18n "i18n_display_inactive_descriptions" "Display inactive descriptions"}}</span>
                 {{else}}
-                    <input type="checkbox" id="{{divElementId}}-displayInactiveDescriptionsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">Display inactive descriptions</span>
+                    <input type="checkbox" id="{{divElementId}}-displayInactiveDescriptionsOption"> <span class="i18n" data-i18n-id="i18n_display_inactive_descriptions">{{i18n "i18n_display_inactive_descriptions" "Display inactive descriptions"}}</span>
                 {{/if}}
             </label>
         </div>
         <div class="checkbox">
             <label>
                 {{#if options.hideNotAcceptable}}
-                    <input type="checkbox" id="{{divElementId}}-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>
+                    <input type="checkbox" id="{{divElementId}}-hideNotAcceptableOption" checked> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">{{i18n "i18n_hide_not_acceptable" "Hide descriptions with no acceptability"}}</span>
                 {{else}}
-                    <input type="checkbox" id="{{divElementId}}-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">Hide descriptions with no acceptability</span>
+                    <input type="checkbox" id="{{divElementId}}-hideNotAcceptableOption"> <span class="i18n" data-i18n-id="i18n_hide_not_acceptable">{{i18n "i18n_hide_not_acceptable" "Hide descriptions with no acceptability"}}</span>
                 {{/if}}
             </label>
         </div>
         <div class="checkbox">
             <label>
                 {{#if options.diagrammingMarkupEnabled}}
-                    <input type="checkbox" id="{{divElementId}}-diagrammingMarkupEnabledOption" checked> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Guideline colors enabled</span>
+                    <input type="checkbox" id="{{divElementId}}-diagrammingMarkupEnabledOption" checked> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">{{i18n "i18n_diagramming_markup_enabled" "Diagramming Guideline colors enabled"}}</span>
                 {{else}}
-                    <input type="checkbox" id="{{divElementId}}-diagrammingMarkupEnabledOption"> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">Diagramming Guideline colors enabled</span>
+                    <input type="checkbox" id="{{divElementId}}-diagrammingMarkupEnabledOption"> <span class="i18n" data-i18n-id="i18n_diagramming_markup_enabled">{{i18n "i18n_diagramming_markup_enabled" "Diagramming Guideline colors enabled"}}</span>
                 {{/if}}
             </label>
         </div>
         <div class="checkbox">
             <label>
-                <input type="checkbox" id="{{divElementId}}-displayChildren" {{#if options.displayChildren}}checked{{/if}}> <span class="i18n" data-i18n-id="i18n_display_children">Display Children</span>
+                <input type="checkbox" id="{{divElementId}}-displayChildren" {{#if options.displayChildren}}checked{{/if}}> <span class="i18n" data-i18n-id="i18n_display_children">{{i18n "i18n_display_children" "Display All Children"}}</span>
             </label>
         </div>
     </div>
     <div class="form-group">
-        <label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_rels_view">Relationships View</span></label>
+        <label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_rels_view">{{i18n "i18n_rels_view" "Relationships View"}}</span></label>
         <select class="form-control" id="{{divElementId}}-relsViewOption">
             {{#if_eq options.selectedView "stated"}}
                 <option value="stated" selected>Stated</option>
@@ -72,7 +72,7 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="{{divElementId}}-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">Language Refset</span></label>
+        <label for="{{divElementId}}-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">{{i18n "i18n_language_refset" "Language Refset"}}</span></label>
         <select class="form-control" id="{{divElementId}}-langRefsetOption">
             {{#if_eq options.langRefset "900000000000508004"}}
                 <option value="900000000000508004" selected>GB Language Refset</option>
@@ -109,10 +109,10 @@
             {{else}}
                 <option value="999001251000000103">UK Language Refset</option>
             {{/if_eq}}
-            {{#if_eq options.langRefset "31000146106"}}
-                <option value="31000146106" selected>NL Language Refset</option>
+            {{#if_eq options.langRefset "11000146104"}}
+                <option value="11000146104" selected>NL Language Refset</option>
             {{else}}
-                <option value="31000146106">NL Language Refset</option>
+                <option value="11000146104">NL Language Refset</option>
             {{/if_eq}}
         </select>
     </div>
