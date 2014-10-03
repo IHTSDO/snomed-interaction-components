@@ -85,6 +85,9 @@ function favoritePanel(divElement, options) {
                 localStorage.removeItem("conceptId:" + $(e.target).attr("data-concept-id"));
                 panel.loadFavs();
             });
+            $("#exportFavsXls").click(function(){
+                return ExcellentExport.excel(this, 'tableFavs');
+            });
             $('#' + panel.divElement.id + '-panelBody').find(".fav-item").click(function (event) {
                 channel.publish(panel.divElement.id, {
                     term: $(event.target).attr('data-term'),
