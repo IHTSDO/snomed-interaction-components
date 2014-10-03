@@ -582,6 +582,8 @@ function searchPanel(divElement, options) {
                 } else {
                     if (panel.options.searchMode == "partialMatching") {
                         t = t.toLowerCase();
+                        t = t.replace("(","");
+                        t = t.replace(")","");
                     }
                     var startTime = Date.now();
                     var searchUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=" + panel.options.searchLang + "&statusFilter=" + panel.options.statusSearchFilter + "&skipTo=" + skipTo + "&returnLimit=" + returnLimit;
