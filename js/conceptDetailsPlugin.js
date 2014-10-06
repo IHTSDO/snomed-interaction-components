@@ -1161,7 +1161,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.getReferences = function (conceptId){
-        $("#references-" + panel.divElement.id + "-accordion").html("");
+        $("#references-" + panel.divElement.id + "-accordion").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
         if (xhrReferences != null) {
             xhrReferences.abort();
