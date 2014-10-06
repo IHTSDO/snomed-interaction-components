@@ -1221,8 +1221,7 @@ function conceptDetails(divElement, conceptId, options) {
                 divElementId: panel.divElement.id,
                 result: result,
                 groups: result.groups
-            }
-
+            };
 //            $("#references-" + panel.divElement.id + "-total").html(result.length  + " references");
             $("#references-" + panel.divElement.id + "-accordion").html(JST["views/conceptDetailsPlugin/tabs/references.hbs"](context));
             $("#references-" + panel.divElement.id + "-accordion").click(function(e){
