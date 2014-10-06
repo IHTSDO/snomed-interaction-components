@@ -1159,7 +1159,7 @@ function conceptDetails(divElement, conceptId, options) {
 
     this.getReferences = function (conceptId){
         $("#references-" + panel.divElement.id + "-accordion").html("");
-        console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
+//        console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
 
         }).done(function(result){
@@ -1209,7 +1209,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             result.groups.push(auxArray);
-            console.log(result.groups);
+//            console.log(result.groups);
             var context = {
                 divElementId: panel.divElement.id,
                 result: result,
@@ -1231,7 +1231,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 }
             });
-            console.log(result, result.length);
+//            console.log(result, result.length);
         }).fail(function(){
             $("#references-" + panel.divElement.id + "-accordion").html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
         });
