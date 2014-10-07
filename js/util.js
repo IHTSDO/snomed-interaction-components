@@ -74,6 +74,33 @@ function drag(ev, id) {
     ev.dataTransfer.setData("divElementId", id);
 }
 
+function dropS(ev){
+    $(document).find('.drop-highlighted').removeClass('drop-highlighted');
+    ev.preventDefault();
+    var text = ev.dataTransfer.getData("Text");
+    if (text != "javascript:void(0);"){
+        var i = 0;
+        while (text.charAt(i) != "|"){
+            i++;
+        }
+        var conceptId = ev.dataTransfer.getData("concept-id");
+        if (typeof conceptId == "undefined"){
+            conceptId = text.substr(0, i);
+        }
+        var term = ev.dataTransfer.getData("term");
+        if (typeof term == "undefined"){
+            term = text.substr(i);
+        }
+        $(ev.target).val(term);
+        var id = $(ev.target).attr("id").replace("-searchBox", "");
+        $.each(componentsRegistry, function(i, field) {
+            if (field.divElement.id == id) {
+                field.search(term, 0, 100, false);
+            }
+        });
+    }
+}
+
 function dropC(ev, id) {
     $(document).find('.drop-highlighted').removeClass('drop-highlighted');
     ev.preventDefault();
@@ -245,5 +272,3 @@ function stringToArray (string){
 function alertEvent(message, type) {
     $.notify(message,type);
 }
-
-

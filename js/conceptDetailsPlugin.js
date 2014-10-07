@@ -37,6 +37,9 @@ function conceptDetails(divElement, conceptId, options) {
     this.subscription = null;
     var xhr = null;
     var xhrChildren = null;
+    var xhrReferences = null;
+    var xhrParents = null;
+    var xhrMembers = null;
     var conceptRequested = 0;
     panel.subscriptionsColor = [];
     panel.subscriptions = [];
@@ -939,7 +942,7 @@ function conceptDetails(divElement, conceptId, options) {
 
             }
 
-
+            $("#references-tab-link-" + panel.divElement.id).unbind();
             $("#references-tab-link-" + panel.divElement.id).click(function (e) {
                 $("#references-" + panel.divElement.id + "-resultsTable").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
                 panel.getReferences(firstMatch.conceptId);
@@ -1158,9 +1161,13 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.getReferences = function (conceptId){
-        $("#references-" + panel.divElement.id + "-accordion").html("");
+        $("#references-" + panel.divElement.id + "-accordion").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
-        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
+        if (xhrReferences != null) {
+            xhrReferences.abort();
+            console.log("aborting references call...");
+        }
+        xhrReferences = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
 
         }).done(function(result){
             Handlebars.registerHelper('if_gr', function(a,b, opts) {
@@ -1209,13 +1216,12 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             result.groups.push(auxArray);
-            console.log(result.groups);
+//            console.log(result.groups);
             var context = {
                 divElementId: panel.divElement.id,
                 result: result,
                 groups: result.groups
-            }
-
+            };
 //            $("#references-" + panel.divElement.id + "-total").html(result.length  + " references");
             $("#references-" + panel.divElement.id + "-accordion").html(JST["views/conceptDetailsPlugin/tabs/references.hbs"](context));
             $("#references-" + panel.divElement.id + "-accordion").click(function(e){
@@ -1231,7 +1237,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 }
             });
-            console.log(result, result.length);
+//            console.log(result, result.length);
         }).fail(function(){
             $("#references-" + panel.divElement.id + "-accordion").html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
         });
@@ -1249,7 +1255,11 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
         }
 
-        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
+        if (xhrChildren != null) {
+            xhrChildren.abort();
+            console.log("aborting children call...");
+        }
+        xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
@@ -1323,7 +1333,11 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.getParent = function(conceptId, target){
-        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents", function(result) {
+        if (xhrParents != null) {
+            xhrParents.abort();
+            console.log("aborting children call...");
+        }
+        xhrParents = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents", function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
             result.sort(function(a, b) {
@@ -1419,7 +1433,11 @@ function conceptDetails(divElement, conceptId, options) {
 
         }
 //        console.log(membersUrl);
-        $.getJSON(membersUrl, function(result){
+        if (xhrMembers != null) {
+            xhrMembers.abort();
+            console.log("aborting call...");
+        }
+        xhrMembers = $.getJSON(membersUrl, function(result){
 
         }).done(function(result){
             var remaining = "asd";
