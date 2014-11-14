@@ -510,7 +510,7 @@ function conceptDetails(divElement, conceptId, options) {
                 languageName = "(AU)";
             } else if (panel.options.langRefset == "999001251000000103") {
                 languageName = "(UK)";
-            } else if (panel.options.langRefset == "11000146104") {
+            } else if (panel.options.langRefset == "31000146106") {
                 languageName = "(NL)";
             }
 
@@ -1161,7 +1161,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.getReferences = function (conceptId){
-        $("#references-" + panel.divElement.id + "-accordion").html("");
+        $("#references-" + panel.divElement.id + "-accordion").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
         if (xhrReferences != null) {
             xhrReferences.abort();
@@ -1216,13 +1216,12 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             result.groups.push(auxArray);
-            console.log(result.groups);
+//            console.log(result.groups);
             var context = {
                 divElementId: panel.divElement.id,
                 result: result,
                 groups: result.groups
-            }
-
+            };
 //            $("#references-" + panel.divElement.id + "-total").html(result.length  + " references");
             $("#references-" + panel.divElement.id + "-accordion").html(JST["views/conceptDetailsPlugin/tabs/references.hbs"](context));
             $("#references-" + panel.divElement.id + "-accordion").click(function(e){
@@ -1238,7 +1237,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 }
             });
-            console.log(result, result.length);
+//            console.log(result, result.length);
         }).fail(function(){
             $("#references-" + panel.divElement.id + "-accordion").html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
         });
