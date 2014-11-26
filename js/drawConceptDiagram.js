@@ -127,7 +127,7 @@ function drawConceptDiagram (concept, div, options) {
     var svgCode = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' + parentDiv.html();
     svgCode = svgCode.substr(0, svgCode.indexOf("svg") + 4) +
         ' xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" ' +
-        svgCode.substr(svgCode.indexOf("svg") + 5)
+        svgCode.substr(svgCode.indexOf("svg") + 4)
     svgCode = svgCode.replace('width="1000px" height="2000px"', 'width="' + maxX + '" height="' + y + '"');
     var b64 = Base64.encode(svgCode);
 
