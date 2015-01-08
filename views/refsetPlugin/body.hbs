@@ -1,31 +1,47 @@
 <div style="margin-top: 10px" class="panel panel-default">
     <div class="panel-body">
-        <table class="table table-hover table-bordered">
-            <tbody>
-            {{#if_eq refsets.length 0}}
-                <tr>
-                    <td>
-                        <span class="text-muted"> No refsets</span>
-                    </td>
-                </tr>
-            {{else}}
-                {{#each refsets}}
+        <div class="row container-fluid" style="max-height: 260px; overflow-y: scroll; margin: 10px;">
+            <table class="table table-hover table-bordered">
+                <thead>
                     <tr>
-                        <td>
-                            <a class="refset-item" href="javascript:void(0);" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' style="color: inherit; text-decoration: inherit;">
-                                <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;&nbsp;</span>
-                                {{#hasCountryIcon module}}
-                                    <div class="phoca-flagbox" style="width:22px;height:22px">
-                                        <span class="phoca-flag {{countryIcon module}}"></span>
-                                    </div>
-                                {{/hasCountryIcon}}
-                                {{defaultTerm}}
-                            </a>
+                        <th>Refset</th>
+                        <th>Members count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#if_eq refsets.length 0}}
+                    <tr>
+                        <td colspan="2">
+                            <span class="text-muted"> No refsets</span>
                         </td>
                     </tr>
-                {{/each}}
-            {{/if_eq}}
-            </tbody>
-        </table>
+                {{else}}
+                    {{#each refsets}}
+                        <tr>
+                            <td>
+                                <a class="refset-item" href="javascript:void(0);" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' style="color: inherit; text-decoration: inherit;">
+                                    <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;&nbsp;</span>
+                                    {{#hasCountryIcon module}}
+                                        <div class="phoca-flagbox" style="width:22px;height:22px">
+                                            <span class="phoca-flag {{countryIcon module}}"></span>
+                                        </div>
+                                    {{/hasCountryIcon}}
+                                    {{defaultTerm}}
+                                </a>
+                            </td>
+                            <td>
+                                {{count}}
+                            </td>
+                        </tr>
+                    {{/each}}
+                {{/if_eq}}
+                </tbody>
+            </table>
+        </div>
+        <div class="row container-fluid">
+            <table id="{{divElementId}}-resultsTable" class="table table-hover table-bordered">
+
+            </table>
+        </div>
     </div>
 </div>
