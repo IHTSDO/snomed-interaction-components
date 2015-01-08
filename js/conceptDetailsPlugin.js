@@ -329,6 +329,7 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             var context = {
+                options: options,
                 firstMatch: firstMatch,
                 divElementId: panel.divElement.id,
                 edition: options.edition,
@@ -709,6 +710,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             var context = {
+                options: options,
                 firstMatch: firstMatch,
                 inferredParents: panel.inferredParents,
                 inferredRoles: panel.inferredRoles,
