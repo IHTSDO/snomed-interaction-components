@@ -4,6 +4,7 @@
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>
+                        <th>Type</th>
                         <th>Refset</th>
                         <th>Members count</th>
                     </tr>
@@ -11,13 +12,14 @@
                 <tbody>
                 {{#if_eq refsets.length 0}}
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                             <span class="text-muted"> No refsets</span>
                         </td>
                     </tr>
                 {{else}}
                     {{#each refsets}}
                         <tr>
+                            <td>{{type}}</td>
                             <td>
                                 <a class="refset-item" href="javascript:void(0);" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' style="color: inherit; text-decoration: inherit;">
                                     <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;&nbsp;</span>

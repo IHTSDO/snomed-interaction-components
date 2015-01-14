@@ -54,6 +54,12 @@ function refsetPanel(divElement, options) {
 //        console.log(panel.options.manifest);
         if (panel.options.manifest){
             panel.options.manifest.refsets.sort(function (a, b) {
+                if (a.type == "daily-build" && a.type != b.type)
+                    return -1;
+                if (a.type < b.type)
+                    return -1;
+                if (a.type > b.type)
+                    return 1;
                 if (a.defaultTerm < b.defaultTerm)
                     return -1;
                 if (a.defaultTerm > b.defaultTerm)
