@@ -329,6 +329,7 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             var context = {
+                options: options,
                 firstMatch: firstMatch,
                 divElementId: panel.divElement.id,
                 edition: options.edition,
@@ -623,9 +624,29 @@ function conceptDetails(divElement, conceptId, options) {
             if (panel.options.selectedView == "inferred") {
                 $('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
                 $('#home-' + panel.divElement.id + '-diagram-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+                $('#home-' + panel.divElement.id + '-stated-button').unbind();
+                $('#home-' + panel.divElement.id + '-inferred-button').unbind();
+                $('#home-' + panel.divElement.id + '-inferred-button').addClass("btn-primary");
+                $('#home-' + panel.divElement.id + '-inferred-button').removeClass("btn-default");
+                $('#home-' + panel.divElement.id + '-stated-button').addClass("btn-default");
+                $('#home-' + panel.divElement.id + '-stated-button').removeClass("btn-primary");
+                $('#home-' + panel.divElement.id + '-stated-button').click(function (event) {
+                    panel.options.selectedView = "stated";
+                    panel.updateCanvas();
+                });
             } else {
                 $('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
                 $('#home-' + panel.divElement.id + '-diagram-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+                $('#home-' + panel.divElement.id + '-stated-button').unbind();
+                $('#home-' + panel.divElement.id + '-inferred-button').unbind();
+                $('#home-' + panel.divElement.id + '-stated-button').addClass("btn-primary");
+                $('#home-' + panel.divElement.id + '-stated-button').removeClass("btn-default");
+                $('#home-' + panel.divElement.id + '-inferred-button').addClass("btn-default");
+                $('#home-' + panel.divElement.id + '-inferred-button').removeClass("btn-primary");
+                $('#home-' + panel.divElement.id + '-inferred-button').click(function (event) {
+                    panel.options.selectedView = "inferred";
+                    panel.updateCanvas();
+                });
             }
             panel.relsPId = divElement.id + "-rels-panel";
             panel.statedParents = [];
@@ -689,6 +710,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             var context = {
+                options: options,
                 firstMatch: firstMatch,
                 inferredParents: panel.inferredParents,
                 inferredRoles: panel.inferredRoles,

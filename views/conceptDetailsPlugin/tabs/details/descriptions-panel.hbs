@@ -9,7 +9,7 @@
     </thead>
     <tbody>
         {{#each allDescriptions}}
-            <tr class='{{#if_eq type.conceptId "900000000000003001"}} fsn-row{{else}} synonym-row{{/if_eq}}{{#if active}}{{else}} danger{{/if}}{{#if_eq effectiveTime ../../options.highlightByEffectiveTime}} highlightEffectiveTime{{/if_eq}}'>
+            <tr class='{{#if_eq type.conceptId "900000000000003001"}} fsn-row{{else}} synonym-row{{/if_eq}}{{#if active}}{{else}} danger{{/if}}{{#if_eq effectiveTime ../options.highlightByEffectiveTime}} highlightEffectiveTime{{/if_eq}}'>
                     <td>
                         {{#if_eq type.conceptId "900000000000003001"}}
                             <span rel="tooltip-right" title="{{i18n "i18n_fsn" "FSN"}}">F</span>

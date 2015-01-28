@@ -27,7 +27,13 @@
         <!-- Tab panes -->
         <div class="tab-content" id="details-tab-content-{{divElementId}}">
             <div class="tab-pane fade in active" id="home-{{divElementId}}" style="padding: 5px;">
-                <div class="row" style="margin-right: 20px"><span class="pull-right text-muted" id="home-{{divElementId}}-viewLabel"></span></div>
+                <div class="pull-right">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button type="button" class="btn btn-default" id="home-{{divElementId}}-stated-button">Stated</button>
+                        <button type="button" class="btn btn-default" id="home-{{divElementId}}-inferred-button">Inferred</button>
+                    </div>
+                    <div><span class="text-muted text-center" id="home-{{divElementId}}-wf-status-label"></span></div>
+                </div>
                 <div style="max-height: 300px; overflow: auto; margin-left: 0%; margin-bottom: 10px; margin-top: 10px; width: 80%;border: 2px solid #357ebd; border-radius: 4px; padding: 5px;">
                     <div class="panel-heading">
                         <h4><span data-i18n-id="i18n_parents" class="i18n">Parents</span></h4>
