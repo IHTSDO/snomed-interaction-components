@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -586,7 +586,7 @@ function searchPanel(divElement, options) {
                         t = t.replace(")","");
                     }
                     var startTime = Date.now();
-                    var searchUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + t + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=" + panel.options.searchLang + "&statusFilter=" + panel.options.statusSearchFilter + "&skipTo=" + skipTo + "&returnLimit=" + returnLimit;
+                    var searchUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + encodeURIComponent(t) + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=" + panel.options.searchLang + "&statusFilter=" + panel.options.statusSearchFilter + "&skipTo=" + skipTo + "&returnLimit=" + returnLimit;
                     if (panel.options.semTagFilter != "none") {
                         searchUrl = searchUrl + "&semanticFilter=" + panel.options.semTagFilter;
                     }
@@ -605,7 +605,7 @@ function searchPanel(divElement, options) {
                     if ($("#" + panel.divElement.id + "-groupConcept").is(":checked")){
                         searchUrl = searchUrl + "&groupByConcept=1";
                     }
-//                    console.log(searchUrl);
+                    //console.log(searchUrl);
                     xhr = $.getJSON(searchUrl,function (result) {
 
                     }).done(function (result) {
