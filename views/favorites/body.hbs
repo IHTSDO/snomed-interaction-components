@@ -10,7 +10,7 @@
             <tbody>
                 {{#each concepts}}
                     <tr>
-                        <td>{{defaultTerm}}</td>
+                        <td>{{fsn}}</td>
                         <td>{{conceptId}}</td>
                     </tr>
                 {{/each}}
@@ -28,14 +28,14 @@
                 {{#each concepts}}
                     <tr>
                         <td>
-                            <a class="fav-item" href="javascript:void(0);" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' style="color: inherit; text-decoration: inherit;">
-                                <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;&nbsp;</span>
+                            <a class="fav-item" href="javascript:void(0);" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{fsn}}' style="color: inherit; text-decoration: inherit;">
+                                <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{fsn}}'>&nbsp;&nbsp;</span>
                                 {{#hasCountryIcon module}}
                                     <div class="phoca-flagbox" style="width:22px;height:22px">
                                         <span class="phoca-flag {{countryIcon module}}"></span>
                                     </div>
                                 {{/hasCountryIcon}}
-                                {{defaultTerm}}
+                                {{fsn}}
                             </a>
                         </td>
                         <td>{{conceptId}}

@@ -176,7 +176,7 @@ function dropF(ev, id) {
             }
         });
         var concept = {
-            defaultTerm: term,
+            fsn: term,
             conceptId: conceptId,
             module: module
         };

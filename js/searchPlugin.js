@@ -638,7 +638,7 @@ function searchPanel(divElement, options) {
                                     var auxObject = {};
                                     $.each(panel.options.manifest.refsets, function(j, field){
                                         if (i == field.conceptId){
-                                            auxObject.term = field.defaultTerm;
+                                            auxObject.term = field.fsn;
                                             auxObject.value = i;
                                             auxObject.cant = refset;
                                             found = true;
@@ -669,7 +669,7 @@ function searchPanel(divElement, options) {
                                 var auxObject = {};
                                 $.each(panel.options.manifest.modules, function(j, module){
                                     if (i == module.conceptId){
-                                        auxObject.term = module.defaultTerm;
+                                        auxObject.term = module.fsn;
                                         auxObject.value = i;
                                         auxObject.cant = field;
                                         found = true;

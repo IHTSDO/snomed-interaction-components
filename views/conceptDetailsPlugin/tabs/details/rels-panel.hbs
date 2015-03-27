@@ -28,19 +28,19 @@
                             '>
                     <td>
                         {{#if_eq type.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.fsn}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.fsn}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
-                        {{type.defaultTerm}}
+                        {{type.fsn}}
                     </td>
                     <td>
                         {{#if_eq target.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.fsn}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.fsn}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
-                        {{target.defaultTerm}}</td>
+                        {{target.fsn}}</td>
                     <td>{{groupId}}</td>
                     {{#if_eq charType.conceptId "900000000000010007"}}
                     <td><span class='i18n' data-i18n-id='i18n_stated'>{{i18n "i18n_stated" "Stated"}}</span>
@@ -78,18 +78,18 @@
                             '>
                     <td>
                         {{#if_eq type.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.fsn}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.fsn}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
-                        {{type.defaultTerm}}</td>
+                        {{type.fsn}}</td>
                     <td>
                         {{#if_eq target.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.fsn}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.fsn}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
-                        {{target.defaultTerm}}</td>
+                        {{target.fsn}}</td>
                     <td>{{groupId}}</td>
                     {{#if_eq charType.conceptId "900000000000010007"}}
                     <td><span class='i18n' data-i18n-id='i18n_stated'>{{i18n "i18n_stated" "Stated"}}</span>

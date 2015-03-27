@@ -4,7 +4,7 @@
             <span data-conceptId="{{firstMatch.conceptId}}" class="glyphicon glyphicon-star{{#if_fav firstMatch.conceptId}}{{else}}-empty{{/if_fav}}"></span>
         </a>
     </span>
-    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"  draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}">
+    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"  draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.fsn}}" data-def-status="{{firstMatch.definitionStatus}}">
         <span class="badge alert-warning">
         {{#if_eq firstMatch.definitionStatus "Primitive"}}
             &nbsp;&nbsp;
@@ -14,7 +14,7 @@
         </span>
     </a>
     &nbsp;&nbsp;
-    {{firstMatch.defaultTerm}}
+    {{firstMatch.fsn}}
     <span class="pull-right">
        <div class="phoca-flagbox" style="width:40px;height:40px">
            <span class="phoca-flag {{countryIcon firstMatch.module}}"></span>

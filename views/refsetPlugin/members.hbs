@@ -13,13 +13,13 @@
     {{#each result.members}}
         <tr class="member-concept-row">
             <td>
-                <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;&nbsp;</span>
+                <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{fsn}}'>&nbsp;&nbsp;</span>
                 {{#hasCountryIcon module}}
                     <div class="phoca-flagbox" style="width:22px;height:22px">
                         <span class="phoca-flag {{countryIcon module}}"></span>
                     </div>
                 {{/hasCountryIcon}}
-                {{defaultTerm}}
+                {{fsn}}
             </td>
             <td>{{conceptId}}</td>
         </tr>

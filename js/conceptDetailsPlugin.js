@@ -89,7 +89,7 @@ function conceptDetails(divElement, conceptId, options) {
         panel.descsPId = panel.divElement.id + "-descriptions-panel";
         panel.relsPId = panel.divElement.id + "-rels-panel";
         panel.childrenPId = panel.divElement.id + "-children-panel";
-        panel.defaultTerm = "";
+        panel.fsn = "";
         $(divElement).html();
         var context = {
             divElementId: panel.divElement.id,
@@ -146,10 +146,10 @@ function conceptDetails(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-panelBody").slideUp("fast");
             $("#" + panel.divElement.id + "-expandButton").show();
             $("#" + panel.divElement.id + "-collapseButton").hide();
-            //if (panel.defaultTerm.length > 25) {
-            //    $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.defaultTerm.substring(0, 24).trim() + "...</strong>");
+            //if (panel.fsn.length > 25) {
+            //    $("#" + panel.divElement.id + "-panelTitle").html("<strong>Concept Details: " + panel.fsn.substring(0, 24).trim() + "...</strong>");
             //} else {
-            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+            $("#" + panel.divElement.id + "-panelTitle").html("&nbsp&nbsp&nbsp<strong>Concept Details: " + panel.fsn + "</strong>");
             //}
         });
 
@@ -194,7 +194,7 @@ function conceptDetails(divElement, conceptId, options) {
                                 agoString = Math.round(((ago / 1000) / 60) / 60) + ' hours ago';
                             }
                         }
-                        historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.conceptId + ');">' + field.defaultTerm + '</a>';
+                        historyHtml = historyHtml + '<tr><td><a href="javascript:void(0);" onclick="updateCD(\'' + panel.divElement.id + '\',' + field.conceptId + ');">' + field.fsn + '</a>';
                         historyHtml = historyHtml + ' <span class="text-muted" style="font-size: 80%"><em>' + agoString + '<em></span>';
                         historyHtml = historyHtml + '</td></tr>';
                     });
@@ -315,10 +315,10 @@ function conceptDetails(divElement, conceptId, options) {
             var firstMatch = result;
             xhr = null;
             panel.attributesPId = divElement.id + "-attributes-panel";
-            panel.defaultTerm = firstMatch.defaultTerm;
+            panel.fsn = firstMatch.fsn;
             var d = new Date();
             var time = d.getTime();
-            panel.history.push({defaultTerm: firstMatch.defaultTerm, conceptId: firstMatch.conceptId, time: time});
+            panel.history.push({fsn: firstMatch.fsn, conceptId: firstMatch.conceptId, time: time});
             Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
                     if (a == b)
@@ -387,7 +387,7 @@ function conceptDetails(divElement, conceptId, options) {
                 var concept = {
                     module: firstMatch.module,
                     conceptId: firstMatch.conceptId,
-                    defaultTerm: firstMatch.defaultTerm
+                    fsn: firstMatch.fsn
                 };
                 if ($(e.target).hasClass("glyphicon-star")){
                     var favs = stringToArray(localStorage.getItem("favs")), auxFavs = [];
@@ -428,7 +428,7 @@ function conceptDetails(divElement, conceptId, options) {
                 var concept = {
                     module: firstMatch.module,
                     conceptId: firstMatch.conceptId,
-                    defaultTerm: firstMatch.defaultTerm
+                    fsn: firstMatch.fsn
                 };
                 if ($(e.target).hasClass("glyphicon-star")){
                     var favs = stringToArray(localStorage.getItem("favs")), auxFavs = [];
@@ -472,7 +472,7 @@ function conceptDetails(divElement, conceptId, options) {
             }
 
             if ($("#" + panel.divElement.id + "-expandButton").is(":visible")) {
-                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.defaultTerm + "</strong>");
+                $("#" + panel.divElement.id + "-panelTitle").html("&nbsp;&nbsp;&nbsp;<strong>Concept Details: " + panel.fsn + "</strong>");
             }
             if (typeof i18n_drag_this == "undefined") {
                 i18n_drag_this = "Drag this";
@@ -668,9 +668,9 @@ function conceptDetails(divElement, conceptId, options) {
                         if (b.type.conceptId == 116680003) {
                             return 1;
                         }
-                        if (a.target.defaultTerm < b.target.defaultTerm)
+                        if (a.target.fsn < b.target.fsn)
                             return -1;
-                        if (a.target.defaultTerm > b.target.defaultTerm)
+                        if (a.target.fsn > b.target.fsn)
                             return 1;
                         return 0;
                     }
@@ -689,9 +689,9 @@ function conceptDetails(divElement, conceptId, options) {
                         if (b.type.conceptId == 116680003) {
                             return 1;
                         }
-                        if (a.target.defaultTerm < b.target.defaultTerm)
+                        if (a.target.fsn < b.target.fsn)
                             return -1;
-                        if (a.target.defaultTerm > b.target.defaultTerm)
+                        if (a.target.fsn > b.target.fsn)
                             return 1;
                         return 0;
                     }
@@ -721,17 +721,17 @@ function conceptDetails(divElement, conceptId, options) {
 
 
             panel.inferredParents.sort(function (a, b) {
-                if (a.target.defaultTerm < b.target.defaultTerm)
+                if (a.target.fsn < b.target.fsn)
                     return -1;
-                if (a.target.defaultTerm > b.target.defaultTerm)
+                if (a.target.fsn > b.target.fsn)
                     return 1;
                 return 0;
             });
 
             panel.statedParents.sort(function (a, b) {
-                if (a.target.defaultTerm < b.target.defaultTerm)
+                if (a.target.fsn < b.target.fsn)
                     return -1;
-                if (a.target.defaultTerm > b.target.defaultTerm)
+                if (a.target.fsn > b.target.fsn)
                     return 1;
                 return 0;
             });
@@ -742,9 +742,9 @@ function conceptDetails(divElement, conceptId, options) {
                 } else if (a.groupId > b.groupId) {
                     return 1;
                 } else {
-                    if (a.target.defaultTerm < b.target.defaultTerm)
+                    if (a.target.fsn < b.target.fsn)
                         return -1;
-                    if (a.target.defaultTerm > b.target.defaultTerm)
+                    if (a.target.fsn > b.target.fsn)
                         return 1;
                     return 0;
                 }
@@ -756,9 +756,9 @@ function conceptDetails(divElement, conceptId, options) {
                 } else if (a.groupId > b.groupId) {
                     return 1;
                 } else {
-                    if (a.target.defaultTerm < b.target.defaultTerm)
+                    if (a.target.fsn < b.target.fsn)
                         return -1;
-                    if (a.target.defaultTerm > b.target.defaultTerm)
+                    if (a.target.fsn > b.target.fsn)
                         return 1;
                     return 0;
                 }
@@ -1070,9 +1070,9 @@ function conceptDetails(divElement, conceptId, options) {
         }).done(function (result) {
             // load relationships panel
             result.sort(function(a, b) {
-                if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
+                if (a.fsn.toLowerCase() < b.fsn.toLowerCase())
                     return -1;
-                if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
+                if (a.fsn.toLowerCase() > b.fsn.toLowerCase())
                     return 1;
                 return 0;
             });
@@ -1202,9 +1202,9 @@ function conceptDetails(divElement, conceptId, options) {
             });
             $.each(result, function (i, field){
                 if (field.statedRelationships){
-                    field.relationship = field.statedRelationships[0].type.defaultTerm;
+                    field.relationship = field.statedRelationships[0].type.fsn;
                 }else{
-                    field.relationship = field.relationships[0].type.defaultTerm;
+                    field.relationship = field.relationships[0].type.fsn;
                 }
             });
             result.sort(function (a, b) {
@@ -1213,9 +1213,9 @@ function conceptDetails(divElement, conceptId, options) {
                 if (a.relationship > b.relationship)
                     return 1;
                 if (a.relationship == b.relationship) {
-                    if (a.defaultTerm < b.defaultTerm)
+                    if (a.fsn < b.fsn)
                         return -1;
-                    if (a.defaultTerm > b.defaultTerm)
+                    if (a.fsn > b.fsn)
                         return 1;
                 }
                 return 0;
@@ -1284,9 +1284,9 @@ function conceptDetails(divElement, conceptId, options) {
         xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
             result.sort(function(a, b) {
-                if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
+                if (a.fsn.toLowerCase() < b.fsn.toLowerCase())
                     return -1;
-                if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
+                if (a.fsn.toLowerCase() > b.fsn.toLowerCase())
                     return 1;
                 return 0;
             });
@@ -1363,9 +1363,9 @@ function conceptDetails(divElement, conceptId, options) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
             result.sort(function(a, b) {
-                if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
+                if (a.fsn.toLowerCase() < b.fsn.toLowerCase())
                     return -1;
-                if (a.defaultTerm.toLowerCase() > b.defaultTerm.toLowerCase())
+                if (a.fsn.toLowerCase() > b.fsn.toLowerCase())
                     return 1;
                 return 0;
             });
@@ -1379,22 +1379,22 @@ function conceptDetails(divElement, conceptId, options) {
                 }
                 $.each(result, function(i, field){
 //                    console.log(field);
-                    auxHtml = auxHtml + "<li class='treeLabel' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'><button class='btn btn-link btn-xs treeButton' style='padding:2px'>";
+                    auxHtml = auxHtml + "<li class='treeLabel' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.fsn + "'><button class='btn btn-link btn-xs treeButton' style='padding:2px'>";
                     if (field.conceptId == "138875005" || field.conceptId == "9999999999"){
                         auxHtml = auxHtml + "<i class='glyphicon glyphicon-minus treeButton' data-ind='" + ind + "'></i></button>";
                     }else{
                         auxHtml = auxHtml + "<i class='glyphicon glyphicon-chevron-right treeButton' data-ind='" + ind + "'></i></button>";
                     }
                     if (field.definitionStatus == "Primitive"){
-                        auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>&nbsp;&nbsp;</span>&nbsp;&nbsp";
+                        auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.fsn + "'>&nbsp;&nbsp;</span>&nbsp;&nbsp";
                     }else{
-                        auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>&equiv;</span>&nbsp;&nbsp";
+                        auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.fsn + "'>&equiv;</span>&nbsp;&nbsp";
                     }
                     if (countryIcons[field.module]){
                         auxHtml = auxHtml + "<div class='phoca-flagbox' style='width:26px;height:26px'><span class='phoca-flag " + countryIcons[field.module] + "'></span></div>&nbsp";
                     }
                     auxHtml = auxHtml + "<a id='" + ind + panel.divElement.id + "-treeicon-" + field.conceptId + "' href='javascript:void(0);' style='color: inherit;text-decoration: inherit;'>";
-                    auxHtml = auxHtml + "<span class='treeLabel selectable-row' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>" + field.defaultTerm + "</span></a></li>";
+                    auxHtml = auxHtml + "<span class='treeLabel selectable-row' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.fsn + "'>" + field.fsn + "</span></a></li>";
                 });
                 auxHtml = auxHtml + "</ul>";
             }
