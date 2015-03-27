@@ -92,9 +92,9 @@
 //				var txValue1 = 404684003; // Clinical finding (finding)
 //				var txValue1 = 280115004; // Acquired body structure (body structure)
 				var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), txValue1, options);
-//				var cdPanel = new conceptDetails(document.getElementById("bp-cd1_canvas"), "404684003", options);
-//				cdPanel.subscribe(tpt);
-//				cdPanel.setupCanvas();
+				var cdPanel = new conceptDetails(document.getElementById("bp-cd1_canvas"), "404684003", options);
+				cdPanel.subscribe(tpt);
+				cdPanel.setupCanvas();
 
 				// Setup resizable panels (jquery-splitter plugin)
 				$('#spliter2').split({orientation: 'vertical', limit: 20, position: '30%'});
