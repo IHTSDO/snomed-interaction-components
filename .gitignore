@@ -1,7 +1,6 @@
-/sno-interaction-comp/nbproject/private/
-.project
-/target/sct-components/nbproject/private/
-.idea
+.*
+target
 node_modules
 *.iml
 dist
+offline_responses
