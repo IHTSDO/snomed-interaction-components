@@ -91,23 +91,44 @@
 				var txValue1 = 138875005; // SNOMED CT Concept
 //				var txValue1 = 404684003; // Clinical finding (finding)
 //				var txValue1 = 280115004; // Acquired body structure (body structure)
+
 				var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), txValue1, options);
+				var searchP = new searchPanel(document.getElementById("bp-search_canvas"), options);
 				var cdPanel = new conceptDetails(document.getElementById("bp-cd1_canvas"), "404684003", options);
+
 				cdPanel.subscribe(tpt);
+				cdPanel.subscribe(searchP);
 				cdPanel.setupCanvas();
 
 				// Setup resizable panels (jquery-splitter plugin)
 				$('#spliter2').split({orientation: 'vertical', limit: 20, position: '30%'});
+
+
+				// Quick Test search
+//				var $fh = $('#fh-tabs li a');
+//				$fh[1].click();
+//				$('#bp-search_canvas-searchBox').val('arm');
+//				searchP.updateStatusFilterLabel();
 			}
+			$(document).ready(function() {
+				initialize();
+			});
 		</script>
 
 	</head>
-    <body onLoad="initialize();">
+    <body>
 
 	<div id="browsing-perspective" class="container-fluid">
 		<div id="spliter2" class="row" style="width:100%; height: 91%; position: absolute;">
 			<div class="a panel panel-default" style="border-radius: 0px;">
-				<div id="bp-taxonomy_canvas" style="padding: 0px;margin: 0;"></div>
+				<ul class="nav nav-tabs" id="fh-tabs">
+					<li class="active"><a href="#bp-taxonomy_canvas" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_taxonomy">Taxonomy</span></a></li>
+					<li><a href="#bp-search_canvas" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_search">Search</span></a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="bp-taxonomy_canvas" style="padding: 0px;margin: 0;"></div>
+					<div class="tab-pane" id="bp-search_canvas" style="padding: 0px;margin: 0;"></div>
+				</div>
 			</div>
 			<div class="col-md-6 panel panel-default" style="border-radius: 0px;" >
 				<div class="col-md-12" id="bp-cd1_canvas" style="padding: 0px;margin: 0;"></div>

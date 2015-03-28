@@ -25,23 +25,23 @@
         </form>
         <div id='{{divElementId}}-searchConfigBar' style='margin-bottom: 10px;'><nav class='navbar navbar-default' role='navigation' style='min-height: 28px;border-radius: 0px;border-bottom: 1px lightgray solid;'>
             <ul class='nav navbar-nav navbar-left'>
-                <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>
-                    <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='{{divElementId}}-navSearchModeLabel'></span> <b class='caret'></b></a>
-                    <ul class='dropdown-menu' role='menu' style='float: none;'>
-                        <li><button class='btn btn-link' id='{{divElementId}}-fullTextButton'><span class='i18n' data-i18n-id='i18n_full_text_search_mode'>Full text search mode</span></button></li>
-                        <li><button class='btn btn-link' id='{{divElementId}}-partialMatchingButton'><span class='i18n' data-i18n-id='i18n_partial_match_search_mode'>Partial matching search mode</span></button></li>
-                        <li><button class='btn btn-link' id='{{divElementId}}-regexButton'><span class='i18n' data-i18n-id='i18n_regex_search_mode'>Regular Expressions search mode</span></button></li>
-                    </ul>
-                </li>
-                <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>
-                    <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='{{divElementId}}-navLanguageLabel'></span> <b class='caret'></b></a>
-                    <ul class='dropdown-menu' role='menu' style='float: none;'>
-                        <li><button class='btn btn-link' id='{{divElementId}}-danishLangButton'><span class='i18n' data-i18n-id='i18n_danish_stemmer'>Danish language stemmer</span></button></li>
-                        <li><button class='btn btn-link' id='{{divElementId}}-englishLangButton'><span class='i18n' data-i18n-id='i18n_english_stemmer'>English language stemmer</span></button></li>
-                        <li><button class='btn btn-link' id='{{divElementId}}-spanishLangButton'><span class='i18n' data-i18n-id='i18n_spanish_stemmer'>Spanish language stemmer</span></button></li>
-                        <li><button class='btn btn-link' id='{{divElementId}}-swedishLangButton'><span class='i18n' data-i18n-id='i18n_swedish_stemmer'>Swedish language stemmer</span></button></li>
-                    </ul>
-                </li>
+                <!--<li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>-->
+                    <!--<a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='{{divElementId}}-navSearchModeLabel'></span> <b class='caret'></b></a>-->
+                    <!--<ul class='dropdown-menu' role='menu' style='float: none;'>-->
+                        <!--<li><button class='btn btn-link' id='{{divElementId}}-fullTextButton'><span class='i18n' data-i18n-id='i18n_full_text_search_mode'>Full text search mode</span></button></li>-->
+                        <!--<li><button class='btn btn-link' id='{{divElementId}}-partialMatchingButton'><span class='i18n' data-i18n-id='i18n_partial_match_search_mode'>Partial matching search mode</span></button></li>-->
+                        <!--<li><button class='btn btn-link' id='{{divElementId}}-regexButton'><span class='i18n' data-i18n-id='i18n_regex_search_mode'>Regular Expressions search mode</span></button></li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <!--<li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>-->
+                    <!--<a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='{{divElementId}}-navLanguageLabel'></span> <b class='caret'></b></a>-->
+                    <!--<ul class='dropdown-menu' role='menu' style='float: none;'>-->
+                        <!--<li><button class='btn btn-link' id='{{divElementId}}-danishLangButton'><span class='i18n' data-i18n-id='i18n_danish_stemmer'>Danish language stemmer</span></button></li>-->
+                        <!--<li><button class='btn btn-link' id='{{divElementId}}-englishLangButton'><span class='i18n' data-i18n-id='i18n_english_stemmer'>English language stemmer</span></button></li>-->
+                        <!--<li><button class='btn btn-link' id='{{divElementId}}-spanishLangButton'><span class='i18n' data-i18n-id='i18n_spanish_stemmer'>Spanish language stemmer</span></button></li>-->
+                        <!--<li><button class='btn btn-link' id='{{divElementId}}-swedishLangButton'><span class='i18n' data-i18n-id='i18n_swedish_stemmer'>Swedish language stemmer</span></button></li>-->
+                    <!--</ul>-->
+                <!--</li>-->
                 <li class='dropdown' style='margin-bottom: 2px; margin-top: 2px;'>
                     <a href='javascript:void(0);' class='dropdown-toggle' data-toggle='dropdown' style='padding-top: 2px; padding-bottom: 2px;'><span id='{{divElementId}}-navStatusFilterLabel'></span> <b class='caret'></b></a>
                     <ul class='dropdown-menu' role='menu' style='float: none;'>
@@ -60,23 +60,23 @@
                 </tbody>
             </table>
         </div>
-        <div class='modal fade' id='{{divElementId}}-configModal'>
-            <div class='modal-dialog'>
-                <div class='modal-content'>
-                    <div class='modal-header'>
-                        <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-                        <h4 class='modal-title'><span class='i18n' data-i18n-id='i18n_options'>Options</span> ({{divElementId}})</h4>
-                    </div>
-                    <div class='modal-body' id='{{divElementId}}-modal-body'>
-                        <p></p>
-                    </div>
-                    <div class='modal-footer'>
-                        <button type='button' class='btn btn-danger' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_cancel'>Cancel</span></button>
-                        <button id='{{divElementId}}-apply-button' type='button' class='btn btn-success' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_apply_changes'>Apply changes</span></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!--<div class='modal fade' id='{{divElementId}}-configModal'>-->
+            <!--<div class='modal-dialog'>-->
+                <!--<div class='modal-content'>-->
+                    <!--<div class='modal-header'>-->
+                        <!--<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>-->
+                        <!--<h4 class='modal-title'><span class='i18n' data-i18n-id='i18n_options'>Options</span> ({{divElementId}})</h4>-->
+                    <!--</div>-->
+                    <!--<div class='modal-body' id='{{divElementId}}-modal-body'>-->
+                        <!--<p></p>-->
+                    <!--</div>-->
+                    <!--<div class='modal-footer'>-->
+                        <!--<button type='button' class='btn btn-danger' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_cancel'>Cancel</span></button>-->
+                        <!--<button id='{{divElementId}}-apply-button' type='button' class='btn btn-success' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_apply_changes'>Apply changes</span></button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
     </div>
 </div>
         

@@ -586,7 +586,7 @@ function searchPanel(divElement, options) {
                         t = t.replace(")","");
                     }
                     var startTime = Date.now();
-                    var searchUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + encodeURIComponent(t) + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=" + panel.options.searchLang + "&statusFilter=" + panel.options.statusSearchFilter + "&skipTo=" + skipTo + "&returnLimit=" + returnLimit;
+                    var searchUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + encodeURIComponent(t) + "&limit=50";
                     if (panel.options.semTagFilter != "none") {
                         searchUrl = searchUrl + "&semanticFilter=" + panel.options.semTagFilter;
                     }
@@ -811,7 +811,7 @@ function searchPanel(divElement, options) {
                         xhr = null;
                         var matchedDescriptions = result.matches;
                         //console.log(JSON.stringify(result));
-                        var remaining = result.details.total - (skipTo + returnLimit);
+                        //var remaining = result.details.total - (skipTo + returnLimit);
 
                         if (panel.options.searchMode == "regex") {
                             result.matches.sort(function (a, b) {
@@ -855,7 +855,7 @@ function searchPanel(divElement, options) {
                         var context = {
                             result: result,
                             divElementId: panel.divElement.id,
-                            remaining: remaining,
+                            //remaining: remaining,
                             returnLimit: returnLimit
                         };
 
@@ -878,13 +878,13 @@ function searchPanel(divElement, options) {
                                 source: panel.divElement.id
                             });
                         });
-                        $("[draggable='true']").tooltip({
-                            placement: 'left auto',
-                            trigger: 'hover',
-                            title: i18n_drag_this,
-                            animation: true,
-                            delay: 500
-                        });
+                        //$("[draggable='true']").tooltip({
+                        //    placement: 'left auto',
+                        //    trigger: 'hover',
+                        //    title: i18n_drag_this,
+                        //    animation: true,
+                        //    delay: 500
+                        //});
 
                         $("[draggable='true']").mouseover(function(e){
 //                console.log(e);

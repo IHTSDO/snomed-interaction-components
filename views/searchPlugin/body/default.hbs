@@ -1,25 +1,25 @@
-{{#if result.matches}}
-    {{#if_gre "0" result.matches.length}}
+{{#if result}}
+    {{#if_gre "0" result.length}}
         <tr><td class='text-muted'><span data-i18n-id="i18n_no_results" class="i18n">{{i18n "i18n_no_results" "No results"}}</span></td></tr>
     {{else}}
-        {{#each result.matches}}
-            <tr class='resultRow selectable-row{{#if_eq active false}} danger{{else}}{{#if_eq conceptActive false}} danger{{/if_eq}}{{/if_eq}}'>
+        {{#each result}}
+            <tr class='resultRow selectable-row{{#if_eq active false}} danger{{else}}{{#if_eq concept.active false}} danger{{/if_eq}}{{/if_eq}}'>
                 <td class='col-md-6'>
-                    <div class='result-item' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>
-                        {{#if_eq definitionStatus "Primitive"}}
-                            <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{term}}">&nbsp;&nbsp;</span>&nbsp;&nbsp;
+                    <div class='result-item' data-module="{{concept.moduleId}}" data-concept-id='{{concept.conceptId}}' data-term='{{term}}'>
+                        {{#if_eq concept.definitionStatus "PRIMITIVE"}}
+                            <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{concept.moduleId}}" data-concept-id="{{concept.conceptId}}" data-term="{{term}}">&nbsp;&nbsp;</span>&nbsp;&nbsp;
                         {{else}}
-                            <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{term}}">&equiv;</span>&nbsp;&nbsp;
+                            <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{concept.moduleId}}" data-concept-id="{{concept.conceptId}}" data-term="{{term}}">&equiv;</span>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{#hasCountryIcon module}}
                             <div class="phoca-flagbox" style="width:20px;height:20px">
                                 <span class="phoca-flag {{countryIcon module}}"></span>
                             </div>
                         {{/hasCountryIcon}}
-                        <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
+                        <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;' data-module="{{concept.moduleId}}" data-concept-id='{{concept.conceptId}}' data-term='{{term}}'>{{term}}</a>
                     </div>
                 </td>
-                <td class='text-muted small-text col-md-6 result-item' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>{{fsn}}
+                <td class='text-muted small-text col-md-6 result-item' data-module="{{concept.moduleId}}" data-concept-id='{{concept.conceptId}}' data-term='{{term}}'>{{concept.fsn}}
                 </td>
             </tr>
         {{/each}}
