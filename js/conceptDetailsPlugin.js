@@ -516,19 +516,19 @@ function conceptDetails(divElement, conceptId, options) {
             }
 
             var allDescriptions = firstMatch.descriptions.slice(0);
-            allDescriptions.sort(function (a, b) {
-                if (a.type.conceptId < b.type.conceptId)
-                    return -1;
-                if (a.type.conceptId > b.type.conceptId)
-                    return 1;
-                if (a.type.conceptId == b.type.conceptId) {
-                    if (a.term < b.term)
-                        return -1;
-                    if (a.term > b.term)
-                        return 1;
-                }
-                return 0;
-            });
+//            allDescriptions.sort(function (a, b) {
+//                if (a.type.conceptId < b.type.conceptId)
+//                    return -1;
+//                if (a.type.conceptId > b.type.conceptId)
+//                    return 1;
+//                if (a.type.conceptId == b.type.conceptId) {
+//                    if (a.term < b.term)
+//                        return -1;
+//                    if (a.term > b.term)
+//                        return 1;
+//                }
+//                return 0;
+//            });
             var homeDescriptionsHtml = "";
             $.each(allDescriptions, function (i, field) {
                 if (panel.options.displayInactiveDescriptions || field.active == true) {
@@ -541,7 +541,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
             Handlebars.registerHelper('removeSemtag', function (term) {
-                return panel.removeSemtag(term);
+                return 
             });
             Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
@@ -551,43 +551,43 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
-            var auxDescriptions = [];
-            $.each(allDescriptions, function (i, description){
-                var included = false;
-                if (description.langMemberships){
-                    $.each(description.langMemberships, function (i, langMembership){
-                        if (langMembership.refset.conceptId == panel.options.langRefset){
-                            included = true;
-                            if (langMembership.acceptability.conceptId == "900000000000548007"){
-                                description.preferred = true;
-                            }else{
-                                if (langMembership.acceptability.conceptId == "900000000000549004"){
-                                    description.acceptable = true;
-                                }
-                            }
-                        }
-                    });
-                }
-                if (included){
-                    auxDescriptions.push(description);
-                }else{
-                    description.acceptable = false;
-                    if (panel.options.hideNotAcceptable){
-                        if (panel.options.displayInactiveDescriptions){
-                            auxDescriptions.push(description);
-                        }
-                    }else{
-                        if (options.displayInactiveDescriptions){
-                            auxDescriptions.push(description);
-                        }else{
-                            if (description.active){
-                                auxDescriptions.push(description);
-                            }
-                        }
-                    }
-                }
-            });
-            allDescriptions = auxDescriptions;
+//            var auxDescriptions = [];
+//            $.each(allDescriptions, function (i, description){
+//                var included = false;
+//                if (description.langMemberships){
+//                    $.each(description.langMemberships, function (i, langMembership){
+//                        if (langMembership.refset.conceptId == panel.options.langRefset){
+//                            included = true;
+//                            if (langMembership.acceptability.conceptId == "900000000000548007"){
+//                                description.preferred = true;
+//                            }else{
+//                                if (langMembership.acceptability.conceptId == "900000000000549004"){
+//                                    description.acceptable = true;
+//                                }
+//                            }
+//                        }
+//                    });
+//                }
+//                if (included){
+//                    auxDescriptions.push(description);
+//                }else{
+//                    description.acceptable = false;
+//                    if (panel.options.hideNotAcceptable){
+//                        if (panel.options.displayInactiveDescriptions){
+//                            auxDescriptions.push(description);
+//                        }
+//                    }else{
+//                        if (options.displayInactiveDescriptions){
+//                            auxDescriptions.push(description);
+//                        }else{
+//                            if (description.active){
+//                                auxDescriptions.push(description);
+//                            }
+//                        }
+//                    }
+//                }
+//            });
+//            allDescriptions = auxDescriptions;
 //            console.log(auxDescriptions);
             var context = {
                 options: panel.options,
@@ -1583,13 +1583,7 @@ function conceptDetails(divElement, conceptId, options) {
 //        $("#" + panel.divElement.id + "-subscribersMarker").hide();
 //    }
 
-    this.removeSemtag = function(term) {
-        if (term.lastIndexOf("(") > 0) {
-            return term.substr(0, term.lastIndexOf("(")-1)
-        } else {
-            return term;
-        }
-    }
+//    
 
     this.loadMarkers = function (){
         var auxMarker = "", right = 0, top = 0, aux = false, visible = false;

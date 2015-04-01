@@ -26,6 +26,9 @@ i:active { background-color: #428bca; }
 
 .selectable-row:active { background-color: #428bca; color: white;}
 
+.no-display {
+    display:none;
+}
 .popover {
     max-width: 800px;
     min-width: 250px;

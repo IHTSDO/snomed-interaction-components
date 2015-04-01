@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>IHTSDO SNOMED CT Terminology Server Browser - beta</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width">
+		<meta name="description" content="IHTSDO SNOMED CT Terminology Server Browser">
+		<meta name="author" content="IHTSDO">
+
+		<!-- External -->
+		<script src="external-libs/jquery-2.1.0.min.js" type="text/javascript"></script>
+		<script src="external-libs/jquery.splitter-0.14.0.js" type="text/javascript"></script>
+		<script src="external-libs/bootstrap.min.js" type="text/javascript"></script>
+		<script src="external-libs/handlebars-v1.3.0.js"></script>
+		<script src="external-libs/jquery.i18n.properties-min-1.0.9.js"></script>
+		<script src="external-libs/conduit.min.js" type="text/javascript"></script>
+		<script src="external-libs/lodash.js" type="text/javascript"></script>
+		<script src="external-libs/postal.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="external-css/jquery.splitter.css">
+		<link rel="stylesheet" href="external-css/bootstrap.min.css">
+
+		<!-- Internal -->
+		<link rel="stylesheet" href="css/flags.css">
+		<link rel="stylesheet" href="css/jquery.splitter.css">
+		<link rel="stylesheet" href="css/popover.css">
+		<link rel="stylesheet" href="css/popover-extra-placements.css">
+		<link rel="stylesheet" href="css/sct-diagram.css">
+		<link rel="stylesheet" href="css/sct-widgets.css">
+
+		<script>
+			// Hack
+			var globalMarkerColor = "black";
+		</script>
+
+		<script src="js/conceptDetailsPlugin.js"></script>
+		<script src="js/countryIcons.js"></script>
+		<script src="js/searchPlugin.js"></script>
+		<script src="js/taxonomyPlugin.js"></script>
+		<script src="js/refsetPlugin.js"></script>
+		<script src="js/favoritesPlugin.js"></script>
+		<script src="js/util.js"></script>
+		<script src="views/compiled/templates.js"></script>
+		<script>
+			this["JST"] = this["JST"] || {};
+		</script>
+
+		<script>
+			function loadEmberTemplate(name) {
+				var id = name;//.replace('/', '.');
+				$.ajax({
+					async: false,
+					url: 'templates/' + name + '.html',
+					dataType: 'text',
+					success: function (html) {
+						$('body').append($('<script>').attr('type', 'text/x-handlebars').attr('id', id).html(html));
+					}
+				});
+			}
+
+		</script>
+
+		<script type="text/javascript">
+			function initialize() {
+				// Example: common options object
+				var options = {
+					serverUrl: "/snowowl",
+					edition: "snomed-ct",
+					release: "MAIN",
+//					serverUrl: "/snapshot",
+//					edition: "en-edition",
+//					release: "v20150131",
+					showIds: false,
+					hideNotAcceptable: true,
+					displayInactiveDescriptions: false,
+					displaySynonyms: true,
+					selectedView: "inferred",
+					displayChildren: false,
+					langRefset: "900000000000509007",
+					closeButton: false,
+					collapseButton: false,
+					linkerButton: true,
+					subscribersMarker: true,
+					searchMode: "partialMatching",
+					searchLang: "english",
+					diagrammingMarkupEnabled: false,
+					statusSearchFilter: "activeOnly",
+					highlightByEffectiveTime: "false",
+                    taskSet: false,
+                    taskId: null
+				};
+                var getTaskList = $.getJSON(options.serverUrl + "/" + options.edition + "/" + "MAIN" + "/tasks").done(function(result) {
+                    var $taskDdl = $('#taskDdl');
+                    $.each(result.items, function() {
+                        $('<option>').val(this.taskId).text(this.description).appendTo($taskDdl);
+                    });
+                    if(options.taskSet == true){
+                        $("taskDdl").val(options.taskId);
+                    }
+                    var taskChanged = function(){
+                        var taskId = $('#taskDdl').val();
+                        options.taskId = taskId;
+                        options.taskSet = true; 
+                        options.release = "MAIN/tasks/" + options.taskId;
+                        var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), 138875005, options);
+                        var searchP = new searchPanel(document.getElementById("bp-search_canvas"), options);
+                        var cdPanel = new conceptDetails(document.getElementById("bp-cd1_canvas"), "404684003", options);
+
+                        cdPanel.subscribe(tpt);
+                        cdPanel.subscribe(searchP);
+                        cdPanel.setupCanvas();
+                    }
+                    $("#taskDdl").on("change", function(event) { 
+                         taskChanged(this);
+                    });
+                });
+
+				// Example: load first widget using plain javascript
+				var txValue1 = 138875005; // SNOMED CT Concept
+//				var txValue1 = 404684003; // Clinical finding (finding)
+//				var txValue1 = 280115004; // Acquired body structure (body structure)
+
+				var tpt = new taxonomyPanel(document.getElementById("bp-taxonomy_canvas"), txValue1, options);
+				var searchP = new searchPanel(document.getElementById("bp-search_canvas"), options);
+				var cdPanel = new conceptDetails(document.getElementById("bp-cd1_canvas"), "404684003", options);
+
+				cdPanel.subscribe(tpt);
+				cdPanel.subscribe(searchP);
+				cdPanel.setupCanvas();
+
+				// Setup resizable panels (jquery-splitter plugin)
+				$('#spliter2').split({orientation: 'vertical', limit: 20, position: '30%'});
+
+
+				// Quick Test search
+//				var $fh = $('#fh-tabs li a');
+//				$fh[1].click();
+//				$('#bp-search_canvas-searchBox').val('arm');
+//				searchP.updateStatusFilterLabel();
+			}
+			$(document).ready(function() {
+				initialize();
+			});
+		</script>
+
+	</head>
+    <body>
+
+	<div id="browsing-perspective" class="container-fluid">
+		<div id="spliter2" class="row" style="width:100%; height: 91%; position: absolute;">
+			<div class="a panel panel-default" style="border-radius: 0px;">
+				<ul class="nav nav-tabs" id="fh-tabs">
+					<li class="active"><a href="#bp-taxonomy_canvas" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_taxonomy">Taxonomy</span></a></li>
+					<li><a href="#bp-search_canvas" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_search">Search</span></a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="bp-taxonomy_canvas" style="padding: 0px;margin: 0;"></div>
+					<div class="tab-pane" id="bp-search_canvas" style="padding: 0px;margin: 0;"></div>
+				</div>
+                
+			</div>
+			<div class="col-md-6 panel panel-default" style="border-radius: 0px;" >
+                <select id="taskDdl" on-change="taskChanged()" class="col-md-4">
+                <option value="default">Select a Task</option>
+                </select>
+				<div class="col-md-12" id="bp-cd1_canvas" style="padding: 0px;margin: 0;"></div>
+			</div>
+		</div>
+	</div>
+
+	</body>
+</html>

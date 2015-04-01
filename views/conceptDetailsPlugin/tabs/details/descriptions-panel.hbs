@@ -4,27 +4,28 @@
         {{#if options.showIds}}
             <th>SCTID</th>
         {{/if}}
-        <th><span class='i18n' data-i18n-id='i18n_acceptability'>Acceptability</span>{{languageName}}</th>
+<!--        <th><span class='i18n' data-i18n-id='i18n_acceptability'>Acceptability</span>{{languageName}}</th>-->
         </tr>
     </thead>
     <tbody>
         {{#each allDescriptions}}
-            <tr class='{{#if_eq type.conceptId "900000000000003001"}} fsn-row{{else}} synonym-row{{/if_eq}}{{#if active}}{{else}} danger{{/if}}{{#if_eq effectiveTime ../options.highlightByEffectiveTime}} highlightEffectiveTime{{/if_eq}}'>
+            <tr class='{{#if_eq type "FSN"}} fsn-row{{else}} synonym-row{{/if_eq}}{{#if active}}{{else}} danger{{/if}}{{#if_eq effectiveTime ../options.highlightByEffectiveTime}} highlightEffectiveTime{{/if_eq}}'>
                     <td>
-                        {{#if_eq type.conceptId "900000000000003001"}}
+                        {{#if_eq type "FSN"}}
                             <span rel="tooltip-right" title="{{i18n "i18n_fsn" "FSN"}}">F</span>
                         {{else}}
-                            {{#if_eq type.conceptId "900000000000013009"}}
+                            {{#if_eq type "SYNONYM"}}
                                 <span rel="tooltip-right" title="{{i18n "i18n_synonym" "Synonym"}}">S</span>
                             {{else}}
-                                {{#if_eq type.conceptId "900000000000550004"}}
+                                {{#if_eq type "DEFINITION"}}
                                     <span rel="tooltip-right" title="{{i18n "i18n_definition" "Definition"}}">D</span>
                                 {{/if_eq}}
                             {{/if_eq}}
                         {{/if_eq}}
-
+<!---->
+<!--
                         {{#if preferred}}
-                            {{#if_eq type.conceptId "900000000000003001"}}
+                            {{#if_eq type "FSN"}}
                                 &nbsp;<span class="glyphicon glyphicon-star-empty" rel="tooltip-right" title="{{i18n "i18n_preferred" "Preferred"}}"></span>
                             {{else}}
                                 &nbsp;<span class="glyphicon glyphicon-star" rel="tooltip-right" title="{{i18n "i18n_preferred" "Preferred"}}"></span>
@@ -36,11 +37,13 @@
                                 &nbsp;&nbsp;&nbsp;
                             {{/if}}
                         {{/if}}
+-->
                         &nbsp;&nbsp;&nbsp;{{term}}</td>
                     {{#if ../../options.showIds}}
                         <td>{{descriptionId}}</td>
                     {{/if}}
 
+<!--
                     <td>
                         {{#if preferred}}
                             <span class='i18n' data-i18n-id='i18n_preferred'>{{i18n "i18n_preferred" "Preferred"}}</span>
@@ -58,6 +61,7 @@
                         </table>
                         " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
                     </td>
+-->
                 </tr>
         {{/each}}
     </tbody>

@@ -466,7 +466,14 @@ function searchPanel(divElement, options) {
                 if (isNumber(t)) {
                     if (t.substr(-2, 1) == "0") {
                         // Search conceptId
-                        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
+                        if(options.taskSet)
+                        {
+                            var url = options.serverUrl + "/" + options.edition + "/" + options.release + "/tasks/" + options.taskId + "/concepts/" + t;
+                        }
+                        else{
+                            var url = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t;
+                        }
+                        xhr = $.getJSON(url,function (result) {
 
                         }).done(function (result) {
                             console.log(result);
