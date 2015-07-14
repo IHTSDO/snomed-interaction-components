@@ -2327,10 +2327,12 @@ function program24(depth0,data) {
   return "\n                     sct-defined-concept-compact\n                ";
   }
 
-  buffer += "<div style='line-height: 100%;'>\n    ";
+  buffer += "<div style='line-height: 100%;'>\n    "
+    + escapeExpression((helper = helpers.setLastGroup || (depth0 && depth0.setLastGroup),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.null), options) : helperMissing.call(depth0, "setLastGroup", (depth0 && depth0.null), options)))
+    + "\n    ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(16, program16, data),fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.selectedView), "stated", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.options)),stack1 == null || stack1 === false ? stack1 : stack1.selectedView), "stated", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</div>";
+  buffer += "\n</div>\n";
   return buffer;
   });
 
@@ -3213,7 +3215,7 @@ function program7(depth0,data) {
   buffer += "\n            </tbody>\n        </table>\n        <table id=\"\" class=\"table table-hover table-bordered\">\n            <tbody>\n            ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.concepts)),stack1 == null || stack1 === false ? stack1 : stack1.length), 0, options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.concepts)),stack1 == null || stack1 === false ? stack1 : stack1.length), 0, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            </tbody>\n        </table>\n        <a download=\"favorites.xls\" id=\"exportFavsXls\" href=\"javascript:void(0);\"><button class=\"btn btn-default\">Export favorites in XLS <img style=\"height: 23px;\" src=\"img/excel.png\"></button></a>\n    </div>\n</div>";
+  buffer += "\n            </tbody>\n        </table>\n    </div>\n</div>\n";
   return buffer;
   });
 
