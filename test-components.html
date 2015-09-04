@@ -56,10 +56,10 @@
             var currentPerspective = "home";
 
             var options = {
-                serverUrl: "http://104.131.195.232/api/snomed",
+                serverUrl: "http://107.170.67.17/api/snomed",
 //                serverUrl: "http://162.243.35.127/api/snomed",
-                edition: "gmdn-edition",
-                release: "v20140725",
+                edition: "en-edition",
+                release: "v20150731",
                 showIds: false,
                 hideNotAcceptable: true,
                 displayInactiveDescriptions: false,
@@ -127,13 +127,13 @@
                 }
                 var edition = QueryString.edition;
                 if (typeof edition == "undefined" || edition == null || edition == "") {
-                    edition = "gmdn-edition";
+                    edition = "en-edition";
                 }
                 options.edition = edition;
 
                 var release = QueryString.release;
                 if (typeof release == "undefined" || release == null || release == "") {
-                    release = "v20140725";
+                    release = "v20140731";
                 }
                 options.release = release;
 
@@ -645,7 +645,7 @@
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Spanish Edition 20140604', 'multi-edition', 'v20140701', '900000000000509007', 'http://107.170.98.11/api/snomed');switchLanguage('es', 'img/flags/es.png', true);switchToFullHeight(404684003, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Multi-English Browser</span></a>
                         <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('Beta release Edition 20150131', 'en-edition', 'v20141125', '900000000000509007', 'http://162.243.35.127/api/snomed');switchLanguage('en', 'img/flags/us.png', true);switchToFullHeight(404684003, 138875005);"><img src="img/flags/us.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Beta release Edition 20150131</span></a>
                         <!--<a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('UK Edition 20140401', 'uk-edition', 'v20140401', '900000000000508004');switchLanguage('en_US', 'img/flags/us.png', true);switchToFullHeight(404684003, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">UKTC English Extension</span></a>-->
-                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('GMDN Edition 20140604', 'gmdn-edition', 'v20140725', '900000000000509007');switchLanguage('en', 'img/flags/us.png', true);switchToFullHeight(9999999999, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">GMDN</span></a>
+                        <a class="btn btn-primary btn-lg" role="button" onclick="switchRelease('GMDN Edition 20140604', 'en-edition', 'v20140731', '900000000000509007');switchLanguage('en', 'img/flags/us.png', true);switchToFullHeight(9999999999, 138875005);"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">GMDN</span></a>
                         &nbsp;&nbsp;<span class="i18n" data-i18n-id="i18n_or">or</span>&nbsp;&nbsp;
                         <a class="btn btn-primary btn-lg" role="button" onclick="tourStart();"><span class="i18n" data-i18n-id="i18n_take_tour">take the Tour...</span></a></p>
                     <p><span class="i18n" data-i18n-id="i18n_home3">Also, please provide any feedback by emailing <a href="mailto:otf@ihtsdo.org?subject=Browser Feedback" target="_blank">otf@ihtsdo.org</a>. Your feedback is essential to the evolution and improvement of this service.</span></p>
