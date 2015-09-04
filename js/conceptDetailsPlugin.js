@@ -327,6 +327,9 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
+            Handlebars.registerHelper('console', function (a) {
+                console.log(a);
+            });
 
             var context = {
                 options: panel.options,
