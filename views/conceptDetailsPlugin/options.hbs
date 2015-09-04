@@ -76,7 +76,7 @@
         <select class="form-control" id="{{divElementId}}-langRefsetOption">
             {{#if options.manifest.languageRefsets}}
                 {{#each options.manifest.languageRefsets}}
-                    <option value="{{conceptId}}" {{console ../options.langRefset}} {{#if_eq conceptId ../../options.langRefset}}selected{{/if_eq}}>{{defaultTerm}}</option>
+                    <option value="{{conceptId}}" {{#if_eq conceptId ../../options.langRefset}}selected{{/if_eq}}>{{defaultTerm}}</option>
                 {{/each}}
             {{else}}
                 {{#if_eq options.langRefset "900000000000508004"}}
