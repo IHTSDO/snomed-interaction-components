@@ -74,46 +74,52 @@
     <div class="form-group">
         <label for="{{divElementId}}-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">{{i18n "i18n_language_refset" "Language Refset"}}</span></label>
         <select class="form-control" id="{{divElementId}}-langRefsetOption">
-            {{#if_eq options.langRefset "900000000000508004"}}
-                <option value="900000000000508004" selected>GB Language Refset</option>
+            {{#if options.manifest.languageRefsets}}
+                {{#each options.manifest.languageRefsets}}
+                    <option value="{{conceptId}}" {{#if_eq conceptId ../../options.langRefset}}selected{{/if_eq}}>{{defaultTerm}}</option>
+                {{/each}}
             {{else}}
-                <option value="900000000000508004">GB Language Refset</option>
-            {{/if_eq}}
-            {{#if_eq options.langRefset "900000000000509007"}}
-                <option value="900000000000509007" selected>US Language Refset</option>
-            {{else}}
-                <option value="900000000000509007">US Language Refset</option>
-            {{/if_eq}}
-            {{#if_eq options.langRefset "450828004"}}
-                <option value="450828004" selected>ES Language Refset</option>
-            {{else}}
-                <option value="450828004">ES Language Refset</option>
-            {{/if_eq}}
-            {{#if_eq options.langRefset "554461000005103"}}
-                <option value="554461000005103" selected>DA Language Refset</option>
-            {{else}}
-                <option value="554461000005103">DA Language Refset</option>
-            {{/if_eq}}
-            {{#if_eq options.langRefset "46011000052107"}}
-                <option value="46011000052107" selected>SV Language Refset</option>
-            {{else}}
-                <option value="46011000052107">SV Language Refset</option>
-            {{/if_eq}}
-            {{#if_eq options.langRefset "32570271000036106"}}
-                <option value="32570271000036106" selected>AU Language Refset</option>
-            {{else}}
-                <option value="32570271000036106">AU Language Refset</option>
-            {{/if_eq}}
-            {{#if_eq options.langRefset "999001251000000103"}}
-                <option value="999001251000000103" selected>UK Language Refset</option>
-            {{else}}
-                <option value="999001251000000103">UK Language Refset</option>
-            {{/if_eq}}
-            {{#if_eq options.langRefset "31000146106"}}
-                <option value="31000146106" selected>NL Language Refset</option>
-            {{else}}
-                <option value="31000146106">NL Language Refset</option>
-            {{/if_eq}}
+                {{#if_eq options.langRefset "900000000000508004"}}
+                    <option value="900000000000508004" selected>GB Language Refset</option>
+                {{else}}
+                    <option value="900000000000508004">GB Language Refset</option>
+                {{/if_eq}}
+                {{#if_eq options.langRefset "900000000000509007"}}
+                    <option value="900000000000509007" selected>US Language Refset</option>
+                {{else}}
+                    <option value="900000000000509007">US Language Refset</option>
+                {{/if_eq}}
+                {{#if_eq options.langRefset "450828004"}}
+                    <option value="450828004" selected>ES Language Refset</option>
+                {{else}}
+                    <option value="450828004">ES Language Refset</option>
+                {{/if_eq}}
+                {{#if_eq options.langRefset "554461000005103"}}
+                    <option value="554461000005103" selected>DA Language Refset</option>
+                {{else}}
+                    <option value="554461000005103">DA Language Refset</option>
+                {{/if_eq}}
+                {{#if_eq options.langRefset "46011000052107"}}
+                    <option value="46011000052107" selected>SV Language Refset</option>
+                {{else}}
+                    <option value="46011000052107">SV Language Refset</option>
+                {{/if_eq}}
+                {{#if_eq options.langRefset "32570271000036106"}}
+                    <option value="32570271000036106" selected>AU Language Refset</option>
+                {{else}}
+                    <option value="32570271000036106">AU Language Refset</option>
+                {{/if_eq}}
+                {{#if_eq options.langRefset "999001251000000103"}}
+                    <option value="999001251000000103" selected>UK Language Refset</option>
+                {{else}}
+                    <option value="999001251000000103">UK Language Refset</option>
+                {{/if_eq}}
+                {{#if_eq options.langRefset "11000146104"}}
+                    <option value="11000146104" selected>NL Language Refset</option>
+                {{else}}
+                    <option value="11000146104">NL Language Refset</option>
+                {{/if_eq}}
+            {{/if}}
         </select>
     </div>
     <div class="form-group">

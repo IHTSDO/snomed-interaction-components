@@ -56,7 +56,8 @@
             var currentPerspective = "home";
 
             var options = {
-                serverUrl: "http://107.170.67.17/api/snomed",
+//                serverUrl: "http://107.170.67.17/api/snomed",
+                serverUrl: "http://107.170.43.89/api/snomed",
 //                serverUrl: "http://162.243.35.127/api/snomed",
                 edition: "en-edition",
                 release: "v20150731",
@@ -71,6 +72,13 @@
             };
 
             var manifests = [];
+            function loadReleasesButtons(){
+                var buttonsHtml = "";
+                $.each(manifests, function(i, field){
+                    buttonsHtml += '<a class="btn btn-primary btn-lg" role="button" onclick="switchRelease(\'' + field.resourceSetName + " " + field.effectiveTime + '\', \'' + field.databaseName + '\', \'v' + field.collectionName + '\', \'' + field.defaultTermLangRefset + '\', false, \'' + field._id + '\');switchLanguage(\'' + field.defaultTermLangCode + '\', \'img/flags/us.png\', true);switchToFullHeight(404684003, 138875005);"><img src="img/flags/' + field.databaseName.substr(0, 2) + '.png">&nbsp;&nbsp;&nbsp;Start browsing...</span><br><span class="small">' + field.resourceSetName + " " + field.effectiveTime + '</span></a>&nbsp;&nbsp;';
+                });
+                $("#releasesButtons").html(buttonsHtml);
+            }
 
             xhr = $.getJSON(options.serverUrl.replace("snomed", "") + "server/releases", function (result) {
                 // nothing
@@ -78,6 +86,7 @@
                 $.each(result, function (i, field){
                     manifests.push(field);
                 });
+                loadReleasesButtons();
 //                console.log(manifests);
             });
 
@@ -123,7 +132,7 @@
                 if (typeof QueryString.dev != "undefined") {
                     console.log("Using Dev Server...");
 //                    options.serverUrl = "http://107.170.33.116/api";
-                    options.serverUrl = "http://162.243.35.127/api/snomed";
+//                    options.serverUrl = "http://162.243.35.127/api/snomed";
                 }
                 var edition = QueryString.edition;
                 if (typeof edition == "undefined" || edition == null || edition == "") {
@@ -490,7 +499,7 @@
                 if (serverUrl){
                     options.serverUrl = serverUrl;
                 }else{
-                    options.serverUrl = "http://162.243.35.127/api/snomed";
+//                    options.serverUrl = "http://162.243.35.127/api/snomed";
 //                    options.serverUrl = "http://104.131.195.232/api/snomed";
                 }
                 $("#editionLabel").html(label);
@@ -652,6 +661,9 @@
                     <p><span class="i18n" data-i18n-id="i18n_home4">If you would like to get involved in the development, this code is available under an Apache v2 open source license. Please visit the open source repository in the <a href="https://github.com/IHTSDO/snomed-interaction-components" target="_blank">IHTSDO GitHub account</a></span></p>
                     <!--<p><a class="btn btn-primary btn-lg" role="button" onclick="client.setText('esto está el clipboard!');console.log('copy');"><img src="img/flags/gb.png">&nbsp;&nbsp;&nbsp;Go browsing...</span><br><span class="small">Copy to clipboard</span></a></p>-->
                     <p><span class="i18n" data-i18n-id="i18n_home5">Don't be surprised if you see frequent changes. Similarly, please don't depend on this tool being available all the time whilst in beta, but please look around and try it out!</span></p>
+                    <span id="releasesButtons">
+                        <i class='glyphicon glyphicon-refresh icon-spin'></i>
+                    </span>
                 </div>
                 <p><span class="i18n" data-i18n-id="i18n_home6"><span class="btn-success"><em>Releases</em></span> will allow the selection of SNOMED CT content from the International Edition or other extensions, with specific dates.</span></p>
                 <p><span class="i18n" data-i18n-id="i18n_home7"><span class="btn-primary"><em>Perspectives</em></span>  are pre-defined browsing layouts for specific purposes. Use the <a href="javascript:void(0);" onclick="switchToResponsiveLayout(404684003,404684003);">responsive perspective</a> for best results in tablets and phones.</span></p>

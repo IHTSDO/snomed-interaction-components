@@ -327,7 +327,6 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
-
             var context = {
                 options: panel.options,
                 firstMatch: firstMatch,
