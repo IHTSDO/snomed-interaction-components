@@ -15,6 +15,22 @@ function conceptDetails(divElement, conceptId, options) {
         componentsRegistry = [];
     }
 
+    var languageNameOfLangRefset = {
+        "20581000087109": "CA",
+        "19491000087109": "CA",
+        "900000000000508004": "GB",
+        "900000000000509007": "US",
+        "450828004":"ES",
+        "554461000005103":"DA",
+        "46011000052107":"SV",
+        "32570271000036106":"AU",
+        "999001251000000103":"UK",
+        "11000146104":"NL"
+    };
+
+    if (options.languageNameOfLangRefset)
+        languageNameOfLangRefset = options.languageNameOfLangRefset;
+
     var panel = this;
     this.type = "concept-details";
     this.conceptId = conceptId;
@@ -590,7 +606,7 @@ function conceptDetails(divElement, conceptId, options) {
 //            console.log(auxDescriptions);
             var context = {
                 options: panel.options,
-                languageName: languageName,
+                languageName: "(" + languageNameOfLangRefset[panel.options.langRefset] + ")",
                 divElementId: panel.divElement.id,
                 allDescriptions: allDescriptions
             };
