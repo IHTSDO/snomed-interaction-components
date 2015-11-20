@@ -398,6 +398,16 @@ function conceptDetails(divElement, conceptId, options) {
             };
             $('#home-attributes-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/attributes.hbs"](context));
 
+            // Update browser history
+            var historyUrl = "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + options.edition + "&release=" + options.release + "&server=" + options.serverUrl + "&langRefset=" + options.langRefset;
+            manualStateChange = false;
+            var state = {
+                name: firstMatch.defaultTerm,
+                conceptId: firstMatch.conceptId,
+                url: historyUrl
+            };
+            History.pushState(state, "SNOMED CT - " + firstMatch.defaultTerm, historyUrl);
+
             $(".glyphicon-star-empty").click(function(e){
                 var concept = {
                     module: firstMatch.module,
