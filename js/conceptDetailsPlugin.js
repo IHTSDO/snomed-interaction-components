@@ -449,6 +449,43 @@ function conceptDetails(divElement, conceptId, options) {
                 channel.publish("favsAction");
             });
 
+            var clientTermDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-term") );
+            clientTermDetails.on( "ready", function( readyEvent ) {
+                clientTermDetails.on( "copy", function (event) {
+                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
+                    window.setTimeout( function(){
+                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
+                    }, 1000);
+                    alertEvent("Term copied to clipboard", "info");
+                    var clipboard = event.clipboardData;
+                    clipboard.setData("text/plain", firstMatch.defaultTerm);
+                });
+            } );
+            var clientAllDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-sctid-term") );
+            clientAllDetails.on( "ready", function( readyEvent ) {
+                clientAllDetails.on( "copy", function (event) {
+                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
+                    window.setTimeout( function(){
+                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
+                    }, 1000);
+                    alertEvent("SCTID and Term copied to clipboard", "info");
+                    var clipboard = event.clipboardData;
+                    clipboard.setData("text/plain", firstMatch.conceptId + " |" + firstMatch.defaultTerm + "|");
+                });
+            } );
+            var clientSctidDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-sctid") );
+            clientSctidDetails.on( "ready", function( readyEvent ) {
+                clientSctidDetails.on( "copy", function (event) {
+                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
+                    window.setTimeout( function(){
+                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
+                    }, 1000);
+                    alertEvent("SCTID copied to clipboard", "info");
+                    var clipboard = event.clipboardData;
+                    clipboard.setData("text/plain", firstMatch.conceptId);
+                });
+            } );
+
             $(".glyphicon-star").click(function(e){
                 var concept = {
                     module: firstMatch.module,

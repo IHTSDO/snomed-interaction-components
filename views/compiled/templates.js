@@ -1600,7 +1600,23 @@ function program7(depth0,data) {
     + "\" class=\"glyphicon glyphicon-star";
   stack1 = (helper = helpers.if_fav || (depth0 && depth0.if_fav),options={hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId), options) : helperMissing.call(depth0, "if_fav", ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"></span>\n        </a>\n    </span>\n    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"  draggable = \"true\" ondragstart=\"drag(event, '";
+  buffer += "\"></span>\n        </a>\n    </span>\n    <span class=\"pull-right\">\n        <div class=\"dropdown\">\n            <button class=\"btn btn-link dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-expanded=\"true\" style=\"padding: 0px;\">\n                <i class=\"glyphicon glyphicon-export pull-right\" style=\"color: white;\" id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-copy-icon\"></i>\n            </button>\n            <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"dropdownMenu1\">\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"javascript:void(0);\" id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-copy-sctid\">Copy ConceptId</a></li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"javascript:void(0);\" id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-copy-term\">Copy term</a></li>\n                <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"javascript:void(0);\" id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-copy-sctid-term\">Copy ConceptId + term</a></li>\n            </ul>\n        </div>\n    </span>\n    <a href=\"javascript:void(0);\" style=\"color: inherit;text-decoration: inherit;\"  draggable = \"true\" ondragstart=\"drag(event, '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
