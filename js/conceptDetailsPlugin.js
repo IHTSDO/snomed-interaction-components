@@ -981,12 +981,18 @@ function conceptDetails(divElement, conceptId, options) {
 
             if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "references-tab") {
                 $("#references-" + panel.divElement.id + "-resultsTable").html("");
-//                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
                 panel.getReferences(firstMatch.conceptId);
             }
 
             if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
+                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+            }
 
+            if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "expression-tab") {
+                $("#expression-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                setTimeout(function () {
+                    renderExpression(firstMatch, firstMatch, $("#expression-canvas-" + panel.divElement.id), options);
+                }, 300);
             }
 
             $("#references-tab-link-" + panel.divElement.id).unbind();
@@ -1000,8 +1006,16 @@ function conceptDetails(divElement, conceptId, options) {
                 setTimeout(function () {
                     $("#diagram-canvas-" + panel.divElement.id).html("");
                     drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
-                }, 1000)
+                }, 1000);
+            });
 
+            $("#expression-tab-link-" + panel.divElement.id).unbind();
+            $("#expression-tab-link-" + panel.divElement.id).click(function (e) {
+                $("#expression-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+                setTimeout(function () {
+                    $("#expression-canvas-" + panel.divElement.id).html("");
+                    renderExpression(firstMatch, firstMatch, $("#expression-canvas-" + panel.divElement.id), options);
+                }, 1000)
             });
 
             $('.more-fields-button').disableTextSelect();
