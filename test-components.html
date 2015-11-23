@@ -146,11 +146,13 @@
                 }
                 options.diagrammingMarkupEnabled = diagrammingMarkupEnabled;
 
-                var langRefset = QueryString.langRefset.split(",");
-                if (typeof langRefset == "undefined" || langRefset == null || langRefset == "") {
-                    langRefset = options.langRefset;
+                if (QueryString.langRefset) {
+                    var langRefset = QueryString.langRefset.split(",");
+                    if (typeof langRefset == "undefined" || langRefset == null || langRefset == "") {
+                        langRefset = options.langRefset;
+                    }
+                    options.langRefset = langRefset;
                 }
-                options.langRefset = langRefset;
 
                 $("#editionLabel").html(edition + " " + release);
 
