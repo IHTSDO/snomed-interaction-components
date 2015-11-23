@@ -63,15 +63,15 @@
 //                serverUrl: "http://107.170.43.89/api/snomed",
 //                serverUrl: "http://162.243.35.127/api/snomed",
                 serverUrl: "https://browser-aws-1.ihtsdotools.org/api/snomed",
-                edition: "en-edition",
-                release: "v20150731",
+                edition: "fr-ca-edition",
+                release: "v20150526",
                 showIds: false,
                 hideNotAcceptable: true,
                 displayInactiveDescriptions: false,
                 displaySynonyms: true,
                 selectedView: "inferred",
                 displayChildren: false,
-                langRefset: "900000000000509007",
+                langRefset: ["900000000000509007","20581000087109"],
                 diagrammingMarkupEnabled: false
             };
 
@@ -83,16 +83,6 @@
                 });
                 $("#releasesButtons").html(buttonsHtml);
             }
-
-            xhr = $.getJSON(options.serverUrl.replace("snomed", "") + "server/releases", function (result) {
-                // nothing
-            }).done(function (result) {
-                $.each(result, function (i, field){
-                    manifests.push(field);
-                });
-                loadReleasesButtons();
-//                console.log(manifests);
-            });
 
 //            xhr = $.getJSON("http://107.170.143.181/api/snomed".replace("snomed", "") + "server/releases", function (result) {
 //                // nothing
@@ -140,13 +130,13 @@
                 }
                 var edition = QueryString.edition;
                 if (typeof edition == "undefined" || edition == null || edition == "") {
-                    edition = "en-edition";
+                    edition = options.edition;
                 }
                 options.edition = edition;
 
                 var release = QueryString.release;
                 if (typeof release == "undefined" || release == null || release == "") {
-                    release = "v20150731";
+                    release = options.release;
                 }
                 options.release = release;
 
@@ -156,9 +146,9 @@
                 }
                 options.diagrammingMarkupEnabled = diagrammingMarkupEnabled;
 
-                var langRefset = QueryString.langRefset;
+                var langRefset = QueryString.langRefset.split(",");
                 if (typeof langRefset == "undefined" || langRefset == null || langRefset == "") {
-                    langRefset = "900000000000509007";
+                    langRefset = options.langRefset;
                 }
                 options.langRefset = langRefset;
 
@@ -203,34 +193,46 @@
                 }
                 options.acceptLicense = (acceptLicense == "true");
 
-                if (QueryString.perspective == "home") {
-                    initialize();
-                } else if (QueryString.perspective == "browsing") {
-                    currentPerspective = "browsing";
-                    switchToBrowsing(cdValue1,cdValue2,txValue1);
-                } else if (QueryString.perspective == "full") {
-                    currentPerspective = "full";
-                    switchToFullHeight(cdValue1,txValue1);
-                } else if (QueryString.perspective == "compare_concepts") {
-                    currentPerspective = "compare_concepts";
-                    switchToComparingConcepts(cdValue1,cdValue2);
-                } else if (QueryString.perspective == "compare_hierarchies") {
-                    currentPerspective = "compare_hierarchies";
-                    switchToComparingTaxonomies(cdValue1,txValue1,txValue2);
-                } else if (QueryString.perspective == "responsive") {
-                    currentPerspective = "responsive";
-                    switchToResponsiveLayout(cdValue1,cdValue2,txValue1);
-                } else if (QueryString.perspective == "GMDN") {
-                    currentPerspective = "GMDN";
-                    switchToGMDN(cdValue1, txValue1, txValue2);
-                } else {
-                    initialize();
-                }
+                xhr = $.getJSON(options.serverUrl.replace("snomed", "") + "server/releases", function (result) {
+                    // nothing
+                }).done(function (result) {
+                    $.each(result, function (i, field){
+                        manifests.push(field);
+                        if (field.databaseName == options.edition) {
+                            options.manifest = field;
+                        }
+                    });
+                    loadReleasesButtons();
+                    if (QueryString.perspective == "home") {
+                        initialize();
+                    } else if (QueryString.perspective == "browsing") {
+                        currentPerspective = "browsing";
+                        switchToBrowsing(cdValue1,cdValue2,txValue1);
+                    } else if (QueryString.perspective == "full") {
+                        currentPerspective = "full";
+                        switchToFullHeight(cdValue1,txValue1);
+                    } else if (QueryString.perspective == "compare_concepts") {
+                        currentPerspective = "compare_concepts";
+                        switchToComparingConcepts(cdValue1,cdValue2);
+                    } else if (QueryString.perspective == "compare_hierarchies") {
+                        currentPerspective = "compare_hierarchies";
+                        switchToComparingTaxonomies(cdValue1,txValue1,txValue2);
+                    } else if (QueryString.perspective == "responsive") {
+                        currentPerspective = "responsive";
+                        switchToResponsiveLayout(cdValue1,cdValue2,txValue1);
+                    } else if (QueryString.perspective == "GMDN") {
+                        currentPerspective = "GMDN";
+                        switchToGMDN(cdValue1, txValue1, txValue2);
+                    } else {
+                        initialize();
+                    }
+//                console.log(manifests);
+                });
                 if (!options.acceptLicense) {
                     //$('#license-modal').modal('show');
                 }
 
-                verifyDate(release)
+                //verifyDate(release)
             }
 
             function initTour() {

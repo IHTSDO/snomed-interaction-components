@@ -1,10 +1,14 @@
 <table class='table table-bordered' id = '{{divElementId}}-descriptions-panel-table'>
-    <thead><tr>
-        <th><span class='i18n' data-i18n-id='i18n_term'>Term</span></th>
-        {{#if options.showIds}}
-            <th>SCTID</th>
-        {{/if}}
-        <th><span class='i18n' data-i18n-id='i18n_acceptability'>Acceptability</span>{{languageName}}</th>
+    <thead>
+        <tr>
+           <th colspan="2" class="text-center">{{removeSemtag longLangName}}</th>
+        </tr>
+        <tr>
+            <th><span class='i18n' data-i18n-id='i18n_term'>Term</span></th>
+            {{#if options.showIds}}
+                <th>SCTID</th>
+            {{/if}}
+            <th><span class='i18n' data-i18n-id='i18n_acceptability'>Acceptability</span>&nbsp;&nbsp;{{languageName}}</th>
         </tr>
     </thead>
     <tbody>
@@ -47,11 +51,10 @@
                         {{else}}
                             {{#if acceptable}}
                                 <span class='i18n' data-i18n-id='i18n_acceptable'>{{i18n "i18n_acceptable" "Acceptable"}}</span>
+                            {{else}}
+                                <span class='i18n' data-i18n-id='i18n_not_acceptable'>{{i18n "i18n_not_acceptable" "Not acceptable"}}</span>
                             {{/if}}
                         {{/if}}
-                        {{#if_eq acceptable false}}
-                            <span class='i18n' data-i18n-id='i18n_not_acceptable'>{{i18n "i18n_not_acceptable" "Not acceptable"}}</span>
-                        {{/if_eq}}
                         <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                         <table border='1'><tr><th style='padding: 3px;'>DescriptionId</th><th style='padding: 3px;'>Type</th><th style='padding: 3px;'>Language</th><th style='padding: 3px;'>Case Significance</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
                                 <tr><td style='padding: 3px;'>{{descriptionId}}</td><td style='padding: 3px;'>{{removeSemtag type.defaultTerm}}</td><td style='padding: 3px;'>{{lang}}</td><td style='padding: 3px;'>{{removeSemtag ics.defaultTerm}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
