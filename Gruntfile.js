@@ -10,6 +10,8 @@ module.exports = function(grunt) {
         concat: {
             js: {
                 src: [
+                    'views/compiled/templates.js',
+                    'js/conceptExpressions.js',
                     'js/conceptDetailsPlugin.js',
                     'js/countryIcons.js',
                     'js/drawConceptDiagram.js',
@@ -19,8 +21,7 @@ module.exports = function(grunt) {
                     'js/taxonomyPlugin.js',
                     'js/refsetPlugin.js',
                     'js/favoritesPlugin.js',
-                    'js/util.js',
-                    'views/compiled/templates.js'
+                    'js/util.js'
                 ],
                 dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js'
             },
