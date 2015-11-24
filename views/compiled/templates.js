@@ -980,7 +980,7 @@ function program39(depth0,data) {
   return buffer;
   }
 
-  buffer += "<hr>\n<table class='table table-bordered' id = '";
+  buffer += "<table class='table table-bordered' id = '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
