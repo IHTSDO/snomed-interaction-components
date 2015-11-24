@@ -272,16 +272,3 @@ function stringToArray (string){
 function alertEvent(message, type) {
     $.notify(message,type);
 }
-
-manualStateChange = true;
-History.Adapter.bind(window,'statechange',function(){ // Note: We are using statechange instead of popstate
-    if(manualStateChange == true){
-        // BACK BUTTON WAS PRESSED
-        var State = History.getState(); // Note: We are using History.getState() instead of event.state
-        if (State.data && State.data.url) {
-            //console.log("Back button! ", State.data.name);
-            window.location.href = State.data.url;
-        }
-    }
-    manualStateChange = true;
-});
