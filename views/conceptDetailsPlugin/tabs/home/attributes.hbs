@@ -22,6 +22,17 @@
     </span>
 </h4>
 
-<h5>SCTID: {{firstMatch.conceptId}}</h5>
-<h5>{{firstMatch.conceptId}} | {{firstMatch.defaultTerm}} |</H5>
+<h5>SCTID: {{firstMatch.conceptId}}<div id="copy-content">{{firstMatch.conceptId}} | {{firstMatch.defaultTerm}} |</div></h5>
+
+<script type="text/javascript">
+// inspired by this: https://www.lucidchart.com/techblog/2014/12/02/definitive-guide-copying-pasting-javascript/
+//
+document.addEventListener("copy", copyHandler, false);
+function copyHandler(e) {
+  var copyContent = document.getElementById("copy-content");
+  e.clipboardData.setData('text/plain', copyContent.innerHTML);
+  e.preventDefault();
+}
+</script>
+
 <div id="home-descriptions-{{divElementId}}"></div>
