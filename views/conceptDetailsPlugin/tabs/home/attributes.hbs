@@ -29,9 +29,11 @@
 //
 document.addEventListener("copy", copyHandler, false);
 function copyHandler(e) {
-  var copyContent = document.getElementById("copy-content");
-  e.clipboardData.setData('text/plain', copyContent.innerHTML);
-  e.preventDefault();
+  if(window.getSelection().type != "Range") {
+	  var copyContent = document.getElementById("copy-content");
+	  e.clipboardData.setData('text/plain', copyContent.innerHTML);
+	  e.preventDefault();
+  }
 }
 </script>
 
