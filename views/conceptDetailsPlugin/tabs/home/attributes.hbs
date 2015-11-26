@@ -29,7 +29,7 @@
 //
 document.addEventListener("copy", copyHandler, false);
 function copyHandler(e) {
-  if(window.getSelection().type != "Range") {
+  if(window.getSelection().isCollapsed) {
 	  var copyContent = document.getElementById("copy-content");
 	  e.clipboardData.setData('text/plain', copyContent.innerHTML);
 	  e.preventDefault();
