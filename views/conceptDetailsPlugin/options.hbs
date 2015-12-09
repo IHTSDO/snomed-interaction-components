@@ -84,36 +84,36 @@
             {{/each}}
         {{/if}}
     </div>
-    <div class="form-group">
-        <table class='table table-bordered table-hover'>
-            <thead>
-                <tr>
-                    <th>Panel</th>
-                    <th>Subscribed</th>
-                    <th>Subscriptor</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each options.possibleSubscribers}}
-                    <tr>
-                        <td>{{id}}</td>
-                        <td>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="{{../divElementId}}-subscribeTo-{{id}}" {{#if subscribed}}checked{{/if}}>
-                                </label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="{{../divElementId}}-subscriptor-{{id}}" {{#if subscriptor}}checked{{/if}}>
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
+    <!--<div class="form-group">-->
+        <!--<table class='table table-bordered table-hover'>-->
+            <!--<thead>-->
+                <!--<tr>-->
+                    <!--<th>Panel</th>-->
+                    <!--<th>Subscribed</th>-->
+                    <!--<th>Subscriptor</th>-->
+                <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+                <!--{{#each options.possibleSubscribers}}-->
+                    <!--<tr>-->
+                        <!--<td>{{id}}</td>-->
+                        <!--<td>-->
+                            <!--<div class="checkbox">-->
+                                <!--<label>-->
+                                    <!--<input type="checkbox" id="{{../divElementId}}-subscribeTo-{{id}}" {{#if subscribed}}checked{{/if}}>-->
+                                <!--</label>-->
+                            <!--</div>-->
+                        <!--</td>-->
+                        <!--<td>-->
+                            <!--<div class="checkbox">-->
+                                <!--<label>-->
+                                    <!--<input type="checkbox" id="{{../divElementId}}-subscriptor-{{id}}" {{#if subscriptor}}checked{{/if}}>-->
+                                <!--</label>-->
+                            <!--</div>-->
+                        <!--</td>-->
+                    <!--</tr>-->
+                <!--{{/each}}-->
+            <!--</tbody>-->
+        <!--</table>-->
+    <!--</div>-->
 </form>
