@@ -1666,7 +1666,8 @@ function conceptDetails(divElement, conceptId, options) {
                 returnLimit: returnLimit2,
                 remaining: remaining,
                 divElementId: panel.divElement.id,
-                skipTo: skipTo
+                skipTo: skipTo,
+                panel: panel
             };
             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                 if (opts != "undefined") {
@@ -1729,6 +1730,14 @@ function conceptDetails(divElement, conceptId, options) {
                     $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
                 }
             }
+            $('#members-' + panel.divElement.id).find(".member-row").unbind();
+            $('#members-' + panel.divElement.id).find(".member-row").click(function(e){
+                var clickedConceptId = $(e.target).data("concept-id");
+                //var clickedTerm = $(e.target).data("term");
+                panel.conceptId = clickedConceptId;
+                $('#details-tabs-' + panel.divElement.id + ' a:first').tab('show');
+                panel.updateCanvas();
+            });
         }).fail(function(){
             $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
         });
