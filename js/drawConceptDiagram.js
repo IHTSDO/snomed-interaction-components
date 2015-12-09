@@ -1,4 +1,4 @@
-function drawConceptDiagram (concept, div, options) {
+function drawConceptDiagram (concept, div, options, panel) {
     var svgIsaModel = [];
     var svgAttrModel = [];
     if (options.selectedView == "stated") {
@@ -27,7 +27,7 @@ function drawConceptDiagram (concept, div, options) {
     var context = {
         divElementId: div.attr('id')
     };
-    console.log(context);
+    //console.log(context);
     div.html(JST["views/conceptDetailsPlugin/tabs/details/diagram.hbs"](context));
 
     var parentDiv = $("#" + div.attr('id') + "-diagram-body");
@@ -157,6 +157,29 @@ function drawConceptDiagram (concept, div, options) {
             console.log("Error");
         });
     });
+    if (panel.options.selectedView == "inferred") {
+        $("#" + div.attr('id') + '-stated-button-d').unbind();
+        $("#" + div.attr('id') + '-inferred-button-d').unbind();
+        $("#" + div.attr('id') + '-inferred-button-d').addClass("btn-primary");
+        $("#" + div.attr('id') + '-inferred-button-d').removeClass("btn-default");
+        $("#" + div.attr('id') + '-stated-button-d').addClass("btn-default");
+        $("#" + div.attr('id') + '-stated-button-d').removeClass("btn-primary");
+        $("#" + div.attr('id') + '-stated-button-d').click(function (event) {
+            panel.options.selectedView = "stated";
+            panel.updateCanvas();
+        });
+    } else {
+        $("#" + div.attr('id') + '-stated-button-d').unbind();
+        $("#" + div.attr('id') + '-inferred-button-d').unbind();
+        $("#" + div.attr('id') + '-stated-button-d').addClass("btn-primary");
+        $("#" + div.attr('id') + '-stated-button-d').removeClass("btn-default");
+        $("#" + div.attr('id') + '-inferred-button-d').addClass("btn-default");
+        $("#" + div.attr('id') + '-inferred-button-d').removeClass("btn-primary");
+        $("#" + div.attr('id') + '-inferred-button-d').click(function (event) {
+            panel.options.selectedView = "inferred";
+            panel.updateCanvas();
+        });
+    }
 
 
 

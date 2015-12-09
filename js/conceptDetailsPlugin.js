@@ -756,8 +756,8 @@ function conceptDetails(divElement, conceptId, options) {
 
             // load relationships panel and home parents/roles
             if (panel.options.selectedView == "inferred") {
-                $('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
-                $('#home-' + panel.divElement.id + '-diagram-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+                //$('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
+                //$('#home-' + panel.divElement.id + '-diagram-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
                 $('#home-' + panel.divElement.id + '-stated-button').unbind();
                 $('#home-' + panel.divElement.id + '-inferred-button').unbind();
                 $('#home-' + panel.divElement.id + '-inferred-button').addClass("btn-primary");
@@ -769,8 +769,8 @@ function conceptDetails(divElement, conceptId, options) {
                     panel.updateCanvas();
                 });
             } else {
-                $('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
-                $('#home-' + panel.divElement.id + '-diagram-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+                //$('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
+                //$('#home-' + panel.divElement.id + '-diagram-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
                 $('#home-' + panel.divElement.id + '-stated-button').unbind();
                 $('#home-' + panel.divElement.id + '-inferred-button').unbind();
                 $('#home-' + panel.divElement.id + '-stated-button').addClass("btn-primary");
@@ -1094,7 +1094,7 @@ function conceptDetails(divElement, conceptId, options) {
             }
 
             if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "diagram-tab") {
-                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options, panel);
             }
 
             if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "expression-tab") {
@@ -1114,7 +1114,7 @@ function conceptDetails(divElement, conceptId, options) {
                 $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
                 setTimeout(function () {
                     $("#diagram-canvas-" + panel.divElement.id).html("");
-                    drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options);
+                    drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options, panel);
                 }, 1000);
             });
 
