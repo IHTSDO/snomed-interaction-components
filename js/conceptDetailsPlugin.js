@@ -727,7 +727,7 @@ function conceptDetails(divElement, conceptId, options) {
 
                 allLangsHtml += JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context);
                 //if (panel.options.displaySynonyms) {
-                //    $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
+                    $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
                 //}
             });
             // END FOR
