@@ -157,18 +157,7 @@ function drawConceptDiagram (concept, div, options, panel) {
             console.log("Error");
         });
     });
-    if (panel.options.selectedView == "inferred") {
-        $("#" + div.attr('id') + '-stated-button-d').unbind();
-        $("#" + div.attr('id') + '-inferred-button-d').unbind();
-        $("#" + div.attr('id') + '-inferred-button-d').addClass("btn-primary");
-        $("#" + div.attr('id') + '-inferred-button-d').removeClass("btn-default");
-        $("#" + div.attr('id') + '-stated-button-d').addClass("btn-default");
-        $("#" + div.attr('id') + '-stated-button-d').removeClass("btn-primary");
-        $("#" + div.attr('id') + '-stated-button-d').click(function (event) {
-            panel.options.selectedView = "stated";
-            panel.updateCanvas();
-        });
-    } else {
+    if (panel.options.selectedView == "stated") {
         $("#" + div.attr('id') + '-stated-button-d').unbind();
         $("#" + div.attr('id') + '-inferred-button-d').unbind();
         $("#" + div.attr('id') + '-stated-button-d').addClass("btn-primary");
@@ -177,6 +166,17 @@ function drawConceptDiagram (concept, div, options, panel) {
         $("#" + div.attr('id') + '-inferred-button-d').removeClass("btn-primary");
         $("#" + div.attr('id') + '-inferred-button-d').click(function (event) {
             panel.options.selectedView = "inferred";
+            panel.updateCanvas();
+        });
+    } else {
+        $("#" + div.attr('id') + '-stated-button-d').unbind();
+        $("#" + div.attr('id') + '-inferred-button-d').unbind();
+        $("#" + div.attr('id') + '-inferred-button-d').addClass("btn-primary");
+        $("#" + div.attr('id') + '-inferred-button-d').removeClass("btn-default");
+        $("#" + div.attr('id') + '-stated-button-d').addClass("btn-default");
+        $("#" + div.attr('id') + '-stated-button-d').removeClass("btn-primary");
+        $("#" + div.attr('id') + '-stated-button-d').click(function (event) {
+            panel.options.selectedView = "stated";
             panel.updateCanvas();
         });
     }
