@@ -3089,7 +3089,9 @@ function program42(depth0,data) {
     + "\n\n";
   stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.memberships), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n\n<table class='table table-hover'>\n    <thead><tr>\n        <th colspan=\"3\"><span class='i18n' data-i18n-id='i18n_simple_refset_memberships'>Simple Refsets Membership</span></th>\n    </tr></thead>\n<tbody>\n    ";
+  buffer += "\n\n<div style=\"margin: 10px;\">\n    <a class=\"btn btn-primary btn-sm pull-right\" href=\"https://mapping.ihtsdotools.org/#/record/conceptId/"
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "/autologin?refSetId=P447562003\" target=\"_blank\" role=\"button\">Open maps for this concept</a>\n</div>\n\n<table class='table table-hover'>\n    <thead><tr>\n        <th colspan=\"3\"><span class='i18n' data-i18n-id='i18n_simple_refset_memberships'>Simple Refsets Membership</span></th>\n    </tr></thead>\n<tbody>\n    ";
   stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.memberships), {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    ";
