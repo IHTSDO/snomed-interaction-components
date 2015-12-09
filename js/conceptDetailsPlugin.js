@@ -485,6 +485,18 @@ function conceptDetails(divElement, conceptId, options) {
                     clipboard.setData("text/plain", firstMatch.conceptId);
                 });
             } );
+            var clientLink = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-link") );
+            clientLink.on( "ready", function( readyEvent ) {
+                clientLink.on( "copy", function (event) {
+                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
+                    window.setTimeout( function(){
+                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
+                    }, 1000);
+                    alertEvent("Link copied to clipboard", "info");
+                    var clipboard = event.clipboardData;
+                    clipboard.setData("text/plain", document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset);
+                });
+            } );
 
             var clientTermDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-term-details") );
             clientTermDetails.on( "ready", function( readyEvent ) {
@@ -520,6 +532,18 @@ function conceptDetails(divElement, conceptId, options) {
                     alertEvent("SCTID copied to clipboard", "info");
                     var clipboard = event.clipboardData;
                     clipboard.setData("text/plain", firstMatch.conceptId);
+                });
+            } );
+            var clientLinkDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-link-details") );
+            clientLinkDetails.on( "ready", function( readyEvent ) {
+                clientLinkDetails.on( "copy", function (event) {
+                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
+                    window.setTimeout( function(){
+                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
+                    }, 1000);
+                    alertEvent("Link copied to clipboard", "info");
+                    var clipboard = event.clipboardData;
+                    clipboard.setData("text/plain", document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset);
                 });
             } );
 

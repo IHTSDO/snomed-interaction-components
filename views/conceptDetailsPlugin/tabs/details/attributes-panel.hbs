@@ -38,16 +38,17 @@
                     <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1-details" data-toggle="dropdown" aria-expanded="true">
                         <i class="glyphicon glyphicon-export pull-right" id="{{divElementId}}-copy-icon-details"></i>
                     </button>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1-details">
+                    <ul class="dropdown-menu small pull-right" role="menu" aria-labelledby="dropdownMenu1-details">
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-sctid-details">Copy ConceptId</a></li>
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-term-details">Copy term</a></li>
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-sctid-term-details">Copy ConceptId + term</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-link-details">Copy Link to share</a></li>
                     </ul>
                 </div>
             </span>
-            <button type="button" id="share-link-{{divElementId}}" class="btn btn-link more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
-                    <form><input class='form-control' id='share-field-{{divElementId}}' value='{{dataContentValue}}?perspective=full&conceptId1={{firstMatch.conceptId}}&edition={{edition}}&release={{release}}&server={{server}}&langRefset={{langRefset}}'></form><br>Copy the concept link (e.g. CTRL-C) to save and share a reference to this concept.
-                    " data-html="true"><i class="glyphicon glyphicon-share-alt"></i></button>
+            <!--<button type="button" id="share-link-{{divElementId}}" class="btn btn-link more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="-->
+                    <!--<form><input class='form-control' id='share-field-{{divElementId}}' value='{{dataContentValue}}?perspective=full&conceptId1={{firstMatch.conceptId}}&edition={{edition}}&release={{release}}&server={{server}}&langRefset={{langRefset}}'></form><br>Copy the concept link (e.g. CTRL-C) to save and share a reference to this concept.-->
+                    <!--" data-html="true"><i class="glyphicon glyphicon-share-alt"></i></button>-->
             <span class="pull-right">
                <div class="phoca-flagbox" style="width:40px;height:40px">
                    <span class="phoca-flag {{countryIcon firstMatch.module}}"></span>
