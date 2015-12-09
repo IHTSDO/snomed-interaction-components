@@ -469,8 +469,6 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + t,function (result) {
 
                         }).done(function (result) {
-                            console.log(result);
-//                            console.log(result.filters);
                             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                                 if (opts != "undefined") {
                                     if(a == b)
@@ -488,6 +486,11 @@ function searchPanel(divElement, options) {
                             var resDescriptions = [];
                             $.each(result.descriptions, function (i, field){
                                 var aux = field;
+                                aux.definitionStatus = result.definitionStatus;
+                                aux.conceptActive = result.active;
+                                if (!aux.active || !aux.conceptActive) {
+                                    aux.danger = true;
+                                }
                                 if(field.active){
                                     if (panel.options.statusSearchFilter=="activeOnly"){
                                         resDescriptions.push(aux);
@@ -509,7 +512,7 @@ function searchPanel(divElement, options) {
                             var context = {
                                 result: result
                             };
-
+                            console.log(context);
                             $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/0.hbs"](context));
                             $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                             $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
