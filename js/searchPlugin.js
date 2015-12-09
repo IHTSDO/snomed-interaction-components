@@ -435,13 +435,13 @@ function searchPanel(divElement, options) {
                 $('#' + panel.divElement.id + '-typeIcon').removeClass('text-danger');
                 $('#' + panel.divElement.id + '-typeIcon').addClass('glyphicon-ok');
                 $('#' + panel.divElement.id + '-typeIcon').addClass('text-success');
-                if (t != lastT) {
-                    panel.options.semTagFilter = "none";
-                    panel.options.langFilter = "none";
-                    panel.options.moduleFilter ="none";
-                    panel.options.refsetFilter = "none";
-//                    panel.options.textIndexNormalized = "none";
-                }
+                //if (t != lastT) {
+                //    panel.options.semTagFilter = "none";
+                //    panel.options.langFilter = "none";
+                //    panel.options.moduleFilter ="none";
+                //    panel.options.refsetFilter = "none";
+                //    //panel.options.textIndexNormalized = "none";
+                //}
                 lastT = t;
                 //console.log(t);
                 var d = new Date();
@@ -852,7 +852,19 @@ function searchPanel(divElement, options) {
                             else
                                 return opts.inverse(this);
                         });
+
+                        Handlebars.registerHelper('hasFilters', function(options, opts){
+                            if (options.semTagFilter != "none" ||
+                                options.langFilter != "node" ||
+                                options.moduleFilter != "node" ||
+                                options.refsetFilter != "node") {
+                                return  opts.fn(this);;
+                            } else {
+                                return opts.inverse(this);
+                            }
+                        });
                         var context = {
+                            options: panel.options,
                             result: result,
                             divElementId: panel.divElement.id,
                             remaining: remaining,

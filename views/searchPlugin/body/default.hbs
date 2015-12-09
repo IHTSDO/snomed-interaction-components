@@ -1,6 +1,9 @@
 {{#if result.matches}}
     {{#if_gre "0" result.matches.length}}
         <tr><td class='text-muted'><span data-i18n-id="i18n_no_results" class="i18n">{{i18n "i18n_no_results" "No results"}}</span></td></tr>
+        {{#hasFilters options}}
+            <tr><td class='text-muted'><span data-i18n-id="i18n_remove_filters" class="i18n">{{i18n "i18n_remove_filters" "There are filters active, remove them to search again with a broader criteria."}}</span></td></tr>
+        {{/hasFilters}}
     {{else}}
         {{#each result.matches}}
             <tr class='resultRow selectable-row{{#if_eq active false}} danger{{else}}{{#if_eq conceptActive false}} danger{{/if_eq}}{{/if_eq}}'>
@@ -31,4 +34,7 @@
     {{/if_gre}}
 {{else}}
     <tr><td class='text-muted'><span data-i18n-id="i18n_no_results" class="i18n">{{i18n "i18n_no_results" "No results"}}</span></td></tr>
+    {{#hasFilters options}}
+        <tr><td class='text-muted'><span data-i18n-id="i18n_remove_filters" class="i18n">{{i18n "i18n_remove_filters" "There are filters active, remove them to search again with a broader criteria."}}</span></td></tr>
+    {{/hasFilters}}
 {{/if}}
