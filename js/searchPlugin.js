@@ -858,9 +858,9 @@ function searchPanel(divElement, options) {
 
                         Handlebars.registerHelper('hasFilters', function(options, opts){
                             if (options.semTagFilter != "none" ||
-                                options.langFilter != "node" ||
-                                options.moduleFilter != "node" ||
-                                options.refsetFilter != "node") {
+                                options.langFilter != "none" ||
+                                options.moduleFilter != "none" ||
+                                options.refsetFilter != "none") {
                                 return  opts.fn(this);;
                             } else {
                                 return opts.inverse(this);
@@ -882,6 +882,15 @@ function searchPanel(divElement, options) {
                         $("#" + panel.divElement.id + "-groupConcept").click(function(){
                             panel.search(t, parseInt(skipTo), returnLimit, true);
                         });
+                        $("#" + panel.divElement.id + "-remove-all-filters").unbind();
+                        $("#" + panel.divElement.id + "-remove-all-filters").click(function (event) {
+                            panel.options.semTagFilter = "none";
+                            panel.options.langFilter = "none";
+                            panel.options.moduleFilter = "none";
+                            panel.options.refsetFilter = "none";
+                            panel.search(t, 0, returnLimit, true);
+                        });
+                        $("#" + panel.divElement.id + "-more").unbind();
                         $("#" + panel.divElement.id + "-more").click(function (event) {
                             panel.search(t, (parseInt(skipTo) + parseInt(returnLimit)), returnLimit, true);
                         });

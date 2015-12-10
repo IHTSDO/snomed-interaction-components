@@ -4707,7 +4707,7 @@ function program51(depth0,data) {
 this["JST"]["views/searchPlugin/body/default.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this, functionType="function";
+  var buffer = "", stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function", self=this;
 
 function program1(depth0,data) {
   
@@ -4731,10 +4731,14 @@ function program2(depth0,data) {
   }
 function program3(depth0,data) {
   
-  var buffer = "", helper, options;
-  buffer += "\n            <tr><td class='text-muted'><span data-i18n-id=\"i18n_remove_filters\" class=\"i18n\">"
+  var buffer = "", stack1, helper, options;
+  buffer += "\n            <tr><td class='text-center'><span data-i18n-id=\"i18n_remove_filters\" class=\"i18n\">\n            "
     + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_remove_filters", "There are filters active, remove them to search again with a broader criteria.", options) : helperMissing.call(depth0, "i18n", "i18n_remove_filters", "There are filters active, remove them to search again with a broader criteria.", options)))
-    + "</span></td></tr>\n        ";
+    + "</span><br>\n            <button class=\"btn btn-danger btn-sm\" id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-remove-all-filters\"><span data-i18n-id=\"i18n_remove_filters_button\" class=\"i18n\">Remove all filters</span></button>\n        </td></tr>        ";
   return buffer;
   }
 
@@ -4925,10 +4929,14 @@ function program21(depth0,data) {
   }
 function program22(depth0,data) {
   
-  var buffer = "", helper, options;
-  buffer += "\n        <tr><td class='text-muted'><span data-i18n-id=\"i18n_remove_filters\" class=\"i18n\">"
+  var buffer = "", stack1, helper, options;
+  buffer += "\n        <tr><td class='text-center'><span data-i18n-id=\"i18n_remove_filters\" class=\"i18n\">\n            "
     + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_remove_filters", "There are filters active, remove them to search again with a broader criteria.", options) : helperMissing.call(depth0, "i18n", "i18n_remove_filters", "There are filters active, remove them to search again with a broader criteria.", options)))
-    + "</span></td></tr>\n    ";
+    + "</span><br>\n            <button class=\"btn btn-danger btn-sm\" id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-remove-all-filters\"><span data-i18n-id=\"i18n_remove_filters_button\" class=\"i18n\">Remove all filters</span></button>\n        </td></tr>\n    ";
   return buffer;
   }
 
