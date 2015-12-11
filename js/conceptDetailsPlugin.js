@@ -867,13 +867,33 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
+            Handlebars.registerHelper('if_undefined', function (a, opts) {
+                if (opts != "undefined") {
+                    if (typeof a == "undefined")
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
+            var additionalRels;
+            if (firstMatch.additionalRelationships) {
+                $.each(firstMatch.additionalRelationships, function (i, looplr){
+                    if (looplr.active) {
+                        if (typeof additionalRels == "undefined")
+                            additionalRels = [];
+                        additionalRels.push(looplr);
+                    }
+                });
+            }
+            console.log(additionalRels);
             var context = {
                 options: panel.options,
                 firstMatch: firstMatch,
                 inferredParents: panel.inferredParents,
                 inferredRoles: panel.inferredRoles,
                 statedParents: panel.statedParents,
-                statedRoles: panel.statedRoles
+                statedRoles: panel.statedRoles,
+                additionalRels: additionalRels
             };
             $("#" + panel.relsPId).html(JST["views/conceptDetailsPlugin/tabs/details/rels-panel.hbs"](context));
 
@@ -1741,17 +1761,17 @@ function conceptDetails(divElement, conceptId, options) {
         }).fail(function(){
             $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
         });
-    }
+    };
 
     this.stripDiagrammingMarkup = function(htmlString) {
         htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-primitive-concept-compact"), 'g'), "");
         htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-defined-concept-compact"), 'g'), "");
         htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-attribute-compact"), 'g'), "");
         return htmlString;
-    }
+    };
     this.escapeRegExp = function(str) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-    }
+    };
 
 //    this.setSubscription = function(subscriptionPanel) {
 //        panel.subscription = subscriptionPanel;
