@@ -885,7 +885,6 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
             }
-            console.log(additionalRels);
             var context = {
                 options: panel.options,
                 firstMatch: firstMatch,
