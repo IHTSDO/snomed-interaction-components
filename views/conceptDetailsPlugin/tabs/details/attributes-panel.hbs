@@ -27,7 +27,10 @@
             {{else}}
                 , <span class='i18n' data-i18n-id='i18n_inactive'>Inactive</span>
             {{/if_eq}}
-            . Descendants count, Stated: {{firstMatch.statedDescendants}} concepts, Inferred: {{firstMatch.inferredDescendants}} concepts.
+            {{#if_undefined firstMatch.statedDescendantsString}}
+            {{else}}
+                . Descendants count, Stated: {{firstMatch.statedDescendantsString}} concepts, Inferred: {{firstMatch.inferredDescendantsString}} concepts.
+            {{/if_undefined}}
         </td>
         <td>
             <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="

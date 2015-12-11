@@ -343,6 +343,12 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
+            if (firstMatch.statedDescendants) {
+                firstMatch.statedDescendantsString = firstMatch.statedDescendants.toLocaleString();
+            }
+            if (firstMatch.inferredDescendants) {
+                firstMatch.inferredDescendantsString = firstMatch.inferredDescendants.toLocaleString();
+            }
             var context = {
                 options: panel.options,
                 firstMatch: firstMatch,
@@ -862,14 +868,6 @@ function conceptDetails(divElement, conceptId, options) {
             Handlebars.registerHelper('if_eq', function (a, b, opts) {
                 if (opts != "undefined") {
                     if (a == b)
-                        return opts.fn(this);
-                    else
-                        return opts.inverse(this);
-                }
-            });
-            Handlebars.registerHelper('if_undefined', function (a, opts) {
-                if (opts != "undefined") {
-                    if (typeof a == "undefined")
                         return opts.fn(this);
                     else
                         return opts.inverse(this);

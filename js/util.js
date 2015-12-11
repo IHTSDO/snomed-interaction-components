@@ -12,6 +12,15 @@ Handlebars.registerHelper('i18n', function (i18n, defaultV){
     }
 });
 
+Handlebars.registerHelper('if_undefined', function (a, opts) {
+    if (opts != "undefined") {
+        if (typeof a == "undefined")
+            return opts.fn(this);
+        else
+            return opts.inverse(this);
+    }
+});
+
 $(document).on('dragend', function(){
     removeHighlight();
 });
