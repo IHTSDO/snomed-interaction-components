@@ -2006,26 +2006,26 @@ function conceptDetails(divElement, conceptId, options) {
         //panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
 
         panel.options.displayChildren = $("#" + panel.divElement.id + "-displayChildren").is(':checked');
-        $.each(panel.options.possibleSubscribers, function (i, field){
-            field.subscribed = $("#" + panel.divElement.id + "-subscribeTo-" + field.id).is(':checked');
-            field.subscriptor = $("#" + panel.divElement.id + "-subscriptor-" + field.id).is(':checked');
-            var panelToSubscribe = {};
-            $.each(componentsRegistry, function(i, panelS){
-                if (panelS.divElement.id == field.id){
-                    panelToSubscribe = panelS;
-                }
-            });
-            if (field.subscribed){
-                panel.subscribe(panelToSubscribe);
-            }else{
-                panel.unsubscribe(panelToSubscribe);
-            }
-            if (field.subscriptor){
-                panelToSubscribe.subscribe(panel);
-            }else{
-                panelToSubscribe.unsubscribe(panel);
-            }
-        });
+        //$.each(panel.options.possibleSubscribers, function (i, field){
+        //    field.subscribed = $("#" + panel.divElement.id + "-subscribeTo-" + field.id).is(':checked');
+        //    field.subscriptor = $("#" + panel.divElement.id + "-subscriptor-" + field.id).is(':checked');
+        //    var panelToSubscribe = {};
+        //    $.each(componentsRegistry, function(i, panelS){
+        //        if (panelS.divElement.id == field.id){
+        //            panelToSubscribe = panelS;
+        //        }
+        //    });
+        //    if (field.subscribed){
+        //        panel.subscribe(panelToSubscribe);
+        //    }else{
+        //        panel.unsubscribe(panelToSubscribe);
+        //    }
+        //    if (field.subscriptor){
+        //        panelToSubscribe.subscribe(panel);
+        //    }else{
+        //        panelToSubscribe.unsubscribe(panel);
+        //    }
+        //});
         $.each(componentsRegistry, function (i, field){
             field.loadMarkers();
         });
