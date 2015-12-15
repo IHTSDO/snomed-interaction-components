@@ -1,11 +1,16 @@
-<li data-term="{{term}}" data-modifier="{{modifier}}" data-criteria="{{criteria}}" data-concept-id="{{conceptId}}" class="list-group-item clearfix query-condition">
+<li data-modifier="{{modifier}}" class="list-group-item clearfix query-condition">
     <span class="text-muted line-number" style="font-size: 200%;"></span>&nbsp;&nbsp;
     <span style="position: relative; top: -5px;">
-        {{modifier}}, {{criteria}}&nbsp;
-        <span style="color: forestgreen;">{{conceptId}}</span>&nbsp;
-        |
-        <span style="color: firebrick;">{{term}}</span>
-        |
+        {{modifier}},
+        {{#each criterias}}
+            <span class="constraint" data-term="{{term}}" data-criteria="{{criteria}}" data-concept-id="{{conceptId}}">
+                {{criteria}}&nbsp;
+                <span style="color: forestgreen;">{{conceptId}}</span>&nbsp;
+                |
+                <span style="color: firebrick;">{{term}}</span>
+                |
+            </span>
+        {{/each}}
     </span>
     <button class='pull-right btn btn-link removeLi' style="position: relative; top: 3px;">
         <i class='glyphicon glyphicon-remove'></i>

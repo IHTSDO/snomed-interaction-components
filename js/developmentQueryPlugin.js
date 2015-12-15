@@ -102,6 +102,24 @@ function queryComputerPanel(divElement, options) {
         };
         $(divElement).html(JST["views/developmentQueryPlugin/main.hbs"](context));
 
+        var bindAddCriteriaFunction = function(){
+            $(divElement).find(".addCriteria").unbind();
+            $(divElement).find(".addCriteria").disableTextSelect();
+            $(divElement).find(".addCriteria").click(function(e){
+                $(e.target).closest("div").hide();
+                var criteria = $('#' + panel.divElement.id + '-selectedCriteria').html();
+                $(e.target).closest(".form-inline").append(JST["views/developmentQueryPlugin/andCriteria.hbs"]({criteria: criteria}));
+                $(divElement).find(".addedCriteria").find("a[data-role='criteria-selector']").unbind();
+                $(divElement).find(".addedCriteria").find("a[data-role='criteria-selector']").click(function (e) {
+                    $(e.target).closest(".dropdown").find("span").first().html($(e.target).html());
+                });
+                bindAddCriteriaFunction();
+            });
+        };
+        bindAddCriteriaFunction();
+
+        $('#' + panel.divElement.id + '-addCriteriaAnd').unbind();
+
         $('#' + panel.divElement.id + '-clearButton').unbind();
         $('#' + panel.divElement.id + '-clearButton').disableTextSelect();
         $('#' + panel.divElement.id + '-clearButton').click(function(){
@@ -344,6 +362,7 @@ function queryComputerPanel(divElement, options) {
         $("#" + panel.divElement.id).find("a[data-role='criteria-selector']").unbind();
         $("#" + panel.divElement.id).find("a[data-role='criteria-selector']").click(function (e) {
             $('#' + panel.divElement.id + '-selectedCriteria').html($(e.target).html());
+            //$(e.target).closest(".dropdown").find("span").first().html($(e.target).html());
             var selectedCriteria = $(e.target).html();
             if (selectedCriteria == "hasDescription") {
                 $('#' + panel.divElement.id + '-selectedConcept').hide();
@@ -459,39 +478,57 @@ function queryComputerPanel(divElement, options) {
                 } else {
                     $('#' + panel.divElement.id + '-addmsg').html("");
                     $('#' + panel.divElement.id + '-conceptField').removeClass("has-error");
-                    var context2 = {
-                        modifier: modifier,
-                        criteria: criteria,
-                        conceptId: conceptId,
-                        term: term
-                    };
-                    // Add Excludes always at the end, and includes before exclude
-                    var foundExclude = false;
-                    $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function (index) {
-                        var modifier = $(this).data('modifier');
-                        if (modifier == "Exclude") {
-                            $(this).before(JST["views/developmentQueryPlugin/criteria.hbs"](context2));
-                            foundExclude = true;
-                            return false;
-                        }
-                    });
-                    if (!foundExclude) {
-                        $('#' + panel.divElement.id + '-listGroup').append(JST["views/developmentQueryPlugin/criteria.hbs"](context2));
+                    var criterias = [{criteria: criteria, conceptId: conceptId, term: term}];
+                    if ($(divElement).find(".addedCriteria").length){
+                        $(divElement).find(".addedCriteria").each(function(i){
+                            var addedConceptId = $(this).find(".andCriteriaConcept").first().attr("data-conceptId");
+                            var addedTerm = $(this).find(".andCriteriaConcept").first().val();
+                            if (addedConceptId && addedTerm){
+                                criterias.push({
+                                    criteria: $(this).find(".addSelectCriteria").first().html(),
+                                    conceptId: addedConceptId,
+                                    term: addedTerm
+                                });
+                            }else{
+                                $('#' + panel.divElement.id + '-conceptField').addClass("has-error");
+                                $('#' + panel.divElement.id + '-addmsg').html("Drop a concept...");
+                            }
+                        });
                     }
-                    panel.renumLines();
-                    $(divElement).find(".removeLi").unbind();
-                    $(divElement).find(".removeLi").disableTextSelect();
-                    $(divElement).find(".removeLi").click(function(e){
-                        $(e.target).closest("li").remove();
+                    if ($('#' + panel.divElement.id + '-addmsg').html() != "Drop a concept..."){
+                        var context2 = {
+                            modifier: modifier,
+                            criterias: criterias
+                        };
+                        // Add Excludes always at the end, and includes before exclude
+                        var foundExclude = false;
+                        $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function (index) {
+                            var modifier = $(this).data('modifier');
+                            if (modifier == "Exclude") {
+                                $(this).before(JST["views/developmentQueryPlugin/criteria.hbs"](context2));
+                                foundExclude = true;
+                                return false;
+                            }
+                        });
+                        if (!foundExclude) {
+                            $('#' + panel.divElement.id + '-listGroup').append(JST["views/developmentQueryPlugin/criteria.hbs"](context2));
+                        }
                         panel.renumLines();
-                    });
-                    $('#' + panel.divElement.id + '-selectedConcept').val("");
-                    $('#' + panel.divElement.id + '-selectedConcept').attr("data-conceptId", "");
-                    $('#' + panel.divElement.id + '-selectedType').val("");
-                    $('#' + panel.divElement.id + '-selectedType').attr("data-conceptId", "");
-                    $('#' + panel.divElement.id + '-selectedTarget').val("");
-                    $('#' + panel.divElement.id + '-selectedTarget').attr("data-conceptId", "");
-                    $('#' + panel.divElement.id + '-searchTerm').val("");
+
+                        $(divElement).find(".removeLi").unbind();
+                        $(divElement).find(".removeLi").disableTextSelect();
+                        $(divElement).find(".removeLi").click(function(e){
+                            $(e.target).closest("li").remove();
+                            panel.renumLines();
+                        });
+                        $('#' + panel.divElement.id + '-selectedConcept').val("");
+                        $('#' + panel.divElement.id + '-selectedConcept').attr("data-conceptId", "");
+                        $('#' + panel.divElement.id + '-selectedType').val("");
+                        $('#' + panel.divElement.id + '-selectedType').attr("data-conceptId", "");
+                        $('#' + panel.divElement.id + '-selectedTarget').val("");
+                        $('#' + panel.divElement.id + '-selectedTarget').attr("data-conceptId", "");
+                        $('#' + panel.divElement.id + '-searchTerm').val("");
+                    }
                 }
             }
         });
