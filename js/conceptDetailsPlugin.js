@@ -1824,13 +1824,13 @@ function conceptDetails(divElement, conceptId, options) {
     // Subsription methods
     this.subscribe = function(panelToSubscribe) {
         var panelId = panelToSubscribe.divElement.id;
-//        console.log('Subscribing to id: ' + panelId);
         var alreadySubscribed = false;
         $.each(panel.subscriptionsColor, function(i, field){
             if (field == panelToSubscribe.markerColor){
                 alreadySubscribed = true;
             }
         });
+        console.log('Subscribing to id: ' + panelId, !alreadySubscribed);
         if (!alreadySubscribed) {
             var subscription = channel.subscribe(panelId, function(data, envelope) {
 //                console.log("listening in " + panel.divElement.id);
@@ -1906,33 +1906,33 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.setupOptionsPanel = function() {
-        var possibleSubscribers = [];
-        $.each(componentsRegistry, function(i, field){
-            if (field.divElement.id != panel.divElement.id){
-                var object = {};
-                object.subscriptions = field.subscriptions;
-                object.id = field.divElement.id;
-                possibleSubscribers.push(object);
-            }
-        });
-        var aux = false;
-        $.each(possibleSubscribers, function(i, field){
-            aux = false;
-            $.each(panel.subscriptions, function(j, subscription){
-                if (field.id == subscription.topic){
-                    aux = true;
-                }
-            });
-            field.subscribed = aux;
-            aux = false;
-            $.each(field.subscriptions, function(i, subscription){
-                if (subscription.topic == panel.divElement.id){
-                    aux = true;
-                }
-            });
-            field.subscriptor = aux;
-        });
-        panel.options.possibleSubscribers = possibleSubscribers;
+        //var possibleSubscribers = [];
+        //$.each(componentsRegistry, function(i, field){
+        //    if (field.divElement.id != panel.divElement.id){
+        //        var object = {};
+        //        object.subscriptions = field.subscriptions;
+        //        object.id = field.divElement.id;
+        //        possibleSubscribers.push(object);
+        //    }
+        //});
+        //var aux = false;
+        //$.each(possibleSubscribers, function(i, field){
+        //    aux = false;
+        //    $.each(panel.subscriptions, function(j, subscription){
+        //        if (field.id == subscription.topic){
+        //            aux = true;
+        //        }
+        //    });
+        //    field.subscribed = aux;
+        //    aux = false;
+        //    $.each(field.subscriptions, function(i, subscription){
+        //        if (subscription.topic == panel.divElement.id){
+        //            aux = true;
+        //        }
+        //    });
+        //    field.subscriptor = aux;
+        //});
+        //panel.options.possibleSubscribers = possibleSubscribers;
         if (!panel.options.manifest) {
             $("#" + panel.divElement.id + "-modal-body").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
             xhr = $.getJSON(options.serverUrl.replace("snomed", "") + "server/releases", function (result) {

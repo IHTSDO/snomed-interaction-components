@@ -45,6 +45,26 @@ function allowDrop(ev) {
     $(aux).addClass("drop-highlighted");
 }
 
+function dropField(ev){
+    var text = ev.dataTransfer.getData("Text");
+    if (text != "javascript:void(0);"){
+        var i = 0;
+        while (text.charAt(i) != "|" && i < text.length){
+            i++;
+        }
+        var conceptId = ev.dataTransfer.getData("concept-id");
+        if (typeof conceptId == "undefined"){
+            conceptId = text.substr(0, i);
+        }
+        var term = ev.dataTransfer.getData("term");
+        if (typeof term == "undefined"){
+            term = text.substr(i);
+        }
+        $(ev.target).val(term);
+        $(ev.target).attr("data-conceptId", conceptId);
+    }
+}
+
 function iconToDrag(text){
     var CVS = document.createElement('canvas'),
         ctx = CVS.getContext('2d');

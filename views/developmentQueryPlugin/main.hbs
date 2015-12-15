@@ -1,0 +1,192 @@
+<div style='height:100%;margin: 5px; overflow:auto;' class='panel panel-default' id='{{divElementId}}-mainPanel'>
+    <div class='panel-heading' id='{{divElementId}}-panelHeading'>
+        <div class='row'>
+            <div class='col-md-6' id='{{divElementId}}-panelTitle'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>{{{i18n "i18n_dev_queries" "Development Queries"}}}</strong></div>
+            <div class='col-md-6 text-right'>
+                <!--<a class="btn btn-link" href="help/topics/creating-queries.html" target="_blank" title="Help" role="button"><i class='glyphicon glyphicon-question-sign'></i></a>-->
+            </div>
+        </div>
+    </div>
+    <div class='panel-body' style='height:100%' id='{{divElementId}}-panelBody'>
+        <!--<p style="margin: 10px;">Create a query, conditions are evaluated in order:</p>-->
+        <div class="row container-fluid" style="margin: 10px;">
+            <form class="form-inline" role="form">
+                <!--<span>New condition: </span>-->
+                <!--<button type="button" class="btn btn-default pull-right"  id='{{divElementId}}-selectButton' style="margin: 10px;">{{{i18n "i18n_load_query" "Load query"}}}</button>-->
+                <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
+                <div class="form-group">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="{{divElementId}}-modifierButton" data-toggle="dropdown" aria-expanded="true">
+                            <span id="{{divElementId}}-selectedModifier">Include</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="{{divElementId}}-modifierButton">
+                            <li role="presentation"><a role="menuitem" data-role="modifier-selector" tabindex="-1" href="javascript:void(0);">Include</a></li>
+                            <li role="presentation"><a role="menuitem" data-role="modifier-selector" tabindex="-1" href="javascript:void(0);">Exclude</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                            <span id="{{divElementId}}-selectedCriteria">descendantOf</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">descendantOf</a></li>
+                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li>
+                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOf</a></li>
+                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOrSelfOf</a></li>
+                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">self</a></li>
+                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">childrenOf</a></li>-->
+                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">parentsOf</a></li>-->
+                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li>
+                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">hasDescription</a></li>-->
+                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">hasRelationship</a></li>-->
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group" id="{{divElementId}}-conceptField">
+                    <input type="text" data-droppable="true" ondrop="dropField(event)" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class="form-control" id="{{divElementId}}-selectedConcept" placeholder="Drag a concept here" readonly>
+                    <input type="text" data-droppable="true" ondrop="dropField(event)" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class="form-control" id="{{divElementId}}-selectedType" placeholder="Drag a type here" readonly>
+                    <input type="text" data-droppable="true" ondrop="dropField(event)" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class="form-control" id="{{divElementId}}-selectedTarget" placeholder="Drag a destination here" readonly>
+                    <input type="text" class="form-control" id="{{divElementId}}-searchTerm" placeholder="Type search string">
+                    <span class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="{{divElementId}}-formdropdown" data-toggle="dropdown" aria-expanded="true">
+                            <span id="{{divElementId}}-selectedForm">stated</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="{{divElementId}}-formdropdown">
+                            <li role="presentation"><a role="menuitem" data-role="form-selector" tabindex="-1" href="javascript:void(0);">stated</a></li>
+                            <li role="presentation"><a role="menuitem" data-role="form-selector" tabindex="-1" href="javascript:void(0);">inferred</a></li>
+                        </ul>
+                    </span>
+                </div>
+            </form>
+            <form class="form-inline" role="form">
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary"  id='{{divElementId}}-addCriteriaButton' style="margin: 10px;">{{{i18n "i18n_add_condition" "Add condition"}}}</button>
+                    <!--<button type="button" class="btn btn-primary"  id='{{divElementId}}-cloudResults' style="margin: 10px; position: relative;" title="Open Cloud Queries Processor" data-toggle="modal" data-target="#{{divElementId}}-cloudModal"><i class='glyphicon glyphicon-cloud' style="position: relative; top: 3px;"></i> <span id="{{divElementId}}-cloudCount"></span></button>-->
+
+                    <span id="{{divElementId}}-addmsg" for="{{divElementId}}-addCriteriaButton" class="small text-danger"></span>
+                </div>
+            </form>
+            <ul class="list-group" id="{{divElementId}}-listGroup">
+            </ul>
+            <div class="btn btn-success" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Run query"}}}</div>
+            <!--<div class="btn-group">-->
+                <!--<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">-->
+                    <!--{{{i18n "i18n_run_query" "Run query"}}} <span class="caret"></span>-->
+                <!--</button>-->
+                <!--<ul class="dropdown-menu" role="menu">-->
+                    <!--<li><a href="javascript:void(0);" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_real_time_inferred" "Real-time, Inferred View (for simple queries only)"}}}</a></li>-->
+                    <!--<li><a href="javascript:void(0);" id='{{divElementId}}-computeStatedButton'>{{{i18n "i18n_real_time_stated" "Real-time, Stated View (for simple queries only)"}}}</a></li>-->
+                    <!--&lt;!&ndash;<li><a href="javascript:void(0);" id='{{divElementId}}-sendToBatchComputeStated'>Cloud, Stated View</a></li>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<li><a href="javascript:void(0);" id='{{divElementId}}-sendToBatchComputeInferred'>Cloud, Inferred View</a></li>&ndash;&gt;-->
+                <!--</ul>-->
+            <!--</div>-->
+            <!--<button type="button" class="btn btn-primary pull-right ladda-button"  id='{{divElementId}}-saveChanges' data-style="zoom-in" style="margin: 10px;">{{{i18n "i18n_save_query" "Save query"}}}</button>-->
+            <button type="button" class="btn btn-primary pull-right"  id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
+            <!--<span style="padding-top: 15px;">&nbsp;&nbsp;<b>Query mode:</b>&nbsp;&nbsp;</span>-->
+            <!--<span style="padding-top: 15px;"><input id="{{divElementId}}-switch-query-mode" type="checkbox" checked data-on-text="Ordered" data-off-text="Intersection" data-size="mini"></span>-->
+            <br>
+            <br>
+            {{{i18n "i18n_results" "Results"}}}:  <span id="{{divElementId}}-resultInfo" class="text-muted small"></span>
+        </div>
+        <div class="row container-fluid" id="{{divElementId}}-output" style="margin: 10px;">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Concept</th>
+                    <th>Id</th>
+                </tr>
+                </thead>
+                <tbody id="{{divElementId}}-outputBody"></tbody>
+                <tfoot>
+                <tr><td colspan="2" id="{{divElementId}}-footer" class="text-center text-muted small"></td></tr>
+                </tfoot>
+            </table>
+            <table id="{{divElementId}}-output2" style="display: none">
+                <thead>
+                <tr>
+                    <th>Concept</th>
+                    <th>Id</th>
+                </tr>
+                </thead>
+                <tbody id="{{divElementId}}-outputBody2">
+                </tbody>
+            </table>
+
+            <a class="btn btn-default" download="results.xls" id="{{divElementId}}-exportXls" href="javascript:void(0);">{{{i18n "i18n_export_results_in_xls" "Export results in XLS"}}} <img style="height: 23px;" src="img/excel.png"></a>
+            <!--<div class="btn-group">-->
+                <!--<button id="{{divElementId}}-exportResults" type="button" class="btn btn-default dropdown-toggle disabled" data-toggle="dropdown">-->
+                    <!--Export results<b class="caret"></b>-->
+                <!--</button>-->
+                <!--<a id="{{divElementId}}-dlink"  style="display:none;"></a>-->
+                <!--<ul class="dropdown-menu" role="menu">-->
+                    <!--<li><a download="results.xls" id="{{divElementId}}-exportXls" href="javascript:void(0);">Export results in XLS <img style="height: 23px;" src="img/excel.png"></a></li>-->
+                    <!--<li><a id="{{divElementId}}-exportBriefcase" href="javascript:void(0);">Export results to briefcase</a></li>-->
+                    <!--<li><a id="{{divElementId}}-exportBriefcaseClean" href="javascript:void(0);">Empty briefcase and export results to it</a></li>-->
+                <!--</ul>-->
+            <!--</div>-->
+        </div>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    </div>
+</div>
+<!-- Modals -->
+<div class="modal fade" id="{{divElementId}}-cloudModal" tabindex="-1" role="dialog" aria-labelledby="{{divElementId}}-myCloudModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="{{divElementId}}-myCloudModalLabel">Cloud Queries Processor</h4>
+            </div>
+            <div class="modal-body" id="{{divElementId}}-cloud-panel" style="max-height: 450px; overflow: auto;">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="{{divElementId}}-QueryManagerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-height: 450px;">
+        <div class="modal-content">
+            <div class="modal-body" id="{{divElementId}}-QueryManager" style="max-height: 450px; overflow: auto;"></div>
+            <div class="modal-footer" style="padding: 10px;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="{{divElementId}}-constraintGrammarModal" tabindex="-1" role="dialog" aria-labelledby="constraintGrammarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-height: 450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="{{divElementId}}-constraintGrammarModalLabel">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</h4>
+            </div>
+            <div class="modal-body" style="max-height: 450px; overflow: auto;">
+                <div class="row">
+                    <div class="expression-code col-md-11" id="{{divElementId}}-constraintGrammar">
+
+                    </div>
+                    <div class="col-md-1">
+                        <i class="glyphicon glyphicon-copy pull-right" style="font-size: 20px;cursor: pointer;" id="{{divElementId}}-copyConstraint"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group pull-left" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default" id="home-{{divElementId}}-full-syntax-button">Full</button>
+                    <button type="button" class="btn btn-default" id="home-{{divElementId}}-brief-syntax-button">Brief</button>
+                </div>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
