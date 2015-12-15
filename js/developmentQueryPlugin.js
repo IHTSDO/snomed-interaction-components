@@ -713,6 +713,9 @@ function queryComputerPanel(divElement, options) {
                 $.each(conditions, function (index2, condition) {
                     if (index2 > 0) grammar += " AND ";
                     grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                    if (htmlFormat && index2 < conditions.length -1) {
+                        grammar += "<br>";
+                    }
                 });
                 if (conditions.length > 1) grammar += ") ";
                 if (htmlFormat && index < includes.length -1) {
@@ -733,11 +736,18 @@ function queryComputerPanel(divElement, options) {
                     grammar += "<br>";
                 }
             }
-
             if (excludes.length > 1) grammar += "(";
-            $.each(excludes, function (index, condition) {
+            $.each(excludes, function (index, conditions) {
                 if (index > 0) grammar += " OR ";
-                grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                if (conditions.length > 1) grammar += " (";
+                $.each(conditions, function (index2, condition) {
+                    if (index2 > 0) grammar += " AND ";
+                    grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                    if (htmlFormat && index2 < conditions.length -1) {
+                        grammar += "<br>";
+                    }
+                });
+                if (conditions.length > 1) grammar += ") ";
                 if (htmlFormat && index < excludes.length -1) {
                     grammar += "<br>";
                 }
