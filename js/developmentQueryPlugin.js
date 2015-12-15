@@ -728,21 +728,30 @@ function queryComputerPanel(divElement, options) {
             var includes = [];
             var excludes = [];
             $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function (index) {
-                var condition = {
-                    "criteria": $(this).data('criteria'),
-                    "conceptId": $(this).data('concept-id'),
-                    "term": $(this).data('term')
-                };
+                var conditions = [];
+                $(this).find(".constraint").each(function (index2) {
+                    var condition = {
+                        "criteria": $(this).data('criteria'),
+                        "conceptId": $(this).data('concept-id'),
+                        "term": $(this).data('term')
+                    };
+                    conditions.push(condition);
+                });
                 if ($(this).data('modifier') == "Exclude") {
-                    excludes.push(condition);
+                    excludes.push(conditions);
                 } else {
-                    includes.push(condition);
+                    includes.push(conditions);
                 }
             });
             //if (includes.length > 1) grammar += "(";
-            $.each(includes, function (index, condition) {
+            $.each(includes, function (index, conditions) {
                 if (index > 0) grammar += " OR ";
-                grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                if (conditions.length > 1) grammar += " (";
+                $.each(conditions, function (index2, condition) {
+                    if (index2 > 0) grammar += " AND ";
+                    grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                });
+                if (conditions.length > 1) grammar += ") ";
                 if (htmlFormat && index < includes.length -1) {
                     grammar += "<br>";
                 }
@@ -775,9 +784,9 @@ function queryComputerPanel(divElement, options) {
         grammar = grammar.trim();
         //console.log(grammar.charAt(0));
         //console.log(grammar.charAt(grammar.length-1));
-        //if (grammar.charAt(0) == "(" && grammar.charAt(grammar.length-1) == ")") {
-        //    grammar = grammar.substr(1,grammar.length-2);
-        //}
+        if (grammar.charAt(0) == "(" && grammar.charAt(grammar.length-1) == ")") {
+            grammar = grammar.substr(1,grammar.length-2);
+        }
         return grammar;
     };
 
@@ -876,7 +885,7 @@ function queryComputerPanel(divElement, options) {
 
     this.execute = function (form, expression, clean){
         //$('#' + panel.divElement.id + '-footer').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-        $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> </div> </div>');
+        $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div> </div>');
         $('#' + panel.divElement.id + '-resultInfo').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         if (clean){
             $('#' + panel.divElement.id + '-outputBody').html("");
