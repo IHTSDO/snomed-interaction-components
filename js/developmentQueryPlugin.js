@@ -691,21 +691,30 @@ function queryComputerPanel(divElement, options) {
             var includes = [];
             var excludes = [];
             $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function (index) {
-                var condition = {
-                    "criteria": $(this).data('criteria'),
-                    "conceptId": $(this).data('concept-id'),
-                    "term": $(this).data('term')
-                };
+                var conditions = [];
+                $(this).find(".constraint").each(function (index2) {
+                    var condition = {
+                        "criteria": $(this).data('criteria'),
+                        "conceptId": $(this).data('concept-id'),
+                        "term": $(this).data('term')
+                    };
+                    conditions.push(condition);
+                });
                 if ($(this).data('modifier') == "Exclude") {
-                    excludes.push(condition);
+                    excludes.push(conditions);
                 } else {
-                    includes.push(condition);
+                    includes.push(conditions);
                 }
             });
             //if (includes.length > 1) grammar += "(";
-            $.each(includes, function (index, condition) {
+            $.each(includes, function (index, conditions) {
                 if (index > 0) grammar += " OR ";
-                grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                if (conditions.length > 1) grammar += " (";
+                $.each(conditions, function (index2, condition) {
+                    if (index2 > 0) grammar += " AND ";
+                    grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                });
+                if (conditions.length > 1) grammar += ") ";
                 if (htmlFormat && index < includes.length -1) {
                     grammar += "<br>";
                 }
@@ -738,9 +747,9 @@ function queryComputerPanel(divElement, options) {
         grammar = grammar.trim();
         //console.log(grammar.charAt(0));
         //console.log(grammar.charAt(grammar.length-1));
-        //if (grammar.charAt(0) == "(" && grammar.charAt(grammar.length-1) == ")") {
-        //    grammar = grammar.substr(1,grammar.length-2);
-        //}
+        if (grammar.charAt(0) == "(" && grammar.charAt(grammar.length-1) == ")") {
+            grammar = grammar.substr(1,grammar.length-2);
+        }
         return grammar;
     };
 
