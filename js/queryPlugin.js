@@ -593,6 +593,9 @@ function queryComputerPanel(divElement, options) {
                 $.each(conditions, function (index2, condition) {
                     if (index2 > 0) grammar += " AND ";
                     grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                    if (htmlFormat && index2 < conditions.length -1) {
+                        grammar += "<br>";
+                    }
                 });
                 if (conditions.length > 1) grammar += ") ";
                 if (htmlFormat && index < includes.length -1) {
@@ -613,11 +616,18 @@ function queryComputerPanel(divElement, options) {
                     grammar += "<br>";
                 }
             }
-
             if (excludes.length > 1) grammar += "(";
-            $.each(excludes, function (index, condition) {
+            $.each(excludes, function (index, conditions) {
                 if (index > 0) grammar += " OR ";
-                grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                if (conditions.length > 1) grammar += " (";
+                $.each(conditions, function (index2, condition) {
+                    if (index2 > 0) grammar += " AND ";
+                    grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                    if (htmlFormat && index2 < conditions.length -1) {
+                        grammar += "<br>";
+                    }
+                });
+                if (conditions.length > 1) grammar += ") ";
                 if (htmlFormat && index < excludes.length -1) {
                     grammar += "<br>";
                 }
@@ -627,9 +637,9 @@ function queryComputerPanel(divElement, options) {
         grammar = grammar.trim();
         //console.log(grammar.charAt(0));
         //console.log(grammar.charAt(grammar.length-1));
-        if (grammar.charAt(0) == "(" && grammar.charAt(grammar.length-1) == ")") {
-            grammar = grammar.substr(1,grammar.length-2);
-        }
+        //if (grammar.charAt(0) == "(" && grammar.charAt(grammar.length-1) == ")") {
+        //    grammar = grammar.substr(1,grammar.length-2);
+        //}
         return grammar;
     };
 
@@ -799,8 +809,13 @@ function queryComputerPanel(divElement, options) {
 //                    }
 //                    $("#" + panel.divElement.id + "-results").html(resultsHtml);
                 } else {
-                    $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
-                    $("#" + panel.divElement.id + "-results").html("Error...");
+                    if (expression.charAt(0) == "(" && expression.charAt(expression.length-1) == ")") {
+                        expression = expression.substr(1,expression.length-2);
+                        panel.execute(form, expression, clean);
+                    } else {
+                        $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
+                        $("#" + panel.divElement.id + "-results").html("Error...");
+                    }
                 }
             }
         }).done(function(result){
@@ -816,10 +831,13 @@ function queryComputerPanel(divElement, options) {
             } else if (textStatus == "abort"){
 
             } else {
-//                $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR 500</span>');
-//                $("#" + panel.divElement.id + "-results").html("Error...");
-                $('#' + panel.divElement.id + '-resultInfo').html("Error.");
-                $('#' + panel.divElement.id + '-footer').html("Error");
+                if (expression.charAt(0) == "(" && expression.charAt(expression.length-1) == ")") {
+                    expression = expression.substr(1,expression.length-2);
+                    panel.execute(form, expression, clean);
+                } else {
+                    $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
+                    $("#" + panel.divElement.id + "-results").html("Error...");
+                }
             }
         });
     }
