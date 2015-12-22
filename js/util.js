@@ -53,7 +53,7 @@ function dropField(ev){
             i++;
         }
         var conceptId = ev.dataTransfer.getData("concept-id");
-        if (typeof conceptId == "undefined"){
+        if (typeof conceptId == "undefined" && i < text.length){
             conceptId = text.substr(0, i);
         }
         var term = ev.dataTransfer.getData("term");
@@ -110,11 +110,11 @@ function dropS(ev){
     var text = ev.dataTransfer.getData("Text");
     if (text != "javascript:void(0);"){
         var i = 0;
-        while (text.charAt(i) != "|"){
+        while (text.charAt(i) != "|" && i < text.length){
             i++;
         }
         var conceptId = ev.dataTransfer.getData("concept-id");
-        if (typeof conceptId == "undefined"){
+        if (typeof conceptId == "undefined" && i < text.length){
             conceptId = text.substr(0, i);
         }
         var term = ev.dataTransfer.getData("term");
@@ -137,18 +137,17 @@ function dropC(ev, id) {
     var text = ev.dataTransfer.getData("Text");
     if (text != "javascript:void(0);"){
         var i = 0;
-        while (text.charAt(i) != "|"){
+        while (text.charAt(i) != "|" && i < text.length){
             i++;
         }
         var conceptId = ev.dataTransfer.getData("concept-id");
-        if (typeof conceptId == "undefined"){
+        if (typeof conceptId == "undefined" && i < text.length){
             conceptId = text.substr(0, i);
         }
         var term = ev.dataTransfer.getData("term");
         if (typeof term == "undefined"){
             term = text.substr(i);
         }
-        var panelD = ev.dataTransfer.getData("panel");
         var divElementID = id;
         var panelAct;
         $.each(componentsRegistry, function (i, field){
@@ -156,28 +155,14 @@ function dropC(ev, id) {
                 panelAct = field;
             }
         });
-        if (!conceptId) {
-            if (!panelD) {
-            } else {
-                $.each(componentsRegistry, function(i, field) {
-                    if (field.divElement.id == panelD) {
-                        if (field.type == "search" || field.type == "taxonomy") {
-                            panelAct.subscribe(field);
-                            panelAct.setupOptionsPanel();
-                        }
-                    }
-                });
-            }
-        } else {
-            if (panelAct.conceptId != conceptId) {
-                panelAct.conceptId = conceptId;
-                panelAct.updateCanvas();
-                channel.publish(panelAct.divElement.id, {
-                    term: term,
-                    conceptId: panelAct.conceptId,
-                    source: panelAct.divElement.id
-                });
-            }
+        if (conceptId && panelAct.conceptId != conceptId) {
+            panelAct.conceptId = conceptId;
+            panelAct.updateCanvas();
+            channel.publish(panelAct.divElement.id, {
+                term: term,
+                conceptId: panelAct.conceptId,
+                source: panelAct.divElement.id
+            });
         }
     }
 
@@ -187,11 +172,11 @@ function dropF(ev, id) {
     var text = ev.dataTransfer.getData("Text");
     if (text != "javascript:void(0);"){
         var i = 0;
-        while (text.charAt(i) != "|"){
+        while (text.charAt(i) != "|" && i < text.length){
             i++;
         }
         var conceptId = ev.dataTransfer.getData("concept-id");
-        if (typeof conceptId == "undefined"){
+        if (typeof conceptId == "undefined" && i < text.length){
             conceptId = text.substr(0, i);
         }
         var term = ev.dataTransfer.getData("term");
@@ -226,14 +211,13 @@ function dropT(ev, id) {
     var text = ev.dataTransfer.getData("Text");
     if (text != "javascript:void(0);") {
         var i = 0;
-        while (text.charAt(i) != "|"){
+        while (text.charAt(i) != "|" && i < text.length){
             i++;
         }
         var divElementId = id;
         var panel;
-        var panelD = ev.dataTransfer.getData("panel");
         var conceptId = ev.dataTransfer.getData("concept-id");
-        if (typeof conceptId == "undefined"){
+        if (typeof conceptId == "undefined" && i < text.length){
             conceptId = text.substr(0, i);
         }
         var term = ev.dataTransfer.getData("term");
@@ -249,8 +233,7 @@ function dropT(ev, id) {
             }
         });
 
-        if (!conceptId) {
-        } else {
+        if (conceptId) {
             if (panel.options.selectedView == "undefined") {
                 panel.options.selectedView = "inferred";
             }
@@ -265,18 +248,6 @@ function dropT(ev, id) {
                     source: panel.divElement.id
                 });
             }
-        }
-        if (!panelD) {
-        } else {
-            //console.log("OK : " + draggable.attr('data-panel'));
-            $.each(componentsRegistry, function(i, field) {
-                if (field.divElement.id == panelD) {
-                    if (field.type == "concept-details") {
-                        panel.subscribe(field);
-                        field.setupOptionsPanel();
-                    }
-                }
-            });
         }
     }
 }
