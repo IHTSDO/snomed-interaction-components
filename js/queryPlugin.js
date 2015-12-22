@@ -433,7 +433,16 @@ function queryComputerPanel(divElement, options) {
 
         $('#' + panel.divElement.id + '-computeInferredButton').unbind();
         $('#' + panel.divElement.id + '-computeInferredButton').click(function (e) {
-            panel.execute("inferred", panel.exportToConstraintGrammar(false, false), true);
+            var grammar = panel.exportToConstraintGrammar(false, false);
+            console.log(grammar);
+            if ($('#' + panel.divElement.id + '-listGroup').find('.query-condition[data-modifier="Include"]').length){
+                panel.execute("inferred", grammar, true);
+            }else{
+                console.log("add at least one include");
+                $('#' + panel.divElement.id + '-resultInfo').html('<span class="label label-danger">ERROR</span>');
+                $('#' + panel.divElement.id + '-resultInfo').html('ERROR');
+                $("#" + panel.divElement.id + "-footer").html("Add at least one include...");
+            }
         });
     };
 
