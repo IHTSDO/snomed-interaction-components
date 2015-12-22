@@ -1,18 +1,18 @@
 <div class="addedCriteria">
-    <div class="form-group">
+    <div class="form-group text-center" style="width: 75px;">
         AND
     </div>
     <div class="form-group">
         <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+            <button style="width: 147px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                 <span class="addSelectCriteria">{{criteria}}</span>
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                 <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">descendantOf</a></li>
                 <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li>
-                <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOf</a></li>
-                <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOrSelfOf</a></li>
+                <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOf</a></li>-->
+                <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOrSelfOf</a></li>-->
                 <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">self</a></li>
                 <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">childrenOf</a></li>-->
                 <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">parentsOf</a></li>-->
@@ -25,5 +25,6 @@
     <div class="form-group">
         <input type="text" data-droppable="true" ondrop="dropField(event)" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class="form-control andCriteriaConcept" placeholder="Drag a concept here" readonly>
     </div>
+    <div class="form-group"><button type="button" class="btn btn-link glyphicon glyphicon-remove removeCriteria" style="text-decoration: none;"></button></div>
     <div class="form-group"><button type="button" class="btn btn-link glyphicon glyphicon-plus addCriteria" style="text-decoration: none;"></button></div>
 </div>

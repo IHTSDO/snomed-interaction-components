@@ -21,6 +21,7 @@ module.exports = function(grunt) {
                     'js/taxonomyPlugin.js',
                     'js/refsetPlugin.js',
                     'js/favoritesPlugin.js',
+                    'js/queryPlugin.js',
                     'js/util.js'
                 ],
                 dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js'
