@@ -16,7 +16,7 @@
                 <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
                 <div class="form-group">
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="{{divElementId}}-modifierButton" data-toggle="dropdown" aria-expanded="true">
+                        <button style="width: 75px;" class="btn btn-default dropdown-toggle" type="button" id="{{divElementId}}-modifierButton" data-toggle="dropdown" aria-expanded="true">
                             <span id="{{divElementId}}-selectedModifier">Include</span>
                             <span class="caret"></span>
                         </button>
@@ -28,15 +28,15 @@
                 </div>
                 <div class="form-group">
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                        <button style="width: 147px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                             <span id="{{divElementId}}-selectedCriteria">descendantOf</span>
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                             <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">descendantOf</a></li>
                             <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li>
-                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOf</a></li>
-                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOrSelfOf</a></li>
+                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOf</a></li>-->
+                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOrSelfOf</a></li>-->
                             <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">self</a></li>
                             <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">childrenOf</a></li>-->
                             <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">parentsOf</a></li>-->
@@ -62,7 +62,7 @@
                         </ul>
                     </span>
                 </div>
-                <div class="form-group" id="{{divElementId}}-addCriteriaAnd"><button type="button" class="btn btn-link glyphicon glyphicon-plus addCriteria" style="text-decoration: none;"></button></div>
+                <div style="margin-left: 38px;" class="form-group" id="{{divElementId}}-addCriteriaAnd"><button type="button" class="btn btn-link glyphicon glyphicon-plus addCriteria" style="text-decoration: none;"></button></div>
             </form>
             <form class="form-inline" role="form">
                 <div class="form-group">
@@ -75,21 +75,7 @@
             <ul class="list-group" id="{{divElementId}}-listGroup">
             </ul>
             <div class="btn btn-success" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Run query"}}}</div>
-            <!--<div class="btn-group">-->
-                <!--<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">-->
-                    <!--{{{i18n "i18n_run_query" "Run query"}}} <span class="caret"></span>-->
-                <!--</button>-->
-                <!--<ul class="dropdown-menu" role="menu">-->
-                    <!--<li><a href="javascript:void(0);" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_real_time_inferred" "Real-time, Inferred View (for simple queries only)"}}}</a></li>-->
-                    <!--<li><a href="javascript:void(0);" id='{{divElementId}}-computeStatedButton'>{{{i18n "i18n_real_time_stated" "Real-time, Stated View (for simple queries only)"}}}</a></li>-->
-                    <!--&lt;!&ndash;<li><a href="javascript:void(0);" id='{{divElementId}}-sendToBatchComputeStated'>Cloud, Stated View</a></li>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<li><a href="javascript:void(0);" id='{{divElementId}}-sendToBatchComputeInferred'>Cloud, Inferred View</a></li>&ndash;&gt;-->
-                <!--</ul>-->
-            <!--</div>-->
-            <!--<button type="button" class="btn btn-primary pull-right ladda-button"  id='{{divElementId}}-saveChanges' data-style="zoom-in" style="margin: 10px;">{{{i18n "i18n_save_query" "Save query"}}}</button>-->
             <button type="button" class="btn btn-primary pull-right"  id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
-            <!--<span style="padding-top: 15px;">&nbsp;&nbsp;<b>Query mode:</b>&nbsp;&nbsp;</span>-->
-            <!--<span style="padding-top: 15px;"><input id="{{divElementId}}-switch-query-mode" type="checkbox" checked data-on-text="Ordered" data-off-text="Intersection" data-size="mini"></span>-->
             <br>
             <br>
             {{{i18n "i18n_results" "Results"}}}:  <span id="{{divElementId}}-resultInfo" class="text-muted small"></span>
@@ -119,17 +105,6 @@
             </table>
 
             <a class="btn btn-default" download="results.xls" id="{{divElementId}}-exportXls" href="javascript:void(0);">{{{i18n "i18n_export_results_in_xls" "Export results in XLS"}}} <img style="height: 23px;" src="img/excel.png"></a>
-            <!--<div class="btn-group">-->
-                <!--<button id="{{divElementId}}-exportResults" type="button" class="btn btn-default dropdown-toggle disabled" data-toggle="dropdown">-->
-                    <!--Export results<b class="caret"></b>-->
-                <!--</button>-->
-                <!--<a id="{{divElementId}}-dlink"  style="display:none;"></a>-->
-                <!--<ul class="dropdown-menu" role="menu">-->
-                    <!--<li><a download="results.xls" id="{{divElementId}}-exportXls" href="javascript:void(0);">Export results in XLS <img style="height: 23px;" src="img/excel.png"></a></li>-->
-                    <!--<li><a id="{{divElementId}}-exportBriefcase" href="javascript:void(0);">Export results to briefcase</a></li>-->
-                    <!--<li><a id="{{divElementId}}-exportBriefcaseClean" href="javascript:void(0);">Empty briefcase and export results to it</a></li>-->
-                <!--</ul>-->
-            <!--</div>-->
         </div>
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     </div>
