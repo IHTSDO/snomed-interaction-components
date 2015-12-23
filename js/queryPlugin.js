@@ -410,6 +410,12 @@ function queryComputerPanel(divElement, options) {
                         });
                         if (!foundExclude) {
                             $('#' + panel.divElement.id + '-listGroup').append(JST["views/developmentQueryPlugin/criteria.hbs"](context2));
+                            var critAdded = $('#' + panel.divElement.id + '-listGroup').find(".query-condition")[$('#' + panel.divElement.id + '-listGroup').find(".query-condition").length - 1];
+                            panel.execute("inferred", panel.exportToConstraintGrammar(false, false, critAdded), true, function(resultCount){
+                                console.log(resultCount);
+                                var cont = parseInt(resultCount);
+                                $(critAdded).append('<span class="text-muted pull-right" style="position: relative; top: 8px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</span>');
+                            });
                         }
                         panel.renumLines();
 
@@ -434,7 +440,6 @@ function queryComputerPanel(divElement, options) {
         $('#' + panel.divElement.id + '-computeInferredButton').unbind();
         $('#' + panel.divElement.id + '-computeInferredButton').click(function (e) {
             var grammar = panel.exportToConstraintGrammar(false, false);
-            console.log(grammar);
             if ($('#' + panel.divElement.id + '-listGroup').find('.query-condition[data-modifier="Include"]').length){
                 panel.execute("inferred", grammar, true);
             }else{
@@ -568,7 +573,7 @@ function queryComputerPanel(divElement, options) {
         return grammar;
     };
 
-    this.exportToConstraintGrammar = function(htmlFormat, fullSyntax) {
+    this.exportToConstraintGrammar = function(htmlFormat, fullSyntax, htmlObj) {
         var breakLine = " ";
         if (htmlFormat) {
             breakLine = "<br>";
@@ -579,9 +584,9 @@ function queryComputerPanel(divElement, options) {
         } else {
             var includes = [];
             var excludes = [];
-            $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function (index) {
+            if (htmlObj){
                 var conditions = [];
-                $(this).find(".constraint").each(function (index2) {
+                $(htmlObj).find(".constraint").each(function (index2) {
                     var condition = {
                         "criteria": $(this).data('criteria'),
                         "conceptId": $(this).data('concept-id'),
@@ -589,12 +594,25 @@ function queryComputerPanel(divElement, options) {
                     };
                     conditions.push(condition);
                 });
-                if ($(this).data('modifier') == "Exclude") {
-                    excludes.push(conditions);
-                } else {
-                    includes.push(conditions);
-                }
-            });
+                includes.push(conditions);
+            }else{
+                $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function (index) {
+                    var conditions = [];
+                    $(this).find(".constraint").each(function (index2) {
+                        var condition = {
+                            "criteria": $(this).data('criteria'),
+                            "conceptId": $(this).data('concept-id'),
+                            "term": $(this).data('term')
+                        };
+                        conditions.push(condition);
+                    });
+                    if ($(this).data('modifier') == "Exclude") {
+                        excludes.push(conditions);
+                    } else {
+                        includes.push(conditions);
+                    }
+                });
+            }
             //if (includes.length > 1) grammar += "(";
             $.each(includes, function (index, conditions) {
                 if (index > 0) grammar += " OR ";
@@ -745,15 +763,20 @@ function queryComputerPanel(divElement, options) {
         return grammar;
     };
 
-    this.execute = function (form, expression, clean){
+    this.execute = function (form, expression, clean, onlyTotal){
         //$('#' + panel.divElement.id + '-footer').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-        $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div> </div>');
-        $('#' + panel.divElement.id + '-resultInfo').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-        if (clean){
-            $('#' + panel.divElement.id + '-outputBody').html("");
-            $('#' + panel.divElement.id + '-outputBody2').html("");
-            limit = 100;
+        if (onlyTotal){
+            limit = 0;
             skip = 0;
+        }else{
+            $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div> </div>');
+            $('#' + panel.divElement.id + '-resultInfo').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+            if (clean){
+                $('#' + panel.divElement.id + '-outputBody').html("");
+                $('#' + panel.divElement.id + '-outputBody2').html("");
+                limit = 100;
+                skip = 0;
+            }
         }
         var data = {
             expression: expression,
@@ -773,39 +796,44 @@ function queryComputerPanel(divElement, options) {
                 if (result.paserResponse.validation) {
                     data = result.computeResponse;
                     //result.computeResponse.matches
-                    $("#" + panel.divElement.id + "-exportResults").removeClass("disabled");
-                    if (data.performanceCutOff) {
-                        $('#' + panel.divElement.id + '-resultInfo').html("Found " + data.total + " concepts. <span class='text-danger'>This query cannot be completed in real-time, please schedule a Cloud executions. Results below are incomplete and some conditions were not tested. </span>");
-                    } else {
-                        $('#' + panel.divElement.id + '-resultInfo').html("Found " + data.total + " concepts");
-                    }
-                    $.each(data.matches, function (i, row){
-                        $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.module + "' data-concept-id='" + row.conceptId + "' data-term='" + row.defaultTerm + "'><td>" + row.defaultTerm + "</td><td>" + row.conceptId + "</td></tr>");
-                        $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.defaultTerm + "</td><td>" + row.conceptId + "</td></tr>");
-                    });
-
-                    $('#' + panel.divElement.id + '-outputBody').find(".conceptResult").unbind();
-                    $('#' + panel.divElement.id + '-outputBody').find(".conceptResult").click(function(event){
-                        console.log("clicked",$(event.target).closest("tr").attr('data-term'));
-                        channel.publish(panel.divElement.id, {
-                            term: $(event.target).closest("tr").attr('data-term'),
-                            module: $(event.target).closest("tr").attr("data-module"),
-                            conceptId: $(event.target).closest("tr").attr('data-concept-id'),
-                            source: panel.divElement.id
+                    if (!onlyTotal){
+                        $("#" + panel.divElement.id + "-exportResults").removeClass("disabled");
+                        if (data.performanceCutOff) {
+                            $('#' + panel.divElement.id + '-resultInfo').html("Found " + data.total + " concepts. <span class='text-danger'>This query cannot be completed in real-time, please schedule a Cloud executions. Results below are incomplete and some conditions were not tested. </span>");
+                        } else {
+                            $('#' + panel.divElement.id + '-resultInfo').html("Found " + data.total + " concepts");
+                        }
+                        $.each(data.matches, function (i, row){
+                            $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.module + "' data-concept-id='" + row.conceptId + "' data-term='" + row.defaultTerm + "'><td>" + row.defaultTerm + "</td><td>" + row.conceptId + "</td></tr>");
+                            $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.defaultTerm + "</td><td>" + row.conceptId + "</td></tr>");
                         });
-                    });
 
-                    if (limit + skip < data.total) {
-                        $('#' + panel.divElement.id + '-footer').html("<span id='" + panel.divElement.id + "-more'>Show more (viewing " + (limit + skip) + " of " + data.total + " total)</span>");
-                    } else {
-                        $('#' + panel.divElement.id + '-footer').html("Showing all " + data.total + " matches");
+                        $('#' + panel.divElement.id + '-outputBody').find(".conceptResult").unbind();
+                        $('#' + panel.divElement.id + '-outputBody').find(".conceptResult").click(function(event){
+                            //console.log("clicked",$(event.target).closest("tr").attr('data-term'));
+                            channel.publish(panel.divElement.id, {
+                                term: $(event.target).closest("tr").attr('data-term'),
+                                module: $(event.target).closest("tr").attr("data-module"),
+                                conceptId: $(event.target).closest("tr").attr('data-concept-id'),
+                                source: panel.divElement.id
+                            });
+                        });
+
+                        if (limit + skip < data.total) {
+                            $('#' + panel.divElement.id + '-footer').html("<span id='" + panel.divElement.id + "-more'>Show more (viewing " + (limit + skip) + " of " + data.total + " total)</span>");
+                        } else {
+                            $('#' + panel.divElement.id + '-footer').html("Showing all " + data.total + " matches");
+                        }
+
+                        $('#' + panel.divElement.id + '-more').unbind();
+                        $('#' + panel.divElement.id + '-more').click(function (e) {
+                            skip = skip + 100;
+                            panel.execute(form, expression, false);
+                        });
+                    }else{
+                        onlyTotal(data.total);
                     }
 
-                    $('#' + panel.divElement.id + '-more').unbind();
-                    $('#' + panel.divElement.id + '-more').click(function (e) {
-                        skip = skip + 100;
-                        panel.execute(form, expression, false);
-                    });
 //                    $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-success">OK</span>');
 //                    var resultsHtml = "";
 //                    resultsHtml+='<p><span class="text-success">Total matches: ' + result.computeResponse.total + '</span></p>';
@@ -820,10 +848,14 @@ function queryComputerPanel(divElement, options) {
                 } else {
                     if (expression.charAt(0) == "(" && expression.charAt(expression.length-1) == ")") {
                         expression = expression.substr(1,expression.length-2);
-                        panel.execute(form, expression, clean);
+                        panel.execute(form, expression, clean, onlyTotal);
                     } else {
-                        $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
-                        $("#" + panel.divElement.id + "-results").html("Error...");
+                        if (!onlyTotal){
+                            $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
+                            $("#" + panel.divElement.id + "-results").html("Error...");
+                        }else{
+                            onlyTotal("Error");
+                        }
                     }
                 }
             }
@@ -835,17 +867,25 @@ function queryComputerPanel(divElement, options) {
             if(textStatus === 'timeout') {
 //                $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
 //                $("#" + panel.divElement.id + "-results").html("Timeout...");
-                $('#' + panel.divElement.id + '-resultInfo').html("This query cannot be completed in real-time, please schedule a Cloud executions.");
-                $('#' + panel.divElement.id + '-footer').html("Timeout Error, use the Cloud for running this query");
+                if (!onlyTotal){
+                    $('#' + panel.divElement.id + '-resultInfo').html("This query cannot be completed in real-time, please schedule a Cloud executions.");
+                    $('#' + panel.divElement.id + '-footer').html("Timeout Error, use the Cloud for running this query");
+                }else{
+                    onlyTotal("Error");
+                }
             } else if (textStatus == "abort"){
 
             } else {
                 if (expression.charAt(0) == "(" && expression.charAt(expression.length-1) == ")") {
                     expression = expression.substr(1,expression.length-2);
-                    panel.execute(form, expression, clean);
+                    panel.execute(form, expression, clean, onlyTotal);
                 } else {
-                    $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
-                    $("#" + panel.divElement.id + "-results").html("Error...");
+                    if (!onlyTotal){
+                        $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
+                        $("#" + panel.divElement.id + "-results").html("Error...");
+                    }else{
+                        onlyTotal("Error");
+                    }
                 }
             }
         });
