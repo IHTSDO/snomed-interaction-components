@@ -9,7 +9,18 @@
                 <div style="margin-left: 45px; display: inline-block">AND</div>
             {{/if_eq}}
             <span class="constraint" data-term="{{term}}" data-criteria="{{criteria}}" data-concept-id="{{conceptId}}">
-                {{criteria}}&nbsp;
+                <!--{{criteria}}&nbsp;-->
+                <div style="display: inline-block;" class="dropdown">
+                    <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                        {{criteria}}&nbsp;
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li>
+                        <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li>
+                        <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li>
+                        <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li>
+                    </ul>
+                </div>
                 <span style="color: forestgreen;">{{conceptId}}</span>&nbsp;
                 |
                 <span style="color: firebrick;">{{term}}</span>

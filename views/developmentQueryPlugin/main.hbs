@@ -74,7 +74,8 @@
             </form>
             <ul class="list-group" id="{{divElementId}}-listGroup">
             </ul>
-            <div class="btn btn-success" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Run query"}}}</div>
+            <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Run query"}}}</div>
+            <button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#{{divElementId}}-ExamplesModal" type="button">Examples</button>
             <button type="button" class="btn btn-primary pull-right"  id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
             <br>
             <br>
@@ -110,28 +111,21 @@
     </div>
 </div>
 <!-- Modals -->
-<div class="modal fade" id="{{divElementId}}-cloudModal" tabindex="-1" role="dialog" aria-labelledby="{{divElementId}}-myCloudModalLabel" aria-hidden="true">
+<div class="modal fade" id="{{divElementId}}-ExamplesModal" tabindex="-1" role="dialog" aria-labelledby="{{divElementId}}-myCloudModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" >
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="{{divElementId}}-myCloudModalLabel">Cloud Queries Processor</h4>
+                <h4 class="modal-title">Terminology content selections examples</h4>
             </div>
-            <div class="modal-body" id="{{divElementId}}-cloud-panel" style="max-height: 450px; overflow: auto;">
-                ...
+            <div class="modal-body" style="max-height: 450px; overflow: auto;">
+                {{#each examples}}
+                    <br>
+                    <h4>{{title}}:<span data-htmlValue="{{htmlValue}}" class="pull-right btn btn-primary btn-xs loadExample" style="padding: 0px; display: inline-block;">Load this query</span></h4>
+                    <div style="margin: 10px;">{{{htmlValue}}}</div>
+                {{/each}}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="{{divElementId}}-QueryManagerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
-    <div class="modal-dialog modal-lg" style="max-height: 450px;">
-        <div class="modal-content">
-            <div class="modal-body" id="{{divElementId}}-QueryManager" style="max-height: 450px; overflow: auto;"></div>
-            <div class="modal-footer" style="padding: 10px;">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
