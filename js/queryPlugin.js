@@ -411,11 +411,11 @@ function queryComputerPanel(divElement, options) {
                         if (!foundExclude) {
                             $('#' + panel.divElement.id + '-listGroup').append(JST["views/developmentQueryPlugin/criteria.hbs"](context2));
                             var critAdded = $('#' + panel.divElement.id + '-listGroup').find(".query-condition")[$('#' + panel.divElement.id + '-listGroup').find(".query-condition").length - 1];
-                            $(critAdded).append('<small class="text-muted pull-right glyphicon glyphicon-repeat icon-spin" style="position: relative; top: 8px;"></small>');
+                            $(critAdded).append('<small class="text-muted pull-right glyphicon glyphicon-refresh icon-spin" style="position: relative; top: 12px;"></small>');
                             panel.execute("inferred", panel.exportToConstraintGrammar(false, false, critAdded), true, function(resultCount){
                                 $(critAdded).find(".glyphicon-repeat").first().remove();
                                 var cont = parseInt(resultCount);
-                                $(critAdded).append('<small class="text-muted pull-right" style="position: relative; top: 8px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</small>');
+                                $(critAdded).append('<small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</small>');
                             });
                         }
                         panel.renumLines();
@@ -767,7 +767,7 @@ function queryComputerPanel(divElement, options) {
     this.execute = function (form, expression, clean, onlyTotal){
         //$('#' + panel.divElement.id + '-footer').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         if (onlyTotal){
-            limit = 0;
+            limit = 1;
             skip = 0;
         }else{
             $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div> </div>');
