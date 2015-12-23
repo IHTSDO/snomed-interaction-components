@@ -581,7 +581,7 @@ function queryComputerPanel(divElement, options) {
         }
         var grammar = "";
         if ($('#' + panel.divElement.id + '-listGroup').find(".query-condition").length == 0) {
-            console.log("Add at least one condition...");
+            console.log("Add at least one instruction...");
         } else {
             var includes = [];
             var excludes = [];
@@ -792,7 +792,7 @@ function queryComputerPanel(divElement, options) {
             url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
             data: data,
             dataType: "json",
-            timeout: 300000,
+            //timeout: 300000,
             success: function(result) {
                 if (result.paserResponse.validation) {
                     data = result.computeResponse;
