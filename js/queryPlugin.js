@@ -9,7 +9,7 @@ function queryComputerPanel(divElement, options) {
     var skip = 0;
     var xhrTotal = null;
     var xhrExecute = null;
-
+    panel.currentEx = 0;
     this.divElement = divElement;
     this.options = jQuery.extend(true, {}, options);
     this.type = "query-computer";
@@ -282,14 +282,23 @@ function queryComputerPanel(divElement, options) {
             var modifier = $('#' + panel.divElement.id + '-selectedModifier').html();
             var criteria = $('#' + panel.divElement.id + '-selectedCriteria').html();
             var conceptIdDroped = $('#' + panel.divElement.id + '-selectedConcept').attr("data-conceptId");
-            //data-modifier="{{modifier}}" data-criteria="{{criteria}}" data-concept-id="{{conceptId}}" query-condition
-            if ($('#' + panel.divElement.id + '-listGroup').find('.query-condition[data-criteria="' + criteria + '"][data-modifier="' + modifier + '"][data-concept-id="' + conceptIdDroped + '"]').length){
-                $('#' + panel.divElement.id + '-conceptField').addClass("has-error");
-                $('#' + panel.divElement.id + '-addmsg').html("Criteria already added...");
-            }else if ($('#' + panel.divElement.id + '-listGroup').find('.query-condition[data-criteria="' + criteria + '"][data-concept-id="' + conceptIdDroped + '"]').length){
-                $('#' + panel.divElement.id + '-conceptField').addClass("has-error");
-                $('#' + panel.divElement.id + '-addmsg').html("Contradictory criteria...");
-            }else if (criteria == "hasDescription") {
+            if ($('#' + panel.divElement.id + '-listGroup').find('.constraint[data-criteria="' + criteria + '"][data-concept-id="' + conceptIdDroped + '"]').length){
+                if ($('#' + panel.divElement.id + '-listGroup').find('.constraint[data-criteria="' + criteria + '"][data-concept-id="' + conceptIdDroped + '"]').closest(".query-condition").attr("data-modifier") == modifier){
+                    $('#' + panel.divElement.id + '-conceptField').addClass("has-error");
+                    $('#' + panel.divElement.id + '-addmsg').html("Criteria already added...");
+                }else{
+                    $('#' + panel.divElement.id + '-conceptField').addClass("has-error");
+                    $('#' + panel.divElement.id + '-addmsg').html("Contradictory criteria...");
+                }
+            }
+            //if ($('#' + panel.divElement.id + '-listGroup').find('.query-condition[data-criteria="' + criteria + '"][data-modifier="' + modifier + '"][data-concept-id="' + conceptIdDroped + '"]').length){
+            //    $('#' + panel.divElement.id + '-conceptField').addClass("has-error");
+            //    $('#' + panel.divElement.id + '-addmsg').html("Criteria already added...");
+            //}else if ($('#' + panel.divElement.id + '-listGroup').find('.query-condition[data-criteria="' + criteria + '"][data-concept-id="' + conceptIdDroped + '"]').length){
+            //    $('#' + panel.divElement.id + '-conceptField').addClass("has-error");
+            //    $('#' + panel.divElement.id + '-addmsg').html("Contradictory criteria...");
+            //}
+            else if (criteria == "hasDescription") {
                 var searchTerm = $('#' + panel.divElement.id + '-searchTerm').val();
                 if (searchTerm == "") {
                     $('#' + panel.divElement.id + '-conceptField').addClass("has-error");
@@ -413,7 +422,7 @@ function queryComputerPanel(divElement, options) {
                             var critAdded = $('#' + panel.divElement.id + '-listGroup').find(".query-condition")[$('#' + panel.divElement.id + '-listGroup').find(".query-condition").length - 1];
                             $(critAdded).append('<small class="text-muted pull-right glyphicon glyphicon-refresh icon-spin" style="position: relative; top: 12px;"></small>');
                             panel.execute("inferred", panel.exportToConstraintGrammar(false, false, critAdded), true, function(resultCount){
-                                $(critAdded).find(".glyphicon-repeat").first().remove();
+                                $(critAdded).find(".glyphicon-refresh").first().remove();
                                 var cont = parseInt(resultCount);
                                 $(critAdded).append('<small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</small>');
                             });
@@ -765,12 +774,28 @@ function queryComputerPanel(divElement, options) {
     };
 
     this.execute = function (form, expression, clean, onlyTotal){
+        panel.currentEx++;
+        var currentEx = panel.currentEx;
         //$('#' + panel.divElement.id + '-footer').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         if (onlyTotal){
             limit = 1;
             skip = 0;
         }else{
-            $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div> </div>');
+            $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div></div><p id="' + panel.divElement.id + '-waitingSearch-text" class="lead"></p>');
+            $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is processing your instructions...");
+            setTimeout(function(){
+                if (xhrExecute != null && currentEx == panel.currentEx)
+                    $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is still processing your instructions...");
+            }, 15000);
+            setTimeout(function(){
+                if (xhrExecute != null && currentEx == panel.currentEx)
+                    $("#" + panel.divElement.id + "-waitingSearch-text").html("This seems to be a complex set of instructions, still processing...");
+            }, 30000);
+            setTimeout(function(){
+                if (xhrExecute != null && currentEx == panel.currentEx)
+                    $("#" + panel.divElement.id + "-waitingSearch-text").html("Processing a complex set of instructions, it might not be supported in a public server. Some times instructions can be simplified by specifying conditions using concepts close in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.");
+            }, 45000);
+
             $('#' + panel.divElement.id + '-resultInfo').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
             if (clean){
                 $('#' + panel.divElement.id + '-outputBody').html("");
@@ -785,9 +810,9 @@ function queryComputerPanel(divElement, options) {
             skip : skip,
             form: form
         };
-        if (xhrExecute != null)
+        if (xhrExecute != null && !onlyTotal)
             xhrExecute.abort();
-        xhrExecute = $.ajax({
+        var xhrExecute2 = $.ajax({
             type: "POST",
             url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
             data: data,
@@ -862,9 +887,9 @@ function queryComputerPanel(divElement, options) {
             }
         }).done(function(result){
             // done
-            xhrExecute = null;
+            xhrExecute2 = null;
         }).fail(function(jqXHR, textStatus){
-            xhrExecute = null;
+            xhrExecute2 = null;
             if(textStatus === 'timeout') {
 //                $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
 //                $("#" + panel.divElement.id + "-results").html("Timeout...");
@@ -890,5 +915,7 @@ function queryComputerPanel(divElement, options) {
                 }
             }
         });
+        if (!onlyTotal)
+            xhrExecute = xhrExecute2;
     }
 }
