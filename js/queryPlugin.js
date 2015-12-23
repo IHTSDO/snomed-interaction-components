@@ -411,10 +411,11 @@ function queryComputerPanel(divElement, options) {
                         if (!foundExclude) {
                             $('#' + panel.divElement.id + '-listGroup').append(JST["views/developmentQueryPlugin/criteria.hbs"](context2));
                             var critAdded = $('#' + panel.divElement.id + '-listGroup').find(".query-condition")[$('#' + panel.divElement.id + '-listGroup').find(".query-condition").length - 1];
+                            $(critAdded).append('<small class="text-muted pull-right glyphicon glyphicon-repeat icon-spin" style="position: relative; top: 8px;"></small>');
                             panel.execute("inferred", panel.exportToConstraintGrammar(false, false, critAdded), true, function(resultCount){
-                                console.log(resultCount);
+                                $(critAdded).find(".glyphicon-repeat").first().remove();
                                 var cont = parseInt(resultCount);
-                                $(critAdded).append('<span class="text-muted pull-right" style="position: relative; top: 8px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</span>');
+                                $(critAdded).append('<small class="text-muted pull-right" style="position: relative; top: 8px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</small>');
                             });
                         }
                         panel.renumLines();
