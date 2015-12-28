@@ -22,6 +22,13 @@ Handlebars.registerHelper('if_undefined', function (a, opts) {
     }
 });
 
+Handlebars.registerHelper("if_eqInd", function(a, b, opts){
+    if ((parseInt(a) + 1) == parseInt(b))
+        return opts.fn(this);
+    else
+        return opts.inverse(this);
+});
+
 $(document).on('dragend', function(){
     removeHighlight();
 });

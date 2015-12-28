@@ -63,7 +63,15 @@
                         </ul>
                     </span>
                 </div>
-                <div style="margin-left: 38px;" class="form-group" id="{{divElementId}}-addCriteriaAnd"><button type="button" class="btn btn-link glyphicon glyphicon-plus addCriteria" style="text-decoration: none;"></button></div>
+                <div style="margin-left: 41px;" class="form-group" id="{{divElementId}}-addCriteriaAnd">
+                    <div class="dropdown">
+                        <button style="text-decoration: none;" class="btn btn-link dropdown-toggle glyphicon glyphicon-plus" type="button" data-toggle="dropdown" aria-expanded="true"></button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation"><a class="addCriteria" data-type="Conjunction" role="menuitem" tabindex="-1" href="javascript:void(0);">Conjunction</a></li>
+                            <li role="presentation"><a class="addCriteria" data-type="Refinement" role="menuitem" tabindex="-1" href="javascript:void(0);">Refinement</a></li>
+                        </ul>
+                    </div>
+                </div>
             </form>
             <form class="form-inline" role="form">
                 <div class="form-group">

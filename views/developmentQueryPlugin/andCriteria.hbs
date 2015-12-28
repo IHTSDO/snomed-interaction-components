@@ -1,21 +1,11 @@
 <div class="addedCriteria" data-typeSelected="{{#if_eq typeSelected "false"}}Conjunction{{else}}{{typeSelected}}{{/if_eq}}">
     <div class="form-group text-center" style="width: 75px;">
         Attribute
-        <div class="dropdown dropFirstType" {{#if_eq typeSelected "false"}}{{else}}style="display: none;"{{/if_eq}}>
-            <button style="width: 147px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                <span>Conjunction</span>
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                <li role="presentation"><a class="selectTypeAnd" role="menuitem" tabindex="-1" href="javascript:void(0);">Conjunction</a></li>
-                <li role="presentation"><a class="selectTypeAnd" role="menuitem" tabindex="-1" href="javascript:void(0);">Refinement</a></li>
-            </ul>
-        </div>
     </div>
-    <div data-type-concept-id="{{types.0.conceptId}}" data-type-term="{{types.0.defaultTerm}}" class="form-group typeCritCombo" {{#if_eq typeSelected "Refinement"}}{{else}}style="display: none;"{{/if_eq}}>
+    <div data-type-concept-id="false" class="form-group typeCritCombo" {{#if_eq typeSelected "Refinement"}}{{else}}style="display: none;"{{/if_eq}}>
         <div class="dropdown">
             <button style="width: 147px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                <span>{{types.0.defaultTerm}}</span>
+                <span>Select</span>
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">

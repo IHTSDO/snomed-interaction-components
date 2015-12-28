@@ -155,9 +155,9 @@ function queryComputerPanel(divElement, options) {
             $(divElement).find(".addCriteria").unbind();
             $(divElement).find(".addCriteria").disableTextSelect();
             $(divElement).find(".addCriteria").click(function(e){
-                $(e.target).closest("div").hide();
+                $(e.target).closest(".form-group").hide();
                 var criteria = $('#' + panel.divElement.id + '-selectedCriteria').html();
-                var typeSelected = "false";
+                var typeSelected = $(e.target).attr("data-type");
                 if ($(divElement).find(".addedCriteria").length)
                     typeSelected = $(divElement).find(".addedCriteria").first().attr("data-typeSelected");
                 $(e.target).closest(".form-inline").append(JST["views/developmentQueryPlugin/andCriteria.hbs"]({criteria: criteria, typeSelected: typeSelected, types: panel.typeArray}));
@@ -491,14 +491,17 @@ function queryComputerPanel(divElement, options) {
                                     conceptId: addedConceptId,
                                     term: addedTerm
                                 };
-                                console.log(typeSelected);
                                 if (typeSelected == "Refinement"){
-                                    crit.type = {
-                                        conceptId: $(this).find(".typeCritCombo").first().attr("data-type-concept-id"),
-                                        term: $(this).find(".typeCritCombo").first().attr("data-type-term")
-                                    };
+                                    if ($(this).find(".typeCritCombo").first().attr("data-type-concept-id") == "false"){
+                                        $('#' + panel.divElement.id + '-addmsg').html("Select a type...");
+                                        return false;
+                                    }else{
+                                        crit.type = {
+                                            conceptId: $(this).find(".typeCritCombo").first().attr("data-type-concept-id"),
+                                            term: $(this).find(".typeCritCombo").first().attr("data-type-term")
+                                        };
+                                    }
                                 }
-                                console.log(crit);
                                 criterias.push(crit);
                             }else{
                                 $('#' + panel.divElement.id + '-conceptField').addClass("has-error");

@@ -1,12 +1,14 @@
 <li data-modifier="{{modifier}}" class="list-group-item clearfix query-condition">
     <span class="text-muted line-number" style="font-size: 200%;"></span>&nbsp;&nbsp;
     <span style="position: relative; top: -5px;">
-        <div style="width: 45px;display: inline-block;">{{modifier}},</div>
+        <div style="width: 45px;display: inline-block;">{{modifier}}:</div>
         {{#each criterias}}
             {{#if_eq @index 0}}
             {{else}}
                 <br>
-                <div style="margin-left: 45px; display: inline-block">AND</div>
+                <div style="margin-left: 68px; display: inline-block">
+                    <!--AND-->
+                </div>
             {{/if_eq}}
             <span class="constraint" data-term="{{term}}" data-criteria="{{criteria}}" data-concept-id="{{conceptId}}" {{#if type.conceptId}}data-type-concept-id="{{type.conceptId}}" data-type-term="{{type.term}}"{{/if}}>
                 <!--{{criteria}}&nbsp;-->
@@ -28,7 +30,9 @@
                 <span style="color: forestgreen;">{{conceptId}}</span>&nbsp;
                 |
                 <span style="color: firebrick;">{{term}}</span>
-                |
+                |{{#if_eqInd @index ../criterias.length}}
+                {{else}},
+                {{/if_eqInd}}
             </span>
         {{/each}}
     </span>
