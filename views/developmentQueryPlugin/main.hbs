@@ -14,6 +14,7 @@
                 <!--<span>New condition: </span>-->
                 <!--<button type="button" class="btn btn-default pull-right"  id='{{divElementId}}-selectButton' style="margin: 10px;">{{{i18n "i18n_load_query" "Load query"}}}</button>-->
                 <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
+                <button type="button" id="{{divElementId}}-helpButton" class="btn btn-default pull-right" style="margin: 10px;" data-toggle="modal" data-target="#{{divElementId}}-queryHelpModal">{{{i18n "i18n_help" "Help"}}}</button>
                 <div class="form-group">
                     <div class="dropdown">
                         <button style="width: 75px;" class="btn btn-default dropdown-toggle" type="button" id="{{divElementId}}-modifierButton" data-toggle="dropdown" aria-expanded="true">
@@ -124,6 +125,56 @@
                     <h4>{{title}}:<span data-htmlValue="{{htmlValue}}" class="pull-right btn btn-primary btn-xs loadExample" style="padding: 0px; display: inline-block;">Load this query</span></h4>
                     <div style="margin: 10px;">{{{htmlValue}}}</div>
                 {{/each}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="{{divElementId}}-queryHelpModal" tabindex="-1" role="dialog" aria-labelledby="{{divElementId}}-myCloudModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Terminology content selections help</h4>
+            </div>
+            <div class="modal-body" style="max-height: 450px; overflow: auto;">
+                <h2>Terminology content selections</h2>
+                <p>This tool implements a subset of functions from the "SNOMED CT Expression Constraint Language Specification and Guide" (<a href="http://snomed.org/expressionconstraint" target="_blank">http://snomed.org/expressionconstraint)</a>.</p>
+                <p>The goal of this tool is to enable the creation of a query for the selection of content in SNOMED CT, with a user friendly UI designed to support the most common real world use cases for content selection, like the creation of reference sets to support implementation.</p>
+                <h3>How to use</h3>
+                <p>Add Inclusion and Exclusion instructions to the query, consider that all inclusions will be interpreted first, and all the exclusions last. The specific order of instructions within Inclusions or within Exclusions has no impact on the results.</p>
+                <p>Each instruction has a criteria that defines the concept selection:</p>
+                <ul>
+                    <li><b>self</b>: selects only the specified concept.</li>
+                    <li><b>descendantOf</b>: selects all descendants concepts, subtypes and subtypes of the subtypes, all the way to the leaf concpts in the hierarchy.</li>
+                    <li><b>descendantOrSelfOf</b>: selects the specified concept plus all the descendants concepts.</li>
+                    <li><b>memberOf</b>: the concepts that are members of the specified reference set. In this case the spcified concepts needs to be a reference set concept.</li>
+                </ul>
+                <p>After adding each instruction the number of concepts involved in the sentence will be calaculated, in order to provide an estimate of the complexity of the resulting query.</p>
+                <p>The different instructions result in a "disjunction" operator in the query logic: "Include A, Include B" results in "A,B" (A OR B).</p>
+                <p>Inside each instruction is possible to add "conjunction" operations. "Include descendantOf A and descendantOf B" means that only concepts are descendants of A and also descendants of B will be included in teh results.</p>
+                <p>The "Constraint Grammar" button will display a valid constraint grammar expression that when executed will produce the same results as the logic described in the sequence of instructions.</p>
+                <br>
+                <h3>Degree of support of the Constraint Language Specification</h3>
+                <p>This is partial implementation of the Constraint Language, prioritizing the features that support the most common use cases and the proposed simplified user interface.</p>
+                <p>Supported features:</p>
+                <ul>
+                    <li>simpleExpressionConstraint</li>
+                    <li>compoundExpressionConstraint</li>
+                    <li>exclusionExpressionConstraint</li>
+                    <li>disjunctionExpressionConstraint</li>
+                    <li>conjunctionExpressionConstraint</li>
+                </ul>
+                <p>Unsupported features: (some may be added in future versions)</p>
+                <ul>
+                    <li>refinements</li>
+                    <li>nested expressions</li>
+                    <li>arbitrary order of instructions</li>
+                    <li>complex operators like "^ <" (descendants of members)</li>
+                </ul>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
