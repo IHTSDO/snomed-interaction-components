@@ -110,7 +110,7 @@ function queryComputerPanel(divElement, options) {
 
         $("#" + panel.divElement.id + "-ExamplesModal").find(".btn").addClass("disabled");
         $("#" + panel.divElement.id + "-ExamplesModal").find(".loadExample").removeClass("disabled");
-        $("#" + panel.divElement.id + "-constraintGrammarModal-close").removeClass("disabled");
+        $("#" + panel.divElement.id + "-ExamplesModal-close").removeClass("disabled");
 
         $(divElement).find(".loadExample").unbind();
         $(divElement).find(".loadExample").click(function(e){
@@ -1113,14 +1113,19 @@ function queryComputerPanel(divElement, options) {
         }).done(function(result){
             // done
             xhrExecute2 = null;
-        }).fail(function(jqXHR, textStatus){
+        }).fail(function(jqXHR){
+            //console.log(jqXHR);
+            //console.log(xhrExecute2);
+            var textStatus = xhrExecute2.statusText;
+            if (xhrExecute2.status == 0)
+                textStatus = "timeout";
             xhrExecute2 = null;
             if(textStatus === 'timeout') {
 //                $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
 //                $("#" + panel.divElement.id + "-results").html("Timeout...");
                 if (!onlyTotal){
-                    $('#' + panel.divElement.id + '-resultInfo').html("This query cannot be completed in real-time, please schedule a Cloud executions.");
-                    $('#' + panel.divElement.id + '-footer').html("Timeout Error, use the Cloud for running this query");
+                    $('#' + panel.divElement.id + '-resultInfo').html("This query cannot be completed in real-time.");
+                    $('#' + panel.divElement.id + '-footer').html("Timeout Error");
                 }else{
                     onlyTotal("Error");
                 }
