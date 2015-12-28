@@ -184,10 +184,12 @@ function queryComputerPanel(divElement, options) {
                 $(divElement).find(".addedCriteria").find(".removeCriteria").click(function(e){
                     $(e.target).closest(".addedCriteria").remove();
                     var foundAddedCriteria = $(divElement).find(".addedCriteria");
-                    if (!foundAddedCriteria.length)
+                    if (!foundAddedCriteria.length){
                         $("#" + panel.divElement.id + "-addCriteriaAnd").show();
-                    else{
-                        console.log($(foundAddedCriteria[foundAddedCriteria.length - 1]).find(".addCriteria").first().closest(".form-group"));
+                    }else{
+                        $(divElement).find(".addedCriteria").find(".dropFirstType").hide();
+                        $(divElement).find(".addedCriteria").first().find(".dropFirstType").first().show();
+                        //console.log($(foundAddedCriteria[foundAddedCriteria.length - 1]).find(".addCriteria").first().closest(".form-group"));
                         $(foundAddedCriteria[foundAddedCriteria.length - 1]).find(".addCriteria").first().closest(".form-group").show();
                     }
                 });
@@ -489,12 +491,14 @@ function queryComputerPanel(divElement, options) {
                                     conceptId: addedConceptId,
                                     term: addedTerm
                                 };
+                                console.log(typeSelected);
                                 if (typeSelected == "Refinement"){
                                     crit.type = {
-                                        conceptId: $(this).find(".typeCritCombo").first().attr("data-concept-id"),
-                                        term: $(this).find(".typeCritCombo").first().attr("data-term")
+                                        conceptId: $(this).find(".typeCritCombo").first().attr("data-type-concept-id"),
+                                        term: $(this).find(".typeCritCombo").first().attr("data-type-term")
                                     };
                                 }
+                                console.log(crit);
                                 criterias.push(crit);
                             }else{
                                 $('#' + panel.divElement.id + '-conceptField').addClass("has-error");
@@ -516,6 +520,13 @@ function queryComputerPanel(divElement, options) {
                             var modifier = $(this).data('modifier');
                             if (modifier == "Exclude") {
                                 $(this).before(JST["views/developmentQueryPlugin/criteria.hbs"](context2));
+                                var critAdded = $('#' + panel.divElement.id + '-listGroup').find(".query-condition")[index];
+                                $(critAdded).append('<small class="text-muted pull-right glyphicon glyphicon-refresh icon-spin" style="position: relative; top: 12px;"></small>');
+                                panel.execute("inferred", panel.exportToConstraintGrammar(false, false, critAdded), true, function(resultCount){
+                                    $(critAdded).find(".glyphicon-refresh").first().remove();
+                                    var cont = parseInt(resultCount);
+                                    $(critAdded).append('<small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</small>');
+                                });
                                 foundExclude = true;
                                 return false;
                             }
@@ -951,20 +962,64 @@ function queryComputerPanel(divElement, options) {
             limit = 1;
             skip = 0;
         }else{
-            $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div></div><p id="' + panel.divElement.id + '-waitingSearch-text" class="lead"></p>');
+            $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div></div><p id="' + panel.divElement.id + '-waitingSearch-text" class="lead animated"></p>');
             $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is processing your instructions...");
+            $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
             setTimeout(function(){
-                if (xhrExecute != null && currentEx == panel.currentEx)
-                    $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is still processing your instructions...");
+                $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
+            }, 600);
+            setTimeout(function(){
+                $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
+                setTimeout(function(){
+                    $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
+                    if (xhrExecute != null && currentEx == panel.currentEx){
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is still processing your instructions...");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
+                        setTimeout(function(){
+                            $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
+                        }, 600);
+                    }
+                }, 600);
             }, 15000);
             setTimeout(function(){
-                if (xhrExecute != null && currentEx == panel.currentEx)
-                    $("#" + panel.divElement.id + "-waitingSearch-text").html("This seems to be a complex set of instructions, still processing...");
+                $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
+                setTimeout(function(){
+                    $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
+                    if (xhrExecute != null && currentEx == panel.currentEx){
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("This seems to be a complex set of instructions, still processing...");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
+                        setTimeout(function(){
+                            $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
+                        }, 600);
+                    }
+                }, 600);
             }, 30000);
             setTimeout(function(){
-                if (xhrExecute != null && currentEx == panel.currentEx)
-                    $("#" + panel.divElement.id + "-waitingSearch-text").html("Processing a complex set of instructions, it might not be supported in a public server. Some times instructions can be simplified by specifying conditions using concepts close in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.");
+                $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
+                setTimeout(function(){
+                    $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
+                    if (xhrExecute != null && currentEx == panel.currentEx){
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is processing a complex set of instructions. This action might not be supported in a public server. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
+                        setTimeout(function(){
+                            $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
+                        }, 600);
+                    }
+                }, 600);
             }, 45000);
+            setTimeout(function(){
+                $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
+                setTimeout(function(){
+                    $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
+                    if (xhrExecute != null && currentEx == panel.currentEx){
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("Instruction set exceeds maximum allowed time for computation. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
+                        setTimeout(function(){
+                            $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
+                        }, 600);
+                    }
+                }, 600);
+            }, 61000);
 
             $('#' + panel.divElement.id + '-resultInfo').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
             if (clean){

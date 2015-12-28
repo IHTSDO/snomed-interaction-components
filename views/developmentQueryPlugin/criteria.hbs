@@ -21,6 +21,10 @@
                         <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li>
                     </ul>
                 </div>
+                {{#if type.conceptId}}
+                    <span style="color: forestgreen;">{{type.conceptId}}</span> |
+                    <span style="color: firebrick;">{{type.term}}</span>| =
+                {{/if}}
                 <span style="color: forestgreen;">{{conceptId}}</span>&nbsp;
                 |
                 <span style="color: firebrick;">{{term}}</span>
