@@ -83,25 +83,30 @@ function queryComputerPanel(divElement, options) {
         };
         $(divElement).html(JST["views/developmentQueryPlugin/main.hbs"](context));
 
-        $.ajax({
-            type: "POST",
-            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
-            data: {
-                expression: "< 410662002|Concept model attribute (attribute)|",
-                limit : 5000,
-                skip : 0,
-                form: "inferred"
-            },
-            dataType: "json",
-            //timeout: 300000,
-            success: function(result) {
-                //console.log(result);
-                //console.log(result.computeResponse.matches);
-                panel.typeArray = result.computeResponse.matches;
-            }
-        }).done(function(result){
-
+        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/410662002/children?form=inferred").done(function(result) {
+            //console.log(result);
+            panel.typeArray = result;
         });
+
+        //$.ajax({
+        //    type: "POST",
+        //    url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
+        //    data: {
+        //        expression: "< 410662002|Concept model attribute (attribute)|",
+        //        limit : 5000,
+        //        skip : 0,
+        //        form: "inferred"
+        //    },
+        //    dataType: "json",
+        //    //timeout: 300000,
+        //    success: function(result) {
+        //        //console.log(result);
+        //        //console.log(result.computeResponse.matches);
+        //        panel.typeArray = result.computeResponse.matches;
+        //    }
+        //}).done(function(result){
+        //
+        //});
 
         $("#" + panel.divElement.id + "-ExamplesModal").find(".btn").addClass("disabled");
         $("#" + panel.divElement.id + "-ExamplesModal").find(".loadExample").removeClass("disabled");
@@ -166,18 +171,10 @@ function queryComputerPanel(divElement, options) {
                 $(divElement).find(".addedCriteria").find(".selectTypeOpt").click(function(e){
                     $(e.target).closest(".typeCritCombo").attr("data-type-term", $(e.target).attr("data-term"));
                     $(e.target).closest(".typeCritCombo").attr("data-type-concept-id", $(e.target).attr("data-id"));
-                    $(e.target).closest("div").find("span").first().html($(e.target).attr("data-term"));
-                });
-
-                $(divElement).find(".addedCriteria").find(".selectTypeAnd").unbind();
-                $(divElement).find(".addedCriteria").find(".selectTypeAnd").click(function(e){
-                    var typeSel = $(e.target).html();
-                    $(e.target).closest(".addedCriteria").attr("data-typeSelected", typeSel);
-                    $(e.target).closest(".dropdown").find("span").first().html(typeSel);
-                    if (typeSel == "Refinement")
-                        $(divElement).find(".typeCritCombo").show();
-                    else
-                        $(divElement).find(".typeCritCombo").hide();
+                    var term = $(e.target).attr("data-term");
+                    if (term.length > 15)
+                        term = term.substr(0, 14) + "...";
+                    $(e.target).closest("div").find("span").first().html(term);
                 });
 
                 $(divElement).find(".addedCriteria").find(".removeCriteria").unbind();
