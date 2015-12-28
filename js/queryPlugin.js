@@ -650,7 +650,15 @@ function queryComputerPanel(divElement, options) {
             operator = "<span class='exp-operators'>" + operator + "</span>";
             term = "<span class='exp-term'>" +  term + "</span>";
         }
-        grammar = operator + condition.conceptId + term;
+        if (condition.typeId) {
+            var typeTerm = "|" + condition.typeTerm + "|";
+            if (htmlFormat) {
+                term = "<span class='exp-term'>" +  typeTerm + "</span>";
+            }
+            grammar = condition.typeId + typeTerm + " = " + operator + condition.conceptId + term;
+        } else {
+            grammar = operator + condition.conceptId + term;
+        }
         return grammar;
     };
 
@@ -670,6 +678,8 @@ function queryComputerPanel(divElement, options) {
                 $(htmlObj).find(".constraint").each(function (index2) {
                     var condition = {
                         "criteria": $(this).attr('data-criteria'),
+                        "typeId": $(this).attr('data--type-concept-id'),
+                        "typeTerm": $(this).attr('data-type-term'),
                         "conceptId": $(this).attr('data-concept-id'),
                         "term": $(this).attr('data-term')
                     };
@@ -682,6 +692,8 @@ function queryComputerPanel(divElement, options) {
                     $(this).find(".constraint").each(function (index2) {
                         var condition = {
                             "criteria": $(this).attr('data-criteria'),
+                            "typeId": $(this).attr('data--type-concept-id'),
+                            "typeTerm": $(this).attr('data-type-term'),
                             "conceptId": $(this).attr('data-concept-id'),
                             "term": $(this).attr('data-term')
                         };
@@ -694,18 +706,41 @@ function queryComputerPanel(divElement, options) {
                     }
                 });
             }
+            var isRefined = function(conditions) {
+                var refined = false;
+                if (conditions.length > 1) {
+                    if (conditions[1].typeId) {
+                        refined = true;
+                    }
+                }
+                return refined;
+            };
             //if (includes.length > 1) grammar += "(";
             $.each(includes, function (index, conditions) {
                 if (index > 0) grammar += " OR ";
-                if (conditions.length > 1) grammar += " (";
-                $.each(conditions, function (index2, condition) {
-                    if (index2 > 0) grammar += " AND ";
-                    grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
-                    if (htmlFormat && index2 < conditions.length -1) {
-                        grammar += "<br>";
-                    }
-                });
-                if (conditions.length > 1) grammar += ") ";
+                if (conditions.length > 1 || isRefined(conditions)) grammar += " (";
+                if (isRefined(conditions)) {
+                    $.each(conditions, function (index2, condition) {
+                        grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                        if (index2 == 0) {
+                            grammar += " : ";
+                        } else if(index2 < conditions.length -1) {
+                            grammar += " , ";
+                        }
+                        if (htmlFormat && index2 < conditions.length -1) {
+                            grammar += "<br>";
+                        }
+                    });
+                } else {
+                    $.each(conditions, function (index2, condition) {
+                        if (index2 > 0) grammar += " AND ";
+                        grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                        if (htmlFormat && index2 < conditions.length -1) {
+                            grammar += "<br>";
+                        }
+                    });
+                }
+                if (conditions.length > 1 || isRefined(conditions)) grammar += ") ";
                 if (htmlFormat && index < includes.length -1) {
                     grammar += "<br>";
                 }
@@ -727,15 +762,29 @@ function queryComputerPanel(divElement, options) {
             if (excludes.length > 1) grammar += "(";
             $.each(excludes, function (index, conditions) {
                 if (index > 0) grammar += " OR ";
-                if (conditions.length > 1) grammar += " (";
-                $.each(conditions, function (index2, condition) {
-                    if (index2 > 0) grammar += " AND ";
-                    grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
-                    if (htmlFormat && index2 < conditions.length -1) {
-                        grammar += "<br>";
-                    }
-                });
-                if (conditions.length > 1) grammar += ") ";
+                if (conditions.length > 1 || isRefined(conditions)) grammar += " (";
+                if (isRefined(conditions)) {
+                    $.each(conditions, function (index2, condition) {
+                        grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                        if (index2 == 0) {
+                            grammar += " : ";
+                        } else if(index2 < conditions.length -1) {
+                            grammar += " , ";
+                        }
+                        if (htmlFormat && index2 < conditions.length -1) {
+                            grammar += "<br>";
+                        }
+                    });
+                } else {
+                    $.each(conditions, function (index2, condition) {
+                        if (index2 > 0) grammar += " AND ";
+                        grammar += panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
+                        if (htmlFormat && index2 < conditions.length -1) {
+                            grammar += "<br>";
+                        }
+                    });
+                }
+                if (conditions.length > 1 || isRefined(conditions)) grammar += ") ";
                 if (htmlFormat && index < excludes.length -1) {
                     grammar += "<br>";
                 }
