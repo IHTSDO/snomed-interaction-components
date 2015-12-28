@@ -8,7 +8,7 @@
                 <br>
                 <div style="margin-left: 45px; display: inline-block">AND</div>
             {{/if_eq}}
-            <span class="constraint" data-term="{{term}}" data-criteria="{{criteria}}" data-concept-id="{{conceptId}}">
+            <span class="constraint" data-term="{{term}}" data-criteria="{{criteria}}" data-concept-id="{{conceptId}}" {{#if type.conceptId}}data-type-concept-id="{{type.conceptId}}" data-type-term="{{type.term}}"{{/if}}>
                 <!--{{criteria}}&nbsp;-->
                 <div style="display: inline-block;" class="dropdown">
                     <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">

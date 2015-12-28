@@ -83,8 +83,29 @@ function queryComputerPanel(divElement, options) {
         };
         $(divElement).html(JST["views/developmentQueryPlugin/main.hbs"](context));
 
+        $.ajax({
+            type: "POST",
+            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
+            data: {
+                expression: "< 410662002|Concept model attribute (attribute)|",
+                limit : 5000,
+                skip : 0,
+                form: "inferred"
+            },
+            dataType: "json",
+            //timeout: 300000,
+            success: function(result) {
+                //console.log(result);
+                //console.log(result.computeResponse.matches);
+                panel.typeArray = result.computeResponse.matches;
+            }
+        }).done(function(result){
+
+        });
+
         $("#" + panel.divElement.id + "-ExamplesModal").find(".btn").addClass("disabled");
         $("#" + panel.divElement.id + "-ExamplesModal").find(".loadExample").removeClass("disabled");
+        $("#" + panel.divElement.id + "-constraintGrammarModal-close").removeClass("disabled");
 
         $(divElement).find(".loadExample").unbind();
         $(divElement).find(".loadExample").click(function(e){
@@ -136,12 +157,33 @@ function queryComputerPanel(divElement, options) {
             $(divElement).find(".addCriteria").click(function(e){
                 $(e.target).closest("div").hide();
                 var criteria = $('#' + panel.divElement.id + '-selectedCriteria').html();
-                $(e.target).closest(".form-inline").append(JST["views/developmentQueryPlugin/andCriteria.hbs"]({criteria: criteria}));
+                var typeSelected = "false";
+                if ($(divElement).find(".addedCriteria").length)
+                    typeSelected = $(divElement).find(".addedCriteria").first().attr("data-typeSelected");
+                $(e.target).closest(".form-inline").append(JST["views/developmentQueryPlugin/andCriteria.hbs"]({criteria: criteria, typeSelected: typeSelected, types: panel.typeArray}));
+
+                $(divElement).find(".addedCriteria").find(".selectTypeOpt").unbind();
+                $(divElement).find(".addedCriteria").find(".selectTypeOpt").click(function(e){
+                    $(e.target).closest(".typeCritCombo").attr("data-type-term", $(e.target).attr("data-term"));
+                    $(e.target).closest(".typeCritCombo").attr("data-type-concept-id", $(e.target).attr("data-id"));
+                    $(e.target).closest("div").find("span").first().html($(e.target).attr("data-term"));
+                });
+
+                $(divElement).find(".addedCriteria").find(".selectTypeAnd").unbind();
+                $(divElement).find(".addedCriteria").find(".selectTypeAnd").click(function(e){
+                    var typeSel = $(e.target).html();
+                    $(e.target).closest(".addedCriteria").attr("data-typeSelected", typeSel);
+                    $(e.target).closest(".dropdown").find("span").first().html(typeSel);
+                    if (typeSel == "Refinement")
+                        $(divElement).find(".typeCritCombo").show();
+                    else
+                        $(divElement).find(".typeCritCombo").hide();
+                });
+
                 $(divElement).find(".addedCriteria").find(".removeCriteria").unbind();
                 $(divElement).find(".addedCriteria").find(".removeCriteria").click(function(e){
                     $(e.target).closest(".addedCriteria").remove();
                     var foundAddedCriteria = $(divElement).find(".addedCriteria");
-                    console.log(foundAddedCriteria);
                     if (!foundAddedCriteria.length)
                         $("#" + panel.divElement.id + "-addCriteriaAnd").show();
                     else{
@@ -429,6 +471,7 @@ function queryComputerPanel(divElement, options) {
                     $('#' + panel.divElement.id + '-conceptField').removeClass("has-error");
                     var criterias = [{criteria: criteria, conceptId: conceptId, term: term}];
                     if ($(divElement).find(".addedCriteria").length){
+                        var typeSelected = $(divElement).find(".addedCriteria").first().attr("data-typeSelected");
                         $(divElement).find(".addedCriteria").each(function(i){
                             var addedConceptId = $(this).find(".andCriteriaConcept").first().attr("data-conceptId");
                             var addedTerm = $(this).find(".andCriteriaConcept").first().val();
@@ -441,11 +484,18 @@ function queryComputerPanel(divElement, options) {
                                         return false;
                                     }
                                 });
-                                criterias.push({
+                                var crit = {
                                     criteria: addedCrit,
                                     conceptId: addedConceptId,
                                     term: addedTerm
-                                });
+                                };
+                                if (typeSelected == "Refinement"){
+                                    crit.type = {
+                                        conceptId: $(this).find(".typeCritCombo").first().attr("data-concept-id"),
+                                        term: $(this).find(".typeCritCombo").first().attr("data-term")
+                                    };
+                                }
+                                criterias.push(crit);
                             }else{
                                 $('#' + panel.divElement.id + '-conceptField').addClass("has-error");
                                 $('#' + panel.divElement.id + '-addmsg').html("Drop a concept...");
