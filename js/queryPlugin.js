@@ -739,7 +739,7 @@ function queryComputerPanel(divElement, options) {
                 $(htmlObj).find(".constraint").each(function (index2) {
                     var condition = {
                         "criteria": $(this).attr('data-criteria'),
-                        "typeId": $(this).attr('data--type-concept-id'),
+                        "typeId": $(this).attr('data-type-concept-id'),
                         "typeTerm": $(this).attr('data-type-term'),
                         "conceptId": $(this).attr('data-concept-id'),
                         "term": $(this).attr('data-term')
@@ -753,7 +753,7 @@ function queryComputerPanel(divElement, options) {
                     $(this).find(".constraint").each(function (index2) {
                         var condition = {
                             "criteria": $(this).attr('data-criteria'),
-                            "typeId": $(this).attr('data--type-concept-id'),
+                            "typeId": $(this).attr('data-type-concept-id'),
                             "typeTerm": $(this).attr('data-type-term'),
                             "conceptId": $(this).attr('data-concept-id'),
                             "term": $(this).attr('data-term')
