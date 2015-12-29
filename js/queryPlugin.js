@@ -884,7 +884,6 @@ function queryComputerPanel(divElement, options) {
         return grammar;
     };
 
-
     this.execute = function (form, expression, clean, onlyTotal){
         panel.currentEx++;
         var currentEx = panel.currentEx;
