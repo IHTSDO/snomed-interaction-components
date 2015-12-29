@@ -85,6 +85,13 @@ function queryComputerPanel(divElement, options) {
 
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/410662002/children?form=inferred").done(function(result) {
             //console.log(result);
+            result.sort(function (a, b) {
+                if (a.defaultTerm < b.defaultTerm)
+                    return -1;
+                if (a.defaultTerm > b.defaultTerm)
+                    return 1;
+                return 0;
+            });
             panel.typeArray = result;
         });
 

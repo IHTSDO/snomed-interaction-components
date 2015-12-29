@@ -10,11 +10,15 @@
     <div class='panel-body' style='height:100%' id='{{divElementId}}-panelBody'>
         <!--<p style="margin: 10px;">Create a query, conditions are evaluated in order:</p>-->
         <div class="row container-fluid" style="margin: 10px;">
+            <p class="lead col-md-6">Build a query</p>
+            <button type="button" id="{{divElementId}}-helpButton" class="btn btn-default pull-right" style="margin: 10px;" data-toggle="modal" data-target="#{{divElementId}}-queryHelpModal">{{{i18n "i18n_help" "Help"}}}</button>
+            <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#{{divElementId}}-ExamplesModal" style="margin: 10px;">{{{i18n "i18n_examples" "Examples"}}}</button>
+            <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
+        </div>
+        <div class="row container-fluid" style="margin: 10px;">
             <form class="form-inline" role="form">
                 <!--<span>New condition: </span>-->
                 <!--<button type="button" class="btn btn-default pull-right"  id='{{divElementId}}-selectButton' style="margin: 10px;">{{{i18n "i18n_load_query" "Load query"}}}</button>-->
-                <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
-                <button type="button" id="{{divElementId}}-helpButton" class="btn btn-default pull-right" style="margin: 10px;" data-toggle="modal" data-target="#{{divElementId}}-queryHelpModal">{{{i18n "i18n_help" "Help"}}}</button>
                 <div class="form-group">
                     <div class="dropdown">
                         <button style="width: 75px;" class="btn btn-default dropdown-toggle" type="button" id="{{divElementId}}-modifierButton" data-toggle="dropdown" aria-expanded="true">
@@ -84,7 +88,6 @@
             <ul class="list-group" id="{{divElementId}}-listGroup">
             </ul>
             <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Run query"}}}</div>
-            <button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#{{divElementId}}-ExamplesModal" type="button">Examples</button>
             <button type="button" class="btn btn-primary pull-right"  id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
             <br>
             <br>
@@ -175,10 +178,10 @@
                     <li>exclusionExpressionConstraint</li>
                     <li>disjunctionExpressionConstraint</li>
                     <li>conjunctionExpressionConstraint</li>
+                    <li>refinedExpressionConstraint</li>
                 </ul>
                 <p>Unsupported features: (some may be added in future versions)</p>
                 <ul>
-                    <li>refinements</li>
                     <li>nested expressions</li>
                     <li>arbitrary order of instructions</li>
                     <li>complex operators like "^ <" (descendants of members)</li>
