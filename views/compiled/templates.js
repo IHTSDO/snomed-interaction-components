@@ -3239,17 +3239,29 @@ function program3(depth0,data) {
 
 function program5(depth0,data) {
   
-  var buffer = "";
-  return buffer;
+  
+  return "\n            and\n        ";
   }
 
 function program7(depth0,data) {
   
   
-  return "style=\"display: none;\"";
+  return "\n            attribute\n        ";
   }
 
 function program9(depth0,data) {
+  
+  var buffer = "";
+  return buffer;
+  }
+
+function program11(depth0,data) {
+  
+  
+  return "style=\"display: none;\"";
+  }
+
+function program13(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += "\n                    <li role=\"presentation\"><a class=\"selectTypeOpt\" data-id=\"";
@@ -3271,11 +3283,14 @@ function program9(depth0,data) {
   buffer += "<div class=\"addedCriteria\" data-typeSelected=\"";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.typeSelected), "false", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.typeSelected), "false", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\">\n    <div class=\"form-group text-center\" style=\"width: 75px;\">\n        Attribute\n    </div>\n    <div data-type-concept-id=\"false\" class=\"form-group typeCritCombo\" ";
-  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.typeSelected), "Refinement", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.typeSelected), "Refinement", options));
+  buffer += "\">\n    <div class=\"form-group text-center\" style=\"width: 75px;\">\n        ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.typeSelected), "Conjunction", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.typeSelected), "Conjunction", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n    </div>\n    <div data-type-concept-id=\"false\" class=\"form-group typeCritCombo\" ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(11, program11, data),fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.typeSelected), "Refinement", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.typeSelected), "Refinement", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += ">\n        <div class=\"dropdown\">\n            <button style=\"width: 147px;\" class=\"btn btn-default dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-expanded=\"true\">\n                <span>Select</span>\n                <span class=\"caret\"></span>\n            </button>\n            <ul style=\"max-height: 400px; overflow: auto;\" class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"dropdownMenu1\">\n                ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.types), {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.types), {hash:{},inverse:self.noop,fn:self.program(13, program13, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n            </ul>\n        </div>\n    </div>\n    <div class=\"form-group\">\n        <div class=\"dropdown\">\n            <button style=\"width: 147px;\" class=\"btn btn-default dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-expanded=\"true\">\n                <span class=\"addSelectCriteria\">";
   if (helper = helpers.criteria) { stack1 = helper.call(depth0, {hash:{},data:data}); }

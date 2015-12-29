@@ -88,26 +88,6 @@ function queryComputerPanel(divElement, options) {
             panel.typeArray = result;
         });
 
-        //$.ajax({
-        //    type: "POST",
-        //    url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
-        //    data: {
-        //        expression: "< 410662002|Concept model attribute (attribute)|",
-        //        limit : 5000,
-        //        skip : 0,
-        //        form: "inferred"
-        //    },
-        //    dataType: "json",
-        //    //timeout: 300000,
-        //    success: function(result) {
-        //        //console.log(result);
-        //        //console.log(result.computeResponse.matches);
-        //        panel.typeArray = result.computeResponse.matches;
-        //    }
-        //}).done(function(result){
-        //
-        //});
-
         $("#" + panel.divElement.id + "-ExamplesModal").find(".btn").addClass("disabled");
         $("#" + panel.divElement.id + "-ExamplesModal").find(".loadExample").removeClass("disabled");
         $("#" + panel.divElement.id + "-ExamplesModal-close").removeClass("disabled");
@@ -624,7 +604,7 @@ function queryComputerPanel(divElement, options) {
         panel.lastRequest.skip = 0;
         panel.lastRequest.limit = panel.lastTotalValues + 1;
         $('#' + panel.divElement.id + '-exportXls').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-        xhrTotal = $.post(panel.lastUrl + "?access_token=" + options.token, panel.lastRequest).done(function(data){
+        xhrTotal = $.post(panel.lastUrl, panel.lastRequest).done(function(data){
             xhrTotal = null;
             panel.allResults = data.matches;
             var rowsHtml = "";
@@ -1044,7 +1024,7 @@ function queryComputerPanel(divElement, options) {
             xhrExecute.abort();
         var xhrExecute2 = $.ajax({
             type: "POST",
-            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
+            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
             data: data,
             dataType: "json",
             //timeout: 300000,

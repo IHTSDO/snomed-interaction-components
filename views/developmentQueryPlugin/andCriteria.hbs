@@ -1,6 +1,10 @@
 <div class="addedCriteria" data-typeSelected="{{#if_eq typeSelected "false"}}Conjunction{{else}}{{typeSelected}}{{/if_eq}}">
     <div class="form-group text-center" style="width: 75px;">
-        Attribute
+        {{#if_eq typeSelected "Conjunction"}}
+            and
+        {{else}}
+            attribute
+        {{/if_eq}}
     </div>
     <div data-type-concept-id="false" class="form-group typeCritCombo" {{#if_eq typeSelected "Refinement"}}{{else}}style="display: none;"{{/if_eq}}>
         <div class="dropdown">
