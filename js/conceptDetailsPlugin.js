@@ -1761,6 +1761,8 @@ function conceptDetails(divElement, conceptId, options) {
     };
 
     this.stripDiagrammingMarkup = function(htmlString) {
+        if (!htmlString)
+            htmlString = "";
         htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-primitive-concept-compact"), 'g'), "");
         htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-defined-concept-compact"), 'g'), "");
         htmlString = htmlString.replace(new RegExp(panel.escapeRegExp("sct-attribute-compact"), 'g'), "");
