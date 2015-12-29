@@ -1064,16 +1064,11 @@ function queryComputerPanel(divElement, options) {
                         onlyTotal("Error");
                     }
                 } else {
-                    if (expression.charAt(0) == "(" && expression.charAt(expression.length-1) == ")") {
-                        expression = expression.substr(1,expression.length-2);
-                        panel.execute(form, expression, clean, onlyTotal);
-                    } else {
-                        if (!onlyTotal){
-                            $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
-                            $("#" + panel.divElement.id + "-results").html("Error...");
-                        }else{
-                            onlyTotal("Error");
-                        }
+                    if (!onlyTotal){
+                        $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
+                        $("#" + panel.divElement.id + "-results").html("Error...");
+                    }else{
+                        onlyTotal("Error");
                     }
                 }
             }
