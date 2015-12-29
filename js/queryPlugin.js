@@ -84,32 +84,34 @@ function queryComputerPanel(divElement, options) {
         };
         $(divElement).html(JST["views/developmentQueryPlugin/main.hbs"](context));
 
-        $.ajax({
-            type: "POST",
-            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
-            data: {
-                expression: "< 410662002|Concept model attribute (attribute)|",
-                limit : 5000,
-                skip : 0,
-                form: "inferred"
-            },
-            dataType: "json",
-            //timeout: 300000,
-            success: function(result) {
-                //console.log(result);
-                //console.log(result.computeResponse.matches);
-                panel.typeArray = result.computeResponse.matches;
-                panel.typeArray.sort(function (a, b) {
-                    if (a.defaultTerm < b.defaultTerm)
-                        return -1;
-                    if (a.defaultTerm > b.defaultTerm)
-                        return 1;
-                    return 0;
-                });
-            }
-        }).done(function(result){
+        if (!panel.typeArray || !panel.typeArray.length){
+            $.ajax({
+                type: "POST",
+                url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
+                data: {
+                    expression: "< 410662002|Concept model attribute (attribute)|",
+                    limit : 5000,
+                    skip : 0,
+                    form: "inferred"
+                },
+                dataType: "json",
+                //timeout: 300000,
+                success: function(result) {
+                    //console.log(result);
+                    //console.log(result.computeResponse.matches);
+                    panel.typeArray = result.computeResponse.matches;
+                    panel.typeArray.sort(function (a, b) {
+                        if (a.defaultTerm < b.defaultTerm)
+                            return -1;
+                        if (a.defaultTerm > b.defaultTerm)
+                            return 1;
+                        return 0;
+                    });
+                }
+            }).done(function(result){
 
-        });
+            });
+        }
 
         //$.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/410662002/children?form=inferred").done(function(result) {
         //    //console.log(result);
