@@ -9,10 +9,11 @@
     <div data-type-concept-id="false" class="form-group typeCritCombo" {{#if_eq typeSelected "Refinement"}}{{else}}style="display: none;"{{/if_eq}}>
         <div class="dropdown">
             <button style="width: 147px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                <span>Select</span>
+                <span>Select type&nbsp;</span>
                 <span class="caret"></span>
             </button>
             <ul style="max-height: 400px; overflow: auto;" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a class="selectTypeOpt" data-id="*" data-term="Any" role="menuitem" tabindex="-1" href="javascript:void(0);">Any</a></li>
                 {{#each types}}
                     <li role="presentation"><a class="selectTypeOpt" data-id="{{conceptId}}" data-term="{{defaultTerm}}" role="menuitem" tabindex="-1" href="javascript:void(0);">{{defaultTerm}}</a></li>
                 {{/each}}
