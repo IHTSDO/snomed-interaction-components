@@ -963,8 +963,9 @@ function queryComputerPanel(divElement, options) {
             skip = 0;
         }else{
             $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div></div><p id="' + panel.divElement.id + '-waitingSearch-text" class="lead animated"></p>');
-            $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is processing your instructions...");
+            $("#" + panel.divElement.id + "-waitingSearch-text").html("");
             $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
+            $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is processing your instructions...");
             setTimeout(function(){
                 $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
             }, 600);
@@ -973,8 +974,9 @@ function queryComputerPanel(divElement, options) {
                 setTimeout(function(){
                     $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
                     if (xhrExecute != null && currentEx == panel.currentEx){
-                        $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is still processing your instructions...");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("");
                         $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is still processing your instructions...");
                         setTimeout(function(){
                             $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
                         }, 600);
@@ -986,8 +988,9 @@ function queryComputerPanel(divElement, options) {
                 setTimeout(function(){
                     $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
                     if (xhrExecute != null && currentEx == panel.currentEx){
-                        $("#" + panel.divElement.id + "-waitingSearch-text").html("This seems to be a complex set of instructions, still processing...");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("");
                         $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("This seems to be a complex set of instructions, still processing...");
                         setTimeout(function(){
                             $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
                         }, 600);
@@ -999,8 +1002,9 @@ function queryComputerPanel(divElement, options) {
                 setTimeout(function(){
                     $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
                     if (xhrExecute != null && currentEx == panel.currentEx){
-                        $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is processing a complex set of instructions. This action might not be supported in a public server. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("");
                         $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is processing a complex set of instructions. This action might not be supported in a public server. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.");
                         setTimeout(function(){
                             $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
                         }, 600);
@@ -1012,8 +1016,9 @@ function queryComputerPanel(divElement, options) {
                 setTimeout(function(){
                     $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
                     if (xhrExecute != null && currentEx == panel.currentEx){
-                        $("#" + panel.divElement.id + "-waitingSearch-text").html("Instruction set exceeds maximum allowed time for computation. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("");
                         $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
+                        $("#" + panel.divElement.id + "-waitingSearch-text").html("Instruction set exceeds maximum allowed time for computation. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.");
                         setTimeout(function(){
                             $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
                         }, 600);
