@@ -700,11 +700,15 @@ function queryComputerPanel(divElement, options) {
             term = "<span class='exp-term'>" +  term + "</span>";
         }
         if (condition.typeId) {
-            var typeTerm = "|" + condition.typeTerm + "|";
-            if (htmlFormat) {
-                term = "<span class='exp-term'>" +  typeTerm + "</span>";
+            if (condition.typeId == "*") {
+                grammar = " * = " + operator + condition.conceptId + term;
+            } else {
+                var typeTerm = "|" + condition.typeTerm + "|";
+                if (htmlFormat) {
+                    term = "<span class='exp-term'>" +  typeTerm + "</span>";
+                }
+                grammar = condition.typeId + typeTerm + " = " + operator + condition.conceptId + term;
             }
-            grammar = condition.typeId + typeTerm + " = " + operator + condition.conceptId + term;
         } else {
             grammar = operator + condition.conceptId + term;
         }
@@ -849,98 +853,6 @@ function queryComputerPanel(divElement, options) {
         return grammar;
     };
 
-    this.exportToConstraintGrammarOld = function(htmlFormat, fullSyntax) {
-        var breakLine = " ";
-        if (htmlFormat) {
-            breakLine = "<br>";
-        }
-        var grammar = "";
-        if ($('#' + panel.divElement.id + '-listGroup').find(".query-condition").length == 0) {
-            console.log("Add at least one condition...");
-        } else {
-            var includes = [];
-            var excludes = [];
-            var first = true;
-            $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function (index) {
-                var criteria = $(this).data('criteria');
-                if (criteria == "hasDescription") {
-                    var condition = {
-                        "criteria": criteria,
-                        "conceptId": $(this).data('concept-id'),
-                        "searchTerm": $(this).data('search-term')
-                    };
-                } else if (criteria != "hasRelationship") {
-                    var condition = {
-                        "criteria": criteria,
-                        "conceptId": $(this).data('concept-id'),
-                        "term": $(this).data('term')
-                    };
-                    if ($(this).data('modifier') == "Exclude") {
-                        grammar = " ( " + grammar + "MINUS " + panel.getExpressionForCondition(condition, htmlFormat, fullSyntax) + " ) " + breakLine;
-                    } else {
-                        if (!first) {
-                            grammar = grammar + "OR ";
-                        } else {
-                            first = false;
-                        }
-                        grammar = grammar + panel.getExpressionForCondition(condition, htmlFormat, fullSyntax) + breakLine;
-                    }
-                }
-
-            });
-
-            var refinementSeparatorWritten = false;
-            $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function (index) {
-                var criteria = $(this).data('criteria');
-                if (criteria == "hasRelationship") {
-                    if (!refinementSeparatorWritten) {
-                        grammar+= " : ";
-                        refinementSeparatorWritten = true;
-                    } else {
-                        grammar+= " , " + breakLine;
-                    }
-
-                    if ($(this).data('type-id') == "") {
-                        if (fullSyntax) {
-                            grammar+= " ANY";
-                        } else {
-                            grammar+= " *";
-                        }
-                    } else {
-                        var condition = {
-                            "criteria": "self",
-                            "conceptId": $(this).data('type-id'),
-                            "term": $(this).data('type-term')
-                        };
-                        grammar = grammar + panel.getExpressionForCondition(condition, htmlFormat, fullSyntax);
-                    }
-                    grammar += " = ";
-                    if ($(this).data('target-id') == "") {
-                        if (fullSyntax) {
-                            grammar+= " ANY";
-                        } else {
-                            grammar+= " *";
-                        }
-                    } else {
-                        var condition2 = {
-                            "criteria": "self",
-                            "conceptId": $(this).data('target-id'),
-                            "term": $(this).data('target-term')
-                        };
-                        grammar = grammar + panel.getExpressionForCondition(condition2, htmlFormat, fullSyntax);
-                    }
-                }
-            });
-        }
-        grammar = grammar.trim();
-        console.log(grammar.charAt(0));
-        console.log(grammar.charAt(grammar.length-1));
-        if (grammar.charAt(0) == "(" && grammar.charAt(grammar.length-1) == ")") {
-            grammar = grammar.substr(1,grammar.length-2);
-        }
-
-        return grammar;
-    };
 
     this.execute = function (form, expression, clean, onlyTotal){
         panel.currentEx++;
@@ -1090,16 +1002,11 @@ function queryComputerPanel(divElement, options) {
 //                    }
 //                    $("#" + panel.divElement.id + "-results").html(resultsHtml);
                 } else {
-                    if (expression.charAt(0) == "(" && expression.charAt(expression.length-1) == ")") {
-                        expression = expression.substr(1,expression.length-2);
-                        panel.execute(form, expression, clean, onlyTotal);
-                    } else {
-                        if (!onlyTotal){
-                            $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
-                            $("#" + panel.divElement.id + "-results").html("Error...");
-                        }else{
-                            onlyTotal("Error");
-                        }
+                    if (!onlyTotal){
+                        $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
+                        $("#" + panel.divElement.id + "-results").html("Error...");
+                    }else{
+                        onlyTotal("Error");
                     }
                 }
             }
@@ -1126,16 +1033,11 @@ function queryComputerPanel(divElement, options) {
             } else if (textStatus == "abort"){
 
             } else {
-                if (expression.charAt(0) == "(" && expression.charAt(expression.length-1) == ")") {
-                    expression = expression.substr(1,expression.length-2);
-                    panel.execute(form, expression, clean, onlyTotal);
-                } else {
-                    if (!onlyTotal){
-                        $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
-                        $("#" + panel.divElement.id + "-results").html("Error...");
-                    }else{
-                        onlyTotal("Error");
-                    }
+                if (!onlyTotal){
+                    $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
+                    $("#" + panel.divElement.id + "-results").html("Error...");
+                }else{
+                    onlyTotal("Error");
                 }
             }
         });
