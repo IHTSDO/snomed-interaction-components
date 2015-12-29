@@ -84,17 +84,44 @@ function queryComputerPanel(divElement, options) {
         };
         $(divElement).html(JST["views/developmentQueryPlugin/main.hbs"](context));
 
-        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/410662002/children?form=inferred").done(function(result) {
-            //console.log(result);
-            result.sort(function (a, b) {
-                if (a.defaultTerm < b.defaultTerm)
-                    return -1;
-                if (a.defaultTerm > b.defaultTerm)
-                    return 1;
-                return 0;
-            });
-            panel.typeArray = result;
+        $.ajax({
+            type: "POST",
+            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
+            data: {
+                expression: "< 410662002|Concept model attribute (attribute)|",
+                limit : 5000,
+                skip : 0,
+                form: "inferred"
+            },
+            dataType: "json",
+            //timeout: 300000,
+            success: function(result) {
+                //console.log(result);
+                //console.log(result.computeResponse.matches);
+                panel.typeArray = result.computeResponse.matches;
+                panel.typeArray.sort(function (a, b) {
+                    if (a.defaultTerm < b.defaultTerm)
+                        return -1;
+                    if (a.defaultTerm > b.defaultTerm)
+                        return 1;
+                    return 0;
+                });
+            }
+        }).done(function(result){
+
         });
+
+        //$.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/410662002/children?form=inferred").done(function(result) {
+        //    //console.log(result);
+        //    result.sort(function (a, b) {
+        //        if (a.defaultTerm < b.defaultTerm)
+        //            return -1;
+        //        if (a.defaultTerm > b.defaultTerm)
+        //            return 1;
+        //        return 0;
+        //    });
+        //    panel.typeArray = result;
+        //});
 
         $("#" + panel.divElement.id + "-ExamplesModal").find(".btn").addClass("disabled");
         $("#" + panel.divElement.id + "-ExamplesModal").find(".loadExample").removeClass("disabled");
@@ -192,6 +219,8 @@ function queryComputerPanel(divElement, options) {
         $('#' + panel.divElement.id + '-clearButton').unbind();
         $('#' + panel.divElement.id + '-clearButton').disableTextSelect();
         $('#' + panel.divElement.id + '-clearButton').click(function(){
+            if (xhrExecute != null)
+                xhrExecute.abort();
             panel.setUpPanel();
         });
 
@@ -944,6 +973,7 @@ function queryComputerPanel(divElement, options) {
 
     this.execute = function (form, expression, clean, onlyTotal){
         panel.currentEx++;
+        //var currentEx = $.extend(true, {}, panel.currentEx);
         var currentEx = panel.currentEx;
         //$('#' + panel.divElement.id + '-footer').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         if (onlyTotal){
@@ -958,46 +988,47 @@ function queryComputerPanel(divElement, options) {
                 $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
             }, 600);
             setTimeout(function(){
-                $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
-                setTimeout(function(){
-                    $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
-                    if (xhrExecute != null && currentEx == panel.currentEx){
+                //console.log(currentEx, panel.currentEx);
+                if (xhrExecute != null && currentEx == panel.currentEx){
+                    $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
+                    setTimeout(function(){
+                        $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
                         $("#" + panel.divElement.id + "-waitingSearch-text").html("");
                         $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
                         $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is still processing your instructions...");
                         setTimeout(function(){
                             $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
                         }, 600);
-                    }
-                }, 600);
+                    }, 600);
+                }
             }, 15000);
             setTimeout(function(){
-                $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
-                setTimeout(function(){
-                    $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
-                    if (xhrExecute != null && currentEx == panel.currentEx){
+                if (xhrExecute != null && currentEx == panel.currentEx){
+                    $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
+                    setTimeout(function(){
+                        $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
                         $("#" + panel.divElement.id + "-waitingSearch-text").html("");
                         $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
                         $("#" + panel.divElement.id + "-waitingSearch-text").html("This seems to be a complex set of instructions, still processing...");
                         setTimeout(function(){
                             $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
                         }, 600);
-                    }
-                }, 600);
+                    }, 600);
+                }
             }, 30000);
             setTimeout(function(){
-                $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
-                setTimeout(function(){
-                    $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
-                    if (xhrExecute != null && currentEx == panel.currentEx){
+                if (xhrExecute != null && currentEx == panel.currentEx){
+                    $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
+                    setTimeout(function(){
+                        $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeOutLeft");
                         $("#" + panel.divElement.id + "-waitingSearch-text").html("");
                         $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
                         $("#" + panel.divElement.id + "-waitingSearch-text").html("The server is processing a complex set of instructions. This action might not be supported in a public server. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.");
                         setTimeout(function(){
                             $("#" + panel.divElement.id + "-waitingSearch-text").removeClass("fadeInRight");
                         }, 600);
-                    }
-                }, 600);
+                    }, 600);
+                }
             }, 45000);
             //setTimeout(function(){
             //    $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeOutLeft");
@@ -1107,34 +1138,34 @@ function queryComputerPanel(divElement, options) {
             // done
             xhrExecute2 = null;
         }).fail(function(jqXHR){
-            //console.log(jqXHR);
-            //console.log(xhrExecute2);
+            console.log(jqXHR);
+            console.log(xhrExecute2);
             var textStatus = xhrExecute2.statusText;
-            if (xhrExecute2.status == 0)
-                textStatus = "timeout";
-            xhrExecute2 = null;
-            if(textStatus === 'timeout') {
+            if (textStatus != "abort"){
+                if (xhrExecute2.status == 0)
+                    textStatus = "timeout";
+                xhrExecute2 = null;
+                if(textStatus === 'timeout') {
 //                $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
 //                $("#" + panel.divElement.id + "-results").html("Timeout...");
-                if (!onlyTotal){
-                    $('#' + panel.divElement.id + '-footer').html("<p class='lead'>Instruction set exceeds maximum allowed time for computation. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.</p>");
-                    $('#' + panel.divElement.id + '-resultInfo').html("This query cannot be completed in real-time.");
-                    //$('#' + panel.divElement.id + '-footer').html("Timeout Error");
-                }else{
-                    onlyTotal("Error");
-                }
-            } else if (textStatus == "abort"){
-
-            } else {
-                if (expression.charAt(0) == "(" && expression.charAt(expression.length-1) == ")") {
-                    expression = expression.substr(1,expression.length-2);
-                    panel.execute(form, expression, clean, onlyTotal);
-                } else {
                     if (!onlyTotal){
-                        $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
-                        $("#" + panel.divElement.id + "-results").html("Error...");
+                        $('#' + panel.divElement.id + '-footer').html("<p class='lead'>Instruction set exceeds maximum allowed time for computation. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.</p>");
+                        $('#' + panel.divElement.id + '-resultInfo').html("This query cannot be completed in real-time.");
+                        //$('#' + panel.divElement.id + '-footer').html("Timeout Error");
                     }else{
                         onlyTotal("Error");
+                    }
+                } else {
+                    if (expression.charAt(0) == "(" && expression.charAt(expression.length-1) == ")") {
+                        expression = expression.substr(1,expression.length-2);
+                        panel.execute(form, expression, clean, onlyTotal);
+                    } else {
+                        if (!onlyTotal){
+                            $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
+                            $("#" + panel.divElement.id + "-results").html("Error...");
+                        }else{
+                            onlyTotal("Error");
+                        }
                     }
                 }
             }
