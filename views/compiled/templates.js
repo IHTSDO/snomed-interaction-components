@@ -3500,15 +3500,15 @@ function program3(depth0,data,depth1) {
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + ":<span data-htmlValue=\"";
+    + "</h4>\n                                <span data-htmlValue=\"";
   if (helper = helpers.htmlValue) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.htmlValue); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" class=\"pull-right btn btn-primary btn-xs loadExample\" style=\"padding: 0px; display: inline-block;\">Load this query</span></h4>\n                                <div class=\"contentExamples\" style=\"margin: 10px;\">";
+    + "\" class=\"pull-right btn btn-primary btn-xs loadExample\" style=\"padding: 0px; display: inline-block;\">Load this query</span>\n                                <br>\n                                <div class=\"contentExamples\" style=\"margin: 10px;\">";
   if (helper = helpers.htmlValue) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.htmlValue); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</div>\n                            </div>\n                        ";
+  buffer += "</div>\n                                <br>\n                            </div>\n                        ";
   return buffer;
   }
 function program4(depth0,data) {
