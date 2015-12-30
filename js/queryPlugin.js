@@ -75,14 +75,116 @@ function queryComputerPanel(divElement, options) {
         var context = {
             divElementId: panel.divElement.id,
             examples: [
-                {title: "All excision procedures that are also procedures on the digestive system", htmlValue: '<li data-modifier="Include" class="list-group-item clearfix query-condition"> <span class="text-muted line-number" style="font-size: 200%;">1</span>&nbsp;&nbsp; <span style="position: relative; top: -5px;"> <div style="width: 45px;display: inline-block;">Include,</div> <span class="constraint" data-term="Excision (procedure)" data-criteria="descendantOf" data-concept-id="65801008"> <!--descendantOf&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> descendantOf&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">65801008</span>&nbsp; | <span style="color: firebrick;">Excision (procedure)</span> | </span> <br> <div style="margin-left: 45px; display: inline-block">AND</div> <span class="constraint" data-term="Procedure on digestive system (procedure)" data-criteria="descendantOf" data-concept-id="118673008"> <!--descendantOf&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> descendantOf&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">118673008</span>&nbsp; | <span style="color: firebrick;">Procedure on digestive system (procedure)</span> | </span> </span> <button class="pull-right btn btn-link removeLi" style="position: relative; top: 3px;"> <i class="glyphicon glyphicon-remove"></i> </button> <small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of 694 concepts">694 cpts</small></li>'},
-                {title: "All pneumonias except intersticial pneumonias", htmlValue: '<li data-modifier="Include" class="list-group-item clearfix query-condition"> <span class="text-muted line-number" style="font-size: 200%;">1</span>&nbsp;&nbsp; <span style="position: relative; top: -5px;"> <div style="width: 45px;display: inline-block;">Include,</div> <span class="constraint" data-term="Pneumonia (disorder)" data-criteria="descendantOf" data-concept-id="233604007"> <!--descendantOf&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> descendantOf&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">233604007</span>&nbsp; | <span style="color: firebrick;">Pneumonia (disorder)</span> | </span> </span> <button class="pull-right btn btn-link removeLi" style="position: relative; top: 3px;"> <i class="glyphicon glyphicon-remove"></i> </button> <small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of 220 concepts">220 cpts</small></li><li data-modifier="Exclude" class="list-group-item clearfix query-condition"> <span class="text-muted line-number" style="font-size: 200%;">2</span>&nbsp;&nbsp; <span style="position: relative; top: -5px;"> <div style="width: 45px;display: inline-block;">Exclude,</div> <span class="constraint" data-term="Interstitial pneumonia (disorder)" data-criteria="descendantOrSelfOf" data-concept-id="64667001"> <!--descendantOrSelfOf&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">descendantOrSelfOf&nbsp;</button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">64667001</span>&nbsp; | <span style="color: firebrick;">Interstitial pneumonia (disorder)</span> | </span> </span> <button class="pull-right btn btn-link removeLi" style="position: relative; top: 3px;"> <i class="glyphicon glyphicon-remove"></i> </button> <small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of 24 concepts">24 cpts</small></li>'},
-                {title: "Hypertension related concepts, disorders, personal history and family history", htmlValue: '<li data-modifier="Include" class="list-group-item clearfix query-condition"> <span class="text-muted line-number" style="font-size: 200%;">1</span>&nbsp;&nbsp; <span style="position: relative; top: -5px;"> <div style="width: 45px;display: inline-block;">Include,</div> <span class="constraint" data-term="Hypertensive disorder, systemic arterial (disorder)" data-criteria="descendantOf" data-concept-id="38341003"> <!--descendantOf&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> descendantOf&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">38341003</span>&nbsp; | <span style="color: firebrick;">Hypertensive disorder, systemic arterial (disorder)</span> | </span> </span> <button class="pull-right btn btn-link removeLi" style="position: relative; top: 3px;"> <i class="glyphicon glyphicon-remove"></i> </button> <small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of 125 concepts">125 cpts</small></li><li data-modifier="Include" class="list-group-item clearfix query-condition"> <span class="text-muted line-number" style="font-size: 200%;">2</span>&nbsp;&nbsp; <span style="position: relative; top: -5px;"> <div style="width: 45px;display: inline-block;">Include,</div> <span class="constraint" data-term="No family history: Hypertension (situation)" data-criteria="self" data-concept-id="160273004"> <!--self&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> self&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">160273004</span>&nbsp; | <span style="color: firebrick;">No family history: Hypertension (situation)</span> | </span> </span> <button class="pull-right btn btn-link removeLi" style="position: relative; top: 3px;"> <i class="glyphicon glyphicon-remove"></i> </button> <small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of 1 concepts">1 cpts</small></li><li data-modifier="Include" class="list-group-item clearfix query-condition"> <span class="text-muted line-number" style="font-size: 200%;">3</span>&nbsp;&nbsp; <span style="position: relative; top: -5px;"> <div style="width: 45px;display: inline-block;">Include,</div> <span class="constraint" data-term="History of hypertension (situation)" data-criteria="descendantOrSelfOf" data-concept-id="161501007"> <!--descendantOrSelfOf&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> descendantOrSelfOf&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">161501007</span>&nbsp; | <span style="color: firebrick;">History of hypertension (situation)</span> | </span> </span> <button class="pull-right btn btn-link removeLi" style="position: relative; top: 3px;"> <i class="glyphicon glyphicon-remove"></i> </button> <small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of 4 concepts">4 cpts</small></li><li data-modifier="Include" class="list-group-item clearfix query-condition"> <span class="text-muted line-number" style="font-size: 200%;">4</span>&nbsp;&nbsp; <span style="position: relative; top: -5px;"> <div style="width: 45px;display: inline-block;">Include,</div> <span class="constraint" data-term="Family history: Hypertension (situation)" data-criteria="descendantOrSelfOf" data-concept-id="160357008"> <!--descendantOrSelfOf&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> descendantOrSelfOf&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">160357008</span>&nbsp; | <span style="color: firebrick;">Family history: Hypertension (situation)</span> | </span> </span> <button class="pull-right btn btn-link removeLi" style="position: relative; top: 3px;"> <i class="glyphicon glyphicon-remove"></i> </button> <small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of 3 concepts">3 cpts</small></li>'},
-                {title: "Disorders that descendants of Necrosis of an anatomical site and of a disorder of the heart muscle", htmlValue: '<li data-modifier="Include" class="list-group-item clearfix query-condition"> <span class="text-muted line-number" style="font-size: 200%;">1</span>&nbsp;&nbsp; <span style="position: relative; top: -5px;"> <div style="width: 45px;display: inline-block;">Include,</div> <span class="constraint" data-term="Necrosis of anatomical site (disorder)" data-criteria="descendantOf" data-concept-id="609410002"> <!--descendantOf&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> descendantOf&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">609410002</span>&nbsp; | <span style="color: firebrick;">Necrosis of anatomical site (disorder)</span> | </span> <br> <div style="margin-left: 45px; display: inline-block">AND</div> <span class="constraint" data-term="Myocardial disease (disorder)" data-criteria="descendantOf" data-concept-id="57809008"> <!--descendantOf&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> descendantOf&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">57809008</span>&nbsp; | <span style="color: firebrick;">Myocardial disease (disorder)</span> | </span> </span> <button class="pull-right btn btn-link removeLi" style="position: relative; top: 3px;"> <i class="glyphicon glyphicon-remove"></i> </button> <small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of 84 concepts">84 cpts</small></li>'},
-                {title: "All disorders of the lung with an associated morphology with value Edema or any descendant", htmlValue: '<li data-modifier="Include" class="list-group-item clearfix query-condition"> <span class="text-muted line-number" style="font-size: 200%;">1</span>&nbsp;&nbsp; <span style="position: relative; top: -5px;"> <div style="width: 45px;display: inline-block;">Include:</div> <span class="constraint" data-term="Disorder of lung (disorder)" data-criteria="descendantOf" data-concept-id="19829001"> <!--descendantOf&nbsp;--> <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> descendantOf&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">19829001</span>&nbsp; | <span style="color: firebrick;">Disorder of lung (disorder)</span> | : </span> <br> <div style="margin-left: 68px; display: inline-block"> <!--AND--> </div> <span class="constraint" data-term="Edema (morphologic abnormality)" data-criteria="descendantOrSelfOf" data-concept-id="79654002" data-type-concept-id="116676008" data-type-term="Associated morphology (attribute)"> <!--descendantOrSelfOf&nbsp;--> <span style="color: forestgreen;">116676008</span> | <span style="color: firebrick;">Associated morphology (attribute)</span>| = <div style="display: inline-block;" class="dropdown"> <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"> descendantOrSelfOf&nbsp; </button> <ul class="dropdown-menu" role="menu"> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">self</a></li> <li role="presentation"><a class="criteriaDropdownOption" role="menuitem" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li> </ul> </div> <span style="color: forestgreen;">79654002</span>&nbsp; | <span style="color: firebrick;">Edema (morphologic abnormality)</span> | </span> </span> <button class="pull-right btn btn-link removeLi" style="position: relative; top: 3px;"> <i class="glyphicon glyphicon-remove"></i> </button> <small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of 28 concepts">28 cpts</small></li>'}
+                {
+                    title: "All excision procedures that are also procedures on the digestive system",
+                    context: [
+                        {
+                            modifier: "Include",
+                            criterias: [
+                                {criteria: "descendantOf", conceptId: "65801008", term: "Excision (procedure)"},
+                                {criteria: "descendantOf", conceptId: "118673008", term: "Procedure on digestive system (procedure)"}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    title: "All pneumonias except intersticial pneumonias",
+                    context: [
+                        {
+                            modifier: "Include",
+                            criterias: [
+                                {criteria: "descendantOf", conceptId: "233604007", term: "Pneumonia (disorder)"}
+                            ]
+                        },
+                        {
+                            modifier: "Exclude",
+                            criterias: [
+                                {criteria: "descendantOrSelfOf", conceptId: "64667001", term: "Interstitial pneumonia (disorder)"}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    title: "Hypertension related concepts, disorders, personal history and family history",
+                    context: [
+                        {
+                            modifier: "Include",
+                            criterias: [
+                                {criteria: "descendantOf", conceptId: "38341003", term: "Hypertensive disorder, systemic arterial (disorder)"}
+                            ]
+                        },
+                        {
+                            modifier: "Include",
+                            criterias: [
+                                {criteria: "self", conceptId: "160273004", term: "No family history: Hypertension (situation)"}
+                            ]
+                        },
+                        {
+                            modifier: "Include",
+                            criterias: [
+                                {criteria: "descendantOrSelfOf", conceptId: "161501007", term: "History of hypertension (situation)"}
+                            ]
+                        },
+                        {
+                            modifier: "Include",
+                            criterias: [
+                                {criteria: "descendantOrSelfOf", conceptId: "160357008", term: "Family history: Hypertension (situation)"}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    title: "Disorders that descendants of Necrosis of an anatomical site and of a disorder of the heart muscle",
+                    context: [
+                        {
+                            modifier: "Include",
+                            criterias: [
+                                {criteria: "descendantOf", conceptId: "609410002", term: "Necrosis of anatomical site (disorder)"},
+                                {criteria: "descendantOf", conceptId: "57809008", term: "Myocardial disease (disorder)"}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    title: "All disorders of the lung with an associated morphology with value Edema or any descendant",
+                    context: [
+                        {
+                            modifier: "Include",
+                            criterias: [
+                                {criteria: "descendantOf", conceptId: "19829001", term: "Disorder of lung (disorder)", type: {conceptId: "", term: ''}},
+                                {criteria: "descendantOrSelfOf", conceptId: "79654002", term: "Edema (morphologic abnormality)", type: {conceptId: "116676008", term: 'Associated morphology (attribute)'}}
+                            ]
+                        }
+                    ]
+                }
+                //{
+                //    title: "",
+                //    context: [
+                //        {
+                //            modifier: "",
+                //            criterias: [
+                //                {criteria: "", conceptId: "", term: "", type: {conceptId: "", term: ''}}
+                //            ]
+                //        }
+                //    ]
+                //},
             ]
         };
         $(divElement).html(JST["views/developmentQueryPlugin/main.hbs"](context));
+        $('[data-toggle="tooltip"]').tooltip();
+        context.examples.forEach(function(item, index){
+            var contextHtml = "";
+            item.context.forEach(function(loopContext){
+                //contextHtml+= JST[""(loopContext)];
+                contextHtml+= JST["views/developmentQueryPlugin/criteria.hbs"](loopContext);
+            });
+            $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first().html(contextHtml);
+            $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first().find(".btn").addClass("disabled");
+            $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".query-condition").each(function(index) {
+                $(this).find(".line-number").html(index + 1);
+            });
+            $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".loadExample").first().attr("data-htmlValue", $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first().html());
+        });
 
         $("#" + panel.divElement.id + "-ExamplesModal").scrollspy({ target: '#' + panel.divElement.id + '-sidebar', offset:80 });
 
@@ -147,14 +249,15 @@ function queryComputerPanel(divElement, options) {
         //    panel.typeArray = result;
         //});
 
-        $("#" + panel.divElement.id + "-ExamplesModal").find(".btn").addClass("disabled");
-        $("#" + panel.divElement.id + "-ExamplesModal").find(".loadExample").removeClass("disabled");
-        $("#" + panel.divElement.id + "-ExamplesModal-close").removeClass("disabled");
+        //$("#" + panel.divElement.id + "-ExamplesModal").find(".btn").addClass("disabled");
+        //$("#" + panel.divElement.id + "-ExamplesModal").find(".loadExample").removeClass("disabled");
+        //$("#" + panel.divElement.id + "-ExamplesModal-close").removeClass("disabled");
 
         $(divElement).find(".loadExample").unbind();
         $(divElement).find(".loadExample").click(function(e){
             var htmlToPut = $(e.target).attr("data-htmlValue");
             $('#' + panel.divElement.id + '-listGroup').html(htmlToPut);
+            $('#' + panel.divElement.id + '-listGroup').find(".btn").removeClass("disabled");
             $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function(i){
                 var critToUpdate = $(this);
                 $(critToUpdate).find("small").remove();

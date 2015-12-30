@@ -6,7 +6,7 @@
             {{#if_eq @index 0}}
             {{else}}
                 <br>
-                <div style="margin-left: {{#if type.conceptId}}43{{else}}68{{/if}}px; display: inline-block">
+                <div style="margin-left: {{#if type.conceptId}}68{{else}}43{{/if}}px; display: inline-block">
                     {{#if type.conceptId}}{{else}}AND{{/if}}
                 </div>
             {{/if_eq}}
@@ -14,7 +14,7 @@
                 <!--{{criteria}}&nbsp;-->
                 {{#if type.conceptId}}
                     <span style="color: forestgreen;">{{type.conceptId}}</span> |
-                    <span style="color: firebrick;">{{type.term}}</span>| =
+                    <span style="color: firebrick;">{{type.term}}</span> | =
                 {{/if}}
                 <div style="display: inline-block;" class="dropdown">
                     <button style="text-decoration: inherit; color: inherit; display: inline-block; padding: 0px;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">

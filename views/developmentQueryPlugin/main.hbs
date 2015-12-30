@@ -69,8 +69,8 @@
                 </div>
                 <div style="margin-left: 41px;" class="form-group" id="{{divElementId}}-addCriteriaAnd">
                     <div class="dropdown">
-                        <button style="text-decoration: none;" class="btn btn-link dropdown-toggle glyphicon glyphicon-plus" type="button" data-toggle="dropdown" aria-expanded="true"></button>
-                        <ul class="dropdown-menu" role="menu">
+                        <button style="text-decoration: none;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"><span data-toggle="tooltip" data-placement="top" title="More" class="glyphicon glyphicon-plus"></span></button>
+                        <ul class="dropdown-menu pull-right" role="menu">
                             <li role="presentation"><a class="addCriteria" data-type="Conjunction" role="menuitem" tabindex="-1" href="javascript:void(0);">Add AND</a></li>
                             <li role="presentation"><a class="addCriteria" data-type="Refinement" role="menuitem" tabindex="-1" href="javascript:void(0);">Add Refinement</a></li>
                         </ul>
@@ -134,9 +134,9 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="list-group navbar" id="{{divElementId}}-sidebar">
-                            <ul id="{{divElementId}}-mynav" data-spy="affix" data-offset-top="280" class="nav" style="position: fixed; width: 70vh;">
+                            <ul id="{{divElementId}}-mynav" data-spy="affix" data-offset-top="280" class="nav" style="position: fixed; width: 30%;">
                                 {{#each examples}}
-                                    <li><a contenteditable="false" href="#{{@index}}-modal-examples" class="list-group-item">{{title}}</a></li>
+                                    <li><a contenteditable="false" href="#{{../divElementId}}-{{@index}}-modal-examples" class="list-group-item">{{title}}</a></li>
                                 {{/each}}
                             </ul>
                         </div>
@@ -144,9 +144,9 @@
                     <div class="col-md-8" id="{{divElementId}}-mycontent">
                         {{#each examples}}
                             <br>
-                            <div id="{{@index}}-modal-examples" {{#if_eqInd @index ../examples.length}}style="min-height: 450px;"{{/if_eqInd}}>
+                            <div id="{{../divElementId}}-{{@index}}-modal-examples" {{#if_eqInd @index ../examples.length}}style="min-height: 450px;"{{/if_eqInd}}>
                                 <h4>{{title}}:<span data-htmlValue="{{htmlValue}}" class="pull-right btn btn-primary btn-xs loadExample" style="padding: 0px; display: inline-block;">Load this query</span></h4>
-                                <div style="margin: 10px;">{{{htmlValue}}}</div>
+                                <div class="contentExamples" style="margin: 10px;">{{{htmlValue}}}</div>
                             </div>
                         {{/each}}
                     </div>
