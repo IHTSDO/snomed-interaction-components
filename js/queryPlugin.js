@@ -105,7 +105,7 @@ function queryComputerPanel(divElement, options) {
         if (!panel.typeArray || !panel.typeArray.length){
             $.ajax({
                 type: "POST",
-                url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief?access_token=" + options.token,
+                url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
                 data: {
                     expression: "< 410662002|Concept model attribute (attribute)|",
                     limit : 5000,
@@ -117,6 +117,10 @@ function queryComputerPanel(divElement, options) {
                 success: function(result) {
                     //console.log(result);
                     //console.log(result.computeResponse.matches);
+                    result.computeResponse.matches.push({conceptId: "<< 47429007", defaultTerm: "Associated with (attribute) [<<]"});
+                    result.computeResponse.matches.push({conceptId: "<< 405815000", defaultTerm: "Procedure device (attribute) [<<]"});
+                    result.computeResponse.matches.push({conceptId: "<< 405816004", defaultTerm: "Procedure morphology (attribute) [<<]"});
+                    result.computeResponse.matches.push({conceptId: "<< 363704007", defaultTerm: "Procedure site (attribute) [<<]"});
                     panel.typeArray = result.computeResponse.matches;
                     panel.typeArray.sort(function (a, b) {
                         if (a.defaultTerm < b.defaultTerm)
