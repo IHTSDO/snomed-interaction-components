@@ -124,18 +124,33 @@
 </div>
 <!-- Modals -->
 <div class="modal fade" id="{{divElementId}}-ExamplesModal" tabindex="-1" role="dialog" aria-labelledby="{{divElementId}}-myCloudModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" style="width: 80%;">
         <div class="modal-content" >
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Terminology content selections examples</h4>
             </div>
             <div class="modal-body" style="max-height: 450px; overflow: auto;">
-                {{#each examples}}
-                    <br>
-                    <h4>{{title}}:<span data-htmlValue="{{htmlValue}}" class="pull-right btn btn-primary btn-xs loadExample" style="padding: 0px; display: inline-block;">Load this query</span></h4>
-                    <div style="margin: 10px;">{{{htmlValue}}}</div>
-                {{/each}}
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="list-group navbar" id="{{divElementId}}-sidebar">
+                            <ul id="{{divElementId}}-mynav" data-spy="affix" data-offset-top="280" class="nav" style="position: fixed; width: 70vh;">
+                                {{#each examples}}
+                                    <li><a contenteditable="false" href="#{{@index}}-modal-examples" class="list-group-item">{{title}}</a></li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-8" id="{{divElementId}}-mycontent">
+                        {{#each examples}}
+                            <br>
+                            <div id="{{@index}}-modal-examples" {{#if_eqInd @index ../examples.length}}style="min-height: 450px;"{{/if_eqInd}}>
+                                <h4>{{title}}:<span data-htmlValue="{{htmlValue}}" class="pull-right btn btn-primary btn-xs loadExample" style="padding: 0px; display: inline-block;">Load this query</span></h4>
+                                <div style="margin: 10px;">{{{htmlValue}}}</div>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button id="{{divElementId}}-ExamplesModal-close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>

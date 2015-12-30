@@ -6,8 +6,8 @@
             {{#if_eq @index 0}}
             {{else}}
                 <br>
-                <div style="margin-left: 68px; display: inline-block">
-                    <!--AND-->
+                <div style="margin-left: {{#if type.conceptId}}43{{else}}68{{/if}}px; display: inline-block">
+                    {{#if type.conceptId}}{{else}}AND{{/if}}
                 </div>
             {{/if_eq}}
             <span class="constraint" data-term="{{term}}" data-criteria="{{criteria}}" data-concept-id="{{conceptId}}" {{#if type.conceptId}}data-type-concept-id="{{type.conceptId}}" data-type-term="{{type.term}}"{{/if}}>
@@ -30,14 +30,16 @@
                 <span style="color: forestgreen;">{{conceptId}}</span>&nbsp;
                 |
                 <span style="color: firebrick;">{{term}}</span>
-                |{{#if_eqInd @index ../criterias.length}}
-                {{else}}
-                {{#if @index}}
-                    ,
-                {{else}}
-                    :
+                |{{#if type.conceptId}}
+                    {{#if_eqInd @index ../../criterias.length}}
+                    {{else}}
+                        {{#if @index}}
+                            ,
+                        {{else}}
+                            :
+                        {{/if}}
+                    {{/if_eqInd}}
                 {{/if}}
-                {{/if_eqInd}}
             </span>
         {{/each}}
     </span>

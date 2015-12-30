@@ -29,6 +29,10 @@ Handlebars.registerHelper("if_eqInd", function(a, b, opts){
         return opts.inverse(this);
 });
 
+Handlebars.registerHelper("console", function(a){
+    console.log(a);
+});
+
 $(document).on('dragend', function(){
     removeHighlight();
 });

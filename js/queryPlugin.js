@@ -84,6 +84,24 @@ function queryComputerPanel(divElement, options) {
         };
         $(divElement).html(JST["views/developmentQueryPlugin/main.hbs"](context));
 
+        $("#" + panel.divElement.id + "-ExamplesModal").scrollspy({ target: '#' + panel.divElement.id + '-sidebar', offset:80 });
+
+        var clicked = false;
+        $("#" + panel.divElement.id + "-mynav li a").click(
+            function(){
+                console.log('click...');
+                $('#' + panel.divElement.id + '-mycontent > div > h4').css('padding-top',0);
+                $($( this ).attr('href') + ' > h4').css('padding-top','50px');
+                clicked = true;
+            }
+        );
+
+        $("#" + panel.divElement.id + "-ExamplesModal").on('activate.bs.scrollspy', function () {
+            console.log('scrolling...');
+            if(!clicked)$('#' + panel.divElement.id + '-mycontent > div > h4').css('padding-top',0);
+            clicked = false;
+        });
+
         if (!panel.typeArray || !panel.typeArray.length){
             $.ajax({
                 type: "POST",
