@@ -735,6 +735,55 @@ function queryComputerPanel(divElement, options) {
                 $("#" + panel.divElement.id + "-footer").html("Add at least one include...");
             }
         });
+
+        $('#' + panel.divElement.id + '-computeOntoserver').unbind();
+        $('#' + panel.divElement.id + '-computeOntoserver').click(function (e) {
+            var grammar = panel.exportToConstraintGrammar(false, false);
+            if ($('#' + panel.divElement.id + '-listGroup').find('.query-condition[data-modifier="Include"]').length){
+                var ontoserverUrl = "http://52.21.192.244:8080/ontoserver/resources/ontology/findConceptsByQuery?versionedId=http%3A%2F%2Fsnomed.info%2Fsct%2F32506021000036107%2Fversion%2F20151130&field=shortId&field=label&field=primitive&field=inferredAxioms&format=json&start=0&rows=100";
+                var ontoserverConstraintParam = "&query=Constraint(";
+                var sampleEncodedConstraint = "%3C%2019829001%20%7Cdisorder%20of%20lung%7C%3A%20%0A116676008%20%7Cassociated%20morphology%7C%20%3D%20*";
+                var encodedGrammar = encodeURIComponent(grammar);
+                var executeUrl = ontoserverUrl + ontoserverConstraintParam + encodedGrammar + ")";
+                panel.currentEx++;
+                $('#' + panel.divElement.id + '-outputBody').html("");
+                $('#' + panel.divElement.id + '-outputBody2').html("");
+                $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div></div><p id="' + panel.divElement.id + '-waitingSearch-text" class="lead animated"></p>');
+                $("#" + panel.divElement.id + "-waitingSearch-text").html("");
+                $("#" + panel.divElement.id + "-waitingSearch-text").addClass("fadeInRight");
+                $("#" + panel.divElement.id + "-waitingSearch-text").html("OntoServer is processing your instructions...");
+                $.getJSON(executeUrl, function (result) {
+                    //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
+                }).done(function (result) {
+                    console.log(result);
+                    $('#' + panel.divElement.id + '-resultInfo').html("Found " + result.totalResults + " concepts");
+                    $("#" + panel.divElement.id + "-waitingSearch-text").html("");
+                    $("#" + panel.divElement.id + "-footer").html("");
+                    $.each(result.data, function (i, row){
+                        $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='' data-concept-id='" + row.shortId + "' data-term='" + row.label + "'><td>" + row.label + "</td><td>" + row.shortId + "</td></tr>");
+                        $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.label + "</td><td>" + row.shortId + "</td></tr>");
+                    });
+                    $('#' + panel.divElement.id + '-outputBody').find(".conceptResult").unbind();
+                    $('#' + panel.divElement.id + '-outputBody').find(".conceptResult").click(function(event){
+                        //console.log("clicked",$(event.target).closest("tr").attr('data-term'));
+                        channel.publish(panel.divElement.id, {
+                            term: $(event.target).closest("tr").attr('data-term'),
+                            module: $(event.target).closest("tr").attr("data-module"),
+                            conceptId: $(event.target).closest("tr").attr('data-concept-id'),
+                            source: panel.divElement.id
+                        });
+                    });
+                }).fail(function (err) {
+                    console.log("Error",err);
+                });
+
+            }else{
+                console.log("add at least one include");
+                $('#' + panel.divElement.id + '-resultInfo').html('<span class="label label-danger">ERROR</span>');
+                $('#' + panel.divElement.id + '-resultInfo').html('ERROR');
+                $("#" + panel.divElement.id + "-footer").html("Add at least one include...");
+            }
+        });
     };
 
     panel.updateGrammarModal = function(fullSyntax) {

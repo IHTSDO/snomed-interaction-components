@@ -3658,7 +3658,11 @@ function program4(depth0,data) {
     + "-computeInferredButton'>";
   stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_run_query", "Run query", options) : helperMissing.call(depth0, "i18n", "i18n_run_query", "Run query", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</div>\n            <button type=\"button\" class=\"btn btn-primary pull-right\"  id='";
+  buffer += "</div>\n            <div class=\"btn btn-success\" style=\"margin: 10px;\" id='";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-computeOntoserver'>Run on Ontoserver</div>\n            <button type=\"button\" class=\"btn btn-primary pull-right\"  id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
