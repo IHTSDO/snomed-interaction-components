@@ -746,6 +746,7 @@ function queryComputerPanel(divElement, options) {
                 var encodedGrammar = encodeURIComponent(grammar);
                 var executeUrl = ontoserverUrl + ontoserverConstraintParam + encodedGrammar + ")";
                 panel.currentEx++;
+                $('#' + panel.divElement.id + '-resultInfo').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
                 $('#' + panel.divElement.id + '-outputBody').html("");
                 $('#' + panel.divElement.id + '-outputBody2').html("");
                 $('#' + panel.divElement.id + '-footer').html('<div class="progress progress-striped active"> <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span>Searching</span></div></div><p id="' + panel.divElement.id + '-waitingSearch-text" class="lead animated"></p>');
@@ -758,7 +759,12 @@ function queryComputerPanel(divElement, options) {
                     console.log(result);
                     $('#' + panel.divElement.id + '-resultInfo').html("Found " + result.totalResults + " concepts");
                     $("#" + panel.divElement.id + "-waitingSearch-text").html("");
-                    $("#" + panel.divElement.id + "-footer").html("");
+                    //TODO: implement pagination with Ontoserver
+                    if (result.totalResults > 100) {
+                        $('#' + panel.divElement.id + '-footer').html("Showing first 100 matches");
+                    } else {
+                        $('#' + panel.divElement.id + '-footer').html("Showing all matches");
+                    }
                     $.each(result.data, function (i, row){
                         $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='' data-concept-id='" + row.shortId + "' data-term='" + row.label + "'><td>" + row.label + "</td><td>" + row.shortId + "</td></tr>");
                         $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.label + "</td><td>" + row.shortId + "</td></tr>");
