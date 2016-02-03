@@ -823,22 +823,47 @@ function queryComputerPanel(divElement, options) {
         panel.lastRequest.skip = 0;
         panel.lastRequest.limit = panel.lastTotalValues + 1;
         $('#' + panel.divElement.id + '-exportXls').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-        xhrTotal = $.post(panel.lastUrl, panel.lastRequest).done(function(data){
-            xhrTotal = null;
-            panel.allResults = data.matches;
-            var rowsHtml = "";
-            if (panel.allResults && panel.allResults.length){
-                $.each(panel.allResults, function(i, field){
-                    rowsHtml+= "<tr><td>" + field.defaultTerm + "</td><td>" + field.conceptId + "</td></tr>";
-                });
+        xhrTotal = $.ajax({
+            type: "POST",
+            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+            data: panel.lastRequest,
+            dataType: "json",
+            success: function(result) {
+                xhrTotal = null;
+                panel.allResults = result.computeResponse.matches;
+                var rowsHtml = "";
+                if (panel.allResults && panel.allResults.length){
+                    $.each(panel.allResults, function(i, field){
+                        rowsHtml+= "<tr><td>" + field.defaultTerm + "</td><td>" + field.conceptId + "</td></tr>";
+                    });
+                }
+                $("#" + panel.divElement.id + "-outputBody2").html(rowsHtml);
+                $('#' + panel.divElement.id + '-exportXls').html('Download XLS <img style="height: 23px;" src="img/excel.png">');
+                if (callback)
+                    callback();
             }
-            $("#" + panel.divElement.id + "-outputBody2").html(rowsHtml);
-            $('#' + panel.divElement.id + '-exportXls').html('Download XLS <img style="height: 23px;" src="img/excel.png">');
-            if (callback)
-                callback();
+        }).always(function(result){
+            xhrTotal = null;
         }).fail(function(){
             alertEvent("Failed!", "error");
         });
+
+        //xhrTotal = $.post(panel.lastUrl, panel.lastRequest).done(function(data){
+        //    xhrTotal = null;
+        //    panel.allResults = data.matches;
+        //    var rowsHtml = "";
+        //    if (panel.allResults && panel.allResults.length){
+        //        $.each(panel.allResults, function(i, field){
+        //            rowsHtml+= "<tr><td>" + field.defaultTerm + "</td><td>" + field.conceptId + "</td></tr>";
+        //        });
+        //    }
+        //    $("#" + panel.divElement.id + "-outputBody2").html(rowsHtml);
+        //    $('#' + panel.divElement.id + '-exportXls').html('Download XLS <img style="height: 23px;" src="img/excel.png">');
+        //    if (callback)
+        //        callback();
+        //}).fail(function(){
+        //    alertEvent("Failed!", "error");
+        //});
     };
 
     this.getExpressionForCondition = function(condition, htmlFormat, fullSyntax) {
@@ -1151,6 +1176,7 @@ function queryComputerPanel(divElement, options) {
             skip : skip,
             form: form
         };
+        panel.lastRequest = data;
         if (xhrExecute != null && !onlyTotal)
             xhrExecute.abort();
         var xhrExecute2 = $.ajax({
@@ -1158,7 +1184,7 @@ function queryComputerPanel(divElement, options) {
             url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
             data: data,
             dataType: "json",
-            //timeout: 300000,
+            //timeout: 300000,lasturl
             success: function(result) {
                 if (result.paserResponse.validation) {
                     data = result.computeResponse;
@@ -1186,6 +1212,7 @@ function queryComputerPanel(divElement, options) {
                             });
                         });
 
+                        panel.lastTotalValues = data.total;
                         if (limit + skip < data.total) {
                             $('#' + panel.divElement.id + '-footer').html("<span id='" + panel.divElement.id + "-more'>Show more (viewing " + (limit + skip) + " of " + data.total + " total)</span>");
                         } else {

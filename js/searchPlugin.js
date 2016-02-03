@@ -369,7 +369,8 @@ function searchPanel(divElement, options) {
             }
         });
         $.each(componentsRegistry, function (i, field){
-            field.loadMarkers();
+            if (field.loadMarkers)
+                field.loadMarkers();
         });
     }
 

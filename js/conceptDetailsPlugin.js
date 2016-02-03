@@ -1840,7 +1840,8 @@ function conceptDetails(divElement, conceptId, options) {
                 if ($("#home-children-" + panel.divElement.id + "-body").length > 0){
                 }else{
                     panel.setupCanvas();
-                    panel.loadMarkers();
+                    if (panel.loadMarkers)
+                        panel.loadMarkers();
                 }
                 panel.updateCanvas();
 //            This creates a cycle
@@ -2029,7 +2030,8 @@ function conceptDetails(divElement, conceptId, options) {
         //    }
         //});
         $.each(componentsRegistry, function (i, field){
-            field.loadMarkers();
+            if (field.loadMarkers)
+                field.loadMarkers();
         });
         panel.updateCanvas();
     }
