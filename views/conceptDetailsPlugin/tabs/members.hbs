@@ -8,8 +8,8 @@
 {{/if_eq}}
 <tbody>
     {{#each result.members}}
-        <tr>
-            <td>
+        <tr class="member-row">
+            <td data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>
                 <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;&nbsp;</span>
                 {{#hasCountryIcon module}}
                     <div class="phoca-flagbox" style="width:22px;height:22px">

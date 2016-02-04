@@ -2,6 +2,10 @@
     <div id="{{divElementId}}-diagram-toolbar" class="row">
         <div class="row" style="margin: 15px;">
             <div class="btn-toolbar pull-right" role="toolbar">
+                <div class="btn-group" role="group" aria-label="..." style="margin-right: 5px;">
+                    <button type="button" class="btn btn-default btn-sm" id="{{divElementId}}-stated-button-d">Stated</button>
+                    <button type="button" class="btn btn-default btn-sm" id="{{divElementId}}-inferred-button-d">Inferred</button>
+                </div>
                 <button id="{{divElementId}}-download-button" type="button" class="btn btn-primary btn-sm disabled" style="display: block;">Download</button>
                 <button id="{{divElementId}}-progress-button" type="button" class="btn btn-warning btn-sm disabled" style="display: none;">Generating downloadable files <span class='glyphicon glyphicon-refresh icon-spin'></span></button>
                 <button id="{{divElementId}}-png-button" type="button" class="btn btn-success btn-sm" style="display: none;"><span class="glyphicon glyphicon-picture"></span> PNG</button>

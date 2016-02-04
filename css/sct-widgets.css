@@ -203,3 +203,29 @@ i:active { background-color: #428bca; }
 .menu-item-active {
     background-color: #99ccff;
 }
+
+/* Expressions language */
+
+.expression-code {
+    font-family: "Courier New", monospace;
+    white-space: pre;
+    /*background-color: #000000;*/
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.exp-brackets {
+    color: #3300aa;
+}
+
+.exp-operators {
+    color: sienna;
+}
+
+.exp-pipes {
+    color: #086d11;
+}
+
+.exp-term {
+    color: #086d11;
+}
