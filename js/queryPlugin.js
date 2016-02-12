@@ -191,7 +191,7 @@ function queryComputerPanel(divElement, options) {
         var clicked = false;
         $("#" + panel.divElement.id + "-mynav li a").click(
             function(){
-                console.log('click...');
+                //console.log('click...');
                 $('#' + panel.divElement.id + '-mycontent > div > h4').css('padding-top',0);
                 $($( this ).attr('href') + ' > h4').css('padding-top','50px');
                 clicked = true;
@@ -199,7 +199,7 @@ function queryComputerPanel(divElement, options) {
         );
 
         $("#" + panel.divElement.id + "-ExamplesModal").on('activate.bs.scrollspy', function () {
-            console.log('scrolling...');
+            //console.log('scrolling...');
             if(!clicked)$('#' + panel.divElement.id + '-mycontent > div > h4').css('padding-top',0);
             clicked = false;
         });
@@ -729,7 +729,7 @@ function queryComputerPanel(divElement, options) {
             if ($('#' + panel.divElement.id + '-listGroup').find('.query-condition[data-modifier="Include"]').length){
                 panel.execute("inferred", grammar, true);
             }else{
-                console.log("add at least one include");
+                //console.log("add at least one include");
                 $('#' + panel.divElement.id + '-resultInfo').html('<span class="label label-danger">ERROR</span>');
                 $('#' + panel.divElement.id + '-resultInfo').html('ERROR');
                 $("#" + panel.divElement.id + "-footer").html("Add at least one include...");
@@ -756,7 +756,7 @@ function queryComputerPanel(divElement, options) {
                 $.getJSON(executeUrl, function (result) {
                     //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
                 }).done(function (result) {
-                    console.log(result);
+                    //console.log(result);
                     $('#' + panel.divElement.id + '-resultInfo').html("Found " + result.totalResults + " concepts");
                     $("#" + panel.divElement.id + "-waitingSearch-text").html("");
                     //TODO: implement pagination with Ontoserver
@@ -780,11 +780,11 @@ function queryComputerPanel(divElement, options) {
                         });
                     });
                 }).fail(function (err) {
-                    console.log("Error",err);
+                    //console.log("Error",err);
                 });
 
             }else{
-                console.log("add at least one include");
+                //console.log("add at least one include");
                 $('#' + panel.divElement.id + '-resultInfo').html('<span class="label label-danger">ERROR</span>');
                 $('#' + panel.divElement.id + '-resultInfo').html('ERROR');
                 $("#" + panel.divElement.id + "-footer").html("Add at least one include...");
@@ -958,7 +958,7 @@ function queryComputerPanel(divElement, options) {
         }
         var grammar = "";
         if ($('#' + panel.divElement.id + '-listGroup').find(".query-condition").length == 0) {
-            console.log("Add at least one instruction...");
+            //console.log("Add at least one instruction...");
         } else {
             var includes = [];
             var excludes = [];

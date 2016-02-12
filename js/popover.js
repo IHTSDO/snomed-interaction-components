@@ -266,7 +266,7 @@
         Popover.lastPopoverClicked = this;
         var clickedDiv = $(clicked);
         if (!clickedDiv) {
-            console.log("ERROR: No element clicked!");
+            //console.log("ERROR: No element clicked!");
             return;
         }
 
@@ -275,7 +275,7 @@
             //console.log("Popover not initialized; initializing.");
             popoverWrapperDiv = this.createPopover();
             if (popoverWrapperDiv.length === 0) {
-                console.log("ERROR: Failed to create Popover!");
+                //console.log("ERROR: Failed to create Popover!");
                 return;
             }
         }
@@ -292,12 +292,12 @@
         //TODO: Fix repetition.
         if ($("#popover").is(":visible") && Popover.lastElementClick) {
             if (clickedDiv.is("#" + Popover.lastElementClick)) {
-                console.log("Clicked on same element!");
-                console.log("Last clicked: " + Popover.lastElementClick);
+                //console.log("Clicked on same element!");
+                //console.log("Last clicked: " + Popover.lastElementClick);
                 Popover.closePopover();
                 return;
             }
-            console.log("Clicked on different element!");
+            //console.log("Clicked on different element!");
             Popover.closePopover();
         }
 
@@ -654,7 +654,7 @@
         }
 
         if (!newMenu) {
-            console.log("ID not found.");
+            //console.log("ID not found.");
             return false;
         }
 

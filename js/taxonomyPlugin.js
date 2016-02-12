@@ -729,14 +729,14 @@ function taxonomyPanel(divElement, conceptId, options) {
     } else {
         if (xhr != null) {
             xhr.abort();
-            console.log("aborting call...");
+            //console.log("aborting call...");
         }
         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
 
         }).done(function(result) {
             panel.setToConcept(conceptId, result.defaultTerm);
         }).fail(function() {
-            console.log("Error");
+            //console.log("Error");
         });
     }
 }

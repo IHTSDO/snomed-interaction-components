@@ -63,7 +63,7 @@ function drawSctBox(svg, x, y, label, sctid, cssClass) {
 
     idSequence++;
     $('rect').click(function(evt){
-        console.log(evt.target);
+        //console.log(evt.target);
     });
 
     return rect;

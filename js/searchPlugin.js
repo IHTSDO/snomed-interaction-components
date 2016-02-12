@@ -60,7 +60,7 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-subscribersMarker").hide();
 
         $("#" + panel.divElement.id).find('.semtag-button').click(function (event) {
-            console.log("Semtag click: " + $(this).html());
+            //console.log("Semtag click: " + $(this).html());
         });
 
         //$("#" + panel.divElement.id + "-searchConfigBar").slideUp('fast');
@@ -459,7 +459,7 @@ function searchPanel(divElement, options) {
                 var resultsHtml = "";
                 if (xhr != null) {
                     xhr.abort();
-                    console.log("aborting call...");
+                    //console.log("aborting call...");
                 }
                 $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'>Searching..</span>");
                 //console.log("panel.options.searchMode " + panel.options.searchMode);
@@ -513,7 +513,7 @@ function searchPanel(divElement, options) {
                             var context = {
                                 result: result
                             };
-                            console.log(context);
+                            //console.log(context);
                             $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/0.hbs"](context));
                             $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
                             $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function (event) {
@@ -538,7 +538,7 @@ function searchPanel(divElement, options) {
                         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t,function (result) {
 
                         }).done(function (result) {
-                            console.log(result);
+                            //console.log(result);
                             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                                 if (opts != "undefined") {
                                     if(a == b)

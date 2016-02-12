@@ -6,7 +6,7 @@ channel = postal.channel("Selections");
 
 Handlebars.registerHelper('i18n', function (i18n, defaultV){
     if (typeof window[i18n] == "undefined"){
-        console.log(i18n, "=", defaultV);
+        //console.log(i18n, "=", defaultV);
         return defaultV;
     }else{
         return window[i18n];
