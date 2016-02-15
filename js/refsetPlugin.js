@@ -113,7 +113,7 @@ function refsetPanel(divElement, options) {
 //        console.log(membersUrl);
         if (xhrMembers != null) {
             xhrMembers.abort();
-            console.log("aborting call...");
+            //console.log("aborting call...");
         }
         xhrMembers = $.getJSON(membersUrl, function(result){
 

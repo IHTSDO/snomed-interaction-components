@@ -323,7 +323,7 @@ function conceptDetails(divElement, conceptId, options) {
         // load attributes
         if (xhr != null) {
             xhr.abort();
-            console.log("aborting call...");
+            //console.log("aborting call...");
         }
         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function (result) {
 
@@ -1252,7 +1252,7 @@ function conceptDetails(divElement, conceptId, options) {
 //            $('#' + panel.childrenPId).show();
         if (xhrChildren != null) {
             xhrChildren.abort();
-            console.log("aborting children call...");
+            //console.log("aborting children call...");
         }
         xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function (result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
@@ -1373,10 +1373,10 @@ function conceptDetails(divElement, conceptId, options) {
 
     this.getReferences = function (conceptId){
         $("#references-" + panel.divElement.id + "-accordion").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-        console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
+        //console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
         if (xhrReferences != null) {
             xhrReferences.abort();
-            console.log("aborting references call...");
+            //console.log("aborting references call...");
         }
         xhrReferences = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
 
@@ -1437,7 +1437,7 @@ function conceptDetails(divElement, conceptId, options) {
             $("#references-" + panel.divElement.id + "-accordion").html(JST["views/conceptDetailsPlugin/tabs/references.hbs"](context));
             $("#references-" + panel.divElement.id + "-accordion").click(function(e){
                 if ($($(e.target).closest("a").attr("href")).hasClass("collapse")){
-                    console.log("finded");
+                    //console.log("finded");
                     var target = $($(e.target).closest("a").attr("href") + "-span");
                     if (target.hasClass("glyphicon-chevron-right")){
                         target.removeClass("glyphicon-chevron-right");
@@ -1468,7 +1468,7 @@ function conceptDetails(divElement, conceptId, options) {
 
         if (xhrChildren != null) {
             xhrChildren.abort();
-            console.log("aborting children call...");
+            //console.log("aborting children call...");
         }
         xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
@@ -1546,7 +1546,7 @@ function conceptDetails(divElement, conceptId, options) {
     this.getParent = function(conceptId, target){
         if (xhrParents != null) {
             xhrParents.abort();
-            console.log("aborting children call...");
+            //console.log("aborting children call...");
         }
         xhrParents = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents", function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
@@ -1646,7 +1646,7 @@ function conceptDetails(divElement, conceptId, options) {
 //        console.log(membersUrl);
         if (xhrMembers != null) {
             xhrMembers.abort();
-            console.log("aborting call...");
+            //console.log("aborting call...");
         }
         xhrMembers = $.getJSON(membersUrl, function(result){
 
@@ -1832,7 +1832,7 @@ function conceptDetails(divElement, conceptId, options) {
                 alreadySubscribed = true;
             }
         });
-        console.log('Subscribing to id: ' + panelId, !alreadySubscribed);
+        //console.log('Subscribing to id: ' + panelId, !alreadySubscribed);
         if (!alreadySubscribed) {
             var subscription = channel.subscribe(panelId, function(data, envelope) {
 //                console.log("listening in " + panel.divElement.id);

@@ -154,7 +154,7 @@ function drawConceptDiagram (concept, div, options, panel) {
 
             //$(div).prepend($("<a href-lang='image/svg+xml' href=options.serverUrl.replace("snomed", "")+response+"' download='diagram.png'>Download as PNG</a>&nbsp;&nbsp;&nbsp;"));
         }).fail(function() {
-            console.log("Error");
+            //console.log("Error");
         });
     });
     if (panel.options.selectedView == "stated") {

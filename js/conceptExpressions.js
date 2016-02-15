@@ -95,7 +95,7 @@ var renderExpression = function(concept, inferredConcept, div, options) {
     var plainInferredExpression =  tmp.textContent || tmp.innerText || "";
     plainInferredExpression = plainInferredExpression.replace(/\s\s+/g, ' ');
 
-    console.log(div);
+    //console.log(div);
 
     var context = {
         divElementId: div.attr('id'),
