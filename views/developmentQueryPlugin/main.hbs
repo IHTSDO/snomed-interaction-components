@@ -15,45 +15,52 @@
             <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#{{divElementId}}-ExamplesModal" style="margin: 10px;">{{{i18n "i18n_examples" "Examples"}}}</button>
             <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
         </div>
-        <div class="row container-fluid" style="margin: 10px;">
-            <form class="form-inline" role="form">
-                <div class="form-group">
-                    <div class="dropdown">
-                        <button style="width: 75px;" class="btn btn-default dropdown-toggle" type="button" id="{{divElementId}}-modifierButton" data-toggle="dropdown" aria-expanded="true">
-                            <span id="{{divElementId}}-selectedModifier">Include</span>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="{{divElementId}}-modifierButton">
-                            <li role="presentation"><a role="menuitem" data-role="modifier-selector" tabindex="-1" href="javascript:void(0);">Include</a></li>
-                            <li role="presentation"><a role="menuitem" data-role="modifier-selector" tabindex="-1" href="javascript:void(0);">Exclude</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="dropdown">
-                        <button style="width: 147px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                            <span id="{{divElementId}}-selectedCriteria">descendantOf</span>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">descendantOf</a></li>
-                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li>
-                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOf</a></li>-->
-                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOrSelfOf</a></li>-->
-                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">self</a></li>
-                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">childrenOf</a></li>-->
-                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">parentsOf</a></li>-->
-                            <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li>
-                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">hasDescription</a></li>-->
-                            <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">hasRelationship</a></li>-->
-                        </ul>
-                    </div>
-                </div>
-                <div class="form-group" id="{{divElementId}}-conceptField">
-                    <input type="text" data-droppable="true" ondrop="dropField(event)" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class="form-control" id="{{divElementId}}-selectedConcept" placeholder="Drag a concept here" readonly>
-                    <input type="text" data-droppable="true" ondrop="dropField(event)" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class="form-control" id="{{divElementId}}-selectedType" placeholder="Drag a type here" readonly>
-                    <input type="text" data-droppable="true" ondrop="dropField(event)" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class="form-control" id="{{divElementId}}-selectedTarget" placeholder="Drag a destination here" readonly>
-                    <input type="text" class="form-control" id="{{divElementId}}-searchTerm" placeholder="Type search string">
+        <div>
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#{{divElementId}}-BuilderTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_builder">Builder</span></a></li>
+                <li><a href="#{{divElementId}}-ExpTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_expression">Expression</span></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="{{divElementId}}-BuilderTab" style="padding: 0px;margin: 0;">
+                    <div class="row container-fluid" style="margin: 10px;">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <div class="dropdown">
+                                    <button style="width: 75px;" class="btn btn-default dropdown-toggle" type="button" id="{{divElementId}}-modifierButton" data-toggle="dropdown" aria-expanded="true">
+                                        <span id="{{divElementId}}-selectedModifier">Include</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="{{divElementId}}-modifierButton">
+                                        <li role="presentation"><a role="menuitem" data-role="modifier-selector" tabindex="-1" href="javascript:void(0);">Include</a></li>
+                                        <li role="presentation"><a role="menuitem" data-role="modifier-selector" tabindex="-1" href="javascript:void(0);">Exclude</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="dropdown">
+                                    <button style="width: 147px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                        <span id="{{divElementId}}-selectedCriteria">descendantOf</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                        <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">descendantOf</a></li>
+                                        <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">descendantOrSelfOf</a></li>
+                                        <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOf</a></li>-->
+                                        <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">ancestorOrSelfOf</a></li>-->
+                                        <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">self</a></li>
+                                        <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">childrenOf</a></li>-->
+                                        <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">parentsOf</a></li>-->
+                                        <li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">isMemberOf</a></li>
+                                        <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">hasDescription</a></li>-->
+                                        <!--<li role="presentation"><a role="menuitem" data-role="criteria-selector" tabindex="-1" href="javascript:void(0);">hasRelationship</a></li>-->
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group" id="{{divElementId}}-conceptField">
+                                <input type="text" data-droppable="true" ondrop="dropField(event)" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class="form-control" id="{{divElementId}}-selectedConcept" placeholder="Drag a concept here" readonly>
+                                <input type="text" data-droppable="true" ondrop="dropField(event)" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class="form-control" id="{{divElementId}}-selectedType" placeholder="Drag a type here" readonly>
+                                <input type="text" data-droppable="true" ondrop="dropField(event)" ondragleave="removeHighlight();" ondragover="allowDrop(event)" class="form-control" id="{{divElementId}}-selectedTarget" placeholder="Drag a destination here" readonly>
+                                <input type="text" class="form-control" id="{{divElementId}}-searchTerm" placeholder="Type search string">
                     <span class="dropdown">
                         <button class="btn btn-default dropdown-toggle" type="button" id="{{divElementId}}-formdropdown" data-toggle="dropdown" aria-expanded="true">
                             <span id="{{divElementId}}-selectedForm">stated</span>
@@ -64,34 +71,45 @@
                             <li role="presentation"><a role="menuitem" data-role="form-selector" tabindex="-1" href="javascript:void(0);">inferred</a></li>
                         </ul>
                     </span>
-                </div>
-                <div style="margin-left: 41px;" class="form-group" id="{{divElementId}}-addCriteriaAnd">
-                    <div class="dropdown">
-                        <button style="text-decoration: none;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"><span data-toggle="tooltip" data-placement="top" title="More" class="glyphicon glyphicon-plus"></span></button>
-                        <ul class="dropdown-menu pull-right" role="menu">
-                            <li role="presentation"><a class="addCriteria" data-type="Conjunction" role="menuitem" tabindex="-1" href="javascript:void(0);">Add AND</a></li>
-                            <li role="presentation"><a class="addCriteria" data-type="Refinement" role="menuitem" tabindex="-1" href="javascript:void(0);">Add Refinement</a></li>
+                            </div>
+                            <div style="margin-left: 41px;" class="form-group" id="{{divElementId}}-addCriteriaAnd">
+                                <div class="dropdown">
+                                    <button style="text-decoration: none;" class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true"><span data-toggle="tooltip" data-placement="top" title="More" class="glyphicon glyphicon-plus"></span></button>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li role="presentation"><a class="addCriteria" data-type="Conjunction" role="menuitem" tabindex="-1" href="javascript:void(0);">Add AND</a></li>
+                                        <li role="presentation"><a class="addCriteria" data-type="Refinement" role="menuitem" tabindex="-1" href="javascript:void(0);">Add Refinement</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary"  id='{{divElementId}}-addCriteriaButton' style="margin: 10px;">{{{i18n "i18n_add_condition" "Add instruction"}}}</button>
+                                <!--<button type="button" class="btn btn-primary"  id='{{divElementId}}-cloudResults' style="margin: 10px; position: relative;" title="Open Cloud Queries Processor" data-toggle="modal" data-target="#{{divElementId}}-cloudModal"><i class='glyphicon glyphicon-cloud' style="position: relative; top: 3px;"></i> <span id="{{divElementId}}-cloudCount"></span></button>-->
+
+                                <span id="{{divElementId}}-addmsg" for="{{divElementId}}-addCriteriaButton" class="small text-danger"></span>
+                            </div>
+                        </form>
+                        <ul class="list-group" id="{{divElementId}}-listGroup">
                         </ul>
+                        <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Execute"}}}</div>
+                        <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeOntoserver'>Run on Ontoserver</div>
+                        <button type="button" class="btn btn-primary pull-right"  id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
+                        <br>
+                        <br>
                     </div>
                 </div>
-            </form>
-            <form class="form-inline" role="form">
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary"  id='{{divElementId}}-addCriteriaButton' style="margin: 10px;">{{{i18n "i18n_add_condition" "Add instruction"}}}</button>
-                    <!--<button type="button" class="btn btn-primary"  id='{{divElementId}}-cloudResults' style="margin: 10px; position: relative;" title="Open Cloud Queries Processor" data-toggle="modal" data-target="#{{divElementId}}-cloudModal"><i class='glyphicon glyphicon-cloud' style="position: relative; top: 3px;"></i> <span id="{{divElementId}}-cloudCount"></span></button>-->
-
-                    <span id="{{divElementId}}-addmsg" for="{{divElementId}}-addCriteriaButton" class="small text-danger"></span>
+                <div class="tab-pane" id="{{divElementId}}-ExpTab" style="padding: 15px;margin: 0;">
+                    <textarea class="form-control" placeholder="Expression..." id="{{divElementId}}-ExpText"></textarea>
+                    <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton2'>{{{i18n "i18n_run_query" "Execute"}}}</div>
+                    <div class="btn btn-success" style="display: none; margin: 10px;" id='{{divElementId}}-computeOntoserver2'>Run on Ontoserver</div>
+                    <br>
+                    <br>
                 </div>
-            </form>
-            <ul class="list-group" id="{{divElementId}}-listGroup">
-            </ul>
-            <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Execute"}}}</div>
-            <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeOntoserver'>Run on Ontoserver</div>
-            <button type="button" class="btn btn-primary pull-right"  id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
-            <br>
-            <br>
-            {{{i18n "i18n_results" "Results"}}}:  <span id="{{divElementId}}-resultInfo" class="text-muted small"></span>
+            </div>
         </div>
+
+        <span style="margin-left: 10px;">{{{i18n "i18n_results" "Results"}}}:</span>  <span id="{{divElementId}}-resultInfo" class="text-muted small"></span>
         <div class="row container-fluid" id="{{divElementId}}-output" style="margin: 10px;">
             <table class="table table-bordered">
                 <thead>
@@ -140,17 +158,8 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-md-8" id="{{divElementId}}-mycontent">
-                        {{#each examples}}
-                            <br>
-                            <div id="{{../divElementId}}-{{@index}}-modal-examples" {{#if_eqInd @index ../examples.length}}style="min-height: 450px;"{{/if_eqInd}}>
-                                <h4>{{title}}</h4>
-                                <span data-htmlValue="{{htmlValue}}" class="pull-right btn btn-primary btn-xs loadExample" style="padding: 0px; display: inline-block;">Load instructions</span>
-                                <br>
-                                <div class="contentExamples" style="margin: 10px;">{{{htmlValue}}}</div>
-                                <br>
-                            </div>
-                        {{/each}}
+                    <div class="col-md-8" id="{{divElementId}}-mycontentExamples">
+
                     </div>
                 </div>
             </div>

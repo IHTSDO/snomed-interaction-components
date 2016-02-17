@@ -172,19 +172,7 @@ function queryComputerPanel(divElement, options) {
         };
         $(divElement).html(JST["views/developmentQueryPlugin/main.hbs"](context));
         $('[data-toggle="tooltip"]').tooltip();
-        context.examples.forEach(function(item, index){
-            var contextHtml = "";
-            item.context.forEach(function(loopContext){
-                //contextHtml+= JST[""(loopContext)];
-                contextHtml+= JST["views/developmentQueryPlugin/criteria.hbs"](loopContext);
-            });
-            $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first().html(contextHtml);
-            $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first().find(".btn").addClass("disabled");
-            $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".query-condition").each(function(index) {
-                $(this).find(".line-number").html(index + 1);
-            });
-            $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".loadExample").first().attr("data-htmlValue", $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first().html());
-        });
+
 
         $("#" + panel.divElement.id + "-ExamplesModal").scrollspy({ target: '#' + panel.divElement.id + '-sidebar', offset:80 });
 
@@ -202,6 +190,79 @@ function queryComputerPanel(divElement, options) {
             //console.log('scrolling...');
             if(!clicked)$('#' + panel.divElement.id + '-mycontent > div > h4').css('padding-top',0);
             clicked = false;
+        });
+
+        $("#" + panel.divElement.id + "-ExamplesModal").on('shown.bs.modal', function() {
+            $("#" + panel.divElement.id + "-mycontentExamples").html(JST["views/developmentQueryPlugin/examples.hbs"](context));
+            context.examples.forEach(function(item, index){
+                var contextHtml = "";
+                item.context.forEach(function(loopContext){
+                    //contextHtml+= JST[""(loopContext)];
+                    contextHtml+= JST["views/developmentQueryPlugin/criteria.hbs"](loopContext);
+                });
+                $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first().html(contextHtml);
+                if ($("#" + panel.divElement.id + "-ExpTab").hasClass("active")){
+                    contextHtml = panel.exportToConstraintGrammar(true, false, false, $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first());
+                    if (contextHtml.indexOf("(") == 0)
+                        contextHtml = contextHtml.substr(1, contextHtml.length - 2);
+                    $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first().html(contextHtml);
+                }
+                $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first().find(".btn").addClass("disabled");
+                $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".query-condition").each(function(index) {
+                    $(this).find(".line-number").html(index + 1);
+                });
+                $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".loadExample").first().attr("data-htmlValue", $("#" + panel.divElement.id + "-" + index + "-modal-examples").find(".contentExamples").first().html());
+            });
+            $("#" + panel.divElement.id + "-mycontentExamples").find(".loadExample").unbind();
+            $("#" + panel.divElement.id + "-mycontentExamples").find(".loadExample").click(function(e){
+                var htmlToPut = $(e.target).attr("data-htmlValue");
+                if ($("#" + panel.divElement.id + "-ExpTab").hasClass("active")){
+                    $('#' + panel.divElement.id + '-ExpText').html(htmlToPut);
+                    $('#' + panel.divElement.id + '-ExpText').val(htmlToPut.replace(/(<([^>]+)>)/ig,"").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<"));
+                    $("#" + panel.divElement.id + "-ExamplesModal").modal("hide");
+                }else{
+                    $('#' + panel.divElement.id + '-listGroup').html(htmlToPut);
+                    $('#' + panel.divElement.id + '-listGroup').find(".btn").removeClass("disabled");
+                    $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function(i){
+                        var critToUpdate = $(this);
+                        $(critToUpdate).find("small").remove();
+                        $(critToUpdate).append('<small class="text-muted pull-right glyphicon glyphicon-refresh icon-spin" style="position: relative; top: 12px;"></small>');
+                        $("#" + panel.divElement.id + "-ExamplesModal").modal("hide");
+                        panel.execute("inferred", panel.exportToConstraintGrammar(false, false, critToUpdate), true, function(resultCount){
+                            $(critToUpdate).find("small").remove();
+                            $(critToUpdate).find(".glyphicon-refresh").first().remove();
+                            var cont = parseInt(resultCount);
+                            $(critToUpdate).append('<small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</small>');
+                        });
+
+                        $('#' + panel.divElement.id + '-listGroup').find(".criteriaDropdownOption").unbind();
+                        $('#' + panel.divElement.id + '-listGroup').find(".criteriaDropdownOption").click(function(e){
+                            var prevValue = $(e.target).closest(".constraint").attr('data-criteria');
+                            var newValue = $(e.target).html();
+                            if (prevValue != newValue){
+                                $(e.target).closest(".constraint").attr('data-criteria', newValue);
+                                $(e.target).closest("div").find("button").first().html(newValue + "&nbsp;");
+                                var critToUpdate = $(e.target).closest(".query-condition");
+                                $(critToUpdate).find("small").remove();
+                                $(critToUpdate).append('<small class="text-muted pull-right glyphicon glyphicon-refresh icon-spin" style="position: relative; top: 12px;"></small>');
+                                panel.execute("inferred", panel.exportToConstraintGrammar(false, false, critToUpdate), true, function(resultCount){
+                                    $(critToUpdate).find("small").remove();
+                                    $(critToUpdate).find(".glyphicon-refresh").first().remove();
+                                    var cont = parseInt(resultCount);
+                                    $(critToUpdate).append('<small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</small>');
+                                });
+                            }
+                        });
+
+                        $(divElement).find(".removeLi").unbind();
+                        $(divElement).find(".removeLi").disableTextSelect();
+                        $(divElement).find(".removeLi").click(function(e){
+                            $(e.target).closest("li").remove();
+                            panel.renumLines();
+                        });
+                    });
+                }
+            });
         });
 
         if (!panel.typeArray || !panel.typeArray.length){
@@ -252,51 +313,6 @@ function queryComputerPanel(divElement, options) {
         //$("#" + panel.divElement.id + "-ExamplesModal").find(".btn").addClass("disabled");
         //$("#" + panel.divElement.id + "-ExamplesModal").find(".loadExample").removeClass("disabled");
         //$("#" + panel.divElement.id + "-ExamplesModal-close").removeClass("disabled");
-
-        $(divElement).find(".loadExample").unbind();
-        $(divElement).find(".loadExample").click(function(e){
-            var htmlToPut = $(e.target).attr("data-htmlValue");
-            $('#' + panel.divElement.id + '-listGroup').html(htmlToPut);
-            $('#' + panel.divElement.id + '-listGroup').find(".btn").removeClass("disabled");
-            $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function(i){
-                var critToUpdate = $(this);
-                $(critToUpdate).find("small").remove();
-                $(critToUpdate).append('<small class="text-muted pull-right glyphicon glyphicon-refresh icon-spin" style="position: relative; top: 12px;"></small>');
-                $("#" + panel.divElement.id + "-ExamplesModal").modal("hide");
-                panel.execute("inferred", panel.exportToConstraintGrammar(false, false, critToUpdate), true, function(resultCount){
-                    $(critToUpdate).find("small").remove();
-                    $(critToUpdate).find(".glyphicon-refresh").first().remove();
-                    var cont = parseInt(resultCount);
-                    $(critToUpdate).append('<small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</small>');
-                });
-
-                $('#' + panel.divElement.id + '-listGroup').find(".criteriaDropdownOption").unbind();
-                $('#' + panel.divElement.id + '-listGroup').find(".criteriaDropdownOption").click(function(e){
-                    var prevValue = $(e.target).closest(".constraint").attr('data-criteria');
-                    var newValue = $(e.target).html();
-                    if (prevValue != newValue){
-                        $(e.target).closest(".constraint").attr('data-criteria', newValue);
-                        $(e.target).closest("div").find("button").first().html(newValue + "&nbsp;");
-                        var critToUpdate = $(e.target).closest(".query-condition");
-                        $(critToUpdate).find("small").remove();
-                        $(critToUpdate).append('<small class="text-muted pull-right glyphicon glyphicon-refresh icon-spin" style="position: relative; top: 12px;"></small>');
-                        panel.execute("inferred", panel.exportToConstraintGrammar(false, false, critToUpdate), true, function(resultCount){
-                            $(critToUpdate).find("small").remove();
-                            $(critToUpdate).find(".glyphicon-refresh").first().remove();
-                            var cont = parseInt(resultCount);
-                            $(critToUpdate).append('<small class="text-muted pull-right" style="position: relative; top: 10px;" title="This instruction involves the selection of ' + cont + ' concepts">' + cont + ' cpts</small>');
-                        });
-                    }
-                });
-
-                $(divElement).find(".removeLi").unbind();
-                $(divElement).find(".removeLi").disableTextSelect();
-                $(divElement).find(".removeLi").click(function(e){
-                    $(e.target).closest("li").remove();
-                    panel.renumLines();
-                });
-            });
-        });
 
         var bindAddCriteriaFunction = function(){
             $(divElement).find(".addCriteria").unbind();
@@ -723,16 +739,37 @@ function queryComputerPanel(divElement, options) {
             }
         });
 
+        $('#' + panel.divElement.id + '-computeInferredButton2').unbind();
+        $('#' + panel.divElement.id + '-computeInferredButton2').disableTextSelect();
+        $('#' + panel.divElement.id + '-computeInferredButton2').click(function (e) {
+            var expression = $.trim($("#" + panel.divElement.id + "-ExpText").val());
+            $('#' + panel.divElement.id + '-computeInferredButton2').addClass("disabled");
+            $.post(options.serverUrl.replace("snomed", "expressions/") + "parse/brief", {expression: expression}).done(function(res){
+                //console.log(res);
+                if (res.validation){
+                    panel.execute("inferred", expression, true);
+                }else{
+                    alertEvent("Invalid Expression", "error")
+                }
+            }).fail(function(err){
+                //console.log(err);
+            }).always(function(){
+                $('#' + panel.divElement.id + '-computeInferredButton2').removeClass("disabled");
+            });
+        });
+
         $('#' + panel.divElement.id + '-computeInferredButton').unbind();
+        $('#' + panel.divElement.id + '-computeInferredButton').disableTextSelect();
         $('#' + panel.divElement.id + '-computeInferredButton').click(function (e) {
             var grammar = panel.exportToConstraintGrammar(false, false);
             if ($('#' + panel.divElement.id + '-listGroup').find('.query-condition[data-modifier="Include"]').length){
                 panel.execute("inferred", grammar, true);
             }else{
                 //console.log("add at least one include");
-                $('#' + panel.divElement.id + '-resultInfo').html('<span class="label label-danger">ERROR</span>');
-                $('#' + panel.divElement.id + '-resultInfo').html('ERROR');
-                $("#" + panel.divElement.id + "-footer").html("Add at least one include...");
+                alertEvent("Add at least one include", "error");
+                //$('#' + panel.divElement.id + '-resultInfo').html('<span class="label label-danger">ERROR</span>');
+                //$('#' + panel.divElement.id + '-resultInfo').html('ERROR');
+                //$("#" + panel.divElement.id + "-footer").html("<p class='lead'>Add at least one include...</p>");
             }
         });
 
@@ -951,13 +988,13 @@ function queryComputerPanel(divElement, options) {
         return grammar;
     };
 
-    this.exportToConstraintGrammar = function(htmlFormat, fullSyntax, htmlObj) {
+    this.exportToConstraintGrammar = function(htmlFormat, fullSyntax, htmlObj, fullObjHtml) {
         var breakLine = " ";
         if (htmlFormat) {
             breakLine = "<br>";
         }
         var grammar = "";
-        if ($('#' + panel.divElement.id + '-listGroup').find(".query-condition").length == 0) {
+        if ($('#' + panel.divElement.id + '-listGroup').find(".query-condition").length == 0 && !htmlObj && !fullObjHtml) {
             //console.log("Add at least one instruction...");
         } else {
             var includes = [];
@@ -976,7 +1013,10 @@ function queryComputerPanel(divElement, options) {
                 });
                 includes.push(conditions);
             }else{
-                $('#' + panel.divElement.id + '-listGroup').find(".query-condition").each(function (index) {
+                var objTouse = '#' + panel.divElement.id + '-listGroup';
+                if (fullObjHtml)
+                    objTouse = fullObjHtml
+                $(objTouse).find(".query-condition").each(function (index) {
                     var conditions = [];
                     $(this).find(".constraint").each(function (index2) {
                         var condition = {
@@ -1208,7 +1248,8 @@ function queryComputerPanel(divElement, options) {
                                 term: $(event.target).closest("tr").attr('data-term'),
                                 module: $(event.target).closest("tr").attr("data-module"),
                                 conceptId: $(event.target).closest("tr").attr('data-concept-id'),
-                                source: panel.divElement.id
+                                source: panel.divElement.id,
+                                showConcept: true
                             });
                         });
 

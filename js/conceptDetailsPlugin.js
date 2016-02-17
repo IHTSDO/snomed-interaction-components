@@ -1837,6 +1837,9 @@ function conceptDetails(divElement, conceptId, options) {
             var subscription = channel.subscribe(panelId, function(data, envelope) {
 //                console.log("listening in " + panel.divElement.id);
                 panel.conceptId = data.conceptId;
+                if (data.showConcept){
+                    $('a[href="#fh-cd1_canvas-pane"]').click();
+                }
                 if ($("#home-children-" + panel.divElement.id + "-body").length > 0){
                 }else{
                     panel.setupCanvas();
