@@ -3673,7 +3673,7 @@ function program1(depth0,data,depth1) {
     + "-computeInferredButton'>";
   stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_run_query", "Execute", options) : helperMissing.call(depth0, "i18n", "i18n_run_query", "Execute", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</div>\n                        <div class=\"btn btn-success\" style=\"margin: 10px;\" id='";
+  buffer += "</div>\n                        <div class=\"btn btn-success\" style=\"display: none; margin: 10px;\" id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -3692,7 +3692,7 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-ExpTab\" style=\"padding: 15px;margin: 0;\">\n                    <textarea class=\"form-control\" placeholder=\"Expression...\" id=\"";
+    + "-ExpTab\" style=\"padding: 15px;margin: 0;\">\n                    <textarea rows=\"5\" class=\"form-control\" placeholder=\"Expression...\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -3714,7 +3714,7 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-resultInfo\" class=\"text-muted small\"></span>\n        <div class=\"row container-fluid\" id=\"";
+    + "-resultInfo\"></span>\n        <div class=\"row container-fluid\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

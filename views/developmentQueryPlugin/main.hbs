@@ -93,14 +93,14 @@
                         <ul class="list-group" id="{{divElementId}}-listGroup">
                         </ul>
                         <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Execute"}}}</div>
-                        <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeOntoserver'>Run on Ontoserver</div>
+                        <div class="btn btn-success" style="display: none; margin: 10px;" id='{{divElementId}}-computeOntoserver'>Run on Ontoserver</div>
                         <button type="button" class="btn btn-primary pull-right"  id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
                         <br>
                         <br>
                     </div>
                 </div>
                 <div class="tab-pane" id="{{divElementId}}-ExpTab" style="padding: 15px;margin: 0;">
-                    <textarea class="form-control" placeholder="Expression..." id="{{divElementId}}-ExpText"></textarea>
+                    <textarea rows="5" class="form-control" placeholder="Expression..." id="{{divElementId}}-ExpText"></textarea>
                     <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton2'>{{{i18n "i18n_run_query" "Execute"}}}</div>
                     <div class="btn btn-success" style="display: none; margin: 10px;" id='{{divElementId}}-computeOntoserver2'>Run on Ontoserver</div>
                     <br>
@@ -109,7 +109,7 @@
             </div>
         </div>
 
-        <span style="margin-left: 10px;">{{{i18n "i18n_results" "Results"}}}:</span>  <span id="{{divElementId}}-resultInfo" class="text-muted small"></span>
+        <span style="margin-left: 10px;">{{{i18n "i18n_results" "Results"}}}:</span>  <span id="{{divElementId}}-resultInfo"></span>
         <div class="row container-fluid" id="{{divElementId}}-output" style="margin: 10px;">
             <table class="table table-bordered">
                 <thead>

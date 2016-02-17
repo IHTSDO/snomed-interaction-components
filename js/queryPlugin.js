@@ -171,8 +171,16 @@ function queryComputerPanel(divElement, options) {
             ]
         };
         $(divElement).html(JST["views/developmentQueryPlugin/main.hbs"](context));
-        $('[data-toggle="tooltip"]').tooltip();
 
+        $(divElement).find('textarea').unbind();
+        $(divElement).find('textarea').keypress(function(event) {
+            if (event.which == 13) {
+                event.preventDefault();
+                var s = $(this).val();
+                $(this).val(s+"\n");
+            }
+        });
+        $('[data-toggle="tooltip"]').tooltip();
 
         $("#" + panel.divElement.id + "-ExamplesModal").scrollspy({ target: '#' + panel.divElement.id + '-sidebar', offset:80 });
 
@@ -766,10 +774,12 @@ function queryComputerPanel(divElement, options) {
                 panel.execute("inferred", grammar, true);
             }else{
                 //console.log("add at least one include");
-                alertEvent("Add at least one include", "error");
-                //$('#' + panel.divElement.id + '-resultInfo').html('<span class="label label-danger">ERROR</span>');
+                //alertEvent("Add at least one include", "error");
+                $('#' + panel.divElement.id + '-outputBody').html("");
+                $('#' + panel.divElement.id + '-outputBody2').html("");
+                $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-danger'>Add at least one include</span>");
+                $("#" + panel.divElement.id + "-footer").html("");
                 //$('#' + panel.divElement.id + '-resultInfo').html('ERROR');
-                //$("#" + panel.divElement.id + "-footer").html("<p class='lead'>Add at least one include...</p>");
             }
         });
 
@@ -794,7 +804,7 @@ function queryComputerPanel(divElement, options) {
                     //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
                 }).done(function (result) {
                     //console.log(result);
-                    $('#' + panel.divElement.id + '-resultInfo').html("Found " + result.totalResults + " concepts");
+                    $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + result.totalResults + " concepts</span>");
                     $("#" + panel.divElement.id + "-waitingSearch-text").html("");
                     //TODO: implement pagination with Ontoserver
                     if (result.totalResults > 100) {
@@ -821,10 +831,10 @@ function queryComputerPanel(divElement, options) {
                 });
 
             }else{
-                //console.log("add at least one include");
-                $('#' + panel.divElement.id + '-resultInfo').html('<span class="label label-danger">ERROR</span>');
-                $('#' + panel.divElement.id + '-resultInfo').html('ERROR');
-                $("#" + panel.divElement.id + "-footer").html("Add at least one include...");
+                $('#' + panel.divElement.id + '-outputBody').html("");
+                $('#' + panel.divElement.id + '-outputBody2').html("");
+                $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-danger'>Add at least one include</span>");
+                $("#" + panel.divElement.id + "-footer").html("");
             }
         });
     };
@@ -1232,9 +1242,9 @@ function queryComputerPanel(divElement, options) {
                     if (!onlyTotal){
                         $("#" + panel.divElement.id + "-exportResults").removeClass("disabled");
                         if (data.performanceCutOff) {
-                            $('#' + panel.divElement.id + '-resultInfo').html("Found " + data.total + " concepts. <span class='text-danger'>This query cannot be completed in real-time, please schedule a Cloud executions. Results below are incomplete and some conditions were not tested. </span>");
+                            $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.total + " concepts. <span class='text-danger'>This query cannot be completed in real-time, please schedule a Cloud executions. Results below are incomplete and some conditions were not tested. </span></span>");
                         } else {
-                            $('#' + panel.divElement.id + '-resultInfo').html("Found " + data.total + " concepts");
+                            $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.total + " concepts</span>");
                         }
                         $.each(data.matches, function (i, row){
                             $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.module + "' data-concept-id='" + row.conceptId + "' data-term='" + row.defaultTerm + "'><td>" + row.defaultTerm + "</td><td>" + row.conceptId + "</td></tr>");
@@ -1293,29 +1303,35 @@ function queryComputerPanel(divElement, options) {
             // done
             xhrExecute2 = null;
         }).fail(function(jqXHR){
-            //console.log(jqXHR);
             //console.log(xhrExecute2);
-            var textStatus = xhrExecute2.statusText;
-            if (textStatus != "abort"){
-                if (xhrExecute2.status == 0)
-                    textStatus = "timeout";
-                xhrExecute2 = null;
-                if(textStatus === 'timeout') {
+            if (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.computeResponse && jqXHR.responseJSON.computeResponse.message){
+                $('#' + panel.divElement.id + '-outputBody').html("");
+                $('#' + panel.divElement.id + '-outputBody2').html("");
+                $("#" + panel.divElement.id + "-footer").html("");
+                $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-danger'>" + jqXHR.responseJSON.computeResponse.message + "</span>");
+            }else{
+                var textStatus = xhrExecute2.statusText;
+                if (textStatus != "abort"){
+                    if (xhrExecute2.status == 0)
+                        textStatus = "timeout";
+                    xhrExecute2 = null;
+                    if(textStatus === 'timeout') {
 //                $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
 //                $("#" + panel.divElement.id + "-results").html("Timeout...");
-                    if (!onlyTotal){
-                        $('#' + panel.divElement.id + '-footer').html("<p class='lead'>Instruction set exceeds maximum allowed time for computation. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.</p>");
-                        $('#' + panel.divElement.id + '-resultInfo').html("This query cannot be completed in real-time.");
-                        //$('#' + panel.divElement.id + '-footer').html("Timeout Error");
-                    }else{
-                        onlyTotal("Error");
-                    }
-                } else {
-                    if (!onlyTotal){
-                        $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
-                        $("#" + panel.divElement.id + "-results").html("Error...");
-                    }else{
-                        onlyTotal("Error");
+                        if (!onlyTotal){
+                            $('#' + panel.divElement.id + '-footer').html("<p class='lead'>Instruction set exceeds maximum allowed time for computation. Some times instructions can be simplified by specifying conditions using concepts closer in the hierarchy to the intended results, avoiding unnecessary selections of large portions of the terminology.</p>");
+                            $('#' + panel.divElement.id + '-resultInfo').html("This query cannot be completed in real-time.");
+                            //$('#' + panel.divElement.id + '-footer').html("Timeout Error");
+                        }else{
+                            onlyTotal("Error");
+                        }
+                    } else {
+                        if (!onlyTotal){
+                            $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
+                            $("#" + panel.divElement.id + "-results").html("Error...");
+                        }else{
+                            onlyTotal("Error");
+                        }
                     }
                 }
             }
