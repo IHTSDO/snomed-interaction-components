@@ -1,4 +1,4 @@
-# SNOMED Interaction Components
+# SNOMED Interaction Components [![Code Climate](https://codeclimate.com/github/IHTSDO/snomed-interaction-components/badges/gpa.svg)](https://codeclimate.com/github/IHTSDO/snomed-interaction-components)
 
 SNOMED Interaction Components are Javascript widgets that can be easily integrated in any website to provide SNOMED CT Navigation features, querying an IHTSDO Snapshot Backend Server.
 
