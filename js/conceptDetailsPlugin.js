@@ -1653,11 +1653,11 @@ function conceptDetails(divElement, conceptId, options) {
         }).done(function(result){
             var remaining = "asd";
             if (typeof paginate != "undefined"){
-                if (result.details.total == skipTo){
+                if (total == skipTo){
                     remaining = 0;
                 }else{
-                    if (result.details.total > (skipTo + returnLimit)){
-                        remaining = result.details.total - (skipTo + returnLimit);
+                    if (total > (skipTo + returnLimit)){
+                        remaining = total - (skipTo + returnLimit);
                     }else{
 //                        if (result.details.total < returnLimit && skipTo != 0){
                             remaining = 0;
