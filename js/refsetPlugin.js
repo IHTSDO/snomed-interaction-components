@@ -119,11 +119,17 @@ function refsetPanel(divElement, options) {
 
         }).done(function(result){
             var remaining = "asd";
-            if (result.details.total > (skipTo + returnLimit)){
-                remaining = result.details.total - (skipTo + returnLimit);
+            if (total > (skipTo + returnLimit)){
+                remaining = total - (skipTo + returnLimit);
             }else{
                 remaining = 0;
             }
+
+            //if (result.details.total > (skipTo + returnLimit)){
+            //    remaining = result.details.total - (skipTo + returnLimit);
+            //}else{
+            //    remaining = 0;
+            //}
 
             var context = {
                 result: result,
