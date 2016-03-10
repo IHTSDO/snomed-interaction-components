@@ -1637,10 +1637,10 @@ function conceptDetails(divElement, conceptId, options) {
         }
         if (typeof total != "undefined"){
 //            console.log(total);
-            if (total < 25000){
+//            if (total < 25000){
                 paginate = 1;
                 membersUrl = membersUrl + "&paginate=1";
-            }
+            //}
 
         }
 //        console.log(membersUrl);
