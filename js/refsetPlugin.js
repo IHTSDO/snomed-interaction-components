@@ -223,8 +223,15 @@ function refsetPanel(divElement, options) {
                     source: panel.divElement.id
                 });
             });
-        }).fail(function(){
-            $("#" + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
+        }).fail(function(err){
+            if (xhrMembers.status === 0) {
+                if (xhrMembers.statusText === 'abort') {
+                }else{
+                    $("#" + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
+                }
+            }else{
+                $("#" + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><span data-i18n-id='i18n_no_members' class='i18n'>This concept has no members</span></td></tr>");
+            }
         });
     }
 
