@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -287,7 +287,8 @@ function taxonomyPanel(divElement, conceptId, options) {
             }
         });
         $.each(componentsRegistry, function (i, field){
-            field.loadMarkers();
+            if (field.loadMarkers)
+                field.loadMarkers();
         });
     }
 
@@ -728,14 +729,14 @@ function taxonomyPanel(divElement, conceptId, options) {
     } else {
         if (xhr != null) {
             xhr.abort();
-            console.log("aborting call...");
+            //console.log("aborting call...");
         }
         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
 
         }).done(function(result) {
             panel.setToConcept(conceptId, result.defaultTerm);
         }).fail(function() {
-            console.log("Error");
+            //console.log("Error");
         });
     }
 }
