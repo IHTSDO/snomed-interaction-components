@@ -1652,7 +1652,7 @@ function conceptDetails(divElement, conceptId, options) {
 
         }).done(function(result){
             var remaining = "asd";
-            if (typeof paginate == "undefined") total = result.details.total;
+            if (typeof total == "undefined") total = result.details.total;
             if (total == skipTo){
                 remaining = 0;
             }else{
