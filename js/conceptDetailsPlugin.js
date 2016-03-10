@@ -1652,31 +1652,28 @@ function conceptDetails(divElement, conceptId, options) {
 
         }).done(function(result){
             var remaining = "asd";
-            if (typeof paginate != "undefined"){
-                if (total == skipTo){
-                    remaining = 0;
+            if (typeof paginate == "undefined") total = result.details.total;
+            if (total == skipTo){
+                remaining = 0;
+            }else{
+                if (total > (skipTo + returnLimit)){
+                    remaining = total - (skipTo + returnLimit);
                 }else{
-                    if (total > (skipTo + returnLimit)){
-                        remaining = total - (skipTo + returnLimit);
-                    }else{
 //                        if (result.details.total < returnLimit && skipTo != 0){
-                            remaining = 0;
+                        remaining = 0;
 //                        }else{
 //                            remaining = result.details.total;
 //                        }
-                    }
                 }
-                if (remaining < returnLimit){
-                    var returnLimit2 = remaining;
-                }else{
-                    if (remaining != 0){
-                        var returnLimit2 = returnLimit;
-                    }else{
-                        var returnLimit2 = 0;
-                    }
-                }
+            }
+            if (remaining < returnLimit){
+                var returnLimit2 = remaining;
             }else{
-                var returnLimit2 = returnLimit;
+                if (remaining != 0){
+                    var returnLimit2 = returnLimit;
+                }else{
+                    var returnLimit2 = 0;
+                }
             }
             var context = {
                 result: result,
