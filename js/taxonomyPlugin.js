@@ -215,6 +215,18 @@ function taxonomyPanel(divElement, conceptId, options) {
 //            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
 //        });
 
+        $("#" + panel.divElement.id + "-descendantsCountTrue").click(function (event) {
+            panel.options.descendantsCount = true;
+            $("#" + panel.divElement.id + '-txViewLabel2').html("Descendants Count: On");
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        });
+
+        $("#" + panel.divElement.id + "-descendantsCountFalse").click(function (event) {
+            panel.options.descendantsCount = false;
+            $("#" + panel.divElement.id + '-txViewLabel2').html("Descendants Count: Off");
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        });
+
         $("#" + panel.divElement.id + "-inferredViewButton").click(function (event) {
             panel.options.selectedView = 'inferred';
             $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
@@ -332,6 +344,31 @@ function taxonomyPanel(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-panelBody").html($("#" + panel.divElement.id + "-panelBody").html().slice(a, b));
         });
         $("#" + panel.divElement.id + "-panelBody").html(JST["views/taxonomyPlugin/body/parents.hbs"](context));
+
+        if (panel.options.descendantsCount == true) {
+            var auxArray = parents;
+            auxArray.push(focusConcept);
+            auxArray.forEach(function(concept){
+                // $.ajax({
+                //     type: "POST",
+                //     url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+                //     data: {
+                //         expression: "< " + concept.conceptId + "|" + concept.defaultTerm + "|",
+                //         limit : 1,
+                //         skip : 0,
+                //         form: panel.options.selectedView
+                //     },
+                //     dataType: "json",
+                //     success: function(result) {
+                //         if (result.computeResponse) {
+                            $("#" + panel.divElement.id + "-panelBody").find('.selectable-row[data-concept-id="' + concept.conceptId + '"]').append("&nbsp;&nbsp;&nbsp;&nbsp;<span class='text-muted'>" + concept.statedDescendants + "</span>");
+                //         }
+                //     }
+                // }).done(function(result){
+                //     // done
+                // });
+            });
+        }
         //console.log(JST["views/taxonomyPlugin/body/parents.hbs"](context));
         $(".treeButton").disableTextSelect();
         $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
@@ -412,6 +449,10 @@ function taxonomyPanel(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
         }
 
+        if (panel.options.descendantsCount == true) $("#" + panel.divElement.id + "-txViewLabel2").html("Descendants Count: On");
+        else $("#" + panel.divElement.id + "-txViewLabel2").html("Descendants Count: Off");
+
+
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
             result.sort(function(a, b) {
@@ -454,6 +495,30 @@ function taxonomyPanel(divElement, conceptId, options) {
                 $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
             }
             $("#" + panel.divElement.id + "-treenode-" + conceptId).closest("li").append(JST["views/taxonomyPlugin/body/children.hbs"](context));
+            if (panel.options.descendantsCount == true) {
+                result.forEach(function(concept){
+                    if (concept.active){
+                        // $.ajax({
+                        //     type: "POST",
+                        //     url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+                        //     data: {
+                        //         expression: "< " + concept.conceptId + "|" + concept.defaultTerm + "|",
+                        //         limit : 1,
+                        //         skip : 0,
+                        //         form: panel.options.selectedView
+                        //     },
+                        //     dataType: "json",
+                        //     success: function(result) {
+                        //         if (result.computeResponse) {
+                                    $("#" + panel.divElement.id + "-treenode-" + conceptId).closest("li").find('.selectable-row[data-concept-id="' + concept.conceptId + '"]').append("&nbsp;&nbsp;&nbsp;&nbsp;<span class='text-muted'>" + concept.statedDescendants + "</span>");
+                        //         }
+                        //     }
+                        // }).done(function(result){
+                        //     // done
+                        // });
+                    }
+                });
+            }
             $(".treeButton").disableTextSelect();
             if (typeof i18n_drag_this == "undefined"){
                 i18n_drag_this = "Drag this";
@@ -518,6 +583,28 @@ function taxonomyPanel(divElement, conceptId, options) {
                 var staticChildren = topUl.children().slice(0);
                 topUl.append(parentsStrs[0]);
                 $('#' + panel.divElement.id + '-treenode-' + firstParent).closest('li').append("<ul id='parent-ul-id-" + firstParent + "' style='list-style-type: none; padding-left: 15px;'></ul>");
+                if (panel.options.descendantsCount == true) {
+                    parents.forEach(function(concept){
+                        // $.ajax({
+                        //     type: "POST",
+                        //     url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+                        //     data: {
+                        //         expression: "< " + concept.conceptId + "|" + concept.defaultTerm + "|",
+                        //         limit : 1,
+                        //         skip : 0,
+                        //         form: panel.options.selectedView
+                        //     },
+                        //     dataType: "json",
+                        //     success: function(result) {
+                        //         if (result.computeResponse) {
+                                    $(topUl).find('.selectable-row[data-concept-id="' + concept.conceptId + '"]').append("&nbsp;&nbsp;&nbsp;&nbsp;<span class='text-muted'>" + concept.statedDescendants + "</span>");
+                        //         }
+                        //     }
+                        // }).done(function(result){
+                        //     // done
+                        // });
+                    });
+                }
                 var newMainChild;
                 $.each(staticChildren, function(i, child) {
                     if ($(child).attr('data-concept-id') == conceptId) {
