@@ -1637,10 +1637,10 @@ function conceptDetails(divElement, conceptId, options) {
         }
         if (typeof total != "undefined"){
 //            console.log(total);
-            if (total < 25000){
+//            if (total < 25000){
                 paginate = 1;
                 membersUrl = membersUrl + "&paginate=1";
-            }
+            //}
 
         }
 //        console.log(membersUrl);
@@ -1652,31 +1652,28 @@ function conceptDetails(divElement, conceptId, options) {
 
         }).done(function(result){
             var remaining = "asd";
-            if (typeof paginate != "undefined"){
-                if (result.details.total == skipTo){
-                    remaining = 0;
+            if (typeof total == "undefined") total = result.details.total;
+            if (total == skipTo){
+                remaining = 0;
+            }else{
+                if (total > (skipTo + returnLimit)){
+                    remaining = total - (skipTo + returnLimit);
                 }else{
-                    if (result.details.total > (skipTo + returnLimit)){
-                        remaining = result.details.total - (skipTo + returnLimit);
-                    }else{
 //                        if (result.details.total < returnLimit && skipTo != 0){
-                            remaining = 0;
+                        remaining = 0;
 //                        }else{
 //                            remaining = result.details.total;
 //                        }
-                    }
                 }
-                if (remaining < returnLimit){
-                    var returnLimit2 = remaining;
-                }else{
-                    if (remaining != 0){
-                        var returnLimit2 = returnLimit;
-                    }else{
-                        var returnLimit2 = 0;
-                    }
-                }
+            }
+            if (remaining < returnLimit){
+                var returnLimit2 = remaining;
             }else{
-                var returnLimit2 = returnLimit;
+                if (remaining != 0){
+                    var returnLimit2 = returnLimit;
+                }else{
+                    var returnLimit2 = 0;
+                }
             }
             var context = {
                 result: result,
@@ -1837,6 +1834,9 @@ function conceptDetails(divElement, conceptId, options) {
             var subscription = channel.subscribe(panelId, function(data, envelope) {
 //                console.log("listening in " + panel.divElement.id);
                 panel.conceptId = data.conceptId;
+                if (data.showConcept){
+                    $('a[href="#fh-cd1_canvas-pane"]').click();
+                }
                 if ($("#home-children-" + panel.divElement.id + "-body").length > 0){
                 }else{
                     panel.setupCanvas();

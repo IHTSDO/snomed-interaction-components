@@ -21,8 +21,10 @@ countryIcons = {
     '20621000087109': 'ca',
     '19481000087107': 'ca',
     '20611000087101': 'ca',
-    '5641000179103': 'uy'
-}
+    '22091000087100': 'ca',
+    '5641000179103': 'uy',
+    '5631000179106': 'uy'
+};
 
 Handlebars.registerHelper('countryIcon', function(moduleId) {
     return countryIcons[moduleId];
