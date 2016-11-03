@@ -106,7 +106,14 @@
                     <br>
                     <br>
                 </div>
-            </div>
+            </form>
+            <ul class="list-group" id="{{divElementId}}-listGroup">
+            </ul>
+            <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Execute"}}}</div>
+            <button type="button" class="btn btn-primary pull-right"  id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
+            <br>
+            <br>
+            {{{i18n "i18n_results" "Results"}}}:  <span id="{{divElementId}}-resultInfo" class="text-muted small"></span>
         </div>
 
         <span style="margin-left: 10px;">{{{i18n "i18n_results" "Results"}}}:</span>  <span id="{{divElementId}}-resultInfo"></span>
@@ -134,7 +141,6 @@
                 </tbody>
             </table>
 
-            <a class="btn btn-default" download="results.xls" id="{{divElementId}}-exportXls" href="javascript:void(0);">{{{i18n "i18n_export_results_in_xls" "Export results in XLS"}}} <img style="height: 23px;" src="img/excel.png"></a>
         </div>
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     </div>
