@@ -553,6 +553,32 @@ function conceptDetails(divElement, conceptId, options) {
                 });
             } );
 
+
+            //Swedish extension; capture synonyms using JIRA issue collector
+            //start
+            var url = "https://sct-se.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-ia48y4/100025/c/1000.695.3/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=43748f9d";
+
+            $.getScript(url);
+
+            window.ATL_JQ_PAGE_PROPS =  {
+                "triggerFunction": function(showCollectorDialog) {
+                //Requires that jQuery is available! 
+                    jQuery("#fh-cd1_canvas-addsyn-sctid-details").click(function(e) {
+                        e.preventDefault();
+                        showCollectorDialog();
+                    });
+                },
+
+                fieldValues: {
+                    'summary' : 'Förslag på synonymer för begreppet: ' + componentsRegistry[2].getConceptId(),
+                    'customfield_10207' : componentsRegistry[2].getConceptId(),
+                    'customfield_10203' : componentsRegistry[2].defaultTerm,
+                    'customfield_10209' : componentsRegistry[2].options.edition,
+                    'customfield_10208' : componentsRegistry[2].options.release,
+                }
+            };
+            //end
+
             $(".glyphicon-star").click(function(e){
                 var concept = {
                     module: firstMatch.module,
@@ -2092,3 +2118,9 @@ $(document).keypress(function(event) {
     }
 }
 );
+
+
+
+
+
+
