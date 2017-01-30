@@ -556,9 +556,9 @@ function conceptDetails(divElement, conceptId, options) {
 
             //Swedish extension; capture synonyms using JIRA issue collector
             //start
-            var url = "https://sct-se.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-ia48y4/100025/c/1000.695.3/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=43748f9d";
+            var scriptUrl = "https://sct-se.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-ia48y4/100025/c/1000.695.3/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=43748f9d";
 
-            $.getScript(url);
+            $.getScript(scriptUrl);
 
             window.ATL_JQ_PAGE_PROPS =  {
                 "triggerFunction": function(showCollectorDialog) {
