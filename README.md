@@ -1,40 +1,48 @@
-# SNOMED Interaction Components
+# SNOMED Interaction Components [![Code Climate](https://codeclimate.com/github/IHTSDO/snomed-interaction-components/badges/gpa.svg)](https://codeclimate.com/github/IHTSDO/snomed-interaction-components)
 
 SNOMED Interaction Components are Javascript widgets that can be easily integrated in any website to provide SNOMED CT Navigation features, querying an IHTSDO Snapshot Backend Server.
 
 ## Distribution
 
-This project gould be compiled using Grunt.js (http://gruntjs.com/) creating the distribution files:
+This project gould be compiled using Grunt.js (<http://gruntjs.com/>) creating the distribution files:
 
-* js
-  * snomed-interaction-components-1.0.0.js
-  * snomed-interaction-components-1.0.0.min.js
-* css
-  * snomed-interaction-components-1.0.0.css
-  * snomed-interaction-components-1.0.0.min.css
+- js
+
+  - snomed-interaction-components-1.33.2.js
+  - snomed-interaction-components-1.33.2.min.js
+
+- css
+
+  - snomed-interaction-components-1.33.2.css
+  - snomed-interaction-components-1.33.2.min.css
 
 The Grunt default task will create all these components, running `grunt` in the root folder of the project will create the distribution artifacts.
 
 ## Use components in your project
 
 Use the js and css files resulting from Grunt.js build, import them in your project and add these import references in your HTML file:
-```HTML
+
+```html
 <link rel="stylesheet" href="snomed-interaction-components/css/snomed-interaction-components-1.19.0.min.css">
 <script src="snomed-interaction-components/js/snomed-interaction-components-1.19.0.min.js"></script>
 ```
+
 The SNOMED Interaction Componets require you to have JQuery 2.1.x and Boostrap 3.x imported in your project also, fo example:
-```HTML
+
+```html
 <script src="external-libs/jquery-2.1.0.min.js" type="text/javascript"></script>
 <script src="external-libs/bootstrap.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 ```
+
 ## Included Components
 
 The included components are:
-* Taxonomy: A tree view of the SNOMED CT Content, selectable logic view and it can be refocused to any concept.
-* Search: Search SNOMED CT Content with multiple modes and filters.
-* Concept Details: A full concept data display, including a summary, advanced details, navigation to parents and children, diagrams, etc.
-* Refsets: List of available Reference Sets in the environment.
+
+- Taxonomy: A tree view of the SNOMED CT Content, selectable logic view and it can be refocused to any concept.
+- Search: Search SNOMED CT Content with multiple modes and filters.
+- Concept Details: A full concept data display, including a summary, advanced details, navigation to parents and children, diagrams, etc.
+- Refsets: List of available Reference Sets in the environment.
 
 ## Instantiating components in your project
 
@@ -47,8 +55,7 @@ var ref = new refsetPanel(document.getElementById("div-3-id"), options);
 var cdp = new conceptDetails(document.getElementById("div-4-id"), conceptId, options);
 ```
 
-Concept Details and Taxonomy have a conceptId parameter that will focus the panel in the provided concept.
-All components require an Options object that will configure preferences and the access to the backend server.
+Concept Details and Taxonomy have a conceptId parameter that will focus the panel in the provided concept. All components require an Options object that will configure preferences and the access to the backend server.
 
 ### Example: Preparing the canvas for the Concept Details panel
 
@@ -56,7 +63,7 @@ The body of the HTML page needs to include a div element that will contain the w
 
 In this example we create two different divs, one as an example of plain Javascript mode and the other for the example of the JQuery mode.
 
-```HTML
+```html
     <body onload="initialize()">
         <h1>Testing Concept Details Widget</h1>
 
@@ -74,7 +81,7 @@ The `initialize()` function should be implemented in javascript in this example 
 
 After that, 2 panels are created using the 2 different modes.
 
-```HTML
+```html
     <script type="text/javascript">
         function initialize() {
             // Example: common options object
@@ -107,14 +114,12 @@ After that, 2 panels are created using the 2 different modes.
         }
     </script>
 ```
+
 The `options` object can include a property called `url` that would allow to connect to any provided terminology server, that follows a pre-defined rest methods API. In this example we don't provide any `url` value and the plugin will default to a development Terminology Server.
 
 After the initial load, it is possible to set the panel to a different concept by using the Javascript object methods.
 
-```JavaScript
+```javascript
 panel.conceptId = "4046840038";
 panel.updateDivContent();
 ```
-
-
-
