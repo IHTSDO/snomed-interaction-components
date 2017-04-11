@@ -319,6 +319,7 @@ function conceptDetails(divElement, conceptId, options) {
         $('#' + panel.childrenPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#refsets-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#product-details-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 
         // load attributes
         if (xhr != null) {
@@ -1167,6 +1168,72 @@ function conceptDetails(divElement, conceptId, options) {
                     renderExpression(firstMatch, firstMatch, $("#expression-canvas-" + panel.divElement.id), options);
                 }, 1000)
             });
+
+            if (firstMatch.defaultTerm.endsWith("(virtual clinical drug)")) {
+                $("#product-details-tab").show();
+                var productData = {
+                    defaultTerm: firstMatch.defaultTerm,
+                    forms: [],
+                    groups: {},
+                    ingredients: []
+                };
+                firstMatch.relationships.forEach(function(loopRel) {
+                    if (loopRel.type.conceptId == "411116001" && loopRel.active) {
+                        productData.forms.push(loopRel);
+                    } else if (loopRel.active && loopRel.groupId != 0) {
+                        if (typeof productData.groups[loopRel.groupId] == "undefined") {
+                            productData.groups[loopRel.groupId] = [];
+                        }
+                        productData.groups[loopRel.groupId].push(loopRel);
+                    }
+                });
+                Object.keys(productData.groups).forEach(function(loopKey) {
+                    var loopGroup = productData.groups[loopKey];
+                    var loopIngredient = {};
+                    loopGroup.forEach(function(loopRel) {
+                        if (loopRel.type.conceptId == "127489000") {
+                            loopIngredient.ingredient = loopRel.target;
+                        } else if (loopRel.type.conceptId == "732946004") {
+                            loopIngredient.denominatorValue = loopRel.target;
+                        } else if (loopRel.type.conceptId == "732944001") {
+                            loopIngredient.numeratorValue = loopRel.target;
+                        } else if (loopRel.type.conceptId == "732943007") {
+                            loopIngredient.boss = loopRel.target;
+                        } else if (loopRel.type.conceptId == "732947008") {
+                            loopIngredient.denominatorUnit = loopRel.target;
+                        } else if (loopRel.type.conceptId == "732945000") {
+                            loopIngredient.numeratorUnit = loopRel.target;
+                        }
+                    });
+                    productData.ingredients.push(loopIngredient);
+                    // var demoIngredient1 = {
+                    //     ingredient: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Atenolol (substance)"},
+                    //     boss: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Atenolol (substance)"},
+                    //     numeratorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"50 (qualifier value)"},
+                    //     numeratorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"milligram (qualifier value)"},
+                    //     denominatorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"1 (qualifier value)"},
+                    //     denominatorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Tablet (unit of presentation)"}
+                    // };
+                    // var demoIngredient2 = {
+                    //     ingredient: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Chlorthalidone (substance)"},
+                    //     boss: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Chlorthalidone (substance)"},
+                    //     numeratorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"12.5 (qualifier value)"},
+                    //     numeratorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"milligram (qualifier value)"},
+                    //     denominatorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"1 (qualifier value)"},
+                    //     denominatorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Tablet (unit of presentation)"}
+                    // };
+                    //productData.ingredients = [demoIngredient1, demoIngredient2];
+                });
+                console.log(productData);
+                var context = {
+                    productData: productData
+                };
+                $('#product-details-' + panel.divElement.id).html(
+                    JST["views/conceptDetailsPlugin/tabs/product.hbs"](context));
+            } else {
+                $("#product-details-tab").hide();
+                $('#details-tabs-' + panel.divElement.id + ' a:first').tab('show')
+            }
 
             $('.more-fields-button').disableTextSelect();
             $('.more-fields-button').popover();
