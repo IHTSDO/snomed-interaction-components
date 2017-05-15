@@ -26,10 +26,31 @@
 
 <script type="text/javascript">
 // inspired by this: https://www.lucidchart.com/techblog/2014/12/02/definitive-guide-copying-pasting-javascript/
-//
+// and: http://stackoverflow.com/questions/5379120/get-the-highlighted-selected-text
+
 document.addEventListener("copy", copyHandler, false);
+
+function getSelectionText() {
+    var text = "";
+    var activeEl = document.activeElement;
+    var activeElTagName = activeEl ? activeEl.tagName.toLowerCase() : null;
+    if (
+      (activeElTagName == "textarea") || (activeElTagName == "input" &&
+      /^(?:text|search|password|tel|url)$/i.test(activeEl.type)) &&
+      (typeof activeEl.selectionStart == "number")
+    ) {
+        text = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
+    } else if (window.getSelection) {
+        text = window.getSelection().toString();
+    } else if (document.selection) {
+        text = document.selection.createRange().htmlText
+    }
+    return text;
+}
+
 function copyHandler(e) {
-  if(window.getSelection().isCollapsed) {
+  var text = getSelectionText();
+  if(text == "") {
 	  var copyContent = document.getElementById("copy-content");
 	  e.clipboardData.setData('text/plain', copyContent.innerHTML);
 	  e.preventDefault();
