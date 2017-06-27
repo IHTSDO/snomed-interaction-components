@@ -401,7 +401,8 @@ function conceptDetails(divElement, conceptId, options) {
             var context = {
                 panel: panel,
                 firstMatch: firstMatch,
-                divElementId: panel.divElement.id
+                divElementId: panel.divElement.id,
+                link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset
             };
             $('#home-attributes-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/attributes.hbs"](context));
 
@@ -455,104 +456,22 @@ function conceptDetails(divElement, conceptId, options) {
                 }
                 channel.publish("favsAction");
             });
+            // console.log("paso");
+            //$('.clip-btn').unbind();
+            if (panel.clipboard) panel.clipboard.destroy();
+            panel.clipboard = new Clipboard('.clip-btn');
+            panel.clipboard.on('success', function(e) {
+                // console.info('Action:', e.action);
+                // console.info('Text:', e.text);
+                // console.info('Trigger:', e.trigger);
+                alertEvent("Copied!", "info");
+                e.clearSelection();
+            });
+            panel.clipboard.on('error', function(e) {
+                console.log("Error!");
+                alertEvent("Error", "error");
+            });
 
-            var clientTerm = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-term") );
-            clientTerm.on( "ready", function( readyEvent ) {
-                clientTerm.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("Term copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.defaultTerm);
-                });
-            } );
-            var clientAll = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-sctid-term") );
-            clientAll.on( "ready", function( readyEvent ) {
-                clientAll.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("SCTID and Term copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.conceptId + " |" + firstMatch.defaultTerm + "|");
-                });
-            } );
-            var clientSctid = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-sctid") );
-            clientSctid.on( "ready", function( readyEvent ) {
-                clientSctid.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("SCTID copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.conceptId);
-                });
-            } );
-            var clientLink = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-link") );
-            clientLink.on( "ready", function( readyEvent ) {
-                clientLink.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("Link copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset);
-                });
-            } );
-
-            var clientTermDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-term-details") );
-            clientTermDetails.on( "ready", function( readyEvent ) {
-                clientTermDetails.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon-details").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon-details").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("Term copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.defaultTerm);
-                });
-            } );
-            var clientAllDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-sctid-term-details") );
-            clientAllDetails.on( "ready", function( readyEvent ) {
-                clientAllDetails.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon-details").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon-details").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("SCTID and Term copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.conceptId + " |" + firstMatch.defaultTerm + "|");
-                });
-            } );
-            var clientSctidDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-sctid-details") );
-            clientSctidDetails.on( "ready", function( readyEvent ) {
-                clientSctidDetails.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon-details").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon-details").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("SCTID copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.conceptId);
-                });
-            } );
-            var clientLinkDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-link-details") );
-            clientLinkDetails.on( "ready", function( readyEvent ) {
-                clientLinkDetails.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("Link copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset);
-                });
-            } );
 
             $(".glyphicon-star").click(function(e){
                 var concept = {

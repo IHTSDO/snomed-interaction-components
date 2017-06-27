@@ -5,10 +5,10 @@
                 <i class="glyphicon glyphicon-export pull-right" style="color: white;" id="{{divElementId}}-copy-icon"></i>
             </button>
             <ul class="dropdown-menu small" role="menu" aria-labelledby="dropdownMenu1">
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-sctid">Copy ConceptId</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-term">Copy term</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-sctid-term">Copy ConceptId + term</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-link">Copy Link to share</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-sctid" class="clip-btn" data-clipboard-text="{{firstMatch.conceptId}}">Copy ConceptId</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-term" class="clip-btn" data-clipboard-text="{{firstMatch.defaultTerm}}">Copy term</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-sctid-term" class="clip-btn" data-clipboard-text="{{firstMatch.conceptId}} |{{firstMatch.defaultTerm}}|">Copy ConceptId + term</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" id="{{divElementId}}-copy-link" class="clip-btn" data-clipboard-text="{{link}}">Copy Link to share</a></li>
             </ul>
         </div>
     </span>
@@ -35,19 +35,6 @@
     </span>
 </h4>
 
-<h5>SCTID: {{firstMatch.conceptId}}<br><br><div id="copy-content">{{firstMatch.conceptId}} | {{firstMatch.defaultTerm}} |</div></h5>
-
-<script type="text/javascript">
-// inspired by this: https://www.lucidchart.com/techblog/2014/12/02/definitive-guide-copying-pasting-javascript/
-//
-document.addEventListener("copy", copyHandler, false);
-function copyHandler(e) {
-  if(window.getSelection().isCollapsed) {
-	  var copyContent = document.getElementById("copy-content");
-	  e.clipboardData.setData('text/plain', copyContent.innerHTML);
-	  e.preventDefault();
-  }
-}
-</script>
+<h5>SCTID: {{firstMatch.conceptId}}<br><br><div id="copy-content-custom">{{firstMatch.conceptId}} | {{firstMatch.defaultTerm}} |</div></h5>
 
 <div id="home-descriptions-{{divElementId}}"></div>
