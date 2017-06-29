@@ -1088,7 +1088,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }, 1000)
             });
 
-            if (firstMatch.defaultTerm.endsWith("(virtual clinical drug)")) {
+            if (firstMatch.defaultTerm.endsWith("(clinical drug)")) {
                 $("#product-details-tab").show();
                 var productData = {
                     defaultTerm: firstMatch.defaultTerm,
