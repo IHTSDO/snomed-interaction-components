@@ -36,6 +36,27 @@ function taxonomyPanel(divElement, conceptId, options) {
     panel.subscriptionsColor = [];
     this.history = [];
 
+    if (!options.rootConceptDescendants){
+        $.ajax({
+            type: "POST",
+            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+            data: {
+                expression: "< 138875005|SNOMED CT Concept|",
+                limit : 1,
+                skip : 0,
+                form: panel.options.selectedView
+            },
+            dataType: "json",
+            success: function(result) {
+                if (result.computeResponse) {
+                    options.rootConceptDescendants = result.computeResponse.total;
+                }
+            }
+        }).done(function(result){
+            // done
+        });
+    }
+
     this.setupCanvas = function() {
         var context = {
             divElementId: panel.divElement.id
@@ -134,14 +155,14 @@ function taxonomyPanel(divElement, conceptId, options) {
 //        });
 
         $("#" + panel.divElement.id + "-resetButton").click(function() {
-//            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+//            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive", "statedDescendants": options.rootConceptDescendants });
             panel.setToConcept(panel.default.conceptId);
         });
 
         $("#" + panel.divElement.id + "-apply-button").click(function() {
             //console.log("apply!");
             panel.readOptionsPanel();
-//            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+//            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive", "statedDescendants": options.rootConceptDescendants });
         });
 
         $("#" + panel.divElement.id + "-historyButton").click(function (event) {
@@ -215,16 +236,28 @@ function taxonomyPanel(divElement, conceptId, options) {
 //            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
 //        });
 
+        $("#" + panel.divElement.id + "-descendantsCountTrue").click(function (event) {
+            panel.options.descendantsCount = true;
+            $("#" + panel.divElement.id + '-txViewLabel2').html("Descendants Count: On");
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive", "statedDescendants": options.rootConceptDescendants });
+        });
+
+        $("#" + panel.divElement.id + "-descendantsCountFalse").click(function (event) {
+            panel.options.descendantsCount = false;
+            $("#" + panel.divElement.id + '-txViewLabel2').html("Descendants Count: Off");
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive", "statedDescendants": options.rootConceptDescendants });
+        });
+
         $("#" + panel.divElement.id + "-inferredViewButton").click(function (event) {
             panel.options.selectedView = 'inferred';
             $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
-            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive", "statedDescendants": options.rootConceptDescendants });
         });
 
         $("#" + panel.divElement.id + "-statedViewButton").click(function (event) {
             panel.options.selectedView = 'stated';
             $("#" + panel.divElement.id + '-txViewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
-            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive", "statedDescendants": options.rootConceptDescendants });
         });
         //$("#" + panel.divElement.id + "-inferredViewButton").click();
         $("#" + panel.divElement.id + "-ownMarker").css('color', panel.markerColor);
@@ -332,6 +365,31 @@ function taxonomyPanel(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-panelBody").html($("#" + panel.divElement.id + "-panelBody").html().slice(a, b));
         });
         $("#" + panel.divElement.id + "-panelBody").html(JST["views/taxonomyPlugin/body/parents.hbs"](context));
+
+        if (panel.options.descendantsCount == true) {
+            var auxArray = parents;
+            auxArray.push(focusConcept);
+            auxArray.forEach(function(concept){
+                // $.ajax({
+                //     type: "POST",
+                //     url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+                //     data: {
+                //         expression: "< " + concept.conceptId + "|" + concept.defaultTerm + "|",
+                //         limit : 1,
+                //         skip : 0,
+                //         form: panel.options.selectedView
+                //     },
+                //     dataType: "json",
+                //     success: function(result) {
+                //         if (result.computeResponse) {
+                            $("#" + panel.divElement.id + "-panelBody").find('.selectable-row[data-concept-id="' + concept.conceptId + '"]').append("&nbsp;&nbsp;&nbsp;&nbsp;<span class='text-muted'>" + concept.statedDescendants + "</span>");
+                //         }
+                //     }
+                // }).done(function(result){
+                //     // done
+                // });
+            });
+        }
         //console.log(JST["views/taxonomyPlugin/body/parents.hbs"](context));
         $(".treeButton").disableTextSelect();
         $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
@@ -342,12 +400,13 @@ function taxonomyPanel(divElement, conceptId, options) {
                 var selectedModule = $(event.target).attr('data-module');
                 var selectedId = $(event.target).attr('data-concept-id');
                 var selectedLabel = $(event.target).attr('data-term');
+                var statedDescendants = $(event.target).attr('data-statedDescendants');
                 panel.history.push({term: selectedLabel, conceptId: selectedId, time: time});
                 if (typeof selectedId != "undefined") {
                     $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
                         // done
                     }).done(function(result) {
-                        panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive", module: selectedModule});
+                        panel.setupParents(result, {conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "Primitive", module: selectedModule, statedDescendants: statedDescendants});
                     }).fail(function() {
                     });
                 }
@@ -412,8 +471,13 @@ function taxonomyPanel(divElement, conceptId, options) {
             $("#" + panel.divElement.id + "-txViewLabel").html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
         }
 
+        if (panel.options.descendantsCount == true) $("#" + panel.divElement.id + "-txViewLabel2").html("Descendants Count: On");
+        else $("#" + panel.divElement.id + "-txViewLabel2").html("Descendants Count: Off");
+
+
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {
         }).done(function(result) {
+            if (result && result[0] && typeof result[0].statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
                     return -1;
@@ -454,6 +518,30 @@ function taxonomyPanel(divElement, conceptId, options) {
                 $("#" + panel.divElement.id + "-treeicon-" + conceptId).addClass("glyphicon-minus");
             }
             $("#" + panel.divElement.id + "-treenode-" + conceptId).closest("li").append(JST["views/taxonomyPlugin/body/children.hbs"](context));
+            if (panel.options.descendantsCount == true) {
+                result.forEach(function(concept){
+                    if (concept.active){
+                        // $.ajax({
+                        //     type: "POST",
+                        //     url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+                        //     data: {
+                        //         expression: "< " + concept.conceptId + "|" + concept.defaultTerm + "|",
+                        //         limit : 1,
+                        //         skip : 0,
+                        //         form: panel.options.selectedView
+                        //     },
+                        //     dataType: "json",
+                        //     success: function(result) {
+                        //         if (result.computeResponse) {
+                                    $("#" + panel.divElement.id + "-treenode-" + conceptId).closest("li").find('.selectable-row[data-concept-id="' + concept.conceptId + '"]').append("&nbsp;&nbsp;&nbsp;&nbsp;<span class='text-muted'>" + concept.statedDescendants + "</span>");
+                        //         }
+                        //     }
+                        // }).done(function(result){
+                        //     // done
+                        // });
+                    }
+                });
+            }
             $(".treeButton").disableTextSelect();
             if (typeof i18n_drag_this == "undefined"){
                 i18n_drag_this = "Drag this";
@@ -518,6 +606,28 @@ function taxonomyPanel(divElement, conceptId, options) {
                 var staticChildren = topUl.children().slice(0);
                 topUl.append(parentsStrs[0]);
                 $('#' + panel.divElement.id + '-treenode-' + firstParent).closest('li').append("<ul id='parent-ul-id-" + firstParent + "' style='list-style-type: none; padding-left: 15px;'></ul>");
+                if (panel.options.descendantsCount == true) {
+                    parents.forEach(function(concept){
+                        // $.ajax({
+                        //     type: "POST",
+                        //     url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+                        //     data: {
+                        //         expression: "< " + concept.conceptId + "|" + concept.defaultTerm + "|",
+                        //         limit : 1,
+                        //         skip : 0,
+                        //         form: panel.options.selectedView
+                        //     },
+                        //     dataType: "json",
+                        //     success: function(result) {
+                        //         if (result.computeResponse) {
+                                    $(topUl).find('.selectable-row[data-concept-id="' + concept.conceptId + '"]').append("&nbsp;&nbsp;&nbsp;&nbsp;<span class='text-muted'>" + concept.statedDescendants + "</span>");
+                        //         }
+                        //     }
+                        // }).done(function(result){
+                        //     // done
+                        // });
+                    });
+                }
                 var newMainChild;
                 $.each(staticChildren, function(i, child) {
                     if ($(child).attr('data-concept-id') == conceptId) {
@@ -571,7 +681,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         });
     }
 
-    this.setToConcept = function(conceptId, term, definitionStatus, module) {
+    this.setToConcept = function(conceptId, term, definitionStatus, module, statedDescendants) {
         $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form="+panel.options.selectedView, function(result) {
             // done
@@ -579,13 +689,16 @@ function taxonomyPanel(divElement, conceptId, options) {
             if (definitionStatus != "Primitive" && definitionStatus != "Fully defined") {
                 definitionStatus = "Primitive";
             }
-            if (typeof term == "undefined"){
+            if (conceptId == 138875005) statedDescendants = options.rootConceptDescendants;
+            if (typeof term == "undefined" || typeof statedDescendants == "undefined"){
                 $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(res){
                     term = res.defaultTerm;
-                    panel.setupParents(result, {conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus, module: module});
+                    if (typeof res.statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
+                    statedDescendants = res.statedDescendants;
+                    panel.setupParents(result, {conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus, module: module, statedDescendants: statedDescendants});
                 });
             }else{
-                panel.setupParents(result, {conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus, module: module});
+                panel.setupParents(result, {conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus, module: module, statedDescendants: statedDescendants});
             }
         }).fail(function() {
             $("#" + panel.divElement.id + "-panelBody").html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
@@ -605,7 +718,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         if (!alreadySubscribed) {
             var subscription = channel.subscribe(panelId, function(data, envelope) {
 //                console.log("listening in " + panel.divElement.id);
-                panel.setToConcept(data.conceptId, data.term, data.definitionStatus, data.module);
+                panel.setToConcept(data.conceptId, data.term, data.definitionStatus, data.module, data.statedDescendants);
             });
             panel.subscriptions.push(subscription);
             panelToSubscribe.subscribers.push(panel.divElement.id);
@@ -725,16 +838,16 @@ function taxonomyPanel(divElement, conceptId, options) {
 
     this.setupCanvas();
     if (!conceptId || conceptId == 138875005) {
-        this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive"});
+        this.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "Primitive", "statedDescendants": options.rootConceptDescendants });
     } else {
         if (xhr != null) {
             xhr.abort();
             //console.log("aborting call...");
         }
         xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
-
+            if (typeof result.statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
         }).done(function(result) {
-            panel.setToConcept(conceptId, result.defaultTerm);
+            panel.setToConcept(conceptId, result.defaultTerm, result.definitionStatus, result.module, result.statedDescendants);
         }).fail(function() {
             //console.log("Error");
         });

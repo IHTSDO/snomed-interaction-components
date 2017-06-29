@@ -319,6 +319,7 @@ function conceptDetails(divElement, conceptId, options) {
         $('#' + panel.childrenPId).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         $('#refsets-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        $('#product-details-' + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
 
         // load attributes
         if (xhr != null) {
@@ -400,7 +401,8 @@ function conceptDetails(divElement, conceptId, options) {
             var context = {
                 panel: panel,
                 firstMatch: firstMatch,
-                divElementId: panel.divElement.id
+                divElementId: panel.divElement.id,
+                link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset
             };
             $('#home-attributes-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/attributes.hbs"](context));
 
@@ -454,104 +456,22 @@ function conceptDetails(divElement, conceptId, options) {
                 }
                 channel.publish("favsAction");
             });
+            // console.log("paso");
+            //$('.clip-btn').unbind();
+            if (panel.clipboard) panel.clipboard.destroy();
+            panel.clipboard = new Clipboard('.clip-btn');
+            panel.clipboard.on('success', function(e) {
+                // console.info('Action:', e.action);
+                // console.info('Text:', e.text);
+                // console.info('Trigger:', e.trigger);
+                alertEvent("Copied!", "info");
+                e.clearSelection();
+            });
+            panel.clipboard.on('error', function(e) {
+                console.log("Error!");
+                alertEvent("Error", "error");
+            });
 
-            var clientTerm = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-term") );
-            clientTerm.on( "ready", function( readyEvent ) {
-                clientTerm.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("Term copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.defaultTerm);
-                });
-            } );
-            var clientAll = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-sctid-term") );
-            clientAll.on( "ready", function( readyEvent ) {
-                clientAll.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("SCTID and Term copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.conceptId + " |" + firstMatch.defaultTerm + "|");
-                });
-            } );
-            var clientSctid = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-sctid") );
-            clientSctid.on( "ready", function( readyEvent ) {
-                clientSctid.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("SCTID copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.conceptId);
-                });
-            } );
-            var clientLink = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-link") );
-            clientLink.on( "ready", function( readyEvent ) {
-                clientLink.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("Link copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset);
-                });
-            } );
-
-            var clientTermDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-term-details") );
-            clientTermDetails.on( "ready", function( readyEvent ) {
-                clientTermDetails.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon-details").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon-details").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("Term copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.defaultTerm);
-                });
-            } );
-            var clientAllDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-sctid-term-details") );
-            clientAllDetails.on( "ready", function( readyEvent ) {
-                clientAllDetails.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon-details").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon-details").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("SCTID and Term copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.conceptId + " |" + firstMatch.defaultTerm + "|");
-                });
-            } );
-            var clientSctidDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-sctid-details") );
-            clientSctidDetails.on( "ready", function( readyEvent ) {
-                clientSctidDetails.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon-details").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon-details").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("SCTID copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", firstMatch.conceptId);
-                });
-            } );
-            var clientLinkDetails = new ZeroClipboard( document.getElementById(panel.divElement.id + "-copy-link-details") );
-            clientLinkDetails.on( "ready", function( readyEvent ) {
-                clientLinkDetails.on( "copy", function (event) {
-                    $("#" + panel.divElement.id + "-copy-icon").addClass("animated rubberBand");
-                    window.setTimeout( function(){
-                        $("#" + panel.divElement.id + "-copy-icon").removeClass('animated rubberBand');
-                    }, 1000);
-                    alertEvent("Link copied to clipboard", "info");
-                    var clipboard = event.clipboardData;
-                    clipboard.setData("text/plain", document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset);
-                });
-            } );
 
             $(".glyphicon-star").click(function(e){
                 var concept = {
@@ -1167,6 +1087,72 @@ function conceptDetails(divElement, conceptId, options) {
                     renderExpression(firstMatch, firstMatch, $("#expression-canvas-" + panel.divElement.id), options);
                 }, 1000)
             });
+
+            if (firstMatch.defaultTerm.endsWith("(virtual clinical drug)")) {
+                $("#product-details-tab").show();
+                var productData = {
+                    defaultTerm: firstMatch.defaultTerm,
+                    forms: [],
+                    groups: {},
+                    ingredients: []
+                };
+                firstMatch.relationships.forEach(function(loopRel) {
+                    if (loopRel.type.conceptId == "411116001" && loopRel.active) {
+                        productData.forms.push(loopRel);
+                    } else if (loopRel.active && loopRel.groupId != 0) {
+                        if (typeof productData.groups[loopRel.groupId] == "undefined") {
+                            productData.groups[loopRel.groupId] = [];
+                        }
+                        productData.groups[loopRel.groupId].push(loopRel);
+                    }
+                });
+                Object.keys(productData.groups).forEach(function(loopKey) {
+                    var loopGroup = productData.groups[loopKey];
+                    var loopIngredient = {};
+                    loopGroup.forEach(function(loopRel) {
+                        if (loopRel.type.conceptId == "127489000") {
+                            loopIngredient.ingredient = loopRel.target;
+                        } else if (loopRel.type.conceptId == "732946004") {
+                            loopIngredient.denominatorValue = loopRel.target;
+                        } else if (loopRel.type.conceptId == "732944001") {
+                            loopIngredient.numeratorValue = loopRel.target;
+                        } else if (loopRel.type.conceptId == "732943007") {
+                            loopIngredient.boss = loopRel.target;
+                        } else if (loopRel.type.conceptId == "732947008") {
+                            loopIngredient.denominatorUnit = loopRel.target;
+                        } else if (loopRel.type.conceptId == "732945000") {
+                            loopIngredient.numeratorUnit = loopRel.target;
+                        }
+                    });
+                    productData.ingredients.push(loopIngredient);
+                    // var demoIngredient1 = {
+                    //     ingredient: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Atenolol (substance)"},
+                    //     boss: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Atenolol (substance)"},
+                    //     numeratorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"50 (qualifier value)"},
+                    //     numeratorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"milligram (qualifier value)"},
+                    //     denominatorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"1 (qualifier value)"},
+                    //     denominatorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Tablet (unit of presentation)"}
+                    // };
+                    // var demoIngredient2 = {
+                    //     ingredient: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Chlorthalidone (substance)"},
+                    //     boss: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Chlorthalidone (substance)"},
+                    //     numeratorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"12.5 (qualifier value)"},
+                    //     numeratorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"milligram (qualifier value)"},
+                    //     denominatorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"1 (qualifier value)"},
+                    //     denominatorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Tablet (unit of presentation)"}
+                    // };
+                    //productData.ingredients = [demoIngredient1, demoIngredient2];
+                });
+                console.log(productData);
+                var context = {
+                    productData: productData
+                };
+                $('#product-details-' + panel.divElement.id).html(
+                    JST["views/conceptDetailsPlugin/tabs/product.hbs"](context));
+            } else {
+                $("#product-details-tab").hide();
+                $('#details-tabs-' + panel.divElement.id + ' a:first').tab('show')
+            }
 
             $('.more-fields-button').disableTextSelect();
             $('.more-fields-button').popover();
