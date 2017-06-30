@@ -8,6 +8,8 @@ var e_plus = '<span class="exp-operators">+</span>';
 var e_equals = '<span class="exp-operators">=</span>';
 var e_pipe = '<span class="exp-pipes">|</span>';
 
+var panel = {};
+
 var referenceToExpression = function(conceptReference) {
     return conceptReference.conceptId + " " + e_pipe + "<span class='exp-term'>" +
         conceptReference.defaultTerm + "</span>" + e_pipe;
@@ -101,46 +103,24 @@ var renderExpression = function(concept, inferredConcept, div, options) {
         divElementId: div.attr('id'),
         preCoordinatedExpressionHtml: preCoordinatedHtml,
         statedExpressionHtml: statedHtml,
-        inferredExpressionHtml: inferredHtml
+        inferredExpressionHtml: inferredHtml,
+        plainPreCoordinatedExpression: plainPreCoordinatedExpression,
+        plainStatedExpression: plainStatedExpression,
+        plainInferredExpression: plainInferredExpression
     };
     div.html(JST["views/conceptDetailsPlugin/tabs/expression.hbs"](context).trim());
 
-    var preCoordinatedCopy = new ZeroClipboard( document.getElementById(div.attr('id') + "-copy-pre-coordinated-expression") );
-    preCoordinatedCopy.on( "ready", function( readyEvent ) {
-        preCoordinatedCopy.on( "copy", function (event) {
-            $("#" + div.attr('id') + "-copy-pre-coordinated-expression").addClass("animated rubberBand");
-            window.setTimeout( function(){
-                $("#" + div.attr('id') + "-copy-pre-coordinated-expression").removeClass('animated rubberBand');
-            }, 1000);
-            alertEvent("Pre-coordinated expression copied to clipboard", "info");
-            var clipboard = event.clipboardData;
-            clipboard.setData("text/plain", plainPreCoordinatedExpression);
-        });
-    } );
-
-    var statedCopy = new ZeroClipboard( document.getElementById(div.attr('id') + "-copy-stated-expression") );
-    statedCopy.on( "ready", function( readyEvent ) {
-        statedCopy.on( "copy", function (event) {
-            $("#" + div.attr('id') + "-copy-stated-expression").addClass("animated rubberBand");
-            window.setTimeout( function(){
-                $("#" + div.attr('id') + "-copy-stated-expression").removeClass('animated rubberBand');
-            }, 1000);
-            alertEvent("Post-coordinated expression (stated) copied to clipboard", "info");
-            var clipboard = event.clipboardData;
-            clipboard.setData("text/plain", plainStatedExpression);
-        });
-    } );
-
-    var inferredCopy = new ZeroClipboard( document.getElementById(div.attr('id') + "-copy-inferred-expression") );
-    inferredCopy.on( "ready", function( readyEvent ) {
-        inferredCopy.on( "copy", function (event) {
-            $("#" + div.attr('id') + "-copy-inferred-expression").addClass("animated rubberBand");
-            window.setTimeout( function(){
-                $("#" + div.attr('id') + "-copy-inferred-expression").removeClass('animated rubberBand');
-            }, 1000);
-            alertEvent("Post-coordinated expression (inferred) copied to clipboard", "info");
-            var clipboard = event.clipboardData;
-            clipboard.setData("text/plain", plainInferredExpression);
-        });
-    } );
+    if (panel.clipboard) panel.clipboard.destroy();
+    panel.clipboard = new Clipboard('.clip-btn-exp');
+    panel.clipboard.on('success', function(e) {
+        // console.info('Action:', e.action);
+        // console.info('Text:', e.text);
+        // console.info('Trigger:', e.trigger);
+        alertEvent("Copied!", "info");
+        e.clearSelection();
+    });
+    panel.clipboard.on('error', function(e) {
+        console.log("Error!");
+        alertEvent("Error", "error");
+    });
 };
