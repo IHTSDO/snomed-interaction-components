@@ -1,20 +1,17 @@
 # SNOMED Interaction Components [![Code Climate](https://codeclimate.com/github/IHTSDO/snomed-interaction-components/badges/gpa.svg)](https://codeclimate.com/github/IHTSDO/snomed-interaction-components)
 
-SNOMED Interaction Components are Javascript widgets that can be easily integrated in any website to provide SNOMED CT Navigation features, querying an IHTSDO Snapshot Backend Server.
+SNOMED Interaction Components are Javascript widgets that can be easily integrated in any website to provide SNOMED CT Navigation features, querying an IHTSDO Snapshot Backend Serversd
 
 ## Distribution
+The released distributable versions can also be found amongst the repository releases (<https://github.com/IHTSDO/snomed-interaction-components/releases>).
 
-This project gould be compiled using Grunt.js (<http://gruntjs.com/>) creating the distribution files:
-
+YOu can do it yourself by compiling using Grunt.js (<http://gruntjs.com/>) to create the distribution files. 
 - js
-
-  - snomed-interaction-components-1.33.2.js
-  - snomed-interaction-components-1.33.2.min.js
-
+  - snomed-interaction-components-x.js
+  - snomed-interaction-components-x.min.js
 - css
-
-  - snomed-interaction-components-1.33.2.css
-  - snomed-interaction-components-1.33.2.min.css
+  - snomed-interaction-components-x.css
+  - snomed-interaction-components-x.min.css
 
 The Grunt default task will create all these components, running `grunt` in the root folder of the project will create the distribution artifacts.
 
