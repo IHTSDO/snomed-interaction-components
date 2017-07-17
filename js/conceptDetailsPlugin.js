@@ -358,6 +358,7 @@ function conceptDetails(divElement, conceptId, options) {
                 release: options.release,
                 server: options.serverUrl.substr(0, options.serverUrl.length - 10),
                 langRefset: panel.options.langRefset,
+                link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset,
 //                dataContentValue: options.serverUrl.substr(0, options.serverUrl.length - 10)
                 dataContentValue: document.URL.split("?")[0].split("#")[0]
             };
