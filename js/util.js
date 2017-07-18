@@ -280,9 +280,15 @@ function stringToArray (string){
         return false;
     }
 }
-
+var lastEventTime = (new Date()).getTime();
 function alertEvent(message, type) {
-    $.notify(message,type);
+    var t = (new Date()).getTime();
+    if (t-lastEventTime < 10 && message.toLowerCase().includes("copied")) {
+        // Ignore notification
+    } else {
+        $.notify(message,type);
+    }
+    lastEventTime = t;
 }
 
 if (!String.prototype.endsWith) {
