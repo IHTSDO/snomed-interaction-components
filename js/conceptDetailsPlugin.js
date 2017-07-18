@@ -358,6 +358,7 @@ function conceptDetails(divElement, conceptId, options) {
                 release: options.release,
                 server: options.serverUrl.substr(0, options.serverUrl.length - 10),
                 langRefset: panel.options.langRefset,
+                link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset,
 //                dataContentValue: options.serverUrl.substr(0, options.serverUrl.length - 10)
                 dataContentValue: document.URL.split("?")[0].split("#")[0]
             };
@@ -472,6 +473,37 @@ function conceptDetails(divElement, conceptId, options) {
                 alertEvent("Error", "error");
             });
 
+            //var ctrlDown = false,
+            //    ctrlKey = 17,
+            //    cmdKey = 91,
+            //    vKey = 86,
+            //    cKey = 67;
+            //
+            //$(document).keydown(function(e) {
+            //    if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = true;
+            //}).keyup(function(e) {
+            //    if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = false;
+            //});
+            //
+            //$(document).keydown(function(e) {
+            //    if (ctrlDown && e.keyCode == cKey){
+            //        //var copyContent = document.getElementById("copy-content");
+            //        e.clipboardData.setData('text/plain', firstMatch.term);
+            //        e.preventDefault();
+            //        //$("#" + panel.divElement.id + "-copy-sctid-term-details").click();
+            //        //console.log("asd");
+            //    }
+            //});
+            document.addEventListener("copy", copyHandler, false);
+            function copyHandler(e) {
+                if(window.getSelection().isCollapsed) {
+                      if (e.srcElement && e.srcElement.value){}else{
+                          e.clipboardData.setData('text/plain', firstMatch.conceptId + " |" + firstMatch.defaultTerm + "|");
+                          e.preventDefault();
+                          alertEvent("Copied!", "info");
+                      }
+                }
+            }
 
             $(".glyphicon-star").click(function(e){
                 var concept = {
