@@ -508,7 +508,7 @@ function conceptDetails(divElement, conceptId, options) {
 
             //Swedish extension; capture synonyms using JIRA issue collector
             //start
-            var scriptUrl = "https://sct-se.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-ia48y4/100025/c/1000.695.3/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=43748f9d";
+            var scriptUrl = "https://jira.ihtsdotools.org/s/9152b378d577114d19d6cfdcdfdeb45e-T/en_US-i9n6p8/70120/a1623a9e469981bb7c457209f1507980/2.0.8/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=41bec258";
 
             $.getScript(scriptUrl);
 
@@ -523,10 +523,8 @@ function conceptDetails(divElement, conceptId, options) {
 
                 fieldValues: {
                     'summary' : 'Förslag på synonymer för begreppet: ' + componentsRegistry[2].getConceptId(),
-                    'customfield_10207' : componentsRegistry[2].getConceptId(),
-                    'customfield_10203' : componentsRegistry[2].defaultTerm,
-                    'customfield_10209' : componentsRegistry[2].options.edition,
-                    'customfield_10208' : componentsRegistry[2].options.release,
+                    'customfield_10602' : componentsRegistry[2].getConceptId(),
+                    'customfield_10601' : componentsRegistry[2].defaultTerm
                 }
             };
             //end

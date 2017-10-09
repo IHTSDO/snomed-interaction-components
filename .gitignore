@@ -6,3 +6,5 @@ node_modules
 *.iml
 dist
 /nbproject/private/
+.DS_Store
+package-lock.json
