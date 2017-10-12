@@ -498,12 +498,36 @@ function conceptDetails(divElement, conceptId, options) {
             function copyHandler(e) {
                 if(window.getSelection().isCollapsed) {
                       if (e.srcElement && e.srcElement.value){}else{
-                          e.clipboardData.setData('text/plain', firstMatch.conceptId + " |" + firstMatch.defaultTerm + "|");
+                          e.clipboardData.setData('text/plain', firstMatch.conceptId + " | " + firstMatch.defaultTerm + " |");
                           e.preventDefault();
                           alertEvent("Copied!", "info");
                       }
                 }
             }
+
+
+            //Swedish extension; capture synonyms using JIRA issue collector
+            //start
+            var scriptUrl = "https://jira.ihtsdotools.org/s/9152b378d577114d19d6cfdcdfdeb45e-T/en_US-i9n6p8/70120/a1623a9e469981bb7c457209f1507980/2.0.8/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=41bec258";
+
+            $.getScript(scriptUrl);
+
+            window.ATL_JQ_PAGE_PROPS =  {
+                "triggerFunction": function(showCollectorDialog) {
+                //Requires that jQuery is available!
+                    jQuery("#fh-cd1_canvas-addsyn-sctid-details").click(function(e) {
+                        e.preventDefault();
+                        showCollectorDialog();
+                    });
+                },
+
+                fieldValues: {
+                    'summary' : 'Förslag på synonymer för begreppet: ' + componentsRegistry[2].getConceptId(),
+                    'customfield_10602' : componentsRegistry[2].getConceptId(),
+                    'customfield_10601' : componentsRegistry[2].defaultTerm
+                }
+            };
+            //end
 
             $(".glyphicon-star").click(function(e){
                 var concept = {
