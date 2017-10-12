@@ -465,7 +465,7 @@ function conceptDetails(divElement, conceptId, options) {
                 // console.info('Action:', e.action);
                 // console.info('Text:', e.text);
                 // console.info('Trigger:', e.trigger);
-                alertEvent("Copied!", "info");
+                alsertEvent("Copied!", "info");
                 e.clearSelection();
             });
             panel.clipboard.on('error', function(e) {
@@ -1566,7 +1566,7 @@ function conceptDetails(divElement, conceptId, options) {
             xhrParents.abort();
             //console.log("aborting children call...");
         }
-        xhrParents = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents", function(result) {
+        xhrParents = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
             result.sort(function(a, b) {
