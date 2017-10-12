@@ -465,7 +465,7 @@ function conceptDetails(divElement, conceptId, options) {
                 // console.info('Action:', e.action);
                 // console.info('Text:', e.text);
                 // console.info('Trigger:', e.trigger);
-                alsertEvent("Copied!", "info");
+                alertEvent("Copied!", "info");
                 e.clearSelection();
             });
             panel.clipboard.on('error', function(e) {
