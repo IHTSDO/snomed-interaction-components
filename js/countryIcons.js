@@ -1,5 +1,5 @@
 /**
- * Created by alo on 7/17/14.
+ * Updated by rda on 2017-12-15.
  */
 countryIcons = {
     '999000041000000102': 'gb',
@@ -23,7 +23,8 @@ countryIcons = {
     '20611000087101': 'ca',
     '22091000087100': 'ca',
     '5641000179103': 'uy',
-    '5631000179106': 'uy'
+    '5631000179106': 'uy',
+    '11000172109': 'be'
 };
 
 Handlebars.registerHelper('countryIcon', function(moduleId) {
