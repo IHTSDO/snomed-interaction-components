@@ -9,3 +9,4 @@ dist
 .DS_Store
 package-lock.json
 views/compiled/templates.js
+*.zip
