@@ -3988,7 +3988,7 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-panelBody'>\n        <!--<p style=\"margin: 10px;\">Create a query, conditions are evaluated in order:</p>-->\n        <div class=\"row container-fluid\" style=\"margin: 10px;\">\n            <p class=\"lead col-md-6\">Build or enter an expression</p>\n            <button type=\"button\" id=\"";
+    + "-panelBody'>\n        <!--<p style=\"margin: 10px;\">Create a query, conditions are evaluated in order:</p>-->\n        <div class=\"row container-fluid\" style=\"margin: 10px;\">\n            <p class=\"lead col-md-6\">Enter an expression</p>\n            <button type=\"button\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -4017,11 +4017,11 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-BuilderTab\" data-toggle=\"tab\"><span class=\"i18n\" data-i18n-id=\"i18n_builder\">Build a simple expression</span></a></li>\n                <li><a href=\"#";
+    + "-ExpTab\" data-toggle=\"tab\"><span class=\"i18n\" data-i18n-id=\"i18n_expression\">Enter an existing expression</span></a></li>\n<!--                <li><a href=\"#";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-ExpTab\" data-toggle=\"tab\"><span class=\"i18n\" data-i18n-id=\"i18n_expression\">Enter an existing expression</span></a></li>\n            </ul>\n            <div class=\"tab-content\">\n                <div class=\"tab-pane active\" id=\"";
+    + "-BuilderTab\" data-toggle=\"tab\"><span class=\"i18n\" data-i18n-id=\"i18n_builder\">Build a simple expression</span></a></li>\n-->        </ul>\n            <div class=\"tab-content\">\n                <div class=\"tab-pane\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -4126,7 +4126,7 @@ function program1(depth0,data,depth1) {
     + "-constraintGrammarModal\">";
   stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_constraint_grammar", "Constraint Grammar", options) : helperMissing.call(depth0, "i18n", "i18n_constraint_grammar", "Constraint Grammar", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</button>\n                        <br>\n                        <br>\n                    </div>\n                </div>\n                <div class=\"tab-pane\" id=\"";
+  buffer += "</button>\n                        <br>\n                        <br>\n                    </div>\n                </div>\n                <div class=\"tab-pane active\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -4145,25 +4145,25 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-computeOntoserver2'>Run on Ontoserver</div>\n                    <br>\n                    <br>\n                </div>\n            </form>\n            <ul class=\"list-group\" id=\"";
+    + "-computeOntoserver2'>Run on Ontoserver</div>\n                    <br>\n                    <p class=\"lead\">Some examples</p>\n                    <table>\n                      <tr>\n                        <td><strong>Descendant Or Self Of</strong><br></td>\n                        <td>&nbsp;&nbsp; << 73211009 |diabetes mellitus|</td>\n                      </tr>\n                      <tr>\n                        <td><strong>Exclusion Simple<br>Expressions<br></strong></td>\n                        <td>&nbsp;&nbsp;<< 19829001 |disorder of lung| MINUS << 301867009 |edema of trunk|</td>\n                      </tr>\n                      <tr>\n                        <td><strong>Any Attribute Value<br></strong></td>\n                        <td>&nbsp;&nbsp;< 404684003 |clinical finding|: 116676008 |associated morphology| = *</td>\n                      </tr>\n                    </table>\n                </div>\n            </form>\n<!--            <ul class=\"list-group\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-listGroup\">\n            </ul>\n            <br>\n            <br>\n            ";
+    + "-listGroup\">\n            </ul>\n            ";
   stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_results", "Results", options) : helperMissing.call(depth0, "i18n", "i18n_results", "Results", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += ":  <span id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-resultInfo\" class=\"text-muted small\"></span>\n        </div>\n\n        <span style=\"margin-left: 10px;\">";
+    + "-resultInfo\" class=\"text-muted small\"></span>\n-->\n<div class=\"row container-fluid\" style=\"margin: 10px;\">\n    <p class=\"lead\">";
   stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_results", "Results", options) : helperMissing.call(depth0, "i18n", "i18n_results", "Results", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += ":</span>  <span id=\"";
+  buffer += ": <span id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-resultInfo\"></span>\n        <div class=\"row container-fluid\" id=\"";
+    + "-resultInfo\"></p></span>\n</div>\n\n        <div class=\"row container-fluid\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -4183,7 +4183,7 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-outputBody2\">\n                </tbody>\n            </table>\n\n        </div>\n        <br><br><br><br><br><br><br><br><br><br><br><br><br><br>\n    </div>\n</div>\n<!-- Modals -->\n<div class=\"modal fade\" id=\"";
+    + "-outputBody2\">\n                </tbody>\n            </table>\n\n        </div>\n      </div>\n        <br><br><br><br><br><br><br><br><br><br><br><br><br><br>\n    </div>\n</div>\n<!-- Modals -->\n<div class=\"modal fade\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -4218,7 +4218,7 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-myCloudModalLabel\" aria-hidden=\"true\">\n    <div class=\"modal-dialog modal-lg\">\n        <div class=\"modal-content\" >\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n                <h4 class=\"modal-title\">Terminology content selections help</h4>\n            </div>\n            <div class=\"modal-body\" style=\"max-height: 450px; overflow: auto;\">\n                <h2>Terminology content selections</h2>\n                <p>This tool implements a large of functions from the \"SNOMED CT Expression Constraint Language Specification and Guide\" (<a href=\"http://snomed.org/expressionconstraint\" target=\"_blank\">http://snomed.org/expressionconstraint)</a>. </p>\n                <p>To see the Expression Constraint Language feature support see the\n                  open source code repository of the SNOMED CT Query Server - <a href=\"https://github.com/IHTSDO/snomed-query-service#expression-constraint-language-feature-support\" target=\"_blank\">https://github.com/IHTSDO/snomed-query-service#expression-constraint-language-feature-support</a></p>\n                <p>The goal of this tool is to enable the creation of a terminology constraint for the selection of content in SNOMED CT, with a user friendly UI designed to support the most common real world use cases for content selection, like the creation of reference sets to support implementation.</p>\n                <h3>How to use</h3>\n                <p>Add Inclusion and Exclusion instructions to the constraint, consider that all inclusions will be interpreted first, and all the exclusions last. The specific order of instructions within Inclusions or within Exclusions has no impact on the results.</p>\n                <p>Each instruction has a criteria that defines the concept selection:</p>\n                <ul>\n                    <li><b>self</b>: selects only the specified concept.</li>\n                    <li><b>descendantOf</b>: selects all descendants concepts, subtypes and subtypes of the subtypes, all the way to the leaf concpts in the hierarchy.</li>\n                    <li><b>descendantOrSelfOf</b>: selects the specified concept plus all the descendants concepts.</li>\n                    <li><b>memberOf</b>: the concepts that are members of the specified reference set. In this case the spcified concepts needs to be a reference set concept.</li>\n                </ul>\n                <p>After adding each instruction the number of concepts involved in the sentence will be calculated, in order to provide an estimate of the complexity of the resulting instructions.</p>\n                <p>The different instructions result in a \"disjunction\" operator in the constraint logic: \"Include A, Include B\" results in \"A,B\" (A OR B).</p>\n                <p>Inside each instruction is possible to add \"conjunction\" operations. \"Include descendantOf A and descendantOf B\" means that only concepts are descendants of A and also descendants of B will be included in teh results.</p>\n                <p>The \"Constraint Grammar\" button will display a valid constraint grammar expression that when executed will produce the same results as the logic described in the sequence of instructions.</p>\n                <br>\n                <h3>Degree of support of the Constraint Language Specification</h3>\n                <p>This is partial implementation of the Constraint Language, prioritizing the features that support the most common use cases and the proposed simplified user interface.</p>\n                <p>Supported features:</p>\n                <ul>\n                    <li>simpleExpressionConstraint</li>\n                    <li>compoundExpressionConstraint</li>\n                    <li>exclusionExpressionConstraint</li>\n                    <li>disjunctionExpressionConstraint</li>\n                    <li>conjunctionExpressionConstraint</li>\n                    <li>refinedExpressionConstraint</li>\n                </ul>\n                <p>Unsupported features: (some may be added in future versions)</p>\n                <ul>\n                    <li>nested expressions</li>\n                    <li>arbitrary order of instructions</li>\n                    <li>complex operators like \"^ <\" (descendants of members)</li>\n                </ul>\n            </div>\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<div class=\"modal fade\" id=\"";
+    + "-myCloudModalLabel\" aria-hidden=\"true\">\n    <div class=\"modal-dialog modal-lg\">\n        <div class=\"modal-content\" >\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n                <h4 class=\"modal-title\">Terminology content selections help</h4>\n            </div>\n            <div class=\"modal-body\" style=\"max-height: 450px; overflow: auto;\">\n                <h2>SNOMED CT Expression Constraint Language</h2>\n                <p>This tool implements a large of functions from the \"SNOMED CT Expression Constraint Language Specification and Guide\" (<a href=\"http://snomed.org/expressionconstraint\" target=\"_blank\">http://snomed.org/expressionconstraint)</a>. </p>\n                <p>To see the Expression Constraint Language feature support see the\n                  open source code repository of the SNOMED CT Query Server - <a href=\"https://github.com/IHTSDO/snomed-query-service#expression-constraint-language-feature-support\" target=\"_blank\">https://github.com/IHTSDO/snomed-query-service#expression-constraint-language-feature-support</a></p>\n                <p>The goal of this tool is to enable the creation of a terminology constraint for the selection of content in SNOMED CT, with a user friendly UI designed to support the most common real world use cases for content selection, like the creation of reference sets to support implementation.</p>\n            </div>\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<div class=\"modal fade\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

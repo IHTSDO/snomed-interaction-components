@@ -10,18 +10,18 @@
     <div class='panel-body' style='height:100%' id='{{divElementId}}-panelBody'>
         <!--<p style="margin: 10px;">Create a query, conditions are evaluated in order:</p>-->
         <div class="row container-fluid" style="margin: 10px;">
-            <p class="lead col-md-6">Build or enter an expression</p>
+            <p class="lead col-md-6">Enter an expression</p>
             <button type="button" id="{{divElementId}}-helpButton" class="btn btn-default pull-right" style="margin: 10px;" data-toggle="modal" data-target="#{{divElementId}}-queryHelpModal">{{{i18n "i18n_help" "Help"}}}</button>
 <!--            <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#{{divElementId}}-ExamplesModal" style="margin: 10px;">{{{i18n "i18n_examples" "Examples"}}}</button>
 -->            <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
         </div>
         <div>
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#{{divElementId}}-BuilderTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_builder">Build a simple expression</span></a></li>
-                <li><a href="#{{divElementId}}-ExpTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_expression">Enter an existing expression</span></a></li>
-            </ul>
+                <li class="active"><a href="#{{divElementId}}-ExpTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_expression">Enter an existing expression</span></a></li>
+<!--                <li><a href="#{{divElementId}}-BuilderTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_builder">Build a simple expression</span></a></li>
+-->        </ul>
             <div class="tab-content">
-                <div class="tab-pane active" id="{{divElementId}}-BuilderTab" style="padding: 0px;margin: 0;">
+                <div class="tab-pane" id="{{divElementId}}-BuilderTab" style="padding: 0px;margin: 0;">
                     <div class="row container-fluid" style="margin: 10px;">
                         <form class="form-inline" role="form">
                             <div class="form-group">
@@ -98,22 +98,36 @@
                         <br>
                     </div>
                 </div>
-                <div class="tab-pane" id="{{divElementId}}-ExpTab" style="padding: 15px;margin: 0;">
+                <div class="tab-pane active" id="{{divElementId}}-ExpTab" style="padding: 15px;margin: 0;">
                     <textarea rows="5" class="form-control" placeholder="Expression..." id="{{divElementId}}-ExpText"></textarea>
                     <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton2'>{{{i18n "i18n_run_query" "Execute"}}}</div>
                     <div class="btn btn-success" style="display: none; margin: 10px;" id='{{divElementId}}-computeOntoserver2'>Run on Ontoserver</div>
                     <br>
-                    <br>
+                    <p class="lead">Some examples</p>
+                    <table>
+                      <tr>
+                        <td><strong>Descendant Or Self Of</strong><br></td>
+                        <td>&nbsp;&nbsp; << 73211009 |diabetes mellitus|</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Exclusion Simple<br>Expressions<br></strong></td>
+                        <td>&nbsp;&nbsp;<< 19829001 |disorder of lung| MINUS << 301867009 |edema of trunk|</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Any Attribute Value<br></strong></td>
+                        <td>&nbsp;&nbsp;< 404684003 |clinical finding|: 116676008 |associated morphology| = *</td>
+                      </tr>
+                    </table>
                 </div>
             </form>
-            <ul class="list-group" id="{{divElementId}}-listGroup">
+<!--            <ul class="list-group" id="{{divElementId}}-listGroup">
             </ul>
-            <br>
-            <br>
             {{{i18n "i18n_results" "Results"}}}:  <span id="{{divElementId}}-resultInfo" class="text-muted small"></span>
-        </div>
+-->
+<div class="row container-fluid" style="margin: 10px;">
+    <p class="lead">{{{i18n "i18n_results" "Results"}}}: <span id="{{divElementId}}-resultInfo"></p></span>
+</div>
 
-        <span style="margin-left: 10px;">{{{i18n "i18n_results" "Results"}}}:</span>  <span id="{{divElementId}}-resultInfo"></span>
         <div class="row container-fluid" id="{{divElementId}}-output" style="margin: 10px;">
             <table class="table table-bordered">
                 <thead>
@@ -139,6 +153,7 @@
             </table>
 
         </div>
+      </div>
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     </div>
 </div>
@@ -181,42 +196,11 @@
                 <h4 class="modal-title">Terminology content selections help</h4>
             </div>
             <div class="modal-body" style="max-height: 450px; overflow: auto;">
-                <h2>Terminology content selections</h2>
+                <h2>SNOMED CT Expression Constraint Language</h2>
                 <p>This tool implements a large of functions from the "SNOMED CT Expression Constraint Language Specification and Guide" (<a href="http://snomed.org/expressionconstraint" target="_blank">http://snomed.org/expressionconstraint)</a>. </p>
                 <p>To see the Expression Constraint Language feature support see the
                   open source code repository of the SNOMED CT Query Server - <a href="https://github.com/IHTSDO/snomed-query-service#expression-constraint-language-feature-support" target="_blank">https://github.com/IHTSDO/snomed-query-service#expression-constraint-language-feature-support</a></p>
                 <p>The goal of this tool is to enable the creation of a terminology constraint for the selection of content in SNOMED CT, with a user friendly UI designed to support the most common real world use cases for content selection, like the creation of reference sets to support implementation.</p>
-                <h3>How to use</h3>
-                <p>Add Inclusion and Exclusion instructions to the constraint, consider that all inclusions will be interpreted first, and all the exclusions last. The specific order of instructions within Inclusions or within Exclusions has no impact on the results.</p>
-                <p>Each instruction has a criteria that defines the concept selection:</p>
-                <ul>
-                    <li><b>self</b>: selects only the specified concept.</li>
-                    <li><b>descendantOf</b>: selects all descendants concepts, subtypes and subtypes of the subtypes, all the way to the leaf concpts in the hierarchy.</li>
-                    <li><b>descendantOrSelfOf</b>: selects the specified concept plus all the descendants concepts.</li>
-                    <li><b>memberOf</b>: the concepts that are members of the specified reference set. In this case the spcified concepts needs to be a reference set concept.</li>
-                </ul>
-                <p>After adding each instruction the number of concepts involved in the sentence will be calculated, in order to provide an estimate of the complexity of the resulting instructions.</p>
-                <p>The different instructions result in a "disjunction" operator in the constraint logic: "Include A, Include B" results in "A,B" (A OR B).</p>
-                <p>Inside each instruction is possible to add "conjunction" operations. "Include descendantOf A and descendantOf B" means that only concepts are descendants of A and also descendants of B will be included in teh results.</p>
-                <p>The "Constraint Grammar" button will display a valid constraint grammar expression that when executed will produce the same results as the logic described in the sequence of instructions.</p>
-                <br>
-                <h3>Degree of support of the Constraint Language Specification</h3>
-                <p>This is partial implementation of the Constraint Language, prioritizing the features that support the most common use cases and the proposed simplified user interface.</p>
-                <p>Supported features:</p>
-                <ul>
-                    <li>simpleExpressionConstraint</li>
-                    <li>compoundExpressionConstraint</li>
-                    <li>exclusionExpressionConstraint</li>
-                    <li>disjunctionExpressionConstraint</li>
-                    <li>conjunctionExpressionConstraint</li>
-                    <li>refinedExpressionConstraint</li>
-                </ul>
-                <p>Unsupported features: (some may be added in future versions)</p>
-                <ul>
-                    <li>nested expressions</li>
-                    <li>arbitrary order of instructions</li>
-                    <li>complex operators like "^ <" (descendants of members)</li>
-                </ul>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
