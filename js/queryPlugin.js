@@ -132,30 +132,6 @@ function queryComputerPanel(divElement, options) {
                             ]
                         }
                     ]
-                },
-                {
-                    title: "Disorders that descendants of Necrosis of an anatomical site and of a disorder of the heart muscle",
-                    context: [
-                        {
-                            modifier: "Include",
-                            criterias: [
-                                {criteria: "descendantOf", conceptId: "609410002", term: "Necrosis of anatomical site (disorder)"},
-                                {criteria: "descendantOf", conceptId: "57809008", term: "Myocardial disease (disorder)"}
-                            ]
-                        }
-                    ]
-                },
-                {
-                    title: "All disorders of the lung with an associated morphology with value Edema or any descendant",
-                    context: [
-                        {
-                            modifier: "Include",
-                            criterias: [
-                                {criteria: "descendantOf", conceptId: "19829001", term: "Disorder of lung (disorder)", type: {conceptId: "", term: ''}},
-                                {criteria: "descendantOrSelfOf", conceptId: "79654002", term: "Edema (morphologic abnormality)", type: {conceptId: "116676008", term: 'Associated morphology (attribute)'}}
-                            ]
-                        }
-                    ]
                 }
                 //{
                 //    title: "",
