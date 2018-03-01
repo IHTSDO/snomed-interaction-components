@@ -1226,18 +1226,17 @@ function queryComputerPanel(divElement, options) {
             skip : skip,
             form: form
         };
+
         panel.lastRequest = data;
         if (xhrExecute != null && !onlyTotal)
             xhrExecute.abort();
         var xhrExecute2 = $.ajax({
-            type: "POST",
-            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
-            data: data,
-            dataType: "json",
+            type: "GET",
+            url: options.serverUrl + "/" + options.edition + "/" + options.release + "/query/concepts?ecQuery=" + expression + "&offset=" + skip + "&limit=" + limit,
             //timeout: 300000,lasturl
             success: function(result) {
-                if (result.paserResponse.validation) {
-                    data = result.computeResponse;
+                //if (result.paserResponse.validation) {
+                    data = result;
                     //result.computeResponse.matches
                     if (!onlyTotal){
                         $("#" + panel.divElement.id + "-exportResults").removeClass("disabled");
@@ -1246,9 +1245,9 @@ function queryComputerPanel(divElement, options) {
                         } else {
                             $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.total + " concepts</span>");
                         }
-                        $.each(data.matches, function (i, row){
-                            $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.module + "' data-concept-id='" + row.conceptId + "' data-term='" + row.defaultTerm + "'><td>" + row.defaultTerm + "</td><td>" + row.conceptId + "</td></tr>");
-                            $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.defaultTerm + "</td><td>" + row.conceptId + "</td></tr>");
+                        $.each(data.items, function (i, row){
+                            $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.moduleId + "' data-concept-id='" + row.id + "' data-term='" + row.fsn + "'><td>" + row.fsn + "</td><td>" + row.id + "</td></tr>");
+                            $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.fsn + "</td><td>" + row.id + "</td></tr>");
                         });
 
                         $('#' + panel.divElement.id + '-outputBody').find(".conceptResult").unbind();
@@ -1289,7 +1288,7 @@ function queryComputerPanel(divElement, options) {
 //                    } else {
 //                        resultsHtml = result.computeResponse;
 //                    }
-//                    $("#" + panel.divElement.id + "-results").html(resultsHtml);
+/*                    $("#" + panel.divElement.id + "-results").html(resultsHtml);
                 } else {
                     if (!onlyTotal){
                         $("#" + panel.divElement.id + "-syntax-result").html('<span class="label label-danger">ERROR</span>');
@@ -1297,7 +1296,7 @@ function queryComputerPanel(divElement, options) {
                     }else{
                         onlyTotal("Error");
                     }
-                }
+                } */
             }
         }).done(function(result){
             // done

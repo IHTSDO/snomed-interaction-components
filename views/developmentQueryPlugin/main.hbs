@@ -10,15 +10,15 @@
     <div class='panel-body' style='height:100%' id='{{divElementId}}-panelBody'>
         <!--<p style="margin: 10px;">Create a query, conditions are evaluated in order:</p>-->
         <div class="row container-fluid" style="margin: 10px;">
-            <p class="lead col-md-6">Build a constraint</p>
+            <p class="lead col-md-6">Build or enter an expression</p>
             <button type="button" id="{{divElementId}}-helpButton" class="btn btn-default pull-right" style="margin: 10px;" data-toggle="modal" data-target="#{{divElementId}}-queryHelpModal">{{{i18n "i18n_help" "Help"}}}</button>
             <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#{{divElementId}}-ExamplesModal" style="margin: 10px;">{{{i18n "i18n_examples" "Examples"}}}</button>
             <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
         </div>
         <div>
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#{{divElementId}}-BuilderTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_builder">Builder</span></a></li>
-                <li><a href="#{{divElementId}}-ExpTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_expression">Expression</span></a></li>
+                <li class="active"><a href="#{{divElementId}}-BuilderTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_builder">Build a simple expression</span></a></li>
+                <li><a href="#{{divElementId}}-ExpTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_expression">Enter an existing expression</span></a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="{{divElementId}}-BuilderTab" style="padding: 0px;margin: 0;">
@@ -185,7 +185,9 @@
             </div>
             <div class="modal-body" style="max-height: 450px; overflow: auto;">
                 <h2>Terminology content selections</h2>
-                <p>This tool implements a subset of functions from the "SNOMED CT Expression Constraint Language Specification and Guide" (<a href="http://snomed.org/expressionconstraint" target="_blank">http://snomed.org/expressionconstraint)</a>.</p>
+                <p>This tool implements a large of functions from the "SNOMED CT Expression Constraint Language Specification and Guide" (<a href="http://snomed.org/expressionconstraint" target="_blank">http://snomed.org/expressionconstraint)</a>. </p>
+                <p>To see the Expression Constraint Language feature support see the
+                  open source code repository of the SNOMED CT Query Server - <a href="https://github.com/IHTSDO/snomed-query-service#expression-constraint-language-feature-support" target="_blank">https://github.com/IHTSDO/snomed-query-service#expression-constraint-language-feature-support</a></p>
                 <p>The goal of this tool is to enable the creation of a terminology constraint for the selection of content in SNOMED CT, with a user friendly UI designed to support the most common real world use cases for content selection, like the creation of reference sets to support implementation.</p>
                 <h3>How to use</h3>
                 <p>Add Inclusion and Exclusion instructions to the constraint, consider that all inclusions will be interpreted first, and all the exclusions last. The specific order of instructions within Inclusions or within Exclusions has no impact on the results.</p>
