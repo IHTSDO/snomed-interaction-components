@@ -1208,7 +1208,7 @@ function queryComputerPanel(divElement, options) {
             xhrExecute.abort();
         var xhrExecute2 = $.ajax({
             type: "GET",
-            url: options.serverUrl + "/" + options.edition + "/" + options.release + "/query/concepts?ecQuery=" + expression + "&offset=" + skip + "&limit=" + limit,
+            url: options.queryServerUrl + "/" + options.edition + "/" + options.release + "/query/concepts?ecQuery=" + expression + "&offset=" + skip + "&limit=" + limit,
             //timeout: 300000,lasturl
             success: function(result) {
                 //if (result.paserResponse.validation) {

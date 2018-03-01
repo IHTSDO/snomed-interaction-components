@@ -3999,14 +3999,14 @@ function program1(depth0,data,depth1) {
     + "-queryHelpModal\">";
   stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_help", "Help", options) : helperMissing.call(depth0, "i18n", "i18n_help", "Help", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</button>\n            <button type=\"button\" class=\"btn btn-default pull-right\" data-toggle=\"modal\" data-target=\"#";
+  buffer += "</button>\n<!--            <button type=\"button\" class=\"btn btn-default pull-right\" data-toggle=\"modal\" data-target=\"#";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "-ExamplesModal\" style=\"margin: 10px;\">";
   stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_examples", "Examples", options) : helperMissing.call(depth0, "i18n", "i18n_examples", "Examples", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</button>\n            <button type=\"button\" id=\"";
+  buffer += "</button>\n-->            <button type=\"button\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -4115,11 +4115,7 @@ function program1(depth0,data,depth1) {
     + "-computeInferredButton'>";
   stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_run_query", "Execute", options) : helperMissing.call(depth0, "i18n", "i18n_run_query", "Execute", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</div>\n                        <div class=\"btn btn-success\" style=\"display: none; margin: 10px;\" id='";
-  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "-computeOntoserver'>Run on Ontoserver</div>\n                        <button type=\"button\" class=\"btn btn-primary pull-right\"  id='";
+  buffer += "</div>\n                        <button type=\"button\" class=\"btn btn-primary pull-right\"  id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -4153,25 +4149,7 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-listGroup\">\n            </ul>\n            <div class=\"btn btn-success\" style=\"margin: 10px;\" id='";
-  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "-computeInferredButton'>";
-  stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_run_query", "Execute", options) : helperMissing.call(depth0, "i18n", "i18n_run_query", "Execute", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</div>\n            <button type=\"button\" class=\"btn btn-primary pull-right\"  id='";
-  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "-open-grammar' style=\"margin: 10px; position: relative;\" data-toggle=\"modal\" data-target=\"#";
-  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "-constraintGrammarModal\">";
-  stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_constraint_grammar", "Constraint Grammar", options) : helperMissing.call(depth0, "i18n", "i18n_constraint_grammar", "Constraint Grammar", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</button>\n            <br>\n            <br>\n            ";
+    + "-listGroup\">\n            </ul>\n            <br>\n            <br>\n            ";
   stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_results", "Results", options) : helperMissing.call(depth0, "i18n", "i18n_results", "Results", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += ":  <span id=\"";

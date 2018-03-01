@@ -12,8 +12,8 @@
         <div class="row container-fluid" style="margin: 10px;">
             <p class="lead col-md-6">Build or enter an expression</p>
             <button type="button" id="{{divElementId}}-helpButton" class="btn btn-default pull-right" style="margin: 10px;" data-toggle="modal" data-target="#{{divElementId}}-queryHelpModal">{{{i18n "i18n_help" "Help"}}}</button>
-            <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#{{divElementId}}-ExamplesModal" style="margin: 10px;">{{{i18n "i18n_examples" "Examples"}}}</button>
-            <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
+<!--            <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#{{divElementId}}-ExamplesModal" style="margin: 10px;">{{{i18n "i18n_examples" "Examples"}}}</button>
+-->            <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
         </div>
         <div>
             <ul class="nav nav-tabs">
@@ -93,7 +93,6 @@
                         <ul class="list-group" id="{{divElementId}}-listGroup">
                         </ul>
                         <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Execute"}}}</div>
-                        <div class="btn btn-success" style="display: none; margin: 10px;" id='{{divElementId}}-computeOntoserver'>Run on Ontoserver</div>
                         <button type="button" class="btn btn-primary pull-right"  id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
                         <br>
                         <br>
@@ -109,8 +108,6 @@
             </form>
             <ul class="list-group" id="{{divElementId}}-listGroup">
             </ul>
-            <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Execute"}}}</div>
-            <button type="button" class="btn btn-primary pull-right"  id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
             <br>
             <br>
             {{{i18n "i18n_results" "Results"}}}:  <span id="{{divElementId}}-resultInfo" class="text-muted small"></span>
