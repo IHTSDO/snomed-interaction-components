@@ -1204,11 +1204,12 @@ function queryComputerPanel(divElement, options) {
         };
 
         panel.lastRequest = data;
+        page = skip / limit;
         if (xhrExecute != null && !onlyTotal)
             xhrExecute.abort();
         var xhrExecute2 = $.ajax({
             type: "GET",
-            url: options.queryServerUrl + "/" + options.edition + "/" + options.release + "/query/concepts?ecQuery=" + expression + "&offset=" + skip + "&limit=" + limit,
+            url: options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + expression + "&page=" + page + "&size=" + limit,
             //timeout: 300000,lasturl
             success: function(result) {
                 //if (result.paserResponse.validation) {
@@ -1217,13 +1218,13 @@ function queryComputerPanel(divElement, options) {
                     if (!onlyTotal){
                         $("#" + panel.divElement.id + "-exportResults").removeClass("disabled");
                         if (data.performanceCutOff) {
-                            $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.total + " concepts. <span class='text-danger'>This query cannot be completed in real-time, please schedule a Cloud executions. Results below are incomplete and some conditions were not tested. </span></span>");
+                            $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.totalElements + " concepts. <span class='text-danger'>This query cannot be completed in real-time, please schedule a Cloud executions. Results below are incomplete and some conditions were not tested. </span></span>");
                         } else {
-                            $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.total + " concepts</span>");
+                            $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.totalElements + " concepts</span>");
                         }
                         $.each(data.items, function (i, row){
-                            $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.moduleId + "' data-concept-id='" + row.id + "' data-term='" + row.fsn + "'><td>" + row.fsn + "</td><td>" + row.id + "</td></tr>");
-                            $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.fsn + "</td><td>" + row.id + "</td></tr>");
+                            $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.moduleId + "' data-concept-id='" + row.conceptId + "' data-term='" + row.fsn.term + "'><td>" + row.fsn.term + "</td><td>" + row.conceptId + "</td></tr>");
+                            $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.fsn.term + "</td><td>" + row.conceptId + "</td></tr>");
                         });
 
                         $('#' + panel.divElement.id + '-outputBody').find(".conceptResult").unbind();
@@ -1238,16 +1239,16 @@ function queryComputerPanel(divElement, options) {
                             });
                         });
 
-                        panel.lastTotalValues = data.total;
-                        if (limit + skip < data.total) {
-                            $('#' + panel.divElement.id + '-footer').html("<span id='" + panel.divElement.id + "-more'>Show more (viewing " + (limit + skip) + " of " + data.total + " total)</span>");
+                        panel.lastTotalValues = data.totalElements;
+                        if (limit + skip < data.totalElements) {
+                            $('#' + panel.divElement.id + '-footer').html("<span id='" + panel.divElement.id + "-more'>Show more (viewing " + (limit + (page*limit)) + " of " + data.totalElements + " total)</span>");
                         } else {
-                            $('#' + panel.divElement.id + '-footer').html("Showing all " + data.total + " matches");
+                            $('#' + panel.divElement.id + '-footer').html("Showing all " + data.totalElements + " matches");
                         }
 
                         $('#' + panel.divElement.id + '-more').unbind();
                         $('#' + panel.divElement.id + '-more').click(function (e) {
-                            skip = skip + 100;
+                            skip = (page*limit) + 100;
                             panel.execute(form, expression, false);
                         });
                     }else{
