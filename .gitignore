@@ -2,6 +2,7 @@
 .project
 /target/sct-components/nbproject/private/
 .idea
+.vscode
 node_modules
 *.iml
 dist
