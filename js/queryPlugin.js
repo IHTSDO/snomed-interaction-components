@@ -723,18 +723,18 @@ function queryComputerPanel(divElement, options) {
         $('#' + panel.divElement.id + '-computeInferredButton2').click(function(e) {
             var expression = $.trim($("#" + panel.divElement.id + "-ExpText").val());
             $('#' + panel.divElement.id + '-computeInferredButton2').addClass("disabled");
-            $.post(options.serverUrl.replace("snomed", "expressions/") + "parse/brief", { expression: expression }).done(function(res) {
-                //console.log(res);
-                if (res.validation) {
-                    panel.execute("inferred", expression, true);
-                } else {
-                    alertEvent("Invalid Expression", "error")
-                }
-            }).fail(function(err) {
-                //console.log(err);
-            }).always(function() {
-                $('#' + panel.divElement.id + '-computeInferredButton2').removeClass("disabled");
-            });
+            /*  $.post(options.serverUrl.replace("snomed", "expressions/") + "parse/brief", { expression: expression }).done(function(res) {
+                  //console.log(res);
+                  if (res.validation) { */
+            panel.execute("inferred", expression, true);
+            /* } else {
+                      alertEvent("Invalid Expression", "error")
+                  } 
+              }).fail(function(err) {
+                  //console.log(err);
+              }).always(function() { */
+            $('#' + panel.divElement.id + '-computeInferredButton2').removeClass("disabled");
+            // });
         });
 
         $('#' + panel.divElement.id + '-computeInferredButton').unbind();
@@ -1198,8 +1198,10 @@ function queryComputerPanel(divElement, options) {
             form: form
         };
         console.log("normal " + expression);
-        var strippedExpression = expression.replace(/\|.*?\|/guim, '');
-        console.log("stripped " + strippedExpression);
+        var strippedExpression1 = expression.replace(/\|.*?\|/guim, '');
+        console.log("stripped 1 " + strippedExpression1);
+        var strippedExpression = strippedExpression1.replace(/\n/guim, '');
+        console.log("stripped 2 " + strippedExpression);
         panel.lastRequest = data;
         page = skip / limit;
         if (xhrExecute != null && !onlyTotal)
