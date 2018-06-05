@@ -56,6 +56,7 @@ function conceptDetails(divElement, conceptId, options) {
     var xhrReferences = null;
     var xhrParents = null;
     var xhrMembers = null;
+    var componentConceptPanel = null;
     var conceptRequested = 0;
     panel.subscriptionsColor = [];
     panel.subscriptions = [];
@@ -525,9 +526,9 @@ function conceptDetails(divElement, conceptId, options) {
                 },
 
                 fieldValues: {
-                    'summary': 'Förslag på synonymer för begreppet: ' + componentsRegistry[2].getConceptId(),
-                    'customfield_10602': componentsRegistry[2].getConceptId(),
-                    'customfield_10601': componentsRegistry[2].defaultTerm
+                    'summary': 'Förslag på synonymer för begreppet: ' + state.conceptId,
+                    'customfield_10602': state.conceptId,
+                    'customfield_10601': state.name
                 }
             };
             //end

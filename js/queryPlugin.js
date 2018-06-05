@@ -1205,7 +1205,7 @@ function queryComputerPanel(divElement, options) {
         page = skip / limit;
         var expressionURL;
         if (options.queryBranch == 'MAIN') {
-            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + strippedExpression + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
+            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?module=900000000000207008&ecl=" + strippedExpression + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
         } else {
             expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + strippedExpression + "&page=" + page + "&size=" + limit;
         }
