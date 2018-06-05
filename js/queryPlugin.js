@@ -1199,16 +1199,22 @@ function queryComputerPanel(divElement, options) {
         };
         console.log("normal " + expression);
         var strippedExpression1 = expression.replace(/\|.*?\|/guim, '');
-        console.log("stripped 1 " + strippedExpression1);
         var strippedExpression = strippedExpression1.replace(/\n/guim, '');
-        console.log("stripped 2 " + strippedExpression);
+        console.log("stripped " + strippedExpression);
         panel.lastRequest = data;
         page = skip / limit;
+        var expressionURL;
+        if (options.queryBranch == 'MAIN') {
+            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + strippedExpression + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
+        } else {
+            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + strippedExpression + "&page=" + page + "&size=" + limit;
+        }
+        console.log("queryURL " + expressionURL);
         if (xhrExecute != null && !onlyTotal)
             xhrExecute.abort();
         var xhrExecute2 = $.ajax({
             type: "GET",
-            url: options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + strippedExpression + "&page=" + page + "&size=" + limit,
+            url: expressionURL,
             //timeout: 300000,lasturl
             success: function(result) {
                 //if (result.paserResponse.validation) {
@@ -1217,13 +1223,21 @@ function queryComputerPanel(divElement, options) {
                 if (!onlyTotal) {
                     $("#" + panel.divElement.id + "-exportResults").removeClass("disabled");
                     if (data.performanceCutOff) {
-                        $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.totalElements + " concepts. <span class='text-danger'>This query cannot be completed in real-time, please schedule a Cloud executions. Results below are incomplete and some conditions were not tested. </span></span>");
+                        if (!data.totalElements) {
+                            $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.total + " concepts. <span class='text-danger'>This query cannot be completed in real-time, please schedule a Cloud executions. Results below are incomplete and some conditions were not tested. </span></span>");
+                        } else {
+                            $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.totalElements + " concepts. <span class='text-danger'>This query cannot be completed in real-time, please schedule a Cloud executions. Results below are incomplete and some conditions were not tested. </span></span>");
+                        }
                     } else {
-                        $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.totalElements + " concepts</span>");
+                        if (!data.totalElements) {
+                            $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.total + " concepts</span>");
+                        } else {
+                            $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-muted small'>Found " + data.totalElements + " concepts</span>");
+                        }
                     }
                     $.each(data.items, function(i, row) {
-                        $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.moduleId + "' data-concept-id='" + row.conceptId + "' data-term='" + row.fsn.term + "'><td>" + row.fsn.term + "</td><td>" + row.conceptId + "</td></tr>");
-                        $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.fsn.term + "</td><td>" + row.conceptId + "</td></tr>");
+                        $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.moduleId + "' data-concept-id='" + row.id + "' data-term='" + row.fsn.term + "'><td>" + row.fsn.term + "</td><td>" + row.id + "</td></tr>");
+                        $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.fsn.term + "</td><td>" + row.id + "</td></tr>");
                     });
 
                     $('#' + panel.divElement.id + '-outputBody').find(".conceptResult").unbind();
@@ -1238,11 +1252,20 @@ function queryComputerPanel(divElement, options) {
                         });
                     });
 
-                    panel.lastTotalValues = data.totalElements;
-                    if (limit + skip < data.totalElements) {
-                        $('#' + panel.divElement.id + '-footer').html("<span id='" + panel.divElement.id + "-more'>Show more (viewing " + (limit + (page * limit)) + " of " + data.totalElements + " total)</span>");
+                    if (!data.totalElements) {
+                        panel.lastTotalValues = data.total;
+                        if (limit + skip < data.total) {
+                            $('#' + panel.divElement.id + '-footer').html("<span id='" + panel.divElement.id + "-more'>Show more (viewing " + (limit + skip) + " of " + data.total + " total)</span>");
+                        } else {
+                            $('#' + panel.divElement.id + '-footer').html("Showing all " + data.total + " matches");
+                        }
                     } else {
-                        $('#' + panel.divElement.id + '-footer').html("Showing all " + data.totalElements + " matches");
+                        panel.lastTotalValues = data.totalElements;
+                        if (limit + skip < data.totalElements) {
+                            $('#' + panel.divElement.id + '-footer').html("<span id='" + panel.divElement.id + "-more'>Show more (viewing " + (limit + (page * limit)) + " of " + data.totalElements + " total)</span>");
+                        } else {
+                            $('#' + panel.divElement.id + '-footer').html("Showing all " + data.totalElements + " matches");
+                        }
                     }
 
                     $('#' + panel.divElement.id + '-more').unbind();

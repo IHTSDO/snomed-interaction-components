@@ -12,8 +12,8 @@
     <div class="row container-fluid" style="margin: 10px;">
       <p class="lead col-md-6">Enter an expression</p>
       <button type="button" id="{{divElementId}}-helpButton" class="btn btn-default pull-right" style="margin: 10px;" data-toggle="modal" data-target="#{{divElementId}}-queryHelpModal">{{{i18n "i18n_help" "Help"}}}</button>
-      <!--            <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#{{divElementId}}-ExamplesModal" style="margin: 10px;">{{{i18n "i18n_examples" "Examples"}}}</button>
---><button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
+      <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
+      <p><strong>This will execute against the current MAIN branch of the authoring platform. Please make sure you have logged into the authoring platform to be able to run any queries.</strong></p>
     </div>
     <div>
       <ul class="nav nav-tabs">
@@ -185,8 +185,7 @@
         </div>
         <div class="modal-body" style="max-height: 450px; overflow: auto;">
           <h2>SNOMED CT Expression Constraint Language</h2>
-          <p>This tool implements a large number of functions from the "SNOMED CT Expression Constraint Language Specification and Guide" (<a href="http://snomed.org/expressionconstraint" target="_blank">http://snomed.org/expressionconstraint)</a>. </p>
-          <p>To see the Expression Constraint Language feature support see the open source code repository of the SNOMED CT Query Server - <a href="https://github.com/IHTSDO/snomed-query-service#expression-constraint-language-feature-support" target="_blank">https://github.com/IHTSDO/snomed-query-service#expression-constraint-language-feature-support</a></p>
+          <p>This tool implements the full set of ECL v1.3 functions from the "SNOMED CT Expression Constraint Language Specification and Guide" (<a href="http://snomed.org/expressionconstraint" target="_blank">http://snomed.org/expressionconstraint)</a>. </p>
           <p>The goal of this tool is to enable the creation of a terminology constraint for the selection of content in SNOMED CT, with a user friendly UI designed to support the most common real world use cases for content selection, like the creation
             of reference sets to support implementation.</p>
           <p class="lead">Reference</p>
@@ -265,6 +264,20 @@
                 </td>
                 <td class="c6" colspan="1" rowspan="1">
                   <p class="c3"><span class="c9">&gt;&gt; 40541001 |Acute pulmonary edema|</span></p>
+                </td>
+              </tr>
+              <tr class="c1">
+                <td class="c8" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c2">&lt;!</span></p>
+                </td>
+                <td class="c11" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c5">Child of</span></p>  
+                </td>
+                <td class="c13" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c5">The set of all children of the given concept</span></p>
+                </td>
+                <td class="c6" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c9">! 195967001 |Asthma|</span></p>
                 </td>
               </tr>
               <tr class="c1">
