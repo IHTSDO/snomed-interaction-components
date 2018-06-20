@@ -327,7 +327,48 @@ function conceptDetails(divElement, conceptId, options) {
             xhr.abort();
             //console.log("aborting call...");
         }
-        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function(result) {
+        var localEdition = options.edition;
+        var conceptUrl = options.serverUrl + "/" + localEdition + "/" + options.release + "/concepts/" + panel.conceptId;
+        if (localEdition == "all") {
+            // multi-extension search
+            var iCount = 0;
+            var result = null;
+            var searchUrl = null;
+            localEdition = "en-edition";
+            conceptUrl = options.serverUrl + "/" + localEdition + "/" + options.release + "/concepts/" + panel.conceptId;
+            $.ajax({
+                url: conceptUrl,
+                dataType: 'json',
+                data: result,
+                async: false,
+                success: function(result) {
+                    if (result) {
+                        searchUrl = conceptUrl;
+                    }
+                }
+            });
+
+            while ((options.editionList[iCount]) && (conceptUrl != searchUrl)) {
+                searchUrl = options.serverUrl + "/" + options.editionList[iCount].edition + "/" + options.editionList[iCount].release + "/concepts/" + panel.conceptId;
+                console.log(searchUrl);
+                iCount++;
+                $.ajax({
+                    url: searchUrl,
+                    dataType: 'json',
+                    data: result,
+                    async: false,
+                    success: function(result) {
+                        conceptUrl = searchUrl;
+                    }
+                });
+                iCount++;
+            }
+
+            localEdition = "en-edition";
+        }
+        console.log("concept URL - " + conceptUrl);
+
+        xhr = $.getJSON(conceptUrl, function(result) {
 
         }).done(function(result) {
             var firstMatch = result;
