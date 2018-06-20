@@ -616,6 +616,9 @@ function searchPanel(divElement, options) {
                         if ($("#" + panel.divElement.id + "-groupConcept").is(":checked")) {
                             searchUrl = searchUrl + "&groupByConcept=1";
                         }
+                        if ($("#" + panel.divElement.id + "-exclDefinitions").is(":checked")) {
+                            searchUrl = searchUrl + "&exclDefinitions=1";
+                        }
                         //console.log(searchUrl);
                         xhr = $.getJSON(searchUrl, function(result) {
 
@@ -891,6 +894,9 @@ function searchPanel(divElement, options) {
                             $("#" + panel.divElement.id + "-groupConcept").click(function() {
                                 panel.search(t, parseInt(skipTo), returnLimit, true);
                             });
+                            $("#" + panel.divElement.id + "-exclDefinitions").click(function() {
+                                panel.search(t, parseInt(skipTo), returnLimit, true);
+                            });
                             $("#" + panel.divElement.id + "-remove-all-filters").unbind();
                             $("#" + panel.divElement.id + "-remove-all-filters").click(function(event) {
                                 panel.options.semTagFilter = "none";
@@ -939,7 +945,7 @@ function searchPanel(divElement, options) {
                         var overallResult = [];
                         overallResult.matches = [];
                         overallResult.filters = [];
-                        overallResult.details = [];
+                        overallResult.details = { 'total': 0 };
                         overallResult.filters.semTag = [];
                         overallResult.filters.lang = [];
                         overallResult.filters.module = [];
@@ -968,6 +974,9 @@ function searchPanel(divElement, options) {
                             }
                             if ($("#" + panel.divElement.id + "-groupConcept").is(":checked")) {
                                 searchUrl = searchUrl + "&groupByConcept=1";
+                            }
+                            if ($("#" + panel.divElement.id + "-exclDefinitions").is(":checked")) {
+                                searchUrl = searchUrl + "&exclDefinitions=1";
                             }
                             iCount++;
                             $.ajax({
@@ -1256,6 +1265,9 @@ function searchPanel(divElement, options) {
                             $('#' + panel.divElement.id + '-resultsTable').append(JST["views/searchPlugin/body/default.hbs"](context));
                         }
                         $("#" + panel.divElement.id + "-groupConcept").click(function() {
+                            panel.search(t, parseInt(skipTo), returnLimit, true);
+                        });
+                        $("#" + panel.divElement.id + "-exclDefinitions").click(function() {
                             panel.search(t, parseInt(skipTo), returnLimit, true);
                         });
                         $("#" + panel.divElement.id + "-remove-all-filters").unbind();
