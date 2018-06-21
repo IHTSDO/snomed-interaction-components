@@ -5402,7 +5402,9 @@ function program1(depth0,data) {
   var buffer = "", stack1, helper;
   buffer += "\n    <span class='text-muted'>"
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.details)),stack1 == null || stack1 === false ? stack1 : stack1.total)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " matches found in ";
+    + " matches in "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.details)),stack1 == null || stack1 === false ? stack1 : stack1.extensions)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " extensions found in ";
   if (helper = helpers.elapsed) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.elapsed); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -6283,7 +6285,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-searchBox\">\n                    <span>Type at least 3 characters (please wait whilst it searches all extensions)</span> <i class=\"glyphicon glyphicon-remove text-danger\" id=\"";
+    + "-searchBox\">\n                    <span>Type at least 3 characters (please wait whilst it searches all 9 editions)</span> <i class=\"glyphicon glyphicon-remove text-danger\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

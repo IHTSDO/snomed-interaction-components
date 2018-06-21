@@ -46,7 +46,7 @@ function searchPanel(divElement, options) {
             var $this = $(this);
             thread = setTimeout(function() {
                 panel.search($this.val(), 0, 100, false);
-            }, 500);
+            }, 1300);
         });
         //        $("#" + panel.divElement.id + "-linkerButton").disableTextSelect();
         $("#" + panel.divElement.id + "-subscribersMarker").disableTextSelect();
@@ -945,7 +945,7 @@ function searchPanel(divElement, options) {
                         var overallResult = [];
                         overallResult.matches = [];
                         overallResult.filters = [];
-                        overallResult.details = { 'total': 0 };
+                        overallResult.details = { 'total': 0, 'extensions': options.editionList.length };
                         overallResult.filters.semTag = [];
                         overallResult.filters.lang = [];
                         overallResult.filters.module = [];
