@@ -4006,7 +4006,7 @@ function program1(depth0,data,depth1) {
     + "-clearButton\" class=\"btn btn-default pull-right\" style=\"margin: 10px;\">";
   stack1 = (helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_clear", "Clear", options) : helperMissing.call(depth0, "i18n", "i18n_clear", "Clear", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</button>\n      <p><strong>This will execute against the current MAIN branch of the authoring platform. Please make sure you have logged into the authoring platform to be able to run any queries.</strong></p>\n    </div>\n    <div>\n      <ul class=\"nav nav-tabs\">\n        <li class=\"active\"><a href=\"#";
+  buffer += "</button>\n      <!--<p><strong>This will execute against the current MAIN branch of the authoring platform. Please make sure you have logged into the authoring platform to be able to run any queries.</strong></p> -->\n    </div>\n    <div>\n      <ul class=\"nav nav-tabs\">\n        <li class=\"active\"><a href=\"#";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
