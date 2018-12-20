@@ -38,20 +38,17 @@ function taxonomyPanel(divElement, conceptId, options) {
 
     if (!options.rootConceptDescendants) {
         $.ajax({
-            type: "POST",
-            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
-            data: {
-                expression: "< 138875005|SNOMED CT Concept|",
-                limit: 1,
-                skip: 0,
-                form: panel.options.selectedView
-            },
+            type: "GET",
+            url: options.serverUrl + options.edition + "/" + options.release + "/concepts",
+			data: {
+				ecl: "< 138875005|SNOMED CT Concept|",
+				offset: 0,
+				limit: 1
+			},
             dataType: "json",
             success: function(result) {
-                if (result.computeResponse) {
-                    options.rootConceptDescendants = result.computeResponse.total;
-                }
-            }
+				options.rootConceptDescendants = result.total;
+			}
         }).done(function(result) {
             // done
         });
@@ -479,8 +476,9 @@ function taxonomyPanel(divElement, conceptId, options) {
         else $("#" + panel.divElement.id + "-txViewLabel2").html("Descendants Count: Off");
 
 
-        $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
+        $.getJSON(options.serverUrl + "browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
             if (result && result[0] && typeof result[0].statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
+            result.forEach(function(c) {setDefaultTerm(c)});
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
                     return -1;
