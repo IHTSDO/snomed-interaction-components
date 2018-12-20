@@ -590,9 +590,27 @@ function searchPanel(divElement, options) {
                         t = t.replace(")","");
                     }
                     var startTime = Date.now();
-                    var searchUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions?query=" + encodeURIComponent(t) + "&limit=50&searchMode=" + panel.options.searchMode + "&lang=" + panel.options.searchLang + "&statusFilter=" + panel.options.statusSearchFilter + "&skipTo=" + skipTo + "&returnLimit=" + returnLimit;
+
+                    var conceptActiveParam;
+                    if (panel.options.statusSearchFilter == "activeOnly") {
+                    	conceptActiveParam = "true";
+                    } else if (panel.options.statusSearchFilter == "inactiveOnly") {
+                    	conceptActiveParam = "false";
+                    } else {
+                    	conceptActiveParam = "";
+                    }
+
+                    var searchUrl = options.serverUrl + "browser/" + options.edition + "/" + options.release + "/descriptions?" +
+                    	"term=" + encodeURIComponent(t) +
+                    	"&limit=50" +
+                    	"&searchMode=" + panel.options.searchMode +
+                    	"&lang=" + panel.options.searchLang +
+                    	"&conceptActive=" + conceptActiveParam +
+                    	"&skipTo=" + skipTo +
+                    	"&returnLimit=" + returnLimit;
+
                     if (panel.options.semTagFilter != "none") {
-                        searchUrl = searchUrl + "&semanticFilter=" + panel.options.semTagFilter;
+                        searchUrl = searchUrl + "&semanticTag=" + panel.options.semTagFilter;
                     }
                     if (panel.options.langFilter != "none") {
                         searchUrl = searchUrl + "&langFilter=" + panel.options.langFilter;
@@ -613,6 +631,21 @@ function searchPanel(divElement, options) {
                     xhr = $.getJSON(searchUrl,function (result) {
 
                     }).done(function (result) {
+
+                    	// Convert response format
+                    	result.matches = result.items;
+                    	result.matches.forEach(function(match) {
+                    		match.fsn = match.concept.fsn;
+                    		match.conceptActive = match.concept.active;
+                    		match.conceptId = match.concept.conceptId;
+                    	})
+
+						result.filters = {};
+                    	result.filters.lang = result.buckets.language;
+                    	result.filters.module = result.buckets.module;
+                    	result.filters.refsetId = result.buckets.membership;
+                    	result.filters.semTag = result.buckets.semanticTags;
+
                         $('#' + panel.divElement.id + '-resultsTable').find('.more-row').remove();
                         var endTime = Date.now();
                         var elapsed = (endTime - startTime)/1000;
@@ -633,26 +666,18 @@ function searchPanel(divElement, options) {
                         Handlebars.registerHelper("first20chars", function(string){
                             return (string.substr(0, 18) + "...");
                         });
-//                        console.log(panel.options.manifest);
                         var auxArray = [];
-                        if (result.filters && panel.options.manifest){
+                        if (result.filters){
                             if (result.filters.refsetId){
                                 $.each(result.filters.refsetId, function (i, refset){
-                                    var found = false;
                                     var auxObject = {};
-                                    $.each(panel.options.manifest.refsets, function(j, field){
-                                        if (i == field.conceptId){
-                                            auxObject.term = field.defaultTerm;
-                                            auxObject.value = i;
-                                            auxObject.cant = refset;
-                                            found = true;
-                                        }
-                                    })
-                                    if (!found){
-                                        auxObject.term = null;
-                                        auxObject.value = i;
-                                        auxObject.cant = refset;
-                                    }
+									var bucketTerm = null;
+									if (result.bucketConcepts[i]) {
+										bucketTerm = result.bucketConcepts[i].fsn.term;
+									}
+									auxObject.term = bucketTerm;
+									auxObject.value = i;
+									auxObject.cant = refset;
                                     auxArray.push(auxObject);
                                 });
                                 result.filters.refsetId = [];
@@ -669,23 +694,15 @@ function searchPanel(divElement, options) {
                             }
                             auxArray = [];
                             $.each(result.filters.module, function (i, field){
-                                var found = false;
                                 var auxObject = {};
-                                $.each(panel.options.manifest.modules, function(j, module){
-                                    if (i == module.conceptId){
-                                        auxObject.term = module.defaultTerm;
-                                        auxObject.value = i;
-                                        auxObject.cant = field;
-                                        found = true;
-                                    }
-                                })
-                                if (!found){
-                                    auxObject.term = null;
-                                    auxObject.value = i;
-                                    auxObject.cant = field;
-                                }
+								var bucketTerm = null;
+								if (result.bucketConcepts[i]) {
+									bucketTerm = result.bucketConcepts[i].fsn.term;
+								}
+								auxObject.term = bucketTerm;
+								auxObject.value = i;
+								auxObject.cant = field;
                                 auxArray.push(auxObject);
-//                            console.log(auxObject);
                             });
                             result.filters.module = [];
                             result.filters.module = auxArray;
@@ -815,7 +832,7 @@ function searchPanel(divElement, options) {
                         xhr = null;
                         var matchedDescriptions = result.matches;
                         //console.log(JSON.stringify(result));
-                        var remaining = result.details.total - (skipTo + returnLimit);
+                        var remaining = result.totalElements - (skipTo + returnLimit);
 
                         if (panel.options.searchMode == "regex") {
                             result.matches.sort(function (a, b) {
