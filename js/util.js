@@ -37,6 +37,35 @@ $(document).on('dragend', function(){
     removeHighlight();
 });
 
+function setDefaultTerm(concept) {
+	if (concept) {
+		if (concept.fsn) {
+			if (typeof concept.fsn == "object") {
+				concept.defaultTerm = concept.fsn.term;
+			} else {
+				concept.defaultTerm = concept.fsn;
+			}
+		}
+		if (concept.relationships) {
+			concept.statedRelationships = [];
+			concept.relationships.forEach(function(r) {
+				r.type.defaultTerm = r.type.fsn.term;
+				r.target.defaultTerm = r.target.fsn.term;
+				if (r.characteristicType == "STATED_RELATIONSHIP") {
+					concept.statedRelationships.push(r);
+				}
+			})
+			// Remove statedRelationships from relationships array
+			concept.statedRelationships.forEach(function(r) {
+				concept.relationships.splice(concept.relationships.indexOf(r), 1);
+			})
+		}
+		if (concept.definitionStatus == "PRIMITIVE") {
+			concept.definitionStatus = "Primitive";
+		}
+	}
+}
+
 function removeHighlight(){
     $(document).find('.drop-highlighted').removeClass('drop-highlighted');
 }

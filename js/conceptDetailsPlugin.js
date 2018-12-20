@@ -328,9 +328,10 @@ function conceptDetails(divElement, conceptId, options) {
             xhr.abort();
             //console.log("aborting call...");
         }
-        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function(result) {
+        xhr = $.getJSON(options.serverUrl + "browser/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function(result) {
 
         }).done(function(result) {
+        	setDefaultTerm(result);
             var firstMatch = result;
             xhr = null;
             panel.attributesPId = divElement.id + "-attributes-panel";
@@ -732,11 +733,13 @@ function conceptDetails(divElement, conceptId, options) {
                     allDescriptions: allDescriptions
                 };
 
-                $.each(panel.options.manifest.languageRefsets, function(i, looplr) {
-                    if (looplr.conceptId == loopSelectedLangRefset) {
-                        context.longLangName = looplr.defaultTerm;
-                    }
-                });
+				if (panel.options.manifest) {
+					$.each(panel.options.manifest.languageRefsets, function(i, looplr) {
+						if (looplr.conceptId == loopSelectedLangRefset) {
+							context.longLangName = looplr.defaultTerm;
+						}
+					});
+				}
 
                 allLangsHtml += JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context);
                 //if (panel.options.displaySynonyms) {
@@ -1302,9 +1305,10 @@ function conceptDetails(divElement, conceptId, options) {
             xhrChildren.abort();
             //console.log("aborting children call...");
         }
-        xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
+        xhrChildren = $.getJSON(options.serverUrl + "browser/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
+			result.forEach(function(c) {setDefaultTerm(c)});
             // load relationships panel
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
@@ -1519,7 +1523,8 @@ function conceptDetails(divElement, conceptId, options) {
             xhrChildren.abort();
             //console.log("aborting children call...");
         }
-        xhrChildren = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
+        xhrChildren = $.getJSON(options.serverUrl + "browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
+        	result.forEach(function(c) {setDefaultTerm(c)});
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
                     return -1;
@@ -1596,9 +1601,10 @@ function conceptDetails(divElement, conceptId, options) {
             xhrParents.abort();
             //console.log("aborting children call...");
         }
-        xhrParents = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
+        xhrParents = $.getJSON(options.serverUrl + "browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
+			result.forEach(function(c) {setDefaultTerm(c)});
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
                     return -1;
