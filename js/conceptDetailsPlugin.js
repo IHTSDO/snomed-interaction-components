@@ -331,7 +331,7 @@ function conceptDetails(divElement, conceptId, options) {
         xhr = $.getJSON(options.serverUrl + "browser/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function(result) {
 
         }).done(function(result) {
-        	setDefaultTerm(result);
+            setDefaultTerm(result);
             var firstMatch = result;
             xhr = null;
             panel.attributesPId = divElement.id + "-attributes-panel";
@@ -733,13 +733,13 @@ function conceptDetails(divElement, conceptId, options) {
                     allDescriptions: allDescriptions
                 };
 
-				if (panel.options.manifest) {
-					$.each(panel.options.manifest.languageRefsets, function(i, looplr) {
-						if (looplr.conceptId == loopSelectedLangRefset) {
-							context.longLangName = looplr.defaultTerm;
-						}
-					});
-				}
+                if (panel.options.manifest) {
+                    $.each(panel.options.manifest.languageRefsets, function(i, looplr) {
+                        if (looplr.conceptId == loopSelectedLangRefset) {
+                            context.longLangName = looplr.defaultTerm;
+                        }
+                    });
+                }
 
                 allLangsHtml += JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context);
                 //if (panel.options.displaySynonyms) {
@@ -1308,7 +1308,7 @@ function conceptDetails(divElement, conceptId, options) {
         xhrChildren = $.getJSON(options.serverUrl + "browser/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
-			result.forEach(function(c) {setDefaultTerm(c)});
+            result.forEach(function(c) { setDefaultTerm(c) });
             // load relationships panel
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
@@ -1524,7 +1524,7 @@ function conceptDetails(divElement, conceptId, options) {
             //console.log("aborting children call...");
         }
         xhrChildren = $.getJSON(options.serverUrl + "browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
-        	result.forEach(function(c) {setDefaultTerm(c)});
+            result.forEach(function(c) { setDefaultTerm(c) });
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
                     return -1;
@@ -1604,7 +1604,7 @@ function conceptDetails(divElement, conceptId, options) {
         xhrParents = $.getJSON(options.serverUrl + "browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
-			result.forEach(function(c) {setDefaultTerm(c)});
+            result.forEach(function(c) { setDefaultTerm(c) });
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
                     return -1;
@@ -1671,9 +1671,9 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.loadMembers = function(returnLimit, skipTo, paginate) {
-        var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members?limit=" + returnLimit;
+        var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/members?referenceSet=" + panel.conceptId + "&limit=" + returnLimit;
         if (skipTo > 0) {
-            membersUrl = membersUrl + "&skip=" + skipTo;
+            membersUrl = membersUrl + "&offset=" + skipTo;
         } else {
             $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><i class='glyphicon glyphicon-refresh icon-spin'></i></td></tr>");
         }
@@ -1705,7 +1705,7 @@ function conceptDetails(divElement, conceptId, options) {
 
         }).done(function(result) {
             var remaining = "asd";
-            if (typeof total == "undefined") total = result.details.total;
+            if (typeof total == "undefined") total = result.total;
             if (total == skipTo) {
                 remaining = 0;
             } else {
@@ -1758,7 +1758,7 @@ function conceptDetails(divElement, conceptId, options) {
                 else
                     return opts.inverse(this);
             });
-            if (result.members.length != 0) {
+            if (result.total != 0) {
                 $("#" + panel.divElement.id + "-moreMembers").remove();
                 $("#members-" + panel.divElement.id + "-resultsTable").find(".more-row").remove();
                 if (skipTo == 0) {

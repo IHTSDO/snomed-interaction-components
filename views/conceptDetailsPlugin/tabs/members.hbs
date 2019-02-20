@@ -7,19 +7,19 @@
     </thead>
 {{/if_eq}}
 <tbody>
-    {{#each result.members}}
+    {{#each result.items}}
         <tr class="member-row">
-            <td data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>
-                <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;&nbsp;</span>
+            <td data-concept-id='{{referencedComponent.conceptId}}' data-term='{{referencedComponent.fsn.term}}'>
+                <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{moduleId}}" data-concept-id='{{referencedComponent.conceptId}}' data-term='{{referencedComponent.fsn.term}}'>&nbsp;&nbsp;</span>
                 {{#hasCountryIcon module}}
                     <div class="phoca-flagbox" style="width:22px;height:22px">
                         <span class="phoca-flag {{countryIcon module}}"></span>
                     </div>
                 {{/hasCountryIcon}}
-                {{defaultTerm}}
+                {{referencedComponent.fsn.term}}
             </td>
-            <td>{{conceptId}}</td>
-        </tr>
+            <td>{{referencedComponent.conceptId}}</td>
+
     {{/each}}
 
     <tr class="more-row">
@@ -29,7 +29,7 @@
             </td>
         {{else}}
             {{#if_eq remaining 0}}
-                <td class="text-muted" class="text-center" colspan="2">{{result.details.total}} <span data-i18n-id="i18n_members" class="i18n">members</span></td>
+                <td class="text-muted" class="text-center" colspan="2">{{total}} <span data-i18n-id="i18n_members" class="i18n">members</span></td>
             {{else}}
                 {{#if_gr remaining returnLimit}}
                     <td class="text-center" id="{{divElementId}}-moreMembers" colspan="2">
