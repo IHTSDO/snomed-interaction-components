@@ -1671,7 +1671,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.loadMembers = function(returnLimit, skipTo, paginate) {
-        var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/members?referenceSet=" + panel.conceptId + "&limit=" + returnLimit;
+        var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/members?referenceSet=" + panel.conceptId + "&limit=100";
         if (skipTo > 0) {
             membersUrl = membersUrl + "&offset=" + skipTo;
         } else {
