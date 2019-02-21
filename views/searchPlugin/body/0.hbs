@@ -12,10 +12,10 @@
                         <span class="phoca-flag {{countryIcon module}}"></span>
                     </div>
                 {{/hasCountryIcon}}
-                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;' draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-term='{{term}}' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
+                <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;' draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-term='{{term}}' data-module="{{moduleId}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
             </div>
         </td>
-        <td class='text-muted small-text col-md-5 result-item' data-term='{{term}}' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>
+        <td class='text-muted small-text col-md-5 result-item' data-term='{{term}}' data-module="{{moduleId}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>
             {{../result.fsn}}
         </td>
     </tr>

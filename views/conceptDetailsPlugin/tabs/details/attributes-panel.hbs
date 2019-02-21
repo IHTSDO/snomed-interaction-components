@@ -7,9 +7,9 @@
         <td>
             <h4>
                 {{#if_eq firstMatch.definitionStatus "Primitive"}}
-                    <a href="javascript:void(0);" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning">&nbsp;&nbsp;</span></a>&nbsp;&nbsp;
+                    <a href="javascript:void(0);" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.moduleId}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning">&nbsp;&nbsp;</span></a>&nbsp;&nbsp;
                 {{else}}
-                    <a href="javascript:void(0);" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning" >&equiv;</span></a>&nbsp;&nbsp;
+                    <a href="javascript:void(0);" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.moduleId}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.defaultTerm}}" data-def-status="{{firstMatch.definitionStatus}}" style="color: inherit;text-decoration: inherit;"><span class="badge alert-warning" >&equiv;</span></a>&nbsp;&nbsp;
                 {{/if_eq}}
 
                 <span ondrop="dropC(event, '{{divElementId}}')" ondragleave="removeHighlight();" ondragover="allowDrop(event)">{{firstMatch.defaultTerm}}</span>
@@ -34,7 +34,7 @@
         </td>
         <td>
             <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
-                <table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>{{firstMatch.effectiveTime}}</td><td style='padding: 3px;'>{{firstMatch.module}}</td></tr></table>
+                <table border='1'><tr><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr><tr><td style='padding: 3px;'>{{firstMatch.effectiveTime}}</td><td style='padding: 3px;'>{{firstMatch.moduleId}}</td></tr></table>
                 " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
             &nbsp;
             <span class="pull-right">
@@ -67,7 +67,7 @@
                     <!--" data-html="true"><i class="glyphicon glyphicon-share-alt"></i></button>-->
             <span class="pull-right">
                <div class="phoca-flagbox" style="width:40px;height:40px">
-                   <span class="phoca-flag {{countryIcon firstMatch.module}}"></span>
+                   <span class="phoca-flag {{countryIcon firstMatch.moduleId}}"></span>
                </div>
             </span>
         </td>

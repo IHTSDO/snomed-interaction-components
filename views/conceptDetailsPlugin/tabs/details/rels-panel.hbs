@@ -28,17 +28,17 @@
                             '>
                     <td>
                         {{#if_eq type.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{type.defaultTerm}}
                     </td>
                     <td>
                         {{#if_eq target.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{target.defaultTerm}}</td>
                     <td>{{groupId}}</td>
@@ -53,7 +53,7 @@
                     {{/if_eq}}
                     <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                                 <table border='1'><tr><th style='padding: 3px;'>TypeId</th><th style='padding: 3px;'>TargetId</th><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
-                                    <tr><td style='padding: 3px;'>{{type.conceptId}}</td><td style='padding: 3px;'>{{target.conceptId}}</td><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
+                                    <tr><td style='padding: 3px;'>{{type.conceptId}}</td><td style='padding: 3px;'>{{target.conceptId}}</td><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
                                 </table>
                                 " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
                 </td>
@@ -78,16 +78,16 @@
                             '>
                     <td>
                         {{#if_eq type.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{type.defaultTerm}}</td>
                     <td>
                         {{#if_eq target.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{target.defaultTerm}}</td>
                     <td>{{groupId}}</td>
@@ -102,7 +102,7 @@
                     {{/if_eq}}
                     <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                         <table border='1'><tr><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
-                            <tr><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
+                            <tr><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
                         </table>
                         " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
                 </td>
@@ -131,22 +131,22 @@
                 <tr>
                     <td>
                         {{#if_eq type.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{module}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{type.defaultTerm}}</td>
                     <td>
                         {{#if_eq target.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                         {{/if_eq}}
                         {{target.defaultTerm}}</td>
                     <td><span class='i18n' data-i18n-id='i18n_additional'>{{i18n "i18n_additional" "Additional"}}</span>
                         <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                         <table border='1'><tr><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
-                            <tr><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{module}}</td></tr>
+                            <tr><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
                         </table>
                         " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
                     </td>
