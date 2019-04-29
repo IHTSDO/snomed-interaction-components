@@ -1,121 +1,124 @@
-<table class='table table-bordered'>
-    <thead>
-    <tr>
-        <th><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
-        <th><span class='i18n' data-i18n-id='i18n_destination'>{{i18n "i18n_destination" "Destination"}}</span></th>
-        <th><span class='i18n' data-i18n-id='i18n_group'>{{i18n "i18n_group" "Group"}}</span></th>
-        <th><span class='i18n' data-i18n-id='i18n_char_type'>{{i18n "i18n_char_type" "CharType"}}</span></th>
-    </tr>
-    </thead>
-    <tbody>
-    {{#if_eq firstMatch.relationships "undefined"}}
-        {{#if_eq firstMatch.statedRelationships "undefined"}}
-            <tr><td colspan='4'><span class='text-muted'>No relationships</span></td></tr>
-        {{/if_eq}}
-    {{else}}
+{{#if_undefined firstMatch.gciAxioms}}
+    <table class='table table-bordered'>
+        <thead>
+        <tr>
+            <th><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
+            <th><span class='i18n' data-i18n-id='i18n_destination'>{{i18n "i18n_destination" "Destination"}}</span></th>
+            <th><span class='i18n' data-i18n-id='i18n_group'>{{i18n "i18n_group" "Group"}}</span></th>
+            <th><span class='i18n' data-i18n-id='i18n_char_type'>{{i18n "i18n_char_type" "CharType"}}</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#if_eq firstMatch.relationships "undefined"}}
+            {{#if_eq firstMatch.statedRelationships "undefined"}}
+                <tr><td colspan='4'><span class='text-muted'>No relationships</span></td></tr>
+            {{/if_eq}}
+        {{else}}
 
-        {{#each firstMatch.relationships}}
-            {{#if active}}
-                {{#if_eq type.conceptId 116680003}}
-                    {{push this ../../../inferredParents}}
-                {{else}}
-                    {{push this ../../../inferredRoles}}
-                {{/if_eq}}
-                <tr class='inferred-rel
-                            {{#if_eq effectiveTime ../../options.highlightByEffectiveTime}}
-                                 highlightEffectiveTime
-                            {{/if_eq}}
-                            '>
-                    <td>
-                        {{#if_eq type.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
-                        {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+            {{#each firstMatch.relationships}}
+                {{#if active}}
+                    {{#if_eq type.conceptId 116680003}}
+                        {{push this ../../../inferredParents}}
+                    {{else}}
+                        {{push this ../../../inferredRoles}}
+                    {{/if_eq}}
+                    <tr class='inferred-rel
+                        {{#if_eq effectiveTime ../../options.highlightByEffectiveTime}}
+                             highlightEffectiveTime
                         {{/if_eq}}
-                        {{type.defaultTerm}}
+                        '>
+                        <td>
+                            {{#if_eq type.definitionStatus "Primitive"}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            {{else}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            {{/if_eq}}
+                            {{type.defaultTerm}}
+                        </td>
+                        <td>
+                            {{#if_eq target.definitionStatus "Primitive"}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            {{else}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            {{/if_eq}}
+                            {{target.defaultTerm}}</td>
+                        <td>{{groupId}}</td>
+                        {{#if_eq charType.conceptId "900000000000010007"}}
+                        <td><span class='i18n' data-i18n-id='i18n_stated'>{{i18n "i18n_stated" "Stated"}}</span>
+                        {{else}}
+                            {{#if_eq charType.conceptId "900000000000011006"}}
+                            <td><span class='i18n' data-i18n-id='i18n_inferred'>{{i18n "i18n_inferred" "Inferred"}}</span>
+                            {{else}}
+                            <td><span class='i18n' data-i18n-id='i18n_other'>{{i18n "i18n_other" "Other"}}</span>
+                            {{/if_eq}}
+                        {{/if_eq}}
+                        <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                            <table border='1'><tr><th style='padding: 3px;'>TypeId</th><th style='padding: 3px;'>TargetId</th><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
+                                <tr><td style='padding: 3px;'>{{type.conceptId}}</td><td style='padding: 3px;'>{{target.conceptId}}</td><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
+                            </table>
+                            " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
                     </td>
-                    <td>
-                        {{#if_eq target.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
-                        {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
-                        {{/if_eq}}
-                        {{target.defaultTerm}}</td>
-                    <td>{{groupId}}</td>
-                    {{#if_eq charType.conceptId "900000000000010007"}}
-                    <td><span class='i18n' data-i18n-id='i18n_stated'>{{i18n "i18n_stated" "Stated"}}</span>
-                    {{else}}
-                        {{#if_eq charType.conceptId "900000000000011006"}}
-                        <td><span class='i18n' data-i18n-id='i18n_inferred'>{{i18n "i18n_inferred" "Inferred"}}</span>
-                        {{else}}
-                        <td><span class='i18n' data-i18n-id='i18n_other'>{{i18n "i18n_other" "Other"}}</span>
-                        {{/if_eq}}
-                    {{/if_eq}}
-                    <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
-                                <table border='1'><tr><th style='padding: 3px;'>TypeId</th><th style='padding: 3px;'>TargetId</th><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
-                                    <tr><td style='padding: 3px;'>{{type.conceptId}}</td><td style='padding: 3px;'>{{target.conceptId}}</td><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
-                                </table>
-                                " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
-                </td>
-                </tr>
-            {{/if}}
-        {{/each}}
-    {{/if_eq}}
-    {{#if_eq firstMatch.statedRelationships "undefined"}}
-    {{else}}
+                    </tr>
+                {{/if}}
+            {{/each}}
+        {{/if_eq}}
+        {{#if_eq firstMatch.statedRelationships "undefined"}}
+        {{else}}
 
-        {{#each firstMatch.statedRelationships}}
-            {{#if active}}
-                {{#if_eq type.conceptId 116680003}}
-                    {{push this ../../../statedParents}}
-                {{else}}
-                    {{push this ../../../statedRoles}}
-                {{/if_eq}}
-                <tr class='stated-rel
-                            {{#if_eq effectiveTime options.highlightByEffectiveTime}}
-                                 highlightEffectiveTime
+            {{#each firstMatch.statedRelationships}}
+                {{#if active}}
+                    {{#if_eq type.conceptId 116680003}}
+                        {{push this ../../../statedParents}}
+                    {{else}}
+                        {{push this ../../../statedRoles}}
+                    {{/if_eq}}
+                    <tr class='stated-rel
+                        {{#if_eq effectiveTime options.highlightByEffectiveTime}}
+                             highlightEffectiveTime
+                        {{/if_eq}}
+                        '>
+                        <td>
+                            {{#if_eq type.definitionStatus "Primitive"}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            {{else}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
                             {{/if_eq}}
-                            '>
-                    <td>
-                        {{#if_eq type.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            {{type.defaultTerm}}</td>
+                        <td>
+                            {{#if_eq target.definitionStatus "Primitive"}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            {{else}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            {{/if_eq}}
+                            {{target.defaultTerm}}</td>
+                        <td>{{groupId}}</td>
+                        {{#if_eq charType.conceptId "900000000000010007"}}
+                        <td><span class='i18n' data-i18n-id='i18n_stated'>{{i18n "i18n_stated" "Stated"}}</span>
                         {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            {{#if_eq charType.conceptId "900000000000011006"}}
+                            <td><span class='i18n' data-i18n-id='i18n_inferred'>{{i18n "i18n_inferred" "Inferred"}}</span>
+                            {{else}}
+                            <td><span class='i18n' data-i18n-id='i18n_other'>{{i18n "i18n_other" "Other"}}</span>
+                            {{/if_eq}}
                         {{/if_eq}}
-                        {{type.defaultTerm}}</td>
-                    <td>
-                        {{#if_eq target.definitionStatus "Primitive"}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
-                        {{else}}
-                            <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
-                        {{/if_eq}}
-                        {{target.defaultTerm}}</td>
-                    <td>{{groupId}}</td>
-                    {{#if_eq charType.conceptId "900000000000010007"}}
-                    <td><span class='i18n' data-i18n-id='i18n_stated'>{{i18n "i18n_stated" "Stated"}}</span>
-                    {{else}}
-                        {{#if_eq charType.conceptId "900000000000011006"}}
-                        <td><span class='i18n' data-i18n-id='i18n_inferred'>{{i18n "i18n_inferred" "Inferred"}}</span>
-                        {{else}}
-                        <td><span class='i18n' data-i18n-id='i18n_other'>{{i18n "i18n_other" "Other"}}</span>
-                        {{/if_eq}}
-                    {{/if_eq}}
-                    <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
-                        <table border='1'><tr><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
-                            <tr><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
-                        </table>
-                        " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
-                </td>
-                </tr>
-            {{/if}}
-        {{/each}}
-    {{/if_eq}}
-
-    </tbody>
-</table>
+                        <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                    <table border='1'><tr><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
+                        <tr><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
+                    </table>
+                    " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
+                    </td>
+                    </tr>
+                {{/if}}
+            {{/each}}
+        {{/if_eq}}
+        </tbody>
+    </table>
+{{/if_undefined}}
 
 {{#if_undefined additionalRels}}
-    <p>No additional relationships</p>
+    {{#if_undefined firstMatch.gciAxioms}}
+        <p>No additional relationships</p>
+    {{/if_undefined}}
 {{else}}
     <table class='table table-bordered'>
         <thead>
@@ -155,4 +158,50 @@
         {{/each}}
         </tbody>
     </table>
+{{/if_undefined}}
+
+{{#if_undefined firstMatch.gciAxioms}}
+    <p>No Axioms found</p>
+{{else}}
+    {{#each firstMatch.gciAxioms}}
+        <table class='table table-bordered'>
+            <thead>
+            <tr>
+                <th><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
+                <th><span class='i18n' data-i18n-id='i18n_destination'>{{i18n "i18n_destination" "Destination"}}</span></th>
+                <th><span class='i18n' data-i18n-id='i18n_char_type'>{{i18n "i18n_char_type" "CharType"}}</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each relationships}}
+                {{#if active}}
+                    <tr>
+                        <td>
+                            {{#if_eq type.definitionStatus "Primitive"}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            {{else}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            {{/if_eq}}
+                            {{type.fsn.term}}</td>
+                        <td>
+                            {{#if_eq target.definitionStatus "Primitive"}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            {{else}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            {{/if_eq}}
+                            {{target.fsn.term}}</td>
+                        <td><span class='i18n' data-i18n-id='i18n_additional'>{{i18n "i18n_additional" "Additional"}}</span>
+                            <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                        <table border='1'><tr><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
+                            <tr><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
+                        </table>
+                        " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
+                        </td>
+                    </tr>
+                {{/if}}
+            {{/each}}
+            </tbody>
+        </table>
+        <br>
+    {{/each}}
 {{/if_undefined}}
