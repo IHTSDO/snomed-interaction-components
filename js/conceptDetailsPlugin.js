@@ -328,7 +328,7 @@ function conceptDetails(divElement, conceptId, options) {
             xhr.abort();
             //console.log("aborting call...");
         }
-        xhr = $.getJSON(options.serverUrl + "browser/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId, function(result) {
+        xhr = $.getJSON(options.serverUrl + "/browser/" + options.release + "/concepts/" + panel.conceptId, function(result) {
 
         }).done(function(result) {
             setDefaultTerm(result);
@@ -1273,6 +1273,7 @@ function conceptDetails(divElement, conceptId, options) {
 
             //            membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members";
 
+            console.log('CONTEXT: ', context);
         }).fail(function() {
             panel.relsPId = divElement.id + "-rels-panel";
             panel.attributesPId = divElement.id + "-attributes-panel";

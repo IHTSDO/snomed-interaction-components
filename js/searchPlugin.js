@@ -641,10 +641,10 @@ function searchPanel(divElement, options) {
                         })
 
                         result.filters = {};
-                        result.filters.lang = result.buckets.language;
-                        result.filters.module = result.buckets.module;
-                        result.filters.refsetId = result.buckets.membership;
-                        result.filters.semTag = result.buckets.semanticTags;
+                        result.filters.lang = result.filters.language;
+                        result.filters.module = result.filters.module;
+                        result.filters.refsetId = result.filters.membership;
+                        result.filters.semTag = result.filters.semanticTags;
 
                         $('#' + panel.divElement.id + '-resultsTable').find('.more-row').remove();
                         var endTime = Date.now();

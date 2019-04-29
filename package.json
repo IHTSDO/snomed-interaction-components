@@ -1,6 +1,6 @@
 {
     "name": "snomed-interaction-components",
-    "version": "2.0",
+    "version": "2.1",
     "description": "SNOMED CT Interaction Components",
     "main": "index.js",
     "scripts": {
