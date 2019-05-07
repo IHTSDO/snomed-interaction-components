@@ -1,6 +1,7 @@
 function drawConceptDiagram (concept, div, options, panel) {
     var svgIsaModel = [];
     var svgAttrModel = [];
+    var axioms = [];
     if (options.selectedView == "stated") {
         $.each(concept.statedRelationships, function(i, field) {
             if (field.active == true) {
@@ -10,6 +11,33 @@ function drawConceptDiagram (concept, div, options, panel) {
                     svgAttrModel.push(field);
                 }
             }
+        });
+        $.each(concept.gciAxioms, function (i, axiom) {
+            var axiomToPush = {};
+            axiomToPush.relationships = [];
+            axiomToPush.type = 'gci';
+            $.each(axiom.relationships, function (i, field) {
+                if (field.type.conceptId === '116680003') {
+                    axiomToPush.relationships.push(field);
+                } else {
+                    axiomToPush.relationships.push(field);
+                }
+            });
+            axioms.push(axiomToPush);
+        });
+        $.each(concept.classAxioms, function (i, axiom) {
+            var axiomToPush = {
+                relationships : [],
+                type : 'add'
+            };
+            $.each(axiom.relationships, function (i, field) {
+                if (field.type.conceptId === '116680003') {
+                    axiomToPush.relationships.push(field);
+                } else {
+                    axiomToPush.relationships.push(field);
+                }
+            });
+            axioms.push(axiomToPush);
         });
     } else {
         if (concept.relationships) {
@@ -31,12 +59,44 @@ function drawConceptDiagram (concept, div, options, panel) {
     div.html(JST["views/conceptDetailsPlugin/tabs/details/diagram.hbs"](context));
 
     var parentDiv = $("#" + div.attr('id') + "-diagram-body");
-    parentDiv.svg('destroy');
+    var height = 350;
+    var width = 700;
+
+    $.each(svgIsaModel, function (i, field) {
+        height = height + 50;
+        width = width + 80;
+    });
+
+    $.each(svgAttrModel, function (i, field) {
+        height = height + 65;
+        width = width + 110;
+    });
+
+    if(options.selectedView === 'stated'){
+        $.each(concept.classAxioms, function (i, axiom) {
+            height = height + 40;
+            width = width + 80;
+            $.each(axiom.relationships, function (i, field) {
+                height = height + 55;
+                width = width + 110;
+            });
+        });
+        $.each(concept.gciAxioms, function (i, axiom) {
+            height = height + 40;
+            width = width + 80;
+            $.each(axiom.relationships, function (i, field) {
+                height = height + 55;
+                width = width + 110;
+            });
+        });
+    }
+
+    // parentDiv.svg('destroy');
 
     parentDiv.svg({
         settings: {
-            width: '1000px',
-            height: '2000px'}});
+            width: width + 'px',
+            height: height + 'px'}});
     var svg = parentDiv.svg('get');
     loadDefs(svg);
     var x = 10;
@@ -49,7 +109,7 @@ function drawConceptDiagram (concept, div, options, panel) {
         sctClass = "sct-defined-concept";
     }
     //console.log("In draw: " + concept.defaultTerm + " " + concept.conceptId + " " + sctClass);
-    var rect1 = drawSctBox(svg, x, y, concept.defaultTerm, concept.conceptId, sctClass);
+    var rect1 = drawSctBox(svg, x, y, concept.fsn, concept.conceptId, sctClass);
     x = x + 90;
     y = y + rect1.getBBox().height + 40;
     var circle1;
@@ -73,7 +133,7 @@ function drawConceptDiagram (concept, div, options, panel) {
         } else {
             sctClass = "sct-defined-concept";
         }
-        var rectParent = drawSctBox(svg, x, y, relationship.target.defaultTerm, relationship.target.conceptId, sctClass);
+        var rectParent = drawSctBox(svg, x, y, relationship.target.fsn.term, relationship.target.conceptId, sctClass);
         // $("#" + rectParent.id).css({"top":
         // (rectParent.outerHeight()/2) + "px"});
         connectElements(svg, circle2, rectParent, 'center', 'left', 'ClearTriangle');
@@ -90,9 +150,9 @@ function drawConceptDiagram (concept, div, options, panel) {
             sctClass = "sct-defined-concept";
         }
         if (relationship.groupId == 0) {
-            var rectAttr = drawSctBox(svg, x, y, relationship.type.defaultTerm,relationship.type.conceptId, "sct-attribute");
+            var rectAttr = drawSctBox(svg, x, y, relationship.type.fsn.term,relationship.type.conceptId, "sct-attribute");
             connectElements(svg, circle2, rectAttr, 'center', 'left');
-            var rectTarget = drawSctBox(svg, x + rectAttr.getBBox().width + 50, y, relationship.target.defaultTerm,relationship.target.conceptId, sctClass);
+            var rectTarget = drawSctBox(svg, x + rectAttr.getBBox().width + 50, y, relationship.target.fsn.term,relationship.target.conceptId, sctClass);
             connectElements(svg, rectAttr, rectTarget, 'right', 'left');
             y = y + rectTarget.getBBox().height + 25;
             maxX = ((maxX < x + rectAttr.getBBox().width + 50 + rectTarget.getBBox().width + 50) ? x + rectAttr.getBBox().width + 50 + rectTarget.getBBox().width + 50 : maxX);
@@ -115,15 +175,96 @@ function drawConceptDiagram (concept, div, options, panel) {
                 } else {
                     sctClass = "sct-defined-concept";
                 }
-                var rectRole = drawSctBox(svg, x + 85, y - 18, relationship.type.defaultTerm, relationship.type.conceptId,"sct-attribute");
+                var rectRole = drawSctBox(svg, x + 85, y - 18, relationship.type.fsn.term, relationship.type.conceptId,"sct-attribute");
                 connectElements(svg, conjunctionNode, rectRole, 'center', 'left');
-                var rectRole2 = drawSctBox(svg, x + 85 + rectRole.getBBox().width + 30, y - 18, relationship.target.defaultTerm,relationship.target.conceptId, sctClass);
+                var rectRole2 = drawSctBox(svg, x + 85 + rectRole.getBBox().width + 30, y - 18, relationship.target.fsn.term,relationship.target.conceptId, sctClass);
                 connectElements(svg, rectRole, rectRole2, 'right', 'left');
                 y = y + rectRole2.getBBox().height + 25;
                 maxX = ((maxX < x + 85 + rectRole.getBBox().width + 30 + rectRole2.getBBox().width + 50) ? x + 85 + rectRole.getBBox().width + 30 + rectRole2.getBBox().width + 50 : maxX);
             }
         });
     }
+
+
+    $.each(axioms, function (i, axiom) {
+        x = 100;
+        var circle1;
+        if(axiom.type === "gci"){
+            circle1 = drawSubsumesNode(svg, x, y);
+        }
+        else{
+            circle1 = drawSubsumedByNode(svg, x, y);
+        }
+        connectElements(svg, rect1, circle1, 'bottom-50', 'left');
+        x = x + 55;
+        var circle2 = drawConjunctionNode(svg, x, y);
+        connectElements(svg, circle1, circle2, 'right', 'left', 'LineMarker');
+        x = x + 40;
+        y = y - 18;
+        maxX = ((maxX < x) ? x : maxX);
+        var axiomRoleNumber = 0;
+        $.each(axiom.relationships, function (i, relationship) {
+            console.log('here');
+            if(relationship.type.conceptId === '116680003'){
+                if (relationship.target.definitionStatus === "PRIMITIVE") {
+                    sctClass = "sct-primitive-concept";
+                } else {
+                    sctClass = "sct-defined-concept";
+                }
+                var rectParent = drawSctBox(svg, x, y, relationship.target.fsn.term, relationship.target.conceptId, sctClass);
+                // $("#" + rectParent.id).css({"top":
+                // (rectParent.outerHeight()/2) + "px"});
+                connectElements(svg, circle2, rectParent, 'center', 'left', 'ClearTriangle');
+                y = y + rectParent.getBBox().height + 25;
+                maxX = ((maxX < x + rectParent.getBBox().width + 50) ? x + rectParent.getBBox().width + 50 : maxX);
+            }
+            else{
+                if (relationship.target.definitionStatus === "PRIMITIVE") {
+                    sctClass = "sct-primitive-concept";
+                } else {
+                    sctClass = "sct-defined-concept";
+                }
+                if (relationship.groupId === 0) {
+                    var rectAttr = drawSctBox(svg, x, y, relationship.type.fsn.term, relationship.type.conceptId, "sct-attribute");
+                    connectElements(svg, circle2, rectAttr, 'center', 'left');
+                    var rectTarget = drawSctBox(svg, x + rectAttr.getBBox().width + 50, y, relationship.target.fsn.term, relationship.target.conceptId, sctClass);
+                    connectElements(svg, rectAttr, rectTarget, 'right', 'left');
+                    y = y + rectTarget.getBBox().height + 25;
+                    maxX = ((maxX < x + rectAttr.getBBox().width + 50 + rectTarget.getBBox().width + 50) ? x + rectAttr.getBBox().width + 50 + rectTarget.getBBox().width + 50 : maxX);
+                } else {
+                    if (relationship.groupId > axiomRoleNumber) {
+                        axiomRoleNumber = relationship.groupId;
+                    }
+                }
+
+            }
+
+        });
+
+        y = y + 15;
+        for (var i = 1; i <= axiomRoleNumber; i++) {
+            var groupNode = drawAttributeGroupNode(svg, x, y);
+            connectElements(svg, circle2, groupNode, 'center', 'left');
+            var conjunctionNode = drawConjunctionNode(svg, x + 55, y);
+            connectElements(svg, groupNode, conjunctionNode, 'right', 'left');
+            $.each(axiom.relationships, function (m, relationship) {
+                if (relationship.groupId === i) {
+                    if (relationship.target.definitionStatus ==
+                        "PRIMITIVE") { sctClass = "sct-primitive-concept"; } else {
+                        sctClass = "sct-defined-concept";
+                    }
+                    var rectRole = drawSctBox(svg, x + 85, y - 18, relationship.type.fsn.term, relationship.type.conceptId, "sct-attribute");
+                    connectElements(svg, conjunctionNode, rectRole, 'center', 'left');
+                    var rectRole2 = drawSctBox(svg, x + 85 + rectRole.getBBox().width + 30, y - 18, relationship.target.fsn.term, relationship.target.conceptId, sctClass);
+                    connectElements(svg, rectRole, rectRole2, 'right', 'left');
+                    y = y + rectRole2.getBBox().height + 25;
+                    maxX = ((maxX < x + 85 + rectRole.getBBox().width + 30 + rectRole2.getBBox().width + 50) ? x + 85 + rectRole.getBBox().width + 30 + rectRole2.getBBox().width + 50 : maxX);
+                }
+            });
+        }
+    });
+
+
     var svgCode = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' + parentDiv.html();
     svgCode = svgCode.substr(0, svgCode.indexOf("svg") + 4) +
         ' xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" ' +

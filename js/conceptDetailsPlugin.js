@@ -1273,7 +1273,6 @@ function conceptDetails(divElement, conceptId, options) {
 
             //            membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members";
 
-            console.log('CONTEXT: ', context);
         }).fail(function() {
             panel.relsPId = divElement.id + "-rels-panel";
             panel.attributesPId = divElement.id + "-attributes-panel";
