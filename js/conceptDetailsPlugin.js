@@ -954,12 +954,24 @@ function conceptDetails(divElement, conceptId, options) {
                 else
                     return opts.inverse(this);
             });
+
+            var axioms = false;
+
+            if(firstMatch.classAxioms.length > 0 || firstMatch.gciAxioms.length > 0) {
+                axioms = true;
+            } else {
+                axioms = false;
+            }
+
             var context = {
                 divElementId: panel.divElement.id,
                 statedParents: panel.statedParents,
                 inferredParents: panel.inferredParents,
-                options: panel.options
+                options: panel.options,
+                firstMatch: firstMatch,
+                axioms: axioms
             };
+
             $('#home-parents-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/parents.hbs"](context));
             if (!panel.options.diagrammingMarkupEnabled) {
                 $('#home-parents-' + panel.divElement.id).html(panel.stripDiagrammingMarkup($('#home-parents-' + panel.divElement.id).html()));
