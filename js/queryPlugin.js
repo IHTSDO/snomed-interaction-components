@@ -1205,11 +1205,11 @@ function queryComputerPanel(divElement, options) {
         page = skip / limit;
         var expressionURL;
         if (options.queryBranch == 'MAIN') {
-            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?module=900000000000207008&ecl=" + strippedExpression + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
+            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?module=900000000000207008&ecl=" + encodeURIComponent(strippedExpression) + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
         } else if (options.queryBranch.includes('SNOMEDCT-US')) {
-            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?&ecl=" + strippedExpression + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
+            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?&ecl=" + encodeURIComponent(strippedExpression) + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
         } else {
-            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + strippedExpression + "&page=" + page + "&size=" + limit;
+            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + encodeURIComponent(strippedExpression) + "&page=" + page + "&size=" + limit;
         }
         console.log("queryURL " + expressionURL);
         if (xhrExecute != null && !onlyTotal)
