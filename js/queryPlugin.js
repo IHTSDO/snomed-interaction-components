@@ -1206,10 +1206,8 @@ function queryComputerPanel(divElement, options) {
         var expressionURL;
         if (options.queryBranch == 'MAIN') {
             expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?module=900000000000207008&ecl=" + encodeURIComponent(strippedExpression) + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
-        } else if (options.queryBranch.includes('SNOMEDCT-US')) {
-            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?&ecl=" + encodeURIComponent(strippedExpression) + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
         } else {
-            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + encodeURIComponent(strippedExpression) + "&page=" + page + "&size=" + limit;
+            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + encodeURIComponent(strippedExpression) + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
         }
         console.log("queryURL " + expressionURL);
         if (xhrExecute != null && !onlyTotal)
