@@ -1206,20 +1206,20 @@ function conceptDetails(divElement, conceptId, options) {
                     });
                     productData.ingredients.push(loopIngredient);
                     // var demoIngredient1 = {
-                    //     ingredient: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Atenolol (substance)"},
-                    //     boss: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Atenolol (substance)"},
-                    //     numeratorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"50 (qualifier value)"},
-                    //     numeratorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"milligram (qualifier value)"},
-                    //     denominatorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"1 (qualifier value)"},
-                    //     denominatorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Tablet (unit of presentation)"}
+                    //     ingredient: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"Atenolol (substance)"},
+                    //     boss: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"Atenolol (substance)"},
+                    //     numeratorValue: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"50 (qualifier value)"},
+                    //     numeratorUnit: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"milligram (qualifier value)"},
+                    //     denominatorValue: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"1 (qualifier value)"},
+                    //     denominatorUnit: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"Tablet (unit of presentation)"}
                     // };
                     // var demoIngredient2 = {
-                    //     ingredient: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Chlorthalidone (substance)"},
-                    //     boss: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Chlorthalidone (substance)"},
-                    //     numeratorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"12.5 (qualifier value)"},
-                    //     numeratorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"milligram (qualifier value)"},
-                    //     denominatorValue: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"1 (qualifier value)"},
-                    //     denominatorUnit: {definitionStatus: "Primitive",conceptId:1,defaultTerm:"Tablet (unit of presentation)"}
+                    //     ingredient: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"Chlorthalidone (substance)"},
+                    //     boss: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"Chlorthalidone (substance)"},
+                    //     numeratorValue: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"12.5 (qualifier value)"},
+                    //     numeratorUnit: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"milligram (qualifier value)"},
+                    //     denominatorValue: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"1 (qualifier value)"},
+                    //     denominatorUnit: {definitionStatus: "PRIMITIVE",conceptId:1,defaultTerm:"Tablet (unit of presentation)"}
                     // };
                     //productData.ingredients = [demoIngredient1, demoIngredient2];
                 });
@@ -1642,7 +1642,7 @@ function conceptDetails(divElement, conceptId, options) {
                     } else {
                         auxHtml = auxHtml + "<i class='glyphicon glyphicon-chevron-right treeButton' data-ind='" + ind + "'></i></button>";
                     }
-                    if (field.definitionStatus == "Primitive") {
+                    if (field.definitionStatus == "PRIMITIVE") {
                         auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>&nbsp;&nbsp;</span>&nbsp;&nbsp";
                     } else {
                         auxHtml = auxHtml + "<span class='badge alert-warning' draggable='true' ondragstart='drag(event)' data-module='" + field.module + "' data-concept-id='" + field.conceptId + "' data-term='" + field.defaultTerm + "'>&equiv;</span>&nbsp;&nbsp";

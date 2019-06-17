@@ -47,7 +47,7 @@
                             <!--{{/if_gr}}-->
                         <!--</span>&nbsp;&rArr;&nbsp;-->
                         <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-{{#if_eq target.conceptId "138875005"}}minus{{else}}{{#if_eq target.conceptId "9999999999"}}minus{{else}}chevron-right{{/if_eq}}{{/if_eq}} treeButton' data-first="true" data-ind="{{@index}}"></i></button>
-                        {{#if_eq target.definitionStatus "Primitive"}}
+                        {{#if_eq target.definitionStatus "PRIMITIVE"}}
                             <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.fsn.term}}">&nbsp;&nbsp;</span>&nbsp;&nbsp;
                         {{else}}
                             <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.fsn.term}}">&equiv;</span>&nbsp;&nbsp;
@@ -58,7 +58,7 @@
                             </div>
                         {{/hasCountryIcon}}
                         <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;">
-                            {{#if_eq target.definitionStatus "Primitive"}}
+                            {{#if_eq target.definitionStatus "PRIMITIVE"}}
                             <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.fsn.term}}'>
                             {{else}}
                             <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.fsn.term}}'>
@@ -81,7 +81,7 @@
                         <!--{{type.defaultTerm}}-->
                         <!--</span>&nbsp;&rArr;&nbsp;-->
                         <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-{{#if_eq target.conceptId "138875005"}}minus{{else}}{{#if_eq target.conceptId "9999999999"}}minus{{else}}chevron-right{{/if_eq}}{{/if_eq}} treeButton' data-first="true" data-ind="{{@index}}"></i></button>
-                        {{#if_eq target.definitionStatus "Primitive"}}
+                        {{#if_eq target.definitionStatus "PRIMITIVE"}}
                             <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}">&nbsp;&nbsp;</span>&nbsp;&nbsp;
                         {{else}}
                             <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{target.module}}" data-concept-id="{{target.conceptId}}" data-term="{{target.defaultTerm}}">&equiv;</span>&nbsp;&nbsp;
@@ -92,7 +92,7 @@
                             </div>
                         {{/hasCountryIcon}}
                         <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;">
-                            {{#if_eq target.definitionStatus "Primitive"}}
+                            {{#if_eq target.definitionStatus "PRIMITIVE"}}
                             <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
                             {{else}}
                             <span id='{{@index}}{{../../../divElementId}}-treeicon-{{target.conceptId}}' class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
