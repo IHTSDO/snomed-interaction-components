@@ -28,7 +28,8 @@ function drawConceptDiagram (concept, div, options, panel) {
         $.each(concept.classAxioms, function (i, axiom) {
             var axiomToPush = {
                 relationships : [],
-                type : 'add'
+                type : 'add',
+                definitionStatus: axiom.definitionStatus
             };
             $.each(axiom.relationships, function (i, field) {
                 if (field.type.conceptId === '116680003') {
@@ -103,7 +104,7 @@ function drawConceptDiagram (concept, div, options, panel) {
     var y = 10;
     var maxX = 10;
     var sctClass = "";
-    if (concept.definitionStatus == "Primitive") {
+    if (concept.definitionStatus == "PRIMITIVE") {
         sctClass = "sct-primitive-concept";
     } else {
         sctClass = "sct-defined-concept";
@@ -112,8 +113,10 @@ function drawConceptDiagram (concept, div, options, panel) {
     var rect1 = drawSctBox(svg, x, y, concept.fsn, concept.conceptId, sctClass);
     x = x + 90;
     y = y + rect1.getBBox().height + 40;
-    var circle1;
-    if (concept.definitionStatus == "Primitive") {
+    if(options.selectedView === 'stated' && svgIsaModel && svgIsaModel.length > 0){
+        var circle1;
+    if (concept.definitionStatus == "PRIMITIVE") {
+        console.log('drawing 1');
         circle1 = drawSubsumedByNode(svg, x, y);
     } else {
         circle1 = drawEquivalentNode(svg, x, y);
@@ -124,11 +127,19 @@ function drawConceptDiagram (concept, div, options, panel) {
     connectElements(svg, circle1, circle2, 'right', 'left', 'LineMarker');
     x = x + 40;
     y = y - 18;
+    }
+    
+    
+    if (!svgIsaModel || svgIsaModel.length === 0) {
+        x = x + 20;
+        y = y + 3;
+    }
+    
     maxX = ((maxX < x) ? x : maxX);
     // load stated parents
     sctClass = "sct-defined-concept";
     $.each(svgIsaModel, function(i, relationship) {
-        if (relationship.target.definitionStatus == "Primitive") {
+        if (relationship.target.definitionStatus == "PRIMITIVE") {
             sctClass = "sct-primitive-concept";
         } else {
             sctClass = "sct-defined-concept";
@@ -144,7 +155,7 @@ function drawConceptDiagram (concept, div, options, panel) {
     // load ungrouped attributes
     var maxRoleNumber = 0;
     $.each(svgAttrModel, function(i, relationship) {
-        if (relationship.target.definitionStatus == "Primitive") {
+        if (relationship.target.definitionStatus == "PRIMITIVE") {
             sctClass = "sct-primitive-concept";
         } else {
             sctClass = "sct-defined-concept";
@@ -170,7 +181,7 @@ function drawConceptDiagram (concept, div, options, panel) {
         connectElements(svg, groupNode, conjunctionNode, 'right', 'left');
         $.each(svgAttrModel, function(m, relationship) {
             if (relationship.groupId == i) {
-                if (relationship.target.definitionStatus == "Primitive") {
+                if (relationship.target.definitionStatus == "PRIMITIVE") {
                     sctClass = "sct-primitive-concept";
                 } else {
                     sctClass = "sct-defined-concept";
@@ -187,12 +198,18 @@ function drawConceptDiagram (concept, div, options, panel) {
 
 
     $.each(axioms, function (i, axiom) {
+        console.log(axiom);
         x = 100;
+        y = y -3;
         var circle1;
         if(axiom.type === "gci"){
             circle1 = drawSubsumesNode(svg, x, y);
         }
+        else if(axiom.type !== "gci" && axiom.definitionStatus === "FULLY_DEFINED"){
+            circle1 = drawEquivalentNode(svg, x, y);
+        }
         else{
+            console.log('drawing 2');
             circle1 = drawSubsumedByNode(svg, x, y);
         }
         connectElements(svg, rect1, circle1, 'bottom-50', 'left');

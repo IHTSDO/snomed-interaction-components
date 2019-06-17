@@ -61,7 +61,7 @@ function setDefaultTerm(concept) {
 			})
 		}
 		if (concept.definitionStatus == "PRIMITIVE") {
-			concept.definitionStatus = "Primitive";
+			concept.definitionStatus = "PRIMITIVE";
 		}
 	}
 }

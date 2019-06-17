@@ -5,7 +5,7 @@
                 <button class='btn btn-link btn-xs treeButton' style='padding:2px'>
                     <i class='glyphicon glyphicon-chevron-{{#if_def conceptId}}down{{else}}up{{/if_def}} treeButton' id='{{../divElementId}}-treeicon-{{conceptId}}'></i>
                 </button>
-                {{#if_eq definitionStatus "Primitive"}}
+                {{#if_eq definitionStatus "PRIMITIVE"}}
                     <span class="badge alert-warning" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" draggable="true" ondragstart="drag(event, '{{divElementId}}')">&nbsp;&nbsp;</span>&nbsp;&nbsp;
                 {{else}}
                     <span class="badge alert-warning" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" draggable="true" ondragstart="drag(event, '{{divElementId}}')">&equiv;</span>&nbsp;&nbsp;
@@ -25,7 +25,7 @@
         <ul style='list-style-type: none; padding-left: 15px;'>
             <li data-module="{{focusConcept.module}}" data-concept-id='{{focusConcept.conceptId}}' data-term='{{focusConcept.defaultTerm}}' data-statedDescendants='{{focusConcept.statedDescendants}}' class='treeLabel'>
                 <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-chevron-right treeButton'  id='{{divElementId}}-treeicon-{{focusConcept.conceptId}}'></i></button>
-                {{#if_eq focusConcept.definitionStatus "Primitive"}}
+                {{#if_eq focusConcept.definitionStatus "PRIMITIVE"}}
                     <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{focusConcept.module}}" data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}">&nbsp;&nbsp;</span>&nbsp;&nbsp;
                 {{else}}
                     <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{focusConcept.module}}" data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}">&equiv;</span>&nbsp;&nbsp;
