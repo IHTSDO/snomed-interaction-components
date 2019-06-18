@@ -62,6 +62,9 @@ function conceptDetails(divElement, conceptId, options) {
     panel.subscriptionsColor = [];
     panel.subscriptions = [];
     panel.subscribers = [];
+    if(options.release === undefined){
+        options.release = '';
+    }
 
     componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
@@ -328,7 +331,10 @@ function conceptDetails(divElement, conceptId, options) {
             xhr.abort();
             //console.log("aborting call...");
         }
-        xhr = $.getJSON(options.serverUrl + "/browser/" + options.release + "/concepts/" + panel.conceptId, function(result) {
+        if(options.release === undefined){
+            options.release = '';
+        }
+        xhr = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/concepts/" + panel.conceptId, function(result) {
 
         }).done(function(result) {
             setDefaultTerm(result);

@@ -39,6 +39,9 @@ function searchPanel(divElement, options) {
         var context = {
             divElementId: panel.divElement.id
         };
+        if(options.release === undefined){
+            options.release = '';
+        }
         $(divElement).html(JST["views/searchPlugin/aux.hbs"](context));
 
         $('#' + panel.divElement.id + '-searchBox').keyup(function() {
@@ -467,7 +470,7 @@ function searchPanel(divElement, options) {
                 if (isNumber(t)) {
                     if (t.substr(-2, 1) == "0") {
                         // Search conceptId
-                        xhr = $.getJSON(options.serverUrl + "/browser/" + options.release + "/concepts/" + t, function(result) {
+                        xhr = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/concepts/" + t, function(result) {
 
                         }).done(function(result) {
                             Handlebars.registerHelper('if_eq', function(a, b, opts) {

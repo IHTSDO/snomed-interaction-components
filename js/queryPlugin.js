@@ -15,6 +15,9 @@ function queryComputerPanel(divElement, options) {
     this.type = "query-computer";
     panel.subscribers = [];
     panel.totalResults = [];
+    if(options.release === undefined){
+        options.release = '';
+    }
 
     if (!componentsRegistry) {
         componentsRegistry = [];

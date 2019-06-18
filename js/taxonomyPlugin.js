@@ -35,8 +35,12 @@ function taxonomyPanel(divElement, conceptId, options) {
     panel.subscriptions = [];
     panel.subscriptionsColor = [];
     this.history = [];
+    if(options.release === undefined){
+        options.release = '';
+    }
 
     if (!options.rootConceptDescendants) {
+        console.log(options);
         $.ajax({
             type: "GET",
             url: options.serverUrl + options.edition + "/" + options.release + "/concepts",
