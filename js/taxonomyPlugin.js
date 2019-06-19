@@ -35,9 +35,6 @@ function taxonomyPanel(divElement, conceptId, options) {
     panel.subscriptions = [];
     panel.subscriptionsColor = [];
     this.history = [];
-    if(options.release === undefined){
-        options.release = '';
-    }
 
     if (!options.rootConceptDescendants) {
         console.log(options);

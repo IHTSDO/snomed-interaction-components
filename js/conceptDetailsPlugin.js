@@ -62,9 +62,6 @@ function conceptDetails(divElement, conceptId, options) {
     panel.subscriptionsColor = [];
     panel.subscriptions = [];
     panel.subscribers = [];
-    if(options.release === undefined){
-        options.release = '';
-    }
 
     componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
@@ -330,9 +327,6 @@ function conceptDetails(divElement, conceptId, options) {
         if (xhr != null) {
             xhr.abort();
             //console.log("aborting call...");
-        }
-        if(options.release === undefined){
-            options.release = '';
         }
         xhr = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/concepts/" + panel.conceptId, function(result) {
 
