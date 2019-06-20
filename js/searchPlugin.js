@@ -638,6 +638,7 @@ function searchPanel(divElement, options) {
                             match.fsn = match.concept.fsn;
                             match.conceptActive = match.concept.active;
                             match.conceptId = match.concept.conceptId;
+                            match.definitionStatus = match.concept.definitionStatus;
                         })
 
                         result.filters = {};
