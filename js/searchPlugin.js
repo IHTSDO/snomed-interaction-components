@@ -605,7 +605,7 @@ function searchPanel(divElement, options) {
                         "&limit=50" +
                         "&searchMode=" + panel.options.searchMode +
                         "&lang=" + panel.options.searchLang +
-                        "&active=" + conceptActiveParam +
+                        "&active=" + "true" +
                         "&skipTo=" + skipTo +
                         "&returnLimit=" + returnLimit;
 
