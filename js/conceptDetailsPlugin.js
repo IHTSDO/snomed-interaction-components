@@ -347,6 +347,31 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
+            panel.statedParents = [];
+            panel.inferredParents = [];
+            panel.statedRoles = [];
+            panel.inferredRoles = [];
+            
+            firstMatch.relationships.forEach(function(loopRel) {
+                if (loopRel.characteristicType == "INFERRED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId != "116680003") {
+                    panel.inferredRoles.push(loopRel);
+                }
+            });
+            firstMatch.classAxioms.forEach(function(axiom) {
+                axiom.relationships.forEach(function(rel) {
+                    if (rel.active && rel.type.conceptId != "116680003") {
+                        panel.statedRoles.push(rel);
+                    }
+                });
+            });
+            firstMatch.gciAxioms.forEach(function(axiom) {
+                axiom.relationships.forEach(function(rel) {
+                    if (rel.active && rel.type.conceptId != "116680003") {
+                        panel.statedRoles.push(rel);
+                    }
+                });
+            });
+            
             if (firstMatch.statedDescendants) {
                 firstMatch.statedDescendantsString = firstMatch.statedDescendants.toLocaleString();
             }
@@ -801,10 +826,6 @@ function conceptDetails(divElement, conceptId, options) {
                 });
             }
             panel.relsPId = divElement.id + "-rels-panel";
-            panel.statedParents = [];
-            panel.inferredParents = [];
-            panel.statedRoles = [];
-            panel.inferredRoles = [];
 
 
             if (firstMatch.relationships) {
