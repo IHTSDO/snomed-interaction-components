@@ -1,5 +1,5 @@
 {{#each result.matches}}
-    <tr class='resultRow selectable-row{{#if_eq active false}}danger{{else}}{{#if_eq conceptActive false}}danger{{/if_eq}}{{/if_eq}}'>
+    <tr class='resultRow selectable-row{{#if_eq active false}}danger{{else}}{{#if_eq concept.active false}}danger{{/if_eq}}{{/if_eq}}'>
         <td class='col-md-7'>
             <div class='result-item' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>
                 {{#if_eq definitionStatus "PRIMITIVE"}}

@@ -488,11 +488,12 @@ function searchPanel(divElement, options) {
                             $.each(result.descriptions, function(i, field) {
                                 var aux = field;
                                 aux.definitionStatus = result.definitionStatus;
-                                aux.conceptActive = result.active;
+                                aux.conceptActive = result.concept.active;
                                 if (!aux.active || !aux.conceptActive) {
                                     aux.danger = true;
                                 }
-                                if (field.active) {
+                                console.log(panel.options.statusSearchFilter);
+                                if (field.active && field.concept.active) {
                                     if (panel.options.statusSearchFilter == "activeOnly") {
                                         resDescriptions.push(aux);
                                     }
@@ -631,9 +632,34 @@ function searchPanel(divElement, options) {
                     xhr = $.getJSON(searchUrl, function(result) {
 
                     }).done(function(result) {
+                        var resDescriptions = [];
+                        $.each(result.items, function(i, field) {
+                            var aux = field;
+                            aux.definitionStatus = result.definitionStatus;
+                            aux.conceptActive = field.concept.active;
+                            if (!aux.active || !aux.conceptActive) {
+                                aux.danger = true;
+                            }
+                            if (field.active && field.concept.active) {
+                                if (panel.options.statusSearchFilter == "activeOnly") {
+                                    resDescriptions.push(aux);
+                                }
+                                if (panel.options.statusSearchFilter == "activeAndInactive") {
+                                    resDescriptions.push(aux);
+                                }
+                            } else {
+                                aux.danger = true;
+                                if (panel.options.statusSearchFilter == "inactiveOnly") {
+                                    resDescriptions.push(aux);
+                                }
+                                if (panel.options.statusSearchFilter == "activeAndInactive") {
+                                    resDescriptions.push(aux);
+                                }
+                            }
+                        });
 
                         // Convert response format
-                        result.matches = result.items;
+                        result.matches = resDescriptions;
                         result.matches.forEach(function(match) {
                             match.fsn = match.concept.fsn;
                             match.conceptActive = match.concept.active;
