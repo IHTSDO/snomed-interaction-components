@@ -356,11 +356,17 @@ function conceptDetails(divElement, conceptId, options) {
                 if (loopRel.characteristicType == "INFERRED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId != "116680003") {
                     panel.inferredRoles.push(loopRel);
                 }
+                else if(loopRel.characteristicType == "INFERRED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId === "116680003"){
+                    panel.inferredParents.push(loopRel);
+                }
             });
             firstMatch.classAxioms.forEach(function(axiom) {
                 axiom.relationships.forEach(function(rel) {
                     if (rel.active && rel.type.conceptId != "116680003") {
                         panel.statedRoles.push(rel);
+                    }
+                    else if(rel.active && rel.type.conceptId === "116680003"){
+                        panel.statedParents.push(rel);
                     }
                 });
             });
