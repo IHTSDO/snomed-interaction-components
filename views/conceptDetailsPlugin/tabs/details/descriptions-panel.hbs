@@ -13,22 +13,22 @@
     </thead>
     <tbody>
         {{#each allDescriptions}}
-            <tr class='{{#if_eq type.conceptId "900000000000003001"}} fsn-row{{else}} synonym-row{{/if_eq}}{{#if active}}{{else}} danger{{/if}}{{#if_eq effectiveTime ../options.highlightByEffectiveTime}} highlightEffectiveTime{{/if_eq}}'>
+            <tr class='{{#if_eq typeId "900000000000003001"}} fsn-row{{else}} synonym-row{{/if_eq}}{{#if active}}{{else}} danger{{/if}}{{#if_eq effectiveTime ../options.highlightByEffectiveTime}} highlightEffectiveTime{{/if_eq}}'>
                     <td>
-                        {{#if_eq type.conceptId "900000000000003001"}}
+                        {{#if_eq typeId "900000000000003001"}}
                             <span rel="tooltip-right" title="{{i18n "i18n_fsn" "FSN"}}">F</span>
                         {{else}}
-                            {{#if_eq type.conceptId "900000000000013009"}}
+                            {{#if_eq typeId "900000000000013009"}}
                                 <span rel="tooltip-right" title="{{i18n "i18n_synonym" "Synonym"}}">S</span>
                             {{else}}
-                                {{#if_eq type.conceptId "900000000000550004"}}
+                                {{#if_eq typeId "900000000000550004"}}
                                     <span rel="tooltip-right" title="{{i18n "i18n_definition" "Definition"}}">D</span>
                                 {{/if_eq}}
                             {{/if_eq}}
                         {{/if_eq}}
 
                         {{#if preferred}}
-                            {{#if_eq type.conceptId "900000000000003001"}}
+                            {{#if_eq typeId "900000000000003001"}}
                                 &nbsp;<span class="glyphicon glyphicon-star-empty" rel="tooltip-right" title="{{i18n "i18n_preferred" "Preferred"}}"></span>
                             {{else}}
                                 &nbsp;<span class="glyphicon glyphicon-star" rel="tooltip-right" title="{{i18n "i18n_preferred" "Preferred"}}"></span>
