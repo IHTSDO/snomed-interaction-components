@@ -611,6 +611,12 @@ function searchPanel(divElement, options) {
                         "&active=" + "true" +
                         "&skipTo=" + skipTo +
                         "&returnLimit=" + returnLimit;
+                    if (panel.options.statusSearchFilter == "activeOnly") {
+                        searchUrl = searchUrl + "&conceptActive=true"
+                    }
+                    if (panel.options.statusSearchFilter == "inactiveOnly") {
+                        searchUrl = searchUrl + "&conceptActive=false"
+                    }
 
                     if (panel.options.semTagFilter != "none") {
                         searchUrl = searchUrl + "&semanticTag=" + panel.options.semTagFilter;

@@ -395,10 +395,12 @@ function conceptDetails(divElement, conceptId, options) {
                 if(axiom.active){
                     axiom.relationships.forEach(function(rel) {
                         if(rel.active && rel.type.conceptId === "116680003"){
+                            rel.effectiveTime = axiom.effectiveTime;
                             panel.statedParentsFromAxioms.push(rel);
                         }
                         else if(rel.active){
                             rel.axiomId = axiom.axiomId;
+                            rel.effectiveTime = axiom.effectiveTime;
                             panel.attributesFromAxioms.push(rel);
                         }
                     });
@@ -410,7 +412,12 @@ function conceptDetails(divElement, conceptId, options) {
                     axiom.relationships.forEach(function(rel) {
                         if(rel.active && rel.type.conceptId !== "116680003"){
                             rel.axiomId = axiom.axiomId;
+                            rel.effectiveTime = axiom.effectiveTime;
                             panel.attributesFromAxioms.push(rel);
+                        }
+                        else if(rel.active){
+                            rel.axiomId = axiom.axiomId;
+                            rel.effectiveTime = axiom.effectiveTime;
                         }
                     });
                 }
