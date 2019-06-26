@@ -368,6 +368,29 @@ function conceptDetails(divElement, conceptId, options) {
                     panel.statedRoles.push(loopRel);
                 }
             });
+            
+            function sortAxiomRelationships (relationships){
+                relationships.sort(function(a, b) {
+                    if (a.groupId < b.groupId) {
+                        return -1;
+                    } else if (a.groupId > b.groupId) {
+                        return 1;
+                    } else {
+                        if (a.type.conceptId == 116680003) {
+                            return -1;
+                        }
+                        if (b.type.conceptId == 116680003) {
+                            return 1;
+                        }
+                        if (a.target.defaultTerm < b.target.defaultTerm)
+                            return -1;
+                        if (a.target.defaultTerm > b.target.defaultTerm)
+                            return 1;
+                        return 0;
+                    }
+                });
+            };
+            
             firstMatch.classAxioms.forEach(function(axiom) {
                 if(axiom.active){
                     axiom.relationships.forEach(function(rel) {
@@ -376,22 +399,22 @@ function conceptDetails(divElement, conceptId, options) {
                         }
                         else{
                             rel.axiomId = axiom.axiomId;
-                            rel.type = 'Axiom';
                             panel.attributesFromAxioms.push(rel);
                         }
                     });
                 }
+                sortAxiomRelationships(axiom.relationships);
             });
             firstMatch.gciAxioms.forEach(function(axiom) {
                 if(axiom.active){
                     axiom.relationships.forEach(function(rel) {
                         if(rel.active && rel.type.conceptId !== "116680003"){
                             rel.axiomId = axiom.axiomId;
-                            rel.type = 'GCI';
                             panel.attributesFromAxioms.push(rel);
                         }
                     });
                 }
+                sortAxiomRelationships(axiom.relationships);
             });
             
             if (firstMatch.statedDescendants) {
@@ -891,6 +914,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
             }
+            
             if (firstMatch.statedRelationships) {
                 firstMatch.statedRelationships.sort(function(a, b) {
                     if (a.groupId < b.groupId) {
