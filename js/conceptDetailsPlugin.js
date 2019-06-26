@@ -825,11 +825,21 @@ function conceptDetails(divElement, conceptId, options) {
                 //$('#home-' + panel.divElement.id + '-diagram-viewLabel').html("<span class='i18n' data-i18n-id='i18n_stated_view'>Stated view</span>");
                 $('#home-' + panel.divElement.id + '-stated-button').unbind();
                 $('#home-' + panel.divElement.id + '-inferred-button').unbind();
+                $('#details-' + panel.divElement.id + '-stated-button').unbind();
+                $('#details-' + panel.divElement.id + '-inferred-button').unbind();
                 $('#home-' + panel.divElement.id + '-stated-button').addClass("btn-primary");
                 $('#home-' + panel.divElement.id + '-stated-button').removeClass("btn-default");
                 $('#home-' + panel.divElement.id + '-inferred-button').addClass("btn-default");
                 $('#home-' + panel.divElement.id + '-inferred-button').removeClass("btn-primary");
+                $('#details-' + panel.divElement.id + '-stated-button').addClass("btn-primary");
+                $('#details-' + panel.divElement.id + '-stated-button').removeClass("btn-default");
+                $('#details-' + panel.divElement.id + '-inferred-button').addClass("btn-default");
+                $('#details-' + panel.divElement.id + '-inferred-button').removeClass("btn-primary");
                 $('#home-' + panel.divElement.id + '-inferred-button').click(function(event) {
+                    panel.options.selectedView = "inferred";
+                    panel.updateCanvas();
+                });
+                $('#details-' + panel.divElement.id + '-inferred-button').click(function(event) {
                     panel.options.selectedView = "inferred";
                     panel.updateCanvas();
                 });
@@ -842,7 +852,17 @@ function conceptDetails(divElement, conceptId, options) {
                 $('#home-' + panel.divElement.id + '-inferred-button').removeClass("btn-default");
                 $('#home-' + panel.divElement.id + '-stated-button').addClass("btn-default");
                 $('#home-' + panel.divElement.id + '-stated-button').removeClass("btn-primary");
+                $('#details-' + panel.divElement.id + '-stated-button').unbind();
+                $('#details-' + panel.divElement.id + '-inferred-button').unbind();
+                $('#details-' + panel.divElement.id + '-inferred-button').addClass("btn-primary");
+                $('#details-' + panel.divElement.id + '-inferred-button').removeClass("btn-default");
+                $('#details-' + panel.divElement.id + '-stated-button').addClass("btn-default");
+                $('#details-' + panel.divElement.id + '-stated-button').removeClass("btn-primary");
                 $('#home-' + panel.divElement.id + '-stated-button').click(function(event) {
+                    panel.options.selectedView = "stated";
+                    panel.updateCanvas();
+                });
+                $('#details-' + panel.divElement.id + '-stated-button').click(function(event) {
                     panel.options.selectedView = "stated";
                     panel.updateCanvas();
                 });
