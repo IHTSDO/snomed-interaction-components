@@ -397,7 +397,7 @@ function conceptDetails(divElement, conceptId, options) {
                         if(rel.active && rel.type.conceptId === "116680003"){
                             panel.statedParentsFromAxioms.push(rel);
                         }
-                        else{
+                        else if(rel.active){
                             rel.axiomId = axiom.axiomId;
                             panel.attributesFromAxioms.push(rel);
                         }
