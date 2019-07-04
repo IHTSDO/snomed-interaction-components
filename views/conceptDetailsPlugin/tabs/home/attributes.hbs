@@ -12,7 +12,12 @@
             </ul>
         </div>
     </span>
-    <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"  draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{firstMatch.fsn}}" data-def-status="{{firstMatch.definitionStatus}}">
+        <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"  draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{#if_undefined firstMatch.fsn.term}}
+            {{firstMatch.fsn}}
+        {{else}}
+            {{firstMatch.fsn.term}}
+        {{/if_undefined}}" 
+       data-def-status="{{firstMatch.definitionStatus}}">
         <span class="badge alert-warning">
         {{#if_eq firstMatch.definitionStatus "PRIMITIVE"}}
             &nbsp;&nbsp;
@@ -22,7 +27,11 @@
         </span>
     </a>
     &nbsp;&nbsp;
-    {{firstMatch.fsn}}
+    {{#if_undefined firstMatch.fsn.term}}
+        {{firstMatch.fsn}}
+    {{else}}
+        {{firstMatch.fsn.term}}
+    {{/if_undefined}}
     <span class="pull-right">
        <div class="phoca-flagbox" style="width:40px;height:40px">
            <span class="phoca-flag {{countryIcon firstMatch.module}}"></span>
@@ -30,6 +39,11 @@
     </span>
 </h4>
 
-<h5>SCTID: {{firstMatch.conceptId}}<br><br><div id="copy-content-custom">{{firstMatch.conceptId}} | {{firstMatch.fsn}} |</div></h5>
+<h5>SCTID: {{firstMatch.conceptId}}<br><br><div id="copy-content-custom">{{firstMatch.conceptId}} | 
+    {{#if_undefined firstMatch.fsn.term}}
+        {{firstMatch.fsn}}
+    {{else}}
+        {{firstMatch.fsn.term}}
+    {{/if_undefined}} |</div></h5>
 
 <div id="home-descriptions-{{divElementId}}"></div>
