@@ -1,14 +1,14 @@
 <table class='table table-bordered' id = '{{divElementId}}-descriptions-panel-table'>
     <thead>
         <tr>
-           <th colspan="2" class="text-center">{{removeSemtag longLangName}}</th>
+           <th colspan="2" class="text-center">{{#if languageName}}{{removeSemtag longLangName}}{{else}}{{lang}}{{/if}}</th>
         </tr>
         <tr>
             <th><span class='i18n' data-i18n-id='i18n_term'>Term</span></th>
             {{#if options.showIds}}
                 <th>SCTID</th>
             {{/if}}
-            <th><span class='i18n' data-i18n-id='i18n_acceptability'>Acceptability</span>&nbsp;&nbsp;{{languageName}}</th>
+            <th><span class='i18n' data-i18n-id='i18n_acceptability'>Acceptability</span>&nbsp;&nbsp;{{#if languageName}}{{languageName}}{{else}}{{lang}}{{/if}}</th>
         </tr>
     </thead>
     <tbody>
