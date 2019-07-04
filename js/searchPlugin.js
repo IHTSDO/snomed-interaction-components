@@ -597,7 +597,7 @@ https://dev-bb18-ms-authoring.ihtsdotools.org/snowowl/snomed-ct/v2/browser/MAIN/
                     var searchUrl = options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/descriptions?" +
                         "&limit=50";
                     if (panel.options.statusSearchFilter == "activeOnly" && options.serverUrl.includes('snowstorm')) {
-                        searchUrl = searchUrl + "term=" + encodeURIComponent(t);
+                        searchUrl = searchUrl + "&term=" + encodeURIComponent(t);
                         searchUrl = searchUrl + "&conceptActive=true";
                         searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
                         searchUrl = searchUrl + "&skipTo=" + skipTo;
@@ -608,7 +608,7 @@ https://dev-bb18-ms-authoring.ihtsdotools.org/snowowl/snomed-ct/v2/browser/MAIN/
                         searchUrl = searchUrl + "&query=" + encodeURIComponent(t);
                     }
                     if (panel.options.statusSearchFilter == "inactiveOnly" && options.serverUrl.includes('snowstorm')) {
-                        searchUrl = searchUrl + "term=" + encodeURIComponent(t);
+                        searchUrl = searchUrl + "&term=" + encodeURIComponent(t);
                         searchUrl = searchUrl + "&conceptActive=true";
                         searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
                         searchUrl = searchUrl + "&skipTo=" + skipTo;
@@ -619,7 +619,7 @@ https://dev-bb18-ms-authoring.ihtsdotools.org/snowowl/snomed-ct/v2/browser/MAIN/
                         searchUrl = searchUrl + "&query=" + encodeURIComponent(t);
                     }
                     if (panel.options.statusSearchFilter == "activeAndInactive" && options.serverUrl.includes('snowstorm')) {
-                        searchUrl = searchUrl + "term=" + encodeURIComponent(t);
+                        searchUrl = searchUrl + "&term=" + encodeURIComponent(t);
                         searchUrl = searchUrl + "&conceptActive=true";
                         searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
                         searchUrl = searchUrl + "&skipTo=" + skipTo;
