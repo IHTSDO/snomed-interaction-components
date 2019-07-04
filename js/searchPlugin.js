@@ -593,30 +593,41 @@ function searchPanel(divElement, options) {
                         t = t.replace(")", "");
                     }
                     var startTime = Date.now();
-
-                    var conceptActiveParam;
-                    if (panel.options.statusSearchFilter == "activeOnly") {
-                        conceptActiveParam = "true";
-                    } else if (panel.options.statusSearchFilter == "inactiveOnly") {
-                        conceptActiveParam = "false";
-                    } else {
-                        conceptActiveParam = "";
-                    }
-
+https://dev-bb18-ms-authoring.ihtsdotools.org/snowowl/snomed-ct/v2/browser/MAIN/descriptions?query=ham&preferredDescriptionType=FSN&limit=50
                     var searchUrl = options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/descriptions?" +
-                        "term=" + encodeURIComponent(t) +
-                        "&limit=50" +
-                        "&lang=" + panel.options.searchLang +
-                        "&active=" + "true" +
-                        "&skipTo=" + skipTo +
-                        "&returnLimit=" + returnLimit;
-                    if (panel.options.statusSearchFilter == "activeOnly") {
-                        searchUrl = searchUrl + "&conceptActive=true"
+                        "&limit=50";
+                    if (panel.options.statusSearchFilter == "activeOnly" && options.serverUrl.includes('snowstorm')) {
+                        searchUrl = searchUrl + "term=" + encodeURIComponent(t);
+                        searchUrl = searchUrl + "&conceptActive=true";
+                        searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
+                        searchUrl = searchUrl + "&skipTo=" + skipTo;
+                        searchUrl = searchUrl + "&returnLimit=" + returnLimit;
+                        searchUrl = searchUrl + "&conceptActive=" + 'true';
                     }
-                    if (panel.options.statusSearchFilter == "inactiveOnly") {
-                        searchUrl = searchUrl + "&conceptActive=false"
+                    else if(panel.options.statusSearchFilter == "activeOnly" && options.serverUrl.includes('snowowl')) {
+                        searchUrl = searchUrl + "&query=" + encodeURIComponent(t);
                     }
-
+                    if (panel.options.statusSearchFilter == "inactiveOnly" && options.serverUrl.includes('snowstorm')) {
+                        searchUrl = searchUrl + "term=" + encodeURIComponent(t);
+                        searchUrl = searchUrl + "&conceptActive=true";
+                        searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
+                        searchUrl = searchUrl + "&skipTo=" + skipTo;
+                        searchUrl = searchUrl + "&returnLimit=" + returnLimit;
+                        searchUrl = searchUrl + "&conceptActive=" + 'false';
+                    }
+                    else if(panel.options.statusSearchFilter == "inactiveOnly" && options.serverUrl.includes('snowowl')) {
+                        searchUrl = searchUrl + "&query=" + encodeURIComponent(t);
+                    }
+                    if (panel.options.statusSearchFilter == "activeAndInactive" && options.serverUrl.includes('snowstorm')) {
+                        searchUrl = searchUrl + "term=" + encodeURIComponent(t);
+                        searchUrl = searchUrl + "&conceptActive=true";
+                        searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
+                        searchUrl = searchUrl + "&skipTo=" + skipTo;
+                        searchUrl = searchUrl + "&returnLimit=" + returnLimit;
+                    }
+                    else if(panel.options.statusSearchFilter == "activeAndInactive" && options.serverUrl.includes('snowowl')) {
+                        searchUrl = searchUrl + "&query=" + encodeURIComponent(t);
+                    }
                     if (panel.options.semTagFilter != "none") {
                         searchUrl = searchUrl + "&semanticTag=" + panel.options.semTagFilter;
                     }

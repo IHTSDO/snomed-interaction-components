@@ -28,7 +28,12 @@
                         <a href='javascript:void(0);' style='color: inherit;text-decoration: inherit;' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>{{term}}</a>
                     </div>
                 </td>
-                <td class='text-muted small-text col-md-6 result-item' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>{{fsn}}
+                <td class='text-muted small-text col-md-6 result-item' data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{term}}'>
+                    {{#if concept.fsn.term}}
+                        {{concept.fsn.term}}
+                    {{else}}
+                        {{fsn}}
+                    {{/if}}
                 </td>
             </tr>
         {{/each}}
