@@ -353,7 +353,7 @@ function conceptDetails(divElement, conceptId, options) {
             panel.inferredRoles = [];
             panel.statedParentsFromAxioms = [];
             panel.attributesFromAxioms = [];
-            
+
             firstMatch.relationships.forEach(function(loopRel) {
                 if (loopRel.characteristicType == "INFERRED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId != "116680003") {
                     panel.inferredRoles.push(loopRel);
@@ -368,7 +368,7 @@ function conceptDetails(divElement, conceptId, options) {
                     panel.statedRoles.push(loopRel);
                 }
             });
-            
+
             function sortAxiomRelationships (relationships){
                 relationships.sort(function(a, b) {
                     if (a.groupId < b.groupId) {
@@ -390,7 +390,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
             };
-            
+
             firstMatch.classAxioms.forEach(function(axiom) {
                 if(axiom.active){
                     axiom.relationships.forEach(function(rel) {
@@ -423,7 +423,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
                 sortAxiomRelationships(axiom.relationships);
             });
-            
+
             if (firstMatch.statedDescendants) {
                 firstMatch.statedDescendantsString = firstMatch.statedDescendants.toLocaleString();
             }
@@ -921,7 +921,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
                 });
             }
-            
+
             if (firstMatch.statedRelationships) {
                 firstMatch.statedRelationships.sort(function(a, b) {
                     if (a.groupId < b.groupId) {
@@ -994,7 +994,7 @@ function conceptDetails(divElement, conceptId, options) {
                     return 1;
                 return 0;
             });
-            
+
             panel.statedParentsFromAxioms.sort(function(a, b) {
                 if (a.target.defaultTerm < b.target.defaultTerm)
                     return -1;
@@ -1002,7 +1002,7 @@ function conceptDetails(divElement, conceptId, options) {
                     return 1;
                 return 0;
             });
-            
+
             panel.attributesFromAxioms.sort(function(a, b) {
                 if (a.target.axiomId < b.target.axiomId)
                     return -1;
@@ -2044,9 +2044,9 @@ function conceptDetails(divElement, conceptId, options) {
             panelToSubscribe.subscribers.push(panel.divElement.id);
             panel.subscriptionsColor.push(panelToSubscribe.markerColor);
         }
-        $("#" + panelId + "-ownMarker").show();
+        // $("#" + panelId + "-ownMarker").show();
         $("#" + panel.divElement.id + "-subscribersMarker").show();
-        $("#" + panelId + "-ownMarker").show();
+        // $("#" + panelId + "-ownMarker").show();
     }
 
     this.unsubscribe = function(panelToUnsubscribe) {

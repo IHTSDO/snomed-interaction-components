@@ -707,9 +707,9 @@ function taxonomyPanel(divElement, conceptId, options) {
             if (typeof term == "undefined" || typeof statedDescendants == "undefined") {
                 $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(res) {
                     if( typeof(res.fsn) == 'object'){
-                       term = res.fsn.term; 
+                       term = res.fsn.term;
                     }
-                    
+
                     if (typeof res.statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
                     statedDescendants = res.statedDescendants;
                     panel.setupParents(result, { conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus, module: module, statedDescendants: statedDescendants });
@@ -741,7 +741,7 @@ function taxonomyPanel(divElement, conceptId, options) {
             panelToSubscribe.subscribers.push(panel.divElement.id);
             panel.subscriptionsColor.push(panelToSubscribe.markerColor);
         }
-        $("#" + panelId + "-ownMarker").show();
+        // $("#" + panelId + "-ownMarker").show();
         $("#" + panel.divElement.id + "-subscribersMarker").show();
         $("#" + panelId + "-subscribersMarker").show();
     }

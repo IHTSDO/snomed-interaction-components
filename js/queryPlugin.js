@@ -66,9 +66,9 @@ function queryComputerPanel(divElement, options) {
                 }
             });
         }
-        $("#" + panelId + "-ownMarker").show();
+        // $("#" + panelId + "-ownMarker").show();
         $("#" + panel.divElement.id + "-subscribersMarker").show();
-        $("#" + panelId + "-ownMarker").show();
+        // $("#" + panelId + "-ownMarker").show();
     }
 
     this.setUpPanel = function() {
@@ -729,7 +729,7 @@ function queryComputerPanel(divElement, options) {
             panel.execute("inferred", expression, true);
             /* } else {
                       alertEvent("Invalid Expression", "error")
-                  } 
+                  }
               }).fail(function(err) {
                   //console.log(err);
               }).always(function() { */
