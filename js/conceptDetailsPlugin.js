@@ -706,6 +706,9 @@ function conceptDetails(divElement, conceptId, options) {
             }
             // START FOR
             var allLangsHtml = "";
+            if(panel.options.langRefset.includes('/')){
+               panel.options.langRefset = panel.options.langRefset = panel.options.langRefset.replace ('/', "");
+            }
             $.each(panel.options.langRefset, function(i, loopSelectedLangRefset) {
                 var allDescriptions = firstMatch.descriptions.slice(0);
                 var homeDescriptionsHtml = "";
