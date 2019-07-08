@@ -1435,8 +1435,12 @@ function conceptDetails(divElement, conceptId, options) {
         if (xhrChildren != null) {
             xhrChildren.abort();
             //console.log("aborting children call...");
-        }
-        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
+        };
+        var branch = options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
+        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
             result.forEach(function(c) { setDefaultTerm(c) });
@@ -1560,8 +1564,12 @@ function conceptDetails(divElement, conceptId, options) {
         if (xhrReferences != null) {
             xhrReferences.abort();
             //console.log("aborting references call...");
-        }
-        xhrReferences = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
+        };
+        var branch = options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
+        xhrReferences = $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
 
         }).done(function(result) {
             Handlebars.registerHelper('if_gr', function(a, b, opts) {
@@ -1653,8 +1661,12 @@ function conceptDetails(divElement, conceptId, options) {
         if (xhrChildren != null) {
             xhrChildren.abort();
             //console.log("aborting children call...");
-        }
-        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
+        };
+        var branch = options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
+        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
             result.forEach(function(c) { setDefaultTerm(c) });
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
@@ -1731,8 +1743,12 @@ function conceptDetails(divElement, conceptId, options) {
         if (xhrParents != null) {
             xhrParents.abort();
             //console.log("aborting children call...");
-        }
-        xhrParents = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
+        };
+        var branch = "" + options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
+        xhrParents = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
             result.forEach(function(c) { setDefaultTerm(c) });
@@ -1802,7 +1818,11 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.loadMembers = function(returnLimit, skipTo, paginate) {
-        var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/members?referenceSet=" + panel.conceptId + "&limit=100";
+        var branch = options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
+        var membersUrl = options.serverUrl + "/" + branch + "/members?referenceSet=" + panel.conceptId + "&limit=100";
         if (skipTo > 0) {
             membersUrl = membersUrl + "&offset=" + skipTo;
         } else {

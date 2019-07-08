@@ -245,9 +245,13 @@ function queryComputerPanel(divElement, options) {
         });
 
         if (!panel.typeArray || !panel.typeArray.length) {
+            var branch = options.edition;
+            if(options.release.length < 0){
+                branch = branch + "/" + options.release;
+            };
             $.ajax({
                 type: "POST",
-                url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+                url: options.serverUrl.replace("snomed", "expressions/") + branch + "/execute/brief",
                 data: {
                     expression: "< 410662002|Concept model attribute (attribute)|",
                     limit: 5000,
@@ -841,9 +845,13 @@ function queryComputerPanel(divElement, options) {
         panel.lastRequest.skip = 0;
         panel.lastRequest.limit = panel.lastTotalValues + 1;
         $('#' + panel.divElement.id + '-exportXls').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        var branch = options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
         xhrTotal = $.ajax({
             type: "POST",
-            url: options.serverUrl.replace("snomed", "expressions/") + "/" + options.edition + "/" + options.release + "/execute/brief",
+            url: options.serverUrl.replace("snomed", "expressions/") + "/" + branch + "/execute/brief",
             data: panel.lastRequest,
             dataType: "json",
             success: function(result) {

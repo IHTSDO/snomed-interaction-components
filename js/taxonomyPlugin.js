@@ -38,9 +38,13 @@ function taxonomyPanel(divElement, conceptId, options) {
 
     if (!options.rootConceptDescendants) {
         console.log(options);
+        var branch = "" + options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
         $.ajax({
             type: "GET",
-            url: options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts",
+            url: options.serverUrl + "/" + branch + "/concepts",
 			data: {
 				ecl: "< 138875005|SNOMED CT Concept|",
 				offset: 0,
@@ -405,8 +409,12 @@ function taxonomyPanel(divElement, conceptId, options) {
                 var statedDescendants = $(event.target).attr('data-statedDescendants');
                 var inferredDescendants = $(event.target).attr('data-inferredDescendants');
                 panel.history.push({ term: selectedLabel, conceptId: selectedId, time: time });
+                var branch = options.edition;
+                if(options.release.length < 0){
+                    branch = branch + "/" + options.release;
+                };
                 if (typeof selectedId != "undefined") {
-                    $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
+                    $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
                         // done
                     }).done(function(result) {
                         panel.setupParents(result, { conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "PRIMITIVE", module: selectedModule, statedDescendants: statedDescendants, inferredDescendants: inferredDescendants });
@@ -476,8 +484,11 @@ function taxonomyPanel(divElement, conceptId, options) {
         if (panel.options.descendantsCount == true) $("#" + panel.divElement.id + "-txViewLabel2").html("Descendants Count: On");
         else $("#" + panel.divElement.id + "-txViewLabel2").html("Descendants Count: Off");
 
-
-        $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
+        var branch = options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
+        $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
             if (result && result[0] && typeof result[0].statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
             result.forEach(function(c) {setDefaultTerm(c)});
             result.sort(function(a, b) {
@@ -578,7 +589,11 @@ function taxonomyPanel(divElement, conceptId, options) {
 
     this.wrapInParents = function(conceptId, liItem) {
         var topUl = $("#" + panel.divElement.id + "-panelBody").find('ul:first');
-        $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(parents) {
+        var branch = options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
+        $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(parents) {
             // done
         }).done(function(parents) {
             if (parents.length > 0) {
@@ -693,7 +708,11 @@ function taxonomyPanel(divElement, conceptId, options) {
 
     this.setToConcept = function(conceptId, term, definitionStatus, module, statedDescendants) {
         $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-        $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
+        var branch = options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
+        $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
             $.each(result, function(i, item) {
                 if (typeof item.defaultTerm == "undefined") {
                     item.defaultTerm = item.fsn.term;
@@ -705,7 +724,7 @@ function taxonomyPanel(divElement, conceptId, options) {
             }
             if (conceptId == 138875005) statedDescendants = options.rootConceptDescendants;
             if (typeof term == "undefined" || typeof statedDescendants == "undefined") {
-                $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(res) {
+                $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId, function(res) {
                     if( typeof(res.fsn) == 'object'){
                        term = res.fsn.term;
                     }
@@ -867,7 +886,11 @@ function taxonomyPanel(divElement, conceptId, options) {
             xhr.abort();
             //console.log("aborting call...");
         }
-        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId, function(result) {
+        var branch = options.edition;
+        if(options.release.length < 0){
+            branch = branch + "/" + options.release;
+        };
+        xhr = $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId, function(result) {
             if (typeof result.statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
         }).done(function(result) {
             if (panel.options.selectedView == 'stated') {
