@@ -470,7 +470,7 @@ function searchPanel(divElement, options) {
                         var branch = options.edition;
                         console.log(options.release);
                         console.log(options.release.length);
-                        if(options.release.length > 0){
+                        if(options.release.length > 0 && options.release !== 'None'){
                             branch = branch + "/" + options.release;
                         };
                         xhr = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + t, function(result) {
@@ -544,7 +544,7 @@ function searchPanel(divElement, options) {
                         var branch = options.edition;
                         console.log(options.release);
                         console.log(options.release.length);
-                        if(options.release.length > 0){
+                        if(options.release.length > 0 && options.release !== 'None'){
                             branch = branch + "/" + options.release;
                         };
                         xhr = $.getJSON(options.serverUrl + "/" + branch + "/descriptions/" + t, function(result) {
@@ -608,7 +608,7 @@ function searchPanel(divElement, options) {
                     var branch = options.edition;
                     console.log(options.release);
                         console.log(options.release.length);
-                    if(options.release.length > 0){
+                    if(options.release.length > 0 && options.release !== 'None'){
                         branch = branch + "/" + options.release;
                     };
                     var searchUrl = options.serverUrl + "/browser/" + branch + "/descriptions?" +

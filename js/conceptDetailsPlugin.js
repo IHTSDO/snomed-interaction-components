@@ -329,7 +329,7 @@ function conceptDetails(divElement, conceptId, options) {
             //console.log("aborting call...");
         }
         var branch = options.edition;
-        if(options.release.length > 0){
+        if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
         xhr = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId, function(result) {
@@ -1442,7 +1442,7 @@ function conceptDetails(divElement, conceptId, options) {
             //console.log("aborting children call...");
         };
         var branch = options.edition;
-        if(options.release.length > 0){
+        if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
         xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
@@ -1571,7 +1571,7 @@ function conceptDetails(divElement, conceptId, options) {
             //console.log("aborting references call...");
         };
         var branch = options.edition;
-        if(options.release.length > 0){
+        if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
         xhrReferences = $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
@@ -1668,7 +1668,7 @@ function conceptDetails(divElement, conceptId, options) {
             //console.log("aborting children call...");
         };
         var branch = options.edition;
-        if(options.release.length > 0){
+        if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
         xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
@@ -1750,7 +1750,7 @@ function conceptDetails(divElement, conceptId, options) {
             //console.log("aborting children call...");
         };
         var branch = "" + options.edition;
-        if(options.release.length > 0){
+        if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
         xhrParents = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
@@ -1824,7 +1824,7 @@ function conceptDetails(divElement, conceptId, options) {
 
     this.loadMembers = function(returnLimit, skipTo, paginate) {
         var branch = options.edition;
-        if(options.release.length > 0){
+        if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
         var membersUrl = options.serverUrl + "/" + branch + "/members?referenceSet=" + panel.conceptId + "&limit=100";

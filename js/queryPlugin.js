@@ -246,7 +246,7 @@ function queryComputerPanel(divElement, options) {
 
         if (!panel.typeArray || !panel.typeArray.length) {
             var branch = options.edition;
-            if(options.release.length > 0){
+            if(options.release.length > 0 && options.release !== 'None'){
                 branch = branch + "/" + options.release;
             };
             $.ajax({
@@ -846,7 +846,7 @@ function queryComputerPanel(divElement, options) {
         panel.lastRequest.limit = panel.lastTotalValues + 1;
         $('#' + panel.divElement.id + '-exportXls').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         var branch = options.edition;
-        if(options.release.length > 0){
+        if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
         xhrTotal = $.ajax({
