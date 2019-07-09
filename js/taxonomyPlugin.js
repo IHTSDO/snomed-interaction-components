@@ -754,7 +754,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         if (!alreadySubscribed) {
             var subscription = channel.subscribe(panelId, function(data, envelope) {
                 //                console.log("listening in " + panel.divElement.id);
-                panel.setToConcept(data.conceptId, data.term, data.definitionStatus, data.module, data.statedDescendants);
+                panel.setToConcept(data.conceptId, data.fsn.term, data.definitionStatus, data.module, data.statedDescendants);
             });
             panel.subscriptions.push(subscription);
             panelToSubscribe.subscribers.push(panel.divElement.id);
@@ -894,9 +894,9 @@ function taxonomyPanel(divElement, conceptId, options) {
             if (typeof result.statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
         }).done(function(result) {
             if (panel.options.selectedView == 'stated') {
-                panel.setToConcept(conceptId, result.defaultTerm, result.definitionStatus, result.module, result.statedDescendants);
+                panel.setToConcept(conceptId, result.fsn.term, result.definitionStatus, result.module, result.statedDescendants);
             } else {
-                panel.setToConcept(conceptId, result.defaultTerm, result.definitionStatus, result.module, result.inferredDescendants);
+                panel.setToConcept(conceptId, result.fsn.term, result.definitionStatus, result.module, result.inferredDescendants);
             }
         }).fail(function() {
             //console.log("Error");
