@@ -467,7 +467,13 @@ function searchPanel(divElement, options) {
                 if (isNumber(t)) {
                     if (t.substr(-2, 1) == "0") {
                         // Search conceptId
-                        xhr = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/concepts/" + t, function(result) {
+                        var branch = options.edition;
+                        console.log(options.release);
+                        console.log(options.release.length);
+                        if(options.release.length > 0){
+                            branch = branch + "/" + options.release;
+                        };
+                        xhr = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + t, function(result) {
 
                         }).done(function(result) {
                             console.log(result);
@@ -536,7 +542,9 @@ function searchPanel(divElement, options) {
                         });
                     } else if (t.substr(-2, 1) == "1") {
                         var branch = options.edition;
-                        if(options.release.length < 0){
+                        console.log(options.release);
+                        console.log(options.release.length);
+                        if(options.release.length > 0){
                             branch = branch + "/" + options.release;
                         };
                         xhr = $.getJSON(options.serverUrl + "/" + branch + "/descriptions/" + t, function(result) {
@@ -597,9 +605,10 @@ function searchPanel(divElement, options) {
                         t = t.replace(")", "");
                     }
                     var startTime = Date.now();
-https://dev-bb18-ms-authoring.ihtsdotools.org/snowowl/snomed-ct/v2/browser/MAIN/descriptions?query=ham&preferredDescriptionType=FSN&limit=50
                     var branch = options.edition;
-                    if(options.release.length < 0){
+                    console.log(options.release);
+                        console.log(options.release.length);
+                    if(options.release.length > 0){
                         branch = branch + "/" + options.release;
                     };
                     var searchUrl = options.serverUrl + "/browser/" + branch + "/descriptions?" +

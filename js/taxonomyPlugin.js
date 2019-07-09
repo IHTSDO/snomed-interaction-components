@@ -39,7 +39,7 @@ function taxonomyPanel(divElement, conceptId, options) {
     if (!options.rootConceptDescendants) {
         console.log(options);
         var branch = "" + options.edition;
-        if(options.release.length < 0){
+        if(options.release.length > 0){
             branch = branch + "/" + options.release;
         };
         $.ajax({
@@ -410,7 +410,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 var inferredDescendants = $(event.target).attr('data-inferredDescendants');
                 panel.history.push({ term: selectedLabel, conceptId: selectedId, time: time });
                 var branch = options.edition;
-                if(options.release.length < 0){
+                if(options.release.length > 0){
                     branch = branch + "/" + options.release;
                 };
                 if (typeof selectedId != "undefined") {
@@ -485,7 +485,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         else $("#" + panel.divElement.id + "-txViewLabel2").html("Descendants Count: Off");
 
         var branch = options.edition;
-        if(options.release.length < 0){
+        if(options.release.length > 0){
             branch = branch + "/" + options.release;
         };
         $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
@@ -590,7 +590,7 @@ function taxonomyPanel(divElement, conceptId, options) {
     this.wrapInParents = function(conceptId, liItem) {
         var topUl = $("#" + panel.divElement.id + "-panelBody").find('ul:first');
         var branch = options.edition;
-        if(options.release.length < 0){
+        if(options.release.length > 0){
             branch = branch + "/" + options.release;
         };
         $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(parents) {
@@ -709,7 +709,7 @@ function taxonomyPanel(divElement, conceptId, options) {
     this.setToConcept = function(conceptId, term, definitionStatus, module, statedDescendants) {
         $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         var branch = options.edition;
-        if(options.release.length < 0){
+        if(options.release.length > 0){
             branch = branch + "/" + options.release;
         };
         $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
@@ -887,7 +887,7 @@ function taxonomyPanel(divElement, conceptId, options) {
             //console.log("aborting call...");
         }
         var branch = options.edition;
-        if(options.release.length < 0){
+        if(options.release.length > 0){
             branch = branch + "/" + options.release;
         };
         xhr = $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId, function(result) {

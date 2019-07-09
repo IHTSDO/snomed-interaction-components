@@ -88,7 +88,7 @@ function refsetPanel(divElement, options) {
 
     this.loadMembers = function(conceptId, term, returnLimit, skipTo, paginate) {
         var branch = options.edition;
-        if(options.release.length < 0){
+        if(options.release.length > 0){
             branch = branch + "/" + options.release;
         };
         var membersUrl = options.serverUrl + "/" + branch + "/members?referenceSet=" + conceptId + "&limit=100";
