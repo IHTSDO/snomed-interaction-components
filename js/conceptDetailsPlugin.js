@@ -57,6 +57,7 @@ function conceptDetails(divElement, conceptId, options) {
     var xhrReferences = null;
     var xhrParents = null;
     var xhrMembers = null;
+    var xhrRefsets = null;
     var componentConceptPanel = null;
     var conceptRequested = 0;
     panel.subscriptionsColor = [];
@@ -1231,20 +1232,150 @@ function conceptDetails(divElement, conceptId, options) {
                     panel.refset[type] = data;
                 }
             });
-            var context = {
-                firstMatch: firstMatch
-            };
-            $('#refsets-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/refset.hbs"](context));
+            
+            if (xhrRefsets != null) {
+                xhrRefsets.abort();
+            }          
+            
+            xhrRefsets = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/members?referencedComponentId=" + firstMatch.conceptId, function(result) {           
+                }).done(function(result) {
+                    var simpleRefsetMembers = [];
+                    var simpleMapRefsetMembers = [];
+                    var attributeValueRefsetMembers = [];
+                    var associationRefsetMembers = [];
+                    var ids = [];
+                    if (result.total > 0) {
+                        var initializeRefsetMemberByType = function(item, type) {
+                            var refset = {};
+                            refset.active = item.active;
+                            refset.refsetId = item.refsetId;
+                            refset.otherValue = item.additionalFields[type];
 
-            $.each($("#refsets-" + panel.divElement.id).find('.refset-simplemap'), function(i, field) {
-                //                console.log(field);
-                //                console.log($(field).attr('data-refsetId'));
-                if ($(field).attr('data-refsetId') == "467614008") {
-                    channel.publish("refsetSubscription-467614008", {
-                        conceptId: $(field).attr('data-conceptId')
-                    });
+                            return refset;
+                        }
+
+                        result.items.forEach(function(item) {
+                            if (Object.keys(item.additionalFields).length === 0) {
+                                var refset = {};
+                                refset.active = item.active;
+                                refset.refsetId = item.refsetId;
+
+                                simpleRefsetMembers.push(refset)
+                                ids.push(item.refsetId);
+                            }
+                            else if (item.additionalFields.hasOwnProperty('mapTarget')) {
+                                var refset = initializeRefsetMemberByType(item,'mapTarget');                                
+                                simpleMapRefsetMembers.push(refset)
+                                ids.push(item.refsetId);
+                            } 
+                            else if (item.additionalFields.hasOwnProperty('valueId')) {
+                                var refset = initializeRefsetMemberByType(item,'valueId');
+                                attributeValueRefsetMembers.push(refset)
+                                ids.push(item.refsetId);
+                                ids.push(refset.otherValue);  
+                            }
+                            else if (item.additionalFields.hasOwnProperty('targetComponentId')) {
+                                var refset = initializeRefsetMemberByType(item,'targetComponentId');
+                                associationRefsetMembers.push(refset)
+                                ids.push(item.refsetId);
+                                ids.push(refset.otherValue);   
+                            }                             
+                            else {
+                                // do nothing
+                            }
+                        });
+                    }
+                    
+                    if (ids.length > 0) {
+                        Handlebars.registerHelper('if_not_empty', function(list, opts) {
+                            if (list) {
+                                if (list.length > 0)
+                                    return opts.fn(this);
+                                else
+                                    return opts.inverse(this);
+                            }
+                        });
+
+                        $.ajax({
+                            url:options.serverUrl + "/browser/" + options.edition + "/" + options.release + "concepts/bulk-load",
+                            type:"POST",
+                            data: JSON.stringify({"conceptIds":ids}),
+                            contentType:"application/json; charset=utf-8",
+                            dataType:"json",
+                            success: function(concepts){                                                               
+                                var populateRefsetMember = function (list, type, conceptsMap) {
+                                    if (type === 'simple' || type === 'simplemap'){
+                                        list.forEach(function(item) {
+                                            var concept = conceptsMap[item.refsetId];
+
+                                            item.definitionStatus = concept.definitionStatus;
+                                            item.defaultTerm = concept.pt.term;
+                                            item.module = concept.moduleId;
+                                            item.effectiveTime = concept.effectiveTime;
+                                            item.conceptId = concept.conceptId;
+                                        });
+                                    }
+                                    else if (type === 'attr' || type === 'assoc') {
+                                        list.forEach(function(item) {
+                                            var concept = conceptsMap[item.refsetId];
+
+                                            item.definitionStatus = concept.definitionStatus;
+                                            item.defaultTerm = concept.pt.term;
+                                            item.module = concept.moduleId;
+                                            item.effectiveTime = concept.effectiveTime;
+                                            item.conceptId = concept.conceptId;
+                                            
+                                            var cidConcept = conceptsMap[item.otherValue];
+                                            var cidValue = {};                                    
+                                            cidValue.module = cidConcept.moduleId;
+                                            cidValue.defaultTerm = cidConcept.pt.term;
+                                            cidValue.conceptId = cidConcept.conceptId;
+                                            cidValue.definitionStatus = cidConcept.definitionStatus;
+
+                                            item.cidValue = cidValue;                                            
+                                        });                                        
+                                    } 
+                                    else {
+                                        // do nothing
+                                    }
+                                }
+
+                                var conceptsMap = {};
+                                concepts.forEach(function(item) {
+                                    conceptsMap[item.conceptId] = item;
+                                });
+
+                                populateRefsetMember(simpleRefsetMembers,'simple',conceptsMap);
+                                populateRefsetMember(simpleMapRefsetMembers,'simplemap',conceptsMap);
+                                populateRefsetMember(attributeValueRefsetMembers,'attr',conceptsMap);
+                                populateRefsetMember(associationRefsetMembers,'assoc',conceptsMap);
+
+                                var context = {
+                                    firstMatch : firstMatch,
+                                    simpleRefsetMembers: simpleRefsetMembers,
+                                    simpleMapRefsetMembers: simpleMapRefsetMembers,
+                                    attributeValueRefsetMembers: attributeValueRefsetMembers,
+                                    associationRefsetMembers: associationRefsetMembers                        
+                                };
+                                
+                                $('#refsets-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/refset.hbs"](context));
+                            }
+                        });                        
+                    } else {
+                        var context = {
+                            firstMatch : firstMatch,
+                            simpleRefsetMembers: [],
+                            simpleMapRefsetMembers: [],
+                            attributeValueRefsetMembers: [],
+                            associationRefsetMembers: []                        
+                        };
+                        
+                        $('#refsets-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/refset.hbs"](context));
+                    }                 
+                }).fail(function() {
+                    $("#refsets-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
                 }
-            });
+            );            
 
             if ($('ul#details-tabs-' + panel.divElement.id + ' li.active').attr('id') == "references-tab") {
                 $("#references-" + panel.divElement.id + "-resultsTable").html("");
