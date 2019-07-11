@@ -295,6 +295,17 @@ function drawConceptDiagram (concept, div, options, panel) {
     svgCode = svgCode.replace('width="1000px" height="2000px"', 'width="' + maxX + '" height="' + y + '"');
     var b64 = Base64.encode(svgCode);
 
+    $("#" + div.attr('id') + "-download-svg-button").disableTextSelect();
+    $("#" + div.attr('id') + "-download-svg-button").removeClass('disabled');
+    $("#" + div.attr('id') + "-download-svg-button").unbind().click(function(event) { 
+        var downloadLink = document.createElement("a");
+        downloadLink.href = 'data:image/svg+xml;base64,\n' + b64;
+        downloadLink.download = "diagram.svg";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    });
+
     $("#" + div.attr('id') + "-download-button").disableTextSelect();
     $("#" + div.attr('id') + "-progress-button").disableTextSelect();
     $("#" + div.attr('id') + "-png-button").disableTextSelect();
