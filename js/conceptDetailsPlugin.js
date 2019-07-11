@@ -1237,7 +1237,7 @@ function conceptDetails(divElement, conceptId, options) {
                 xhrRefsets.abort();
             }          
             
-            xhrRefsets = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/members?referencedComponentId=" + firstMatch.conceptId, function(result) {           
+            xhrRefsets = $.getJSON(options.serverUrl + "/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release : '') + "/members?referencedComponentId=" + firstMatch.conceptId, function(result) {           
                 }).done(function(result) {
                     var simpleRefsetMembers = [];
                     var simpleMapRefsetMembers = [];
@@ -1297,7 +1297,7 @@ function conceptDetails(divElement, conceptId, options) {
                         });
 
                         $.ajax({
-                            url:options.serverUrl + "/browser/" + options.edition + "/" + options.release + "concepts/bulk-load",
+                            url:options.serverUrl + "/browser/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release + '/' : '') + "concepts/bulk-load",
                             type:"POST",
                             data: JSON.stringify({"conceptIds":ids}),
                             contentType:"application/json; charset=utf-8",
@@ -1567,7 +1567,7 @@ function conceptDetails(divElement, conceptId, options) {
             xhrChildren.abort();
             //console.log("aborting children call...");
         }
-        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
+        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release : '') + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
             result.forEach(function(c) { setDefaultTerm(c) });
@@ -1785,7 +1785,7 @@ function conceptDetails(divElement, conceptId, options) {
             xhrChildren.abort();
             //console.log("aborting children call...");
         }
-        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
+        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release : '') + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
             result.forEach(function(c) { setDefaultTerm(c) });
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
@@ -1933,7 +1933,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.loadMembers = function(returnLimit, skipTo, paginate) {
-        var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/members?referenceSet=" + panel.conceptId + "&limit=100";
+        var membersUrl = options.serverUrl + "/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release : '') + "/members?referenceSet=" + panel.conceptId + "&limit=100";
         if (skipTo > 0) {
             membersUrl = membersUrl + "&offset=" + skipTo;
         } else {

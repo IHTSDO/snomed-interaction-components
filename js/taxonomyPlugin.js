@@ -477,7 +477,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         else $("#" + panel.divElement.id + "-txViewLabel2").html("Descendants Count: Off");
 
 
-        $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
+        $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release : '') + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
             if (result && result[0] && typeof result[0].statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
             result.forEach(function(c) {setDefaultTerm(c)});
             result.sort(function(a, b) {
