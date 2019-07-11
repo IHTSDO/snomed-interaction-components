@@ -467,7 +467,13 @@ function searchPanel(divElement, options) {
                 if (isNumber(t)) {
                     if (t.substr(-2, 1) == "0") {
                         // Search conceptId
-                        xhr = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/concepts/" + t, function(result) {
+                        var branch = options.edition;
+                        console.log(options.release);
+                        console.log(options.release.length);
+                        if(options.release.length > 0 && options.release !== 'None'){
+                            branch = branch + "/" + options.release;
+                        };
+                        xhr = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + t, function(result) {
 
                         }).done(function(result) {
                             console.log(result);
@@ -535,7 +541,13 @@ function searchPanel(divElement, options) {
                             $('#' + panel.divElement.id + '-searchBar2').html("");
                         });
                     } else if (t.substr(-2, 1) == "1") {
-                        xhr = $.getJSON(options.serverUrl + "/" + options.edition + "/" + options.release + "/descriptions/" + t, function(result) {
+                        var branch = options.edition;
+                        console.log(options.release);
+                        console.log(options.release.length);
+                        if(options.release.length > 0 && options.release !== 'None'){
+                            branch = branch + "/" + options.release;
+                        };
+                        xhr = $.getJSON(options.serverUrl + "/" + branch + "/descriptions/" + t, function(result) {
 
                         }).done(function(result) {
                             console.log(result);
@@ -593,8 +605,13 @@ function searchPanel(divElement, options) {
                         t = t.replace(")", "");
                     }
                     var startTime = Date.now();
-https://dev-bb18-ms-authoring.ihtsdotools.org/snowowl/snomed-ct/v2/browser/MAIN/descriptions?query=ham&preferredDescriptionType=FSN&limit=50
-                    var searchUrl = options.serverUrl + "/browser/" + options.edition + "/" + options.release + "/descriptions?" +
+                    var branch = options.edition;
+                    console.log(options.release);
+                        console.log(options.release.length);
+                    if(options.release.length > 0 && options.release !== 'None'){
+                        branch = branch + "/" + options.release;
+                    };
+                    var searchUrl = options.serverUrl + "/browser/" + branch + "/descriptions?" +
                         "&limit=50";
                     if (panel.options.statusSearchFilter == "activeOnly" && options.serverUrl.includes('snowstorm')) {
                         searchUrl = searchUrl + "&term=" + encodeURIComponent(t);

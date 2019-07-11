@@ -87,7 +87,11 @@ function refsetPanel(divElement, options) {
     panel.loadRefsets();
 
     this.loadMembers = function(conceptId, term, returnLimit, skipTo, paginate) {
-        var membersUrl = options.serverUrl + "/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release + '/' : '') + "members?referenceSet=" + conceptId + "&limit=100";
+        var branch = options.edition;
+        if(options.release.length > 0 && options.release !== 'None'){
+            branch = branch + "/" + options.release;
+        };
+        var membersUrl = options.serverUrl + "/" + branch + "/members?referenceSet=" + conceptId + "&limit=100";
         if (skipTo > 0) {
             membersUrl = membersUrl + "&offset=" + skipTo;
         } else {
