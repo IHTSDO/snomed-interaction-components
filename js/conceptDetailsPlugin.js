@@ -327,6 +327,7 @@ function conceptDetails(divElement, conceptId, options) {
         // load attributes
         if (xhr != null) {
             xhr.abort();
+            xhr = null;
             //console.log("aborting call...");
         }
         xhr = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/concepts/" + panel.conceptId, function(result) {
@@ -1237,7 +1238,7 @@ function conceptDetails(divElement, conceptId, options) {
                 xhrRefsets.abort();
             }          
             
-            xhrRefsets = $.getJSON(options.serverUrl + "/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release : '') + "/members?referencedComponentId=" + firstMatch.conceptId, function(result) {           
+            xhrRefsets = $.getJSON(options.serverUrl + "/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release + '/': '') + "members?referencedComponentId=" + firstMatch.conceptId, function(result) {           
                 }).done(function(result) {
                     var simpleRefsetMembers = [];
                     var simpleMapRefsetMembers = [];
@@ -1533,18 +1534,20 @@ function conceptDetails(divElement, conceptId, options) {
 
             //            membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + panel.conceptId + "/members";
 
-        }).fail(function() {
-            panel.relsPId = divElement.id + "-rels-panel";
-            panel.attributesPId = divElement.id + "-attributes-panel";
-            panel.descsPId = divElement.id + "-descriptions-panel";
-            $("#home-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
-            $("#diagram-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
-            $("#members-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
-            $("#references-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
-            $("#refsets-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
-            $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
-            $('#' + panel.descsPId).html("");
-            $('#' + panel.relsPId).html("");
+        }).fail(function(xhr, textStatus, error) {
+            if (textStatus !== 'abort') {
+                panel.relsPId = divElement.id + "-rels-panel";
+                panel.attributesPId = divElement.id + "-attributes-panel";
+                panel.descsPId = divElement.id + "-descriptions-panel";
+                $("#home-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+                $("#diagram-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+                $("#members-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+                $("#references-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+                $("#refsets-" + panel.divElement.id).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+                $('#' + panel.attributesPId).html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+                $('#' + panel.descsPId).html("");
+                $('#' + panel.relsPId).html("");
+            }            
         });
         //        if (typeof xhr != "undefined") {
         //            console.log("aborting call...");
@@ -1567,7 +1570,7 @@ function conceptDetails(divElement, conceptId, options) {
             xhrChildren.abort();
             //console.log("aborting children call...");
         }
-        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release : '') + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
+        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release + '/' : '') + "concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
             result.forEach(function(c) { setDefaultTerm(c) });
@@ -1785,7 +1788,7 @@ function conceptDetails(divElement, conceptId, options) {
             xhrChildren.abort();
             //console.log("aborting children call...");
         }
-        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release : '') + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
+        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release + '/' : '') + "concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
             result.forEach(function(c) { setDefaultTerm(c) });
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
@@ -1933,7 +1936,7 @@ function conceptDetails(divElement, conceptId, options) {
     }
 
     this.loadMembers = function(returnLimit, skipTo, paginate) {
-        var membersUrl = options.serverUrl + "/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release : '') + "/members?referenceSet=" + panel.conceptId + "&limit=100";
+        var membersUrl = options.serverUrl + "/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release + '/' : '') + "members?referenceSet=" + panel.conceptId + "&limit=100";
         if (skipTo > 0) {
             membersUrl = membersUrl + "&offset=" + skipTo;
         } else {

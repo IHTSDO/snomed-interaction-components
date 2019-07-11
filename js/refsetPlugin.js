@@ -87,7 +87,7 @@ function refsetPanel(divElement, options) {
     panel.loadRefsets();
 
     this.loadMembers = function(conceptId, term, returnLimit, skipTo, paginate) {
-        var membersUrl = options.serverUrl + "/" + options.edition + "/" + options.release + "/members?referenceSet=" + conceptId + "&limit=100";
+        var membersUrl = options.serverUrl + "/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release + '/' : '') + "members?referenceSet=" + conceptId + "&limit=100";
         if (skipTo > 0) {
             membersUrl = membersUrl + "&offset=" + skipTo;
         } else {
