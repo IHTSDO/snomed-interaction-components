@@ -1280,8 +1280,17 @@ function conceptDetails(divElement, conceptId, options) {
                                 ids.push(item.refsetId);
                                 ids.push(refset.otherValue);  
                             }
-                            else if (item.additionalFields.hasOwnProperty('targetComponentId')) {
-                                var refset = initializeRefsetMemberByType(item,'targetComponentId');
+                            else if (item.additionalFields.hasOwnProperty('targetComponent') || item.additionalFields.hasOwnProperty('targetComponentId')) {
+                                var refset = {};
+                                refset.active = item.active;
+                                refset.refsetId = item.refsetId;
+                                if (item.additionalFields.hasOwnProperty('targetComponent')) {
+                                    refset.otherValue = item.additionalFields.targetComponent['id'];
+                                }
+                                else {
+                                    refset.otherValue = item.additionalFields['targetComponentId'];
+                                }
+
                                 associationRefsetMembers.push(refset)
                                 ids.push(item.refsetId);
                                 ids.push(refset.otherValue);   
@@ -1315,7 +1324,7 @@ function conceptDetails(divElement, conceptId, options) {
                                             var concept = conceptsMap[item.refsetId];
 
                                             item.definitionStatus = concept.definitionStatus;
-                                            item.defaultTerm = concept.pt.term;
+                                            item.defaultTerm = concept.pt ? concept.pt.term : concept.fsn.term;
                                             item.module = concept.moduleId;
                                             item.effectiveTime = concept.effectiveTime;
                                             item.conceptId = concept.conceptId;
@@ -1326,7 +1335,7 @@ function conceptDetails(divElement, conceptId, options) {
                                             var concept = conceptsMap[item.refsetId];
 
                                             item.definitionStatus = concept.definitionStatus;
-                                            item.defaultTerm = concept.pt.term;
+                                            item.defaultTerm =  concept.pt ? concept.pt.term : concept.fsn.term;
                                             item.module = concept.moduleId;
                                             item.effectiveTime = concept.effectiveTime;
                                             item.conceptId = concept.conceptId;
@@ -1334,7 +1343,7 @@ function conceptDetails(divElement, conceptId, options) {
                                             var cidConcept = conceptsMap[item.otherValue];
                                             var cidValue = {};                                    
                                             cidValue.module = cidConcept.moduleId;
-                                            cidValue.defaultTerm = cidConcept.pt.term;
+                                            cidValue.defaultTerm =  cidConcept.pt ? cidConcept.pt.term : cidConcept.fsn.term;
                                             cidValue.conceptId = cidConcept.conceptId;
                                             cidValue.definitionStatus = cidConcept.definitionStatus;
 
