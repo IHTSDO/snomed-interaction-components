@@ -12,6 +12,11 @@
             </ul>
         </div>
     </span>
+    <span class="pull-right">
+        <a href="javascript:void(0);" style="font-size: 20px; color: white; padding: 5px;">
+            <span data-conceptId="{{firstMatch.conceptId}}" class="glyphicon glyphicon-star{{#if_fav firstMatch.conceptId}}{{else}}-empty{{/if_fav}}"></span>
+        </a>
+    </span>
         <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"  draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{#if_undefined firstMatch.fsn.term}}
             {{firstMatch.fsn}}
         {{else}}

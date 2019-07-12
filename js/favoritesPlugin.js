@@ -57,13 +57,13 @@ function favoritePanel(divElement, options) {
     panel.markerColor = panel.getNextMarkerColor(globalMarkerColor);
 
     this.setUpFavs = function (){
-//        var context = {
-//            divElementId: panel.divElement.id
-//        }
-//        $(divElement).html(JST["views/favorites/main.hbs"](context));
+        var context = {
+            divElementId: panel.divElement.id
+        }
+        $(divElement).html(JST["views/favorites/main.hbs"](context));
     }
 
-    //panel.setUpFavs();
+    panel.setUpFavs();
 
     this.loadFavs = function (){
         $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
