@@ -227,11 +227,11 @@ function searchPanel(divElement, options) {
             panel.updateSearchLabel();
             var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
             $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').show();
-            if (searchTerm.charAt(0) == "^") {
-                $("#" + panel.divElement.id + '-searchBox').val(searchTerm.slice(1));
+            if (searchTerm.charAt(0) != "^") {
+                $("#" + panel.divElement.id + '-searchBox').val("^" + searchTerm);
             }
             if (searchTerm.length > 0) {
-                panel.search(searchTerm, 0, 100, true);
+                panel.search(searchTerm + "$", 0, 100, true);
             }
         });
         $("#" + panel.divElement.id + "-partialMatchingButton").click(function(event) {
