@@ -1,7 +1,7 @@
 <table class='table table-bordered' id = '{{divElementId}}-descriptions-panel-table'>
     <thead>
         <tr>
-           <th colspan="2" class="text-center">{{#if languageName}}{{removeSemtag longLangName}}{{else}}{{lang}}{{/if}}</th>
+           <th colspan="2" class="text-center">{{longLangName}}</th>
         </tr>
         <tr>
             <th><span class='i18n' data-i18n-id='i18n_term'>Term</span></th>
@@ -42,7 +42,7 @@
                         {{/if}}
                         &nbsp;&nbsp;&nbsp;{{term}}</td>
                     {{#if ../options.showIds}}
-                        <td>{{concept.id}}</td>
+                        <td>{{descriptionId}}</td>
                     {{/if}}
 
                     <td>
@@ -57,7 +57,7 @@
                         {{/if}}
                         <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
                         <table border='1'><tr><th style='padding: 3px;'>DescriptionId</th><th style='padding: 3px;'>Type</th><th style='padding: 3px;'>Language</th><th style='padding: 3px;'>Case Significance</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
-                                <tr><td style='padding: 3px;'>{{descriptionId}}</td><td style='padding: 3px;'>{{removeSemtag type.defaultTerm}}</td><td style='padding: 3px;'>{{lang}}</td><td style='padding: 3px;'>{{removeSemtag ics.defaultTerm}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
+                                <tr><td style='padding: 3px;'>{{descriptionId}}</td><td style='padding: 3px;'>{{parseCS '_' ' ' type}}</td><td style='padding: 3px;'>{{lang}}</td><td style='padding: 3px;'>{{parseCS '_' ' ' caseSignificance}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
                         </table>
                         " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
                     </td>

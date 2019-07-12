@@ -63,26 +63,21 @@
                 <option value="inferred" selected>Inferred</option>
             {{else}}
                 <option value="inferred">Inferred</option>
-            {{/if_eq}}
-            {{#if_eq options.selectedView "all"}}
-                <option value="all" selected>All</option>
-            {{else}}
-                <option value="all">All</option>
-            {{/if_eq}}
+            {{/if_eq}}           
         </select>
     </div>
     <div class="form-group">
-        <label><span class="i18n" data-i18n-id="i18n_language_refset">{{i18n "i18n_language_refset" "Language Refset"}}</span></label>
-
-        {{#if options.manifest.languageRefsets}}
-            {{#each options.manifest.languageRefsets}}
-                <div class="checkbox">
-                    <label>
-                        <input class="langOption" type="checkbox" value="{{conceptId}}" {{#ifIn conceptId ../../options.langRefset }}checked{{/ifIn}}> {{defaultTerm}}
-                    </label>
-                </div>
-            {{/each}}
-        {{/if}}
+        <label for="{{divElementId}}-langRefsetOption"><span class="i18n" data-i18n-id="i18n_language_refset">{{i18n "i18n_language_refset" "Language Refset"}}</span></label>
+        <div class="checkbox">
+            <label>
+                <input class="langOption" type="checkbox" value="900000000000509007" {{#ifIn '900000000000509007' options.langRefset }}checked{{/ifIn}}> United States of America English language reference set (foundation metadata concept)
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input class="langOption" type="checkbox" value="900000000000508004" {{#ifIn '900000000000508004' options.langRefset }}checked{{/ifIn}}>Great Britain English language reference set (foundation metadata concept)
+            </label>
+        </div>        
     </div>
     <!--<div class="form-group">-->
         <!--<table class='table table-bordered table-hover'>-->

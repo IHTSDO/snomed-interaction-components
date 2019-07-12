@@ -29,6 +29,11 @@ function conceptDetails(divElement, conceptId, options) {
         "11000146104": "NL"
     };
 
+    var longLanguageNameOfLangRefset = {
+        "900000000000509007": "United States of America English language reference set",
+        "900000000000508004": "Great Britain English language reference set"
+    };
+
     if (options.languageNameOfLangRefset)
         languageNameOfLangRefset = options.languageNameOfLangRefset;
 
@@ -352,6 +357,11 @@ function conceptDetails(divElement, conceptId, options) {
                     else
                         return opts.inverse(this);
                 }
+            });
+            Handlebars.registerHelper('parseCS', function (search, replacement, string) {
+                var str = string.split(search).join(replacement).toLowerCase();
+
+                return str.charAt(0).toUpperCase() + str.slice(1);
             });
             panel.statedParents = [];
             panel.inferredParents = [];
@@ -790,11 +800,11 @@ function conceptDetails(divElement, conceptId, options) {
                             return -1;
                         if ((!a.preferred && !a.acceptable) && (b.acceptable || b.preferred))
                             return 1;
-                        if (a.type.conceptId < b.type.conceptId)
+                        if (a.typeId < b.typeId)
                             return -1;
-                        if (a.type.conceptId > b.type.conceptId)
+                        if (a.typeId > b.typeId)
                             return 1;
-                        if (a.type.conceptId == b.type.conceptId) {
+                        if (a.typeId == b.typeId) {
                             if (a.preferred && !b.preferred)
                                 return -1;
                             if (!a.preferred && b.preferred)
@@ -814,18 +824,18 @@ function conceptDetails(divElement, conceptId, options) {
                 var context = {
                     options: panel.options,
                     languageName: "(" + languageNameOfLangRefset[loopSelectedLangRefset] + ")",
-                    longLangName: loopSelectedLangRefset,
+                    longLangName: longLanguageNameOfLangRefset[loopSelectedLangRefset],
                     divElementId: panel.divElement.id,
                     allDescriptions: allDescriptions
                 };
 
-                if (panel.options.manifest) {
+                /*if (panel.options.manifest) {
                     $.each(panel.options.manifest.languageRefsets, function(i, looplr) {
                         if (looplr.conceptId == loopSelectedLangRefset) {
                             context.longLangName = looplr.defaultTerm;
                         }
                     });
-                }
+                }*/
 
                 allLangsHtml += JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context);
                 //if (panel.options.displaySynonyms) {
@@ -2295,7 +2305,7 @@ function conceptDetails(divElement, conceptId, options) {
         //    field.subscriptor = aux;
         //});
         //panel.options.possibleSubscribers = possibleSubscribers;
-        if (!panel.options.manifest) {
+        /*if (!panel.options.manifest) {
             $("#" + panel.divElement.id + "-modal-body").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
             xhr = $.getJSON(options.serverUrl.replace("snomed", "") + "server/releases", function(result) {
                 // nothing
@@ -2326,7 +2336,7 @@ function conceptDetails(divElement, conceptId, options) {
                 });
                 $("#" + panel.divElement.id + "-modal-body").html(JST["views/conceptDetailsPlugin/options.hbs"](context));
             });
-        } else {
+        } else {*/
             var context = {
                 options: panel.options,
                 divElementId: panel.divElement.id
@@ -2346,7 +2356,7 @@ function conceptDetails(divElement, conceptId, options) {
                 return options.inverse(this);
             });
             $("#" + panel.divElement.id + "-modal-body").html(JST["views/conceptDetailsPlugin/options.hbs"](context));
-        }
+        //}
     }
 
     this.readOptionsPanel = function() {
