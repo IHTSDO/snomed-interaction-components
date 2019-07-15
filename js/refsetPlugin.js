@@ -13,6 +13,7 @@ function refsetPanel(divElement, options) {
     this.type = "favorites";
     panel.subscribers = [];
     var xhrMembers = null;
+    var xhrRefset = null;
 
     this.getConceptId = function() {
         return this.conceptId;
@@ -51,8 +52,61 @@ function refsetPanel(divElement, options) {
     panel.setUpPanel();
 
     this.loadRefsets = function() {
-        //        console.log(panel.options.manifest);
-        if (panel.options.manifest) {
+        $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        var branch = options.edition;
+        if(options.release.length > 0 && options.release !== 'None'){
+            branch = branch + "/" + options.release;
+        };
+        if (xhrRefset != null) {
+            xhrChildren.abort();
+            xhrRefset = null;
+        };
+        xhrRefset = $.getJSON(options.serverUrl + "/browser/" + branch + "/members?activeMember=true&limit=1", function(result) {
+            var refsets = [];
+            var refsetItem = null;
+            Object.keys(result.memberCountsByReferenceSet).forEach(function(key) {
+                refsetItem = {};
+                refsetItem.module = result.referenceSets[key].moduleId;
+                refsetItem.conceptId = key;
+                refsetItem.defaultTerm = result.referenceSets[key].fsn.term;
+                refsetItem.count = result.memberCountsByReferenceSet[key];
+                refsetItem.type = result.referenceSets[key].referenceSetType.pt.term;
+
+                refsets.push(refsetItem);
+            });
+
+            refsets.sort(function(a, b) {
+                if (a.type < b.type)
+                    return -1;
+                if (a.type > b.type)
+                    return 1;
+                if (a.defaultTerm < b.defaultTerm)
+                    return -1;
+                if (a.defaultTerm > b.defaultTerm)
+                    return 1;
+                return 0;
+            });
+
+            var context = {
+                divElementId: panel.divElement.id,
+                refsets: refsets
+            }
+            $("#" + panel.divElement.id + "-panelBody").html(JST["views/refsetPlugin/body.hbs"](context));
+            $('#' + panel.divElement.id + '-panelBody').find(".refset-item").click(function(event) {
+                panel.loadMembers($(event.target).attr('data-concept-id'), $(event.target).attr('data-term'), 100, 0);
+                channel.publish(panel.divElement.id, {
+                    term: $(event.target).attr('data-term'),
+                    module: $(event.target).attr("data-module"),
+                    conceptId: $(event.target).attr('data-concept-id'),
+                    source: panel.divElement.id
+                });
+            });
+        }).done(function(result) {
+            
+        }).fail(function() {
+            $("#" + panel.divElement.id + "-panelBody").html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
+        });
+        /*if (panel.options.manifest) {
             panel.options.manifest.refsets.sort(function(a, b) {
                 if (a.type == "daily-build" && a.type != b.type)
                     return -1;
@@ -82,7 +136,7 @@ function refsetPanel(divElement, options) {
             });
         } else {
             $("#" + panel.divElement.id + "-panelBody").html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
-        }
+        }*/
     }
     panel.loadRefsets();
 
@@ -146,15 +200,43 @@ function refsetPanel(divElement, options) {
                     var returnLimit2 = 0;
                 }
             }
-            var context = {
-                result: result,
-                returnLimit: returnLimit2,
-                remaining: remaining,
-                divElementId: panel.divElement.id,
-                skipTo: skipTo,
-                term: term,
-                conceptId: conceptId
-            };
+
+            var isReferenceComponentsOfRefsetNotConcepts = false;
+            if (result.items && result.items.length > 0) {
+                result.items.forEach(function(item){
+                    if(!item.hasOwnProperty('referencedComponent')){
+                        isReferenceComponentsOfRefsetNotConcepts = true;
+                        return;
+                    }
+                });
+            }
+            
+            var context = {};
+            if (isReferenceComponentsOfRefsetNotConcepts) {
+                context = {
+                    result: {'items':[]},                  
+                    divElementId: panel.divElement.id,                   
+                    term: term,
+                    conceptId: conceptId,
+                    total: total,
+                    skipTo: 0,                 
+                    referenceComponentsOfRefsetAreNotConcepts: true
+                }; 
+            }
+            else {
+                context = {
+                    result: result,
+                    returnLimit: returnLimit2,
+                    remaining: remaining,
+                    divElementId: panel.divElement.id,
+                    skipTo: skipTo,
+                    term: term,
+                    conceptId: conceptId,
+                    total: total,
+                    referenceComponentsOfRefsetAreNotConcepts: false
+                }; 
+            }
+            
             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                 if (opts != "undefined") {
                     if (a == b)
