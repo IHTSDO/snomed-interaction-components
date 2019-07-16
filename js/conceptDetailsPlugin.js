@@ -1986,30 +1986,17 @@ function conceptDetails(divElement, conceptId, options) {
         } else {
             $('#members-' + panel.divElement.id + "-resultsTable").html("<tr><td class='text-muted' colspan='2'><i class='glyphicon glyphicon-refresh icon-spin'></i></td></tr>");
         }
-        var total;
-        if (panel.options.manifest) {
-            //                console.log(panel.options.manifest);
-            $.each(panel.options.manifest.refsets, function(i, field) {
-                if (field.conceptId == panel.conceptId) {
-                    if (field.count) {
-                        total = field.count;
-                    }
-                }
-            });
-        }
-        if (typeof total != "undefined") {
-            //            console.log(total);
-            //            if (total < 25000){
+        var total;        
+        if (typeof total != "undefined") {          
             paginate = 1;
             membersUrl = membersUrl + "&paginate=1";
-            //}
-
         }
-        //        console.log(membersUrl);
+        
         if (xhrMembers != null) {
             xhrMembers.abort();
-            //console.log("aborting call...");
+            xhrMembers = null;           
         }
+
         xhrMembers = $.getJSON(membersUrl, function(result) {
 
         }).done(function(result) {
@@ -2020,12 +2007,8 @@ function conceptDetails(divElement, conceptId, options) {
             } else {
                 if (total > (skipTo + returnLimit)) {
                     remaining = total - (skipTo + returnLimit);
-                } else {
-                    //                        if (result.details.total < returnLimit && skipTo != 0){
-                    remaining = 0;
-                    //                        }else{
-                    //                            remaining = result.details.total;
-                    //                        }
+                } else {                    
+                    remaining = 0;                    
                 }
             }
             if (remaining < returnLimit) {
@@ -2037,14 +2020,38 @@ function conceptDetails(divElement, conceptId, options) {
                     var returnLimit2 = 0;
                 }
             }
-            var context = {
-                result: result,
-                returnLimit: returnLimit2,
-                remaining: remaining,
-                divElementId: panel.divElement.id,
-                skipTo: skipTo,
-                panel: panel
-            };
+
+            var isReferenceComponentsOfRefsetNotConcepts = false;
+            if (result.items && result.items.length > 0) {
+                result.items.forEach(function(item){
+                    if(!item.hasOwnProperty('referencedComponent')){
+                        isReferenceComponentsOfRefsetNotConcepts = true;
+                        return;
+                    }
+                });
+            }
+            var context = {};
+            if (isReferenceComponentsOfRefsetNotConcepts) {
+                context = {
+                    result: {'items':[]},                  
+                    divElementId: panel.divElement.id,
+                    total: total,
+                    skipTo: 0,                 
+                    referenceComponentsOfRefsetAreNotConcepts: true
+                }; 
+            }
+            else {
+                context = {
+                    result: result,
+                    returnLimit: returnLimit2,
+                    remaining: remaining,
+                    divElementId: panel.divElement.id,
+                    skipTo: skipTo,
+                    panel: panel,
+                    total: total,
+                    referenceComponentsOfRefsetAreNotConcepts: false
+                };
+            }
             Handlebars.registerHelper('if_eq', function(a, b, opts) {
                 if (opts != "undefined") {
                     if (a == b)

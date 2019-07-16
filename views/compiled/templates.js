@@ -98,7 +98,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" data-toggle=\"tab\" style=\"padding-top: 3px; padding-bottom:3px;\"><span class=\"i18n\" data-i18n-id=\"i18n_refsets\">Refsets</span></a></li>\r\n        </ul>\r\n        <!-- Tab panes -->\r\n        <div class=\"tab-content\" id=\"details-tab-content-";
+    + "\" data-toggle=\"tab\" style=\"padding-top: 3px; padding-bottom:3px;\"><span class=\"i18n\" data-i18n-id=\"i18n_refsets\">Refsets</span></a></li>\r\n            <li id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-members-tab\"><a href=\"#members-";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" data-toggle=\"tab\" style=\"padding-top: 3px; padding-bottom:3px;\"><span class=\"i18n\" data-i18n-id=\"i18n_members\">Members</span></a></li>\r\n        </ul>\r\n        <!-- Tab panes -->\r\n        <div class=\"tab-content\" id=\"details-tab-content-";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -3070,12 +3078,27 @@ function program4(depth0,data) {
 
 function program6(depth0,data) {
   
+  
+  return "\r\n            <td class=\"text-muted\" class=\"text-center\" colspan=\"2\">The reference components of these reference set members are not concepts.</span></td>\r\n        ";
+  }
+
+function program8(depth0,data) {
+  
   var buffer = "", stack1, helper, options;
-  buffer += "\r\n            <td class=\"text-center\" id=\"";
+  buffer += "\r\n            ";
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(11, program11, data),fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), "asd", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.remaining), "asd", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n        ";
+  return buffer;
+  }
+function program9(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\r\n                <td class=\"text-center\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-moreMembers\" colspan=\"2\">\r\n                <button class='btn btn-link' id='";
+    + "-moreMembers\" colspan=\"2\">\r\n                    <button class='btn btn-link' id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -3087,27 +3110,7 @@ function program6(depth0,data) {
   buffer += escapeExpression(stack1)
     + " <span data-i18n-id=\"i18n_more\" class=\"i18n\">"
     + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_more", "more", options) : helperMissing.call(depth0, "i18n", "i18n_more", "more", options)))
-    + "</span></button>\r\n            </td>\r\n        ";
-  return buffer;
-  }
-
-function program8(depth0,data) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\r\n            ";
-  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(11, program11, data),fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), 0, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.remaining), 0, options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n        ";
-  return buffer;
-  }
-function program9(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "\r\n                <td class=\"text-muted\" class=\"text-center\" colspan=\"2\">";
-  if (helper = helpers.total) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.total); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + " <span data-i18n-id=\"i18n_members\" class=\"i18n\">members</span></td>\r\n            ";
+    + "</span></button>\r\n                </td>\r\n            ";
   return buffer;
   }
 
@@ -3115,19 +3118,39 @@ function program11(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\r\n                ";
-  stack1 = (helper = helpers.if_gr || (depth0 && depth0.if_gr),options={hash:{},inverse:self.program(14, program14, data),fn:self.program(12, program12, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), (depth0 && depth0.returnLimit), options) : helperMissing.call(depth0, "if_gr", (depth0 && depth0.remaining), (depth0 && depth0.returnLimit), options));
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(14, program14, data),fn:self.program(12, program12, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), 0, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.remaining), 0, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n            ";
   return buffer;
   }
 function program12(depth0,data) {
   
+  var buffer = "", stack1, helper;
+  buffer += "\r\n                    <td class=\"text-muted\" class=\"text-center\" colspan=\"2\">";
+  if (helper = helpers.total) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.total); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " <span data-i18n-id=\"i18n_members\" class=\"i18n\">members</span></td>\r\n                ";
+  return buffer;
+  }
+
+function program14(depth0,data) {
+  
   var buffer = "", stack1, helper, options;
-  buffer += "\r\n                    <td class=\"text-center\" id=\"";
+  buffer += "\r\n                    ";
+  stack1 = (helper = helpers.if_gr || (depth0 && depth0.if_gr),options={hash:{},inverse:self.program(17, program17, data),fn:self.program(15, program15, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), (depth0 && depth0.returnLimit), options) : helperMissing.call(depth0, "if_gr", (depth0 && depth0.remaining), (depth0 && depth0.returnLimit), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n                ";
+  return buffer;
+  }
+function program15(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\r\n                        <td class=\"text-center\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-moreMembers\" colspan=\"2\">\r\n                        <button class='btn btn-link' id='";
+    + "-moreMembers\" colspan=\"2\">\r\n                            <button class='btn btn-link' id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -3145,14 +3168,14 @@ function program12(depth0,data) {
   buffer += escapeExpression(stack1)
     + " <span data-i18n-id=\"i18n_remaining\" class=\"i18n\">"
     + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_remaining", "remaining", options) : helperMissing.call(depth0, "i18n", "i18n_remaining", "remaining", options)))
-    + "</span>)</button>\r\n                    </td>\r\n                ";
+    + "</span>)</button>\r\n                        </td>\r\n                    ";
   return buffer;
   }
 
-function program14(depth0,data) {
+function program17(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\r\n                    <td class=\"text-center\" colspan=\"2\">\r\n                        <button class='btn btn-link' id='";
+  buffer += "\r\n                        <td class=\"text-center\" colspan=\"2\">\r\n                            <button class='btn btn-link' id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -3170,7 +3193,7 @@ function program14(depth0,data) {
   buffer += escapeExpression(stack1)
     + " <span data-i18n-id=\"i18n_remaining\" class=\"i18n\">"
     + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_remaining", "remaining", options) : helperMissing.call(depth0, "i18n", "i18n_remaining", "remaining", options)))
-    + "</span>)</button>\r\n                    </td>\r\n                ";
+    + "</span>)</button>\r\n                        </td>\r\n                    ";
   return buffer;
   }
 
@@ -3180,7 +3203,7 @@ function program14(depth0,data) {
   stack1 = helpers.each.call(depth0, ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.items), {hash:{},inverse:self.noop,fn:self.programWithDepth(3, program3, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n\r\n    <tr class=\"more-row\">\r\n        ";
-  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.remaining), "asd", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.remaining), "asd", options));
+  stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(8, program8, data),fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.referenceComponentsOfRefsetAreNotConcepts), true, options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.referenceComponentsOfRefsetAreNotConcepts), true, options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\r\n    </tr>\r\n</tbody>";
   return buffer;
