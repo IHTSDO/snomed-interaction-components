@@ -17,6 +17,7 @@
     },
     "homepage": "https://github.com/termMed/snomed-interaction-components",
     "dependencies": {
+        "canvg": "^1.5.3",
         "chalk": "^0.5.1",
         "grunt": "^1.0.3",
         "grunt-cli": "^0.1.13",
