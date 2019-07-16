@@ -758,8 +758,8 @@ function searchPanel(divElement, options) {
                                     bucketTerm = result.bucketConcepts[i].fsn.term;
                                 }
                                 auxObject.term = bucketTerm;
-                                auxObject.value = i;
-                                auxObject.cant = field;
+                                auxObject.value = field;
+                                auxObject.cant = i;
                                 auxArray.push(auxObject);
                             });
                             result.buckets.module = [];
