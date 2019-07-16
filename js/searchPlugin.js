@@ -702,12 +702,6 @@ function searchPanel(divElement, options) {
                             match.definitionStatus = match.concept.definitionStatus;
                         })
 
-                        result.filters = {};
-                        result.filters.lang = result.filters.language;
-                        result.filters.module = result.filters.module;
-                        result.filters.refsetId = result.filters.membership;
-                        result.filters.semTag = result.filters.semanticTags;
-
                         $('#' + panel.divElement.id + '-resultsTable').find('.more-row').remove();
                         var endTime = Date.now();
                         var elapsed = (endTime - startTime) / 1000;
@@ -729,22 +723,24 @@ function searchPanel(divElement, options) {
                             return (string.substr(0, 18) + "...");
                         });
                         var auxArray = [];
-                        if (result.filters) {
-                            if (result.filters.refsetId) {
-                                $.each(result.filters.refsetId, function(i, refset) {
+                        if (result.buckets) {
+                            if (result.buckets.membership) {
+                                $.each(result.buckets.membership, function(i, refset) {
+                                    console.log(refset + 'refset');
+                                    console.log(i);
                                     var auxObject = {};
                                     var bucketTerm = null;
                                     if (result.bucketConcepts[i]) {
                                         bucketTerm = result.bucketConcepts[i].fsn.term;
                                     }
                                     auxObject.term = bucketTerm;
-                                    auxObject.value = i;
-                                    auxObject.cant = refset;
+                                    auxObject.value = refset;
+                                    auxObject.cant = i;
                                     auxArray.push(auxObject);
                                 });
-                                result.filters.refsetId = [];
-                                result.filters.refsetId = auxArray;
-                                result.filters.refsetId.sort(function(a, b) {
+                                result.buckets.membership = [];
+                                result.buckets.membership = auxArray;
+                                result.buckets.membership.sort(function(a, b) {
                                     if (a.cant > b.cant)
                                         return -1;
                                     if (a.cant < b.cant)
@@ -752,10 +748,10 @@ function searchPanel(divElement, options) {
                                     return 0;
                                 });
                             } else {
-                                result.filters.refsetId = [];
+                                result.buckets.membership = [];
                             }
                             auxArray = [];
-                            $.each(result.filters.module, function(i, field) {
+                            $.each(result.buckets.module, function(i, field) {
                                 var auxObject = {};
                                 var bucketTerm = null;
                                 if (result.bucketConcepts[i]) {
@@ -766,40 +762,31 @@ function searchPanel(divElement, options) {
                                 auxObject.cant = field;
                                 auxArray.push(auxObject);
                             });
-                            result.filters.module = [];
-                            result.filters.module = auxArray;
-                            result.filters.module.sort(function(a, b) {
+                            result.buckets.module = [];
+                            result.buckets.module = auxArray;
+                            result.buckets.module.sort(function(a, b) {
                                 if (a.cant > b.cant)
                                     return -1;
                                 if (a.cant < b.cant)
                                     return 1;
                                 return 0;
                             });
-                            if (result.filters.lang && result.filters.semTag) {
-                                function sortObject(object) {
-                                    var sortable = [],
-                                        sortedObj = {};
-                                    for (var attr in object)
-                                        sortable.push([attr, object[attr]]);
-                                    sortable.sort(function(a, b) { return b[1] - a[1] });
-                                    $.each(sortable, function(i, field) {
-                                        sortedObj[field[0]] = field[1];
-                                    });
-                                    return sortedObj;
-                                }
-                                result.filters.lang = sortObject(result.filters.lang);
-                                result.filters.semTag = sortObject(result.filters.semTag);
-                            }
+//                            if (result.filters.lang && result.filters.semTag) {
+//                                function sortObject(object) {
+//                                    var sortable = [],
+//                                        sortedObj = {};
+//                                    for (var attr in object)
+//                                        sortable.push([attr, object[attr]]);
+//                                    sortable.sort(function(a, b) { return b[1] - a[1] });
+//                                    $.each(sortable, function(i, field) {
+//                                        sortedObj[field[0]] = field[1];
+//                                    });
+//                                    return sortedObj;
+//                                }
+//                                result.filters.lang = sortObject(result.filters.lang);
+//                                result.filters.semTag = sortObject(result.filters.semTag);
+//                            }
                         }
-                        //                        console.log(auxArray);
-                        //                        console.log(result.filters.module);
-                        //                        var ind = 0;
-                        //                        $.each(result.filters.refsetId, function (i, field){
-                        //                            ind++;
-                        //                        });
-                        //                        if (ind == 0){
-                        //                            result.filters.refsetId = 0;
-                        //                        }
                         var context = {
                             result: result,
                             elapsed: elapsed,
