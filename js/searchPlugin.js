@@ -39,6 +39,10 @@ function searchPanel(divElement, options) {
         var context = {
             divElementId: panel.divElement.id
         };
+        var snowstorm = 'snowstorm';
+        if(options.serverUrl.includes('snowowl')){
+           snowstorm = 'snowowl';
+           };
         $(divElement).html(JST["views/searchPlugin/aux.hbs"](context));
 
         $('#' + panel.divElement.id + '-searchBox').keyup(function() {
