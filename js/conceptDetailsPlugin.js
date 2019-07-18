@@ -453,8 +453,8 @@ function conceptDetails(divElement, conceptId, options) {
                 edition: options.edition,
                 release: options.release,
                 server: options.serverUrl.substr(0, options.serverUrl.length - 10),
-                langRefset: panel.options.langRefset,
-                link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset,
+                langRefset: panel.options.languages,
+                link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&languages=" + panel.options.languages,
                 //                dataContentValue: options.serverUrl.substr(0, options.serverUrl.length - 10)
                 dataContentValue: document.URL.split("?")[0].split("#")[0]
             };
@@ -499,12 +499,12 @@ function conceptDetails(divElement, conceptId, options) {
                 panel: panel,
                 firstMatch: firstMatch,
                 divElementId: panel.divElement.id,
-                link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&langRefset=" + panel.options.langRefset
+                link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&languages=" + panel.options.languages
             };
             $('#home-attributes-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/attributes.hbs"](context));
 
             // Update browser history
-            var historyUrl = "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + options.edition + "&release=" + options.release + "&server=" + options.serverUrl + "&langRefset=" + options.langRefset;
+            var historyUrl = "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + options.edition + "&release=" + options.release + "&server=" + options.serverUrl + "&languages=" + options.languages;
             manualStateChange = false;
             var state = {
                 name: firstMatch.defaultTerm,
@@ -703,27 +703,26 @@ function conceptDetails(divElement, conceptId, options) {
             // load descriptions panel
             panel.descsPId = divElement.id + "-descriptions-panel";
             var languageName = "";
-            if (panel.options.langRefset == "900000000000508004") {
-                languageName = "(GB)";
-            } else if (panel.options.langRefset == "900000000000509007") {
-                languageName = "(US)";
-            } else if (panel.options.langRefset == "450828004") {
-                languageName = "(ES)";
-            } else if (panel.options.langRefset == "554461000005103") {
-                languageName = "(DA)";
-            } else if (panel.options.langRefset == "46011000052107") {
-                languageName = "(SV)";
-            } else if (panel.options.langRefset == "32570271000036106") {
-                languageName = "(AU)";
-            } else if (panel.options.langRefset == "999001251000000103") {
-                languageName = "(UK)";
-            } else if (panel.options.langRefset == "31000146106") {
-                languageName = "(NL)";
-            }
+//            if (panel.options.langRefset == "900000000000508004") {
+//                languageName = "(GB)";
+//            } else if (panel.options.langRefset == "900000000000509007") {
+//                languageName = "(US)";
+//            } else if (panel.options.langRefset == "450828004") {
+//                languageName = "(ES)";
+//            } else if (panel.options.langRefset == "554461000005103") {
+//                languageName = "(DA)";
+//            } else if (panel.options.langRefset == "46011000052107") {
+//                languageName = "(SV)";
+//            } else if (panel.options.langRefset == "32570271000036106") {
+//                languageName = "(AU)";
+//            } else if (panel.options.langRefset == "999001251000000103") {
+//                languageName = "(UK)";
+//            } else if (panel.options.langRefset == "31000146106") {
+//                languageName = "(NL)";
+//            }
             // START FOR
             var allLangsHtml = "";
-            $.each(panel.options.langRefset, function(i, loopSelectedLangRefset) {
-                loopSelectedLangRefset = loopSelectedLangRefset.replace (/\//g, "");
+            for (var language in options.languageObject) {
                 var allDescriptions = firstMatch.descriptions.slice(0);
                 var homeDescriptionsHtml = "";
                 $.each(allDescriptions, function(i, field) {
@@ -754,11 +753,12 @@ function conceptDetails(divElement, conceptId, options) {
                 var auxDescriptions = [];
                 $.each(allDescriptions, function(i, description) {
                     var included = false;
+                    if(description.lang === language){
+                        included = true;
+                    }
                     if (description.acceptabilityMap) {
                         $.each(description.acceptabilityMap, function(langref, acceptability) {
                             acceptabilityPair = description.acceptabilityMap[i];
-                            if (langref == loopSelectedLangRefset) {
-                                included = true;
                                 if (acceptability == "PREFERRED") {
                                     description.preferred = true;
                                 } else {
@@ -766,7 +766,6 @@ function conceptDetails(divElement, conceptId, options) {
                                         description.acceptable = true;
                                     }
                                 }
-                            }
                         });
                     }
 
@@ -823,8 +822,8 @@ function conceptDetails(divElement, conceptId, options) {
 
                 var context = {
                     options: panel.options,
-                    languageName: "(" + languageNameOfLangRefset[loopSelectedLangRefset] + ")",
-                    longLangName: longLanguageNameOfLangRefset[loopSelectedLangRefset],
+                    languageName: "(" + language + ")",
+                    longLangName: panel.options.languagesArray[language],
                     divElementId: panel.divElement.id,
                     allDescriptions: allDescriptions
                 };
@@ -841,7 +840,7 @@ function conceptDetails(divElement, conceptId, options) {
                 //if (panel.options.displaySynonyms) {
                 $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
                 //}
-            });
+            }
             // END FOR
             $("#" + panel.descsPId).html(allLangsHtml);
 
@@ -2377,12 +2376,12 @@ function conceptDetails(divElement, conceptId, options) {
         panel.options.diagrammingMarkupEnabled = $("#" + panel.divElement.id + "-diagrammingMarkupEnabledOption").is(':checked');
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
 
-        panel.options.langRefset = [];
-        $.each($("#" + panel.divElement.id).find(".langOption"), function(i, field) {
-            if ($(field).is(':checked')) {
-                panel.options.langRefset.push($(field).val());
-            }
-        });
+        //panel.options.langRefset = [];
+//        $.each($("#" + panel.divElement.id).find(".langOption"), function(i, field) {
+//            if ($(field).is(':checked')) {
+//                panel.options.langRefset.push($(field).val());
+//            }
+//        });
         //console.log(panel.options.langRefset);
         //panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
 

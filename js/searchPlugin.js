@@ -551,50 +551,49 @@ function searchPanel(divElement, options) {
                         if(options.release.length > 0 && options.release !== 'None'){
                             branch = branch + "/" + options.release;
                         };
-                        xhr = $.getJSON(options.serverUrl + "/" + branch + "/descriptions/" + t, function(result) {
-
-                        }).done(function(result) {
-                            console.log(result);
-                            Handlebars.registerHelper('if_eq', function(a, b, opts) {
-                                if (opts != "undefined") {
-                                    if (a == b)
+                        $.ajax({
+                             url: options.serverUrl + "/" + branch + "/descriptions/" + t,
+                             type: "GET",
+                             beforeSend: function(xhr){xhr.setRequestHeader('Accept-Language', options.languages);},
+                             success: function(result) { 
+                                console.log(result);
+                                Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                                    if (opts != "undefined") {
+                                        if (a == b)
+                                            return opts.fn(this);
+                                        else
+                                            return opts.inverse(this);
+                                    }
+                                });
+                                Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts) {
+                                    if (countryIcons[moduleId])
                                         return opts.fn(this);
                                     else
                                         return opts.inverse(this);
-                                }
-                            });
-                            Handlebars.registerHelper('hasCountryIcon', function(moduleId, opts) {
-                                if (countryIcons[moduleId])
-                                    return opts.fn(this);
-                                else
-                                    return opts.inverse(this);
-                            });
-                            var tempResults = {};
-                            tempResults.matches = [];
-                            tempResults.matches.push(result);
-                            var context = {
-                                result: tempResults
-                            };
-                            $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/1.hbs"](context));
-                            $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
-                            $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function(event) {
-                                //                                $.each(panel.subscribers, function (i, field) {
-                                //                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
-                                //                                    field.conceptId = $(event.target).attr('data-concept-id');
-                                //                                    field.updateCanvas();
-                                //                                });
-                                channel.publish(panel.divElement.id, {
-                                    term: $(event.target).attr('data-term'),
-                                    module: $(event.target).attr("data-module"),
-                                    conceptId: $(event.target).attr('data-concept-id'),
-                                    source: panel.divElement.id
                                 });
-                            });
-                        }).fail(function() {
-                            resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
-                            $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                            $('#' + panel.divElement.id + '-searchBar2').html("");
-                        });
+                                var tempResults = {};
+                                tempResults.matches = [];
+                                tempResults.matches.push(result);
+                                var context = {
+                                    result: tempResults
+                                };
+                                $('#' + panel.divElement.id + '-resultsTable').html(JST["views/searchPlugin/body/1.hbs"](context));
+                                $('#' + panel.divElement.id + '-searchBar').html("<span class='text-muted'></span>");
+                                $('#' + panel.divElement.id + '-resultsTable').find(".result-item").click(function(event) {
+                                    //                                $.each(panel.subscribers, function (i, field) {
+                                    //                                    //console.log("Notify to " + field.divElement.id + " selected " + $(event.target).attr('data-concept-id'));
+                                    //                                    field.conceptId = $(event.target).attr('data-concept-id');
+                                    //                                    field.updateCanvas();
+                                    //                                });
+                                    channel.publish(panel.divElement.id, {
+                                        term: $(event.target).attr('data-term'),
+                                        module: $(event.target).attr("data-module"),
+                                        conceptId: $(event.target).attr('data-concept-id'),
+                                        source: panel.divElement.id
+                                    });
+                                });
+                             }
+                          });
                     } else {
                         //                        console.log(t.substr(-2, 1));
                         resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
@@ -668,9 +667,11 @@ function searchPanel(divElement, options) {
                         searchUrl = searchUrl + "&groupByConcept=1";
                     }
                     //console.log(searchUrl);
-                    xhr = $.getJSON(searchUrl, function(result) {
-
-                    }).done(function(result) {
+                    $.ajax({
+                         url: searchUrl,
+                         type: "GET",
+                         beforeSend: function(xhr){xhr.setRequestHeader('Accept-Language', options.languages);},
+                         success: function(result) { 
                         var resDescriptions = [];
                         $.each(result.items, function(i, field) {
                             var aux = field;
@@ -991,11 +992,7 @@ function searchPanel(divElement, options) {
                             icon = iconToDrag(term);
                         });
 
-                    }).fail(function() {
-                        resultsHtml = resultsHtml + "<tr><td class='text-muted'>No results</td></tr>";
-                        $('#' + panel.divElement.id + '-resultsTable').html(resultsHtml);
-                        $('#' + panel.divElement.id + '-searchBar2').html("");
-                    });
+                    }});
                 }
             }
         }
