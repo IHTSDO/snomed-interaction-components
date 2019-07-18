@@ -63,6 +63,57 @@
     </table>
 {{/if_eq}}
 
+{{#if_eq options.selectedView "stated"}}
+    <table class='table table-bordered'>
+        <thead>
+        <tr>
+            <th><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
+            <th><span class='i18n' data-i18n-id='i18n_destination'>{{i18n "i18n_destination" "Destination"}}</span></th>
+            <th><span class='i18n' data-i18n-id='i18n_group'>{{i18n "i18n_group" "Group"}}</span></th>
+            <th><span class='i18n' data-i18n-id='i18n_char_type'>{{i18n "i18n_char_type" "CharType"}}</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#if_eq firstMatch.relationships "undefined"}}
+            {{#if_eq firstMatch.statedRelationships "undefined"}}
+                <tr><td colspan='4'><span class='text-muted'>No relationships</span></td></tr>
+            {{/if_eq}}
+        {{else}}
+            {{#each firstMatch.statedRelationships}}
+                {{#if_eq active true}}                   
+                    <tr style="display: table-row">
+                        <td>
+                            {{#if_eq type.definitionStatus "PRIMITIVE"}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.fsn.term}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            {{else}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.fsn.term}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            {{/if_eq}}
+                            {{type.fsn.term}}
+                        </td>
+                        <td>
+                            {{#if_eq target.definitionStatus "PRIMITIVE"}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.fsn.term}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
+                            {{else}}
+                                <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')"  data-module="{{moduleId}}" data-concept-id="{{target.conceptId}}" data-term="{{target.fsn.term}}" data-def-status="{{target.definitionStatus}}"><span class="badge alert-warning">&equiv;</span></a>&nbsp;&nbsp;
+                            {{/if_eq}}
+                            {{target.fsn.term}}
+                        </td>
+                        <td>{{groupId}}</td>
+                        <td><span class='i18n' data-i18n-id='i18n_stated'>{{i18n "i18n_stated" "Stated"}}</span>
+                            <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                                <table border='1'><tr><th style='padding: 3px;'>TypeId</th><th style='padding: 3px;'>TargetId</th><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
+                                    <tr><td style='padding: 3px;'>{{type.conceptId}}</td><td style='padding: 3px;'>{{target.conceptId}}</td><td style='padding: 3px;'>{{modifier}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
+                                </table>
+                                " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
+                        </td>
+                    </tr>                   
+                {{/if_eq}}
+            {{/each}}
+        {{/if_eq}}
+        </tbody>
+    </table>
+{{/if_eq}}
+
 {{#if_undefined additionalRels}}
     <p>No additional relationships</p>
 {{else}}
@@ -106,7 +157,7 @@
     </table>
 {{/if_undefined}}
 
-{{#if_undefined firstMatch.classAxioms}}
+{{#if_eq firstMatch.classAxioms.length 0}}
     <p>No Axioms found</p>
 {{else}}
     {{#if_eq options.selectedView "stated"}}
@@ -155,8 +206,8 @@
             <br><br><br>
         {{/each}}
     {{/if_eq}}
-{{/if_undefined}}
-{{#if_undefined firstMatch.gciAxioms}}
+{{/if_eq}}
+{{#if_eq firstMatch.gciAxioms.length 0}}
     <p>No GCI's found</p>
 {{else}}
     {{#if_eq options.selectedView "stated"}}
@@ -205,4 +256,4 @@
             <br><br><br>
         {{/each}}
     {{/if_eq}}
-{{/if_undefined}}
+{{/if_eq}}
