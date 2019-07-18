@@ -85,11 +85,26 @@ var renderExpression = function(concept, inferredConcept, div, options) {
     var plainPreCoordinatedExpression =  tmp.textContent || tmp.innerText || "";
     plainPreCoordinatedExpression = plainPreCoordinatedExpression.replace(/\s\s+/g, ' ');
 
-    var statedHtml = conceptToPostCoordinatedExpression(concept, "statedRelationships", div, options);
-    var tmp = document.createElement("DIV");
-    tmp.innerHTML = statedHtml;
-    var plainStatedExpression =  tmp.textContent || tmp.innerText || "";
-    plainStatedExpression = plainStatedExpression.replace(/\s\s+/g, ' ');
+
+    if(concept.hasOwnProperty('classAxioms') && concept.classAxioms.length > 0) {
+        var axiomList = [];
+
+        for(var i = 0; concept.classAxioms.length > i; i++) {
+            var statedHtml = conceptToPostCoordinatedExpression(concept, "relationships", div, options);
+            var tmp = document.createElement("DIV");
+            tmp.innerHTML = statedHtml;
+            var plainAxiomExpression =  tmp.textContent || tmp.innerText || "";
+            plainAxiomExpression = plainAxiomExpression.replace(/\s\s+/g, ' ');
+            axiomList.push(plainAxiomExpression);
+        }
+    } else {
+        var statedHtml = conceptToPostCoordinatedExpression(concept, "statedRelationships");
+        var tmp = document.createElement("DIV");
+        tmp.innerHTML = statedHtml;
+        var plainStatedExpression =  tmp.textContent || tmp.innerText || "";
+        plainStatedExpression = plainStatedExpression.replace(/\s\s+/g, ' ');
+    }
+
 
     var inferredHtml = conceptToPostCoordinatedExpression(concept, "relationships", div, options);
     var tmp = document.createElement("DIV");
@@ -106,6 +121,7 @@ var renderExpression = function(concept, inferredConcept, div, options) {
         inferredExpressionHtml: inferredHtml,
         plainPreCoordinatedExpression: plainPreCoordinatedExpression,
         plainStatedExpression: plainStatedExpression,
+        axiomList: axiomList,
         plainInferredExpression: plainInferredExpression
     };
     div.html(JST["views/conceptDetailsPlugin/tabs/expression.hbs"](context).trim());
