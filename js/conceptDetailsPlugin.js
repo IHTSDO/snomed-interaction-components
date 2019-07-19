@@ -380,6 +380,9 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             firstMatch.statedRelationships.forEach(function(loopRel) {
+                if(loopRel.active == true){
+                    firstMatch.statedActive = "true";
+                }
                 if(loopRel.characteristicType === "STATED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId != "116680003"){
                     panel.statedRoles.push(loopRel);
                 }
@@ -942,6 +945,11 @@ function conceptDetails(divElement, conceptId, options) {
             }
 
             if (firstMatch.statedRelationships) {
+                firstMatch.statedRelationships.forEach(function(loopRel) {
+                    if(loopRel.active == true){
+                        firstMatch.statedActive = "true";
+                    }
+                });
                 firstMatch.statedRelationships.sort(function(a, b) {
                     if (a.groupId < b.groupId) {
                         return -1;
