@@ -377,11 +377,14 @@ function conceptDetails(divElement, conceptId, options) {
                 else if(loopRel.characteristicType == "INFERRED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId === "116680003"){
                     panel.inferredParents.push(loopRel);
                 }
-                else if(loopRel.characteristicType != "INFERRED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId === "116680003"){
+            });
+
+            firstMatch.statedRelationships.forEach(function(loopRel) {
+                if(loopRel.characteristicType === "STATED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId != "116680003"){
                     panel.statedRoles.push(loopRel);
                 }
-                else if (loopRel.characteristicType != "INFERRED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId != "116680003") {
-                    panel.statedRoles.push(loopRel);
+                else if(loopRel.characteristicType === "STATED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId === "116680003") {
+                    panel.statedParents.push(loopRel);
                 }
             });
 
