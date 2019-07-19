@@ -1725,13 +1725,13 @@ function conceptDetails(divElement, conceptId, options) {
         //console.log(options.serverUrl + "/" + options.edition + "/" + options.release + "/concepts/" + conceptId + "/references");
         if (xhrReferences != null) {
             xhrReferences.abort();
-            //console.log("aborting references call...");
+            xhrReferences = null;
         };
         var branch = options.edition;
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
-        xhrReferences = $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId + "/references?form=" + panel.options.selectedView, function(result) {
+        xhrReferences = $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId + "/references?stated=" + (panel.options.selectedView === 'stated') + '&offset=0&limit=10000', function(result) {
 
         }).done(function(result) {
             Handlebars.registerHelper('if_gr', function(a, b, opts) {
@@ -1742,50 +1742,37 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
-            $.each(result, function(i, field) {
-                if (field.statedRelationships) {
-                    field.relationship = field.statedRelationships[0].type.defaultTerm;
-                } else {
-                    field.relationship = field.relationships[0].type.defaultTerm;
-                }
-            });
-            result.sort(function(a, b) {
-                if (a.relationship < b.relationship)
-                    return -1;
-                if (a.relationship > b.relationship)
+            
+            result.referencesByType.sort(function(a, b) {
+                if (a.referenceType.id === '116680003' || b.referenceType.id === '116680003') {
+                    return -1; 
+                }                                 
+                if (a.referenceType.fsn.term >  b.referenceType.fsn.term) {
                     return 1;
-                if (a.relationship == b.relationship) {
-                    if (a.defaultTerm < b.defaultTerm)
-                        return -1;
-                    if (a.defaultTerm > b.defaultTerm)
-                        return 1;
+                }                    
+                if (a.referenceType.fsn.term <  b.referenceType.fsn.term) {
+                    return -1;
                 }
+                   
                 return 0;
             });
-            result.groups = [];
-            var lastR = "",
-                auxArray = [];
-            $.each(result, function(i, field) {
-                if (lastR == "") {
-                    auxArray.push(field);
-                    lastR = field.relationship;
-                } else {
-                    if (lastR == field.relationship) {
-                        auxArray.push(field);
-                    } else {
-                        result.groups.push(auxArray);
-                        auxArray = [];
-                        auxArray.push(field);
-                        lastR = field.relationship;
+           
+            result.referencesByType.forEach(function(item) {
+                item.referencingConcepts.sort(function(a, b) {
+                    if (a.fsn.term >  b.fsn.term) {
+                        return 1;
                     }
-                }
+                    if (a.fsn.term <  b.fsn.term) {
+                        return -1;
+                    }
+
+                    return 0;
+                });
             });
-            result.groups.push(auxArray);
-            //            console.log(result.groups);
+
             var context = {
                 divElementId: panel.divElement.id,
-                result: result,
-                groups: result.groups
+                result: result                
             };
             //            $("#references-" + panel.divElement.id + "-total").html(result.length  + " references");
             $("#references-" + panel.divElement.id + "-accordion").html(JST["views/conceptDetailsPlugin/tabs/references.hbs"](context));
