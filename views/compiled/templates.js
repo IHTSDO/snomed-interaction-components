@@ -6420,21 +6420,12 @@ function program43(depth0,data) {
   }
 function program44(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\r\n                            ";
-  stack1 = helpers.each.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.result)),stack1 == null || stack1 === false ? stack1 : stack1.buckets)),stack1 == null || stack1 === false ? stack1 : stack1.membership), {hash:{},inverse:self.noop,fn:self.program(45, program45, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                        ";
-  return buffer;
-  }
-function program45(depth0,data) {
-  
   var buffer = "", stack1, helper;
-  buffer += "\r\n                                <li class=\"list-group-item\">\r\n                                    <span class=\"badge\">";
-  if (helper = helpers.cant) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.cant); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += "\r\n                            <li class=\"list-group-item\">\r\n                                <span class=\"badge\">";
+  if (helper = helpers.value) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.value); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>\r\n                                    <a class='refset-link' href='javascript:void(0);' data-term=\"";
+    + "</span>\r\n                                <a class='refset-link' href='javascript:void(0);' data-term=\"";
   if (helper = helpers.term) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.term); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -6445,7 +6436,7 @@ function program45(depth0,data) {
     + "'>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.term), {hash:{},inverse:self.program(36, program36, data),fn:self.program(34, program34, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</a>\r\n                                </li>\r\n                            ";
+  buffer += "</a>\r\n                            </li>\r\n                        ";
   return buffer;
   }
 

@@ -91,12 +91,10 @@
                 <div class="panel-body">
                     <ul class="list-group">
                         {{#each result.buckets.membership}}
-                            {{#each result.buckets.membership}}
-                                <li class="list-group-item">
-                                    <span class="badge">{{cant}}</span>
-                                    <a class='refset-link' href='javascript:void(0);' data-term="{{term}}" data-refset='{{value}}'>{{#if term}}{{term}}{{else}}{{value}}{{/if}}</a>
-                                </li>
-                            {{/each}}
+                            <li class="list-group-item">
+                                <span class="badge">{{value}}</span>
+                                <a class='refset-link' href='javascript:void(0);' data-term="{{term}}" data-refset='{{value}}'>{{#if term}}{{term}}{{else}}{{value}}{{/if}}</a>
+                            </li>
                         {{/each}}
                     </ul>
                 </div>
