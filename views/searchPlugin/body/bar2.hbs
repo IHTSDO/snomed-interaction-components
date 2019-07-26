@@ -68,10 +68,10 @@
                     {{#each result.buckets.module}}
                         <li class="list-group-item">
                             <span class="badge">{{value}}</span>
-                            <a class='module-link' href='javascript:void(0);' data-term="{{term}}" data-module='{{value}}'>{{#if term}}{{term}}{{else}}{{value}}{{/if}}
-                                {{#hasCountryIcon value}}
+                            <a class='module-link' href='javascript:void(0);' data-term="{{term}}" data-module='{{id}}'>{{#if term}}{{term}}{{else}}{{value}}{{/if}}
+                                {{#hasCountryIcon id}}
                                     <div class="phoca-flagbox" style="width:26px;height:26px">
-                                        <span class="phoca-flag {{countryIcon value}}"></span>
+                                        <span class="phoca-flag {{countryIcon id}}"></span>
                                     </div>
                                 {{/hasCountryIcon}}
                             </a>
@@ -93,7 +93,7 @@
                         {{#each result.buckets.membership}}
                             <li class="list-group-item">
                                 <span class="badge">{{value}}</span>
-                                <a class='refset-link' href='javascript:void(0);' data-term="{{term}}" data-refset='{{value}}'>{{#if term}}{{term}}{{else}}{{value}}{{/if}}</a>
+                                <a class='refset-link' href='javascript:void(0);' data-term="{{term}}" data-refset='{{id}}'>{{#if term}}{{term}}{{else}}{{value}}{{/if}}</a>
                             </li>
                         {{/each}}
                     </ul>

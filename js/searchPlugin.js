@@ -731,16 +731,15 @@ function searchPanel(divElement, options) {
                         if (result.buckets) {
                             if (result.buckets.membership) {
                                 $.each(result.buckets.membership, function(i, refset) {
-                                    console.log(refset + 'refset');
-                                    console.log(i);
                                     var auxObject = {};
                                     var bucketTerm = null;
                                     if (result.bucketConcepts[i]) {
                                         bucketTerm = result.bucketConcepts[i].fsn.term;
                                     }
+                                    auxObject.id = i;
                                     auxObject.term = bucketTerm;
                                     auxObject.value = refset;
-                                    auxObject.cant = i;
+                                    auxObject.cant = refset;
                                     auxArray.push(auxObject);
                                 });
                                 result.buckets.membership = [];
@@ -762,9 +761,10 @@ function searchPanel(divElement, options) {
                                 if (result.bucketConcepts[i]) {
                                     bucketTerm = result.bucketConcepts[i].fsn.term;
                                 }
+                                auxObject.id = i;
                                 auxObject.term = bucketTerm;
                                 auxObject.value = field;
-                                auxObject.cant = i;
+                                auxObject.cant = field;
                                 auxArray.push(auxObject);
                             });
                             result.buckets.module = [];
