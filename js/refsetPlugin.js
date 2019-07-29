@@ -61,7 +61,7 @@ function refsetPanel(divElement, options) {
             xhrChildren.abort();
             xhrRefset = null;
         };
-        xhrRefset = $.getJSON(options.serverUrl + "/browser/" + branch + "/members?activeMember=true&limit=1", function(result) {
+        xhrRefset = $.getJSON(options.serverUrl + "/browser/" + branch + "/members?active=true&limit=1", function(result) {
             var refsets = [];
             var refsetItem = null;
             Object.keys(result.memberCountsByReferenceSet).forEach(function(key) {
