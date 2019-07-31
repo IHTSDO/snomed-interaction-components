@@ -20,7 +20,7 @@
         <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;"  draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{firstMatch.module}}" data-concept-id="{{firstMatch.conceptId}}" data-term="{{#if_undefined firstMatch.fsn.term}}
             {{firstMatch.fsn}}
         {{else}}
-            {{firstMatch.fsn.term}}
+            {{firstMatch.defaultTerm}}
         {{/if_undefined}}" 
        data-def-status="{{firstMatch.definitionStatus}}">
         <span class="badge alert-warning">
@@ -35,7 +35,7 @@
     {{#if_undefined firstMatch.fsn.term}}
         {{firstMatch.fsn}}
     {{else}}
-        {{firstMatch.fsn.term}}
+        {{firstMatch.defaultTerm}}
     {{/if_undefined}}
     <span class="pull-right">
        <div class="phoca-flagbox" style="width:40px;height:40px">
@@ -48,7 +48,7 @@
     {{#if_undefined firstMatch.fsn.term}}
         {{firstMatch.fsn}}
     {{else}}
-        {{firstMatch.fsn.term}}
+        {{firstMatch.defaultTerm}}
     {{/if_undefined}} |</div></h5>
 
 <div id="home-descriptions-{{divElementId}}"></div>

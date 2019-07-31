@@ -477,6 +477,11 @@ function searchPanel(divElement, options) {
                         if(options.release.length > 0 && options.release !== 'None'){
                             branch = branch + "/" + options.release;
                         };
+                        $.ajaxSetup({
+                          headers : {   
+                            'Accept-Language': options.languages
+                          }
+                        });
                         xhr = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + t, function(result) {
 
                         }).done(function(result) {

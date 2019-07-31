@@ -339,6 +339,11 @@ function conceptDetails(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
+        $.ajaxSetup({
+          headers : {   
+            'Accept-Language': options.languages
+          }
+        });
         xhr = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId, function(result) {
 
         }).done(function(result) {
@@ -371,6 +376,18 @@ function conceptDetails(divElement, conceptId, options) {
             panel.attributesFromAxioms = [];
 
             firstMatch.relationships.forEach(function(loopRel) {
+                if(loopRel.type.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && loopRel.type.fsn.lang != options.defaultLanguage){
+                    loopRel.type.defaultTerm = loopRel.type.pt.term;
+                }
+                else{
+                    loopRel.type.defaultTerm = loopRel.type.fsn.term;
+                }
+                if(loopRel.target.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && loopRel.target.fsn.lang != options.defaultLanguage){
+                    loopRel.target.defaultTerm = loopRel.target.pt.term;
+                }
+                else{
+                    loopRel.target.defaultTerm = loopRel.target.fsn.term;
+                }
                 if (loopRel.characteristicType == "INFERRED_RELATIONSHIP" && loopRel.active && loopRel.type.conceptId != "116680003") {
                     panel.inferredRoles.push(loopRel);
                 }
@@ -380,6 +397,18 @@ function conceptDetails(divElement, conceptId, options) {
             });
 
             firstMatch.statedRelationships.forEach(function(loopRel) {
+                if(loopRel.type.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && loopRel.type.fsn.lang != options.defaultLanguage){
+                    loopRel.type.defaultTerm = loopRel.type.pt.term;
+                }
+                else{
+                    loopRel.type.defaultTerm = loopRel.type.fsn.term;
+                }
+                if(loopRel.target.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && loopRel.target.fsn.lang != options.defaultLanguage){
+                    loopRel.target.defaultTerm = loopRel.target.pt.term;
+                }
+                else{
+                    loopRel.target.defaultTerm = loopRel.target.fsn.term;
+                }
                 if(loopRel.active == true){
                     firstMatch.statedActive = "true";
                 }
@@ -416,6 +445,18 @@ function conceptDetails(divElement, conceptId, options) {
             firstMatch.classAxioms.forEach(function(axiom) {
                 if(axiom.active){
                     axiom.relationships.forEach(function(rel) {
+                        if(rel.type.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && rel.type.fsn.lang != options.defaultLanguage){
+                            rel.type.defaultTerm = rel.type.pt.term;
+                        }
+                        else{
+                            rel.type.defaultTerm = rel.type.fsn.term;
+                        }
+                        if(rel.target.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && rel.target.fsn.lang != options.defaultLanguage){
+                            rel.target.defaultTerm = rel.target.pt.term;
+                        }
+                        else{
+                            rel.target.defaultTerm = rel.target.fsn.term;
+                        }
                         if(rel.active && rel.type.conceptId === "116680003"){
                             rel.effectiveTime = axiom.effectiveTime;
                             panel.statedParentsFromAxioms.push(rel);
@@ -432,6 +473,18 @@ function conceptDetails(divElement, conceptId, options) {
             firstMatch.gciAxioms.forEach(function(axiom) {
                 if(axiom.active){
                     axiom.relationships.forEach(function(rel) {
+                        if(rel.type.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && rel.type.fsn.lang != options.defaultLanguage){
+                            rel.type.defaultTerm = rel.type.pt.term;
+                        }
+                        else{
+                            rel.type.defaultTerm = rel.type.fsn.term;
+                        }
+                        if(rel.target.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && rel.target.fsn.lang != options.defaultLanguage){
+                            rel.target.defaultTerm = rel.target.pt.term;
+                        }
+                        else{
+                            rel.target.defaultTerm = rel.target.fsn.term;
+                        }
                         if(rel.active && rel.type.conceptId !== "116680003"){
                             rel.axiomId = axiom.axiomId;
                             rel.effectiveTime = axiom.effectiveTime;
@@ -1631,10 +1684,22 @@ function conceptDetails(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
+        $.ajaxSetup({
+          headers : {   
+            'Accept-Language': options.languages
+          }
+        });
         xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
-            result.forEach(function(c) { setDefaultTerm(c) });
+            result.forEach(function(item) { 
+                if(item.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && item.fsn.lang != options.defaultLanguage){
+                    item.defaultTerm = item.pt.term;
+                }
+                else{
+                    item.defaultTerm = item.fsn.term;
+                }
+            });
             // load relationships panel
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
@@ -1760,6 +1825,11 @@ function conceptDetails(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
+        $.ajaxSetup({
+          headers : {   
+            'Accept-Language': options.languages
+          }
+        });
         xhrReferences = $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId + "/references?stated=" + (panel.options.selectedView === 'stated') + '&offset=0&limit=10000', function(result) {
 
         }).done(function(result) {
@@ -1844,6 +1914,11 @@ function conceptDetails(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
+        $.ajaxSetup({
+          headers : {   
+            'Accept-Language': options.languages
+          }
+        });
         xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
             result.forEach(function(c) { setDefaultTerm(c) });
             result.sort(function(a, b) {
@@ -1926,10 +2001,22 @@ function conceptDetails(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
+        $.ajaxSetup({
+          headers : {   
+            'Accept-Language': options.languages
+          }
+        });
         xhrParents = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
-            result.forEach(function(c) { setDefaultTerm(c) });
+            result.forEach(function(c) {
+                if(item.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && item.fsn.lang != options.defaultLanguage){
+                    item.defaultTerm = item.pt.term;
+                }
+                else{
+                    item.defaultTerm = item.fsn.term;
+                }
+            });
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
                     return -1;
