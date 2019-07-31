@@ -554,7 +554,7 @@ function program6(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n                        "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\n                    ";
   return buffer;
   }
@@ -592,7 +592,7 @@ function program12(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n                    "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\n                ";
   return buffer;
   }
@@ -651,7 +651,7 @@ function program28(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n                                "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\n                            ";
   return buffer;
   }
@@ -1194,12 +1194,12 @@ function program8(depth0,data,depth2) {
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(13, program13, data),fn:self.program(11, program11, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                                "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\n                            </td>\n                            <td>\n                                ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(17, program17, data),fn:self.program(15, program15, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                                "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n                            <td>";
   if (helper = helpers.groupId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.groupId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
@@ -1246,7 +1246,7 @@ function program11(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&nbsp;</span></a>&nbsp;&nbsp;\n                                ";
@@ -1267,7 +1267,7 @@ function program13(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&equiv;</span></a>&nbsp;&nbsp;\n                                ";
@@ -1288,7 +1288,7 @@ function program15(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&nbsp;</span></a>&nbsp;&nbsp;\n                                ";
@@ -1309,7 +1309,7 @@ function program17(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&equiv;</span></a>&nbsp;&nbsp;\n                                ";
@@ -1418,12 +1418,12 @@ function program32(depth0,data) {
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(35, program35, data),fn:self.program(33, program33, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                                        "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\n                                    </td>\n                                    <td>\n                                        ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(39, program39, data),fn:self.program(37, program37, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                                        "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\n                                    </td>\n                                    <td>";
   if (helper = helpers.groupId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.groupId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
@@ -1463,7 +1463,7 @@ function program33(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&nbsp;</span></a>&nbsp;&nbsp;\n                                        ";
@@ -1484,7 +1484,7 @@ function program35(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&equiv;</span></a>&nbsp;&nbsp;\n                                        ";
@@ -1505,7 +1505,7 @@ function program37(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&nbsp;</span></a>&nbsp;&nbsp;\n                                        ";
@@ -1526,7 +1526,7 @@ function program39(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&equiv;</span></a>&nbsp;&nbsp;\n                                        ";
@@ -1596,12 +1596,12 @@ function program49(depth0,data) {
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(52, program52, data),fn:self.program(50, program50, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                                    "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n                                <td>\n                                    ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(56, program56, data),fn:self.program(54, program54, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                                    "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n                                <td>";
   if (helper = helpers.groupId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.groupId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
@@ -1635,7 +1635,7 @@ function program50(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&nbsp;</span></a>&nbsp;&nbsp;\n                                    ";
@@ -1656,7 +1656,7 @@ function program52(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&equiv;</span></a>&nbsp;&nbsp;\n                                    ";
@@ -1677,7 +1677,7 @@ function program54(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&nbsp;</span></a>&nbsp;&nbsp;\n                                    ";
@@ -1698,7 +1698,7 @@ function program56(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&equiv;</span></a>&nbsp;&nbsp;\n                                    ";
@@ -1762,12 +1762,12 @@ function program64(depth0,data) {
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(52, program52, data),fn:self.program(50, program50, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                                    "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n                                <td>\n                                    ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(67, program67, data),fn:self.program(65, program65, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                                    "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n                                <td>";
   if (helper = helpers.groupId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.groupId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
@@ -1801,7 +1801,7 @@ function program65(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&nbsp;</span></a>&nbsp;&nbsp;\n                                    ";
@@ -1822,7 +1822,7 @@ function program67(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&equiv;</span></a>&nbsp;&nbsp;\n                                    ";
@@ -1866,12 +1866,12 @@ function program73(depth0,data) {
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(76, program76, data),fn:self.program(74, program74, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                            "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n                        <td>\n                            ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(80, program80, data),fn:self.program(78, program78, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                            "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</td>\n                        <td><span class='i18n' data-i18n-id='i18n_additional'>"
     + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_additional", "Additional", options) : helperMissing.call(depth0, "i18n", "i18n_additional", "Additional", options)))
     + "</span>\n                            <button type=\"button\" class=\"btn btn-link unobtrusive-icon more-fields-button pull-right\" data-container=\"body\" data-toggle=\"popover\" data-placement=\"left\" data-content=\"\n                            <table border='1'><tr><th style='padding: 3px;'>Modifier</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>\n                                <tr><td style='padding: 3px;'>";
@@ -1903,7 +1903,7 @@ function program74(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&nbsp;</span></a>&nbsp;&nbsp;\n                            ";
@@ -1924,7 +1924,7 @@ function program76(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&equiv;</span></a>&nbsp;&nbsp;\n                            ";
@@ -1945,7 +1945,7 @@ function program78(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&nbsp;</span></a>&nbsp;&nbsp;\n                            ";
@@ -1966,7 +1966,7 @@ function program80(depth0,data) {
     + "\" data-concept-id=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" data-def-status=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"><span class=\"badge alert-warning\">&equiv;</span></a>&nbsp;&nbsp;\n                            ";
@@ -2091,7 +2091,7 @@ function program7(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n            "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\n        ";
   return buffer;
   }
@@ -2121,7 +2121,7 @@ function program15(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n        "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\n    ";
   return buffer;
   }
@@ -2925,14 +2925,14 @@ function program2(depth0,data) {
     + "\" data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>\n                "
-    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options)))
+    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options)))
     + "</span>&nbsp;&rarr;&nbsp;\n\n            ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(12, program12, data),fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n            "
-    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options)))
+    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options)))
     + "\n            </span><br>\n        ";
   return buffer;
   }
@@ -2984,7 +2984,7 @@ function program10(depth0,data) {
     + "\" data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>\n            ";
   return buffer;
   }
@@ -3001,7 +3001,7 @@ function program12(depth0,data) {
     + "\" data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>\n            ";
   return buffer;
   }
@@ -3078,14 +3078,14 @@ function program24(depth0,data) {
     + "\" data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>\n                            "
-    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options)))
+    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options)))
     + "</span>&nbsp;&rarr;&nbsp;\n\n                        ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.program(31, program31, data),fn:self.program(29, program29, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options) : helperMissing.call(depth0, "if_eq", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.definitionStatus), "PRIMITIVE", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                        "
-    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options)))
+    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options)))
     + "\n                        </span><br>\n                    ";
   return buffer;
   }
@@ -3126,7 +3126,7 @@ function program29(depth0,data) {
     + "\" data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>\n                        ";
   return buffer;
   }
@@ -3143,7 +3143,7 @@ function program31(depth0,data) {
     + "\" data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>\n                        ";
   return buffer;
   }
@@ -3196,9 +3196,9 @@ function program37(depth0,data) {
     + "\" data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>\n                    "
-    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options)))
+    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = (depth0 && depth0.type)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options)))
     + "</span>&nbsp;&rarr;&nbsp;\n            <span draggable = \"true\" ondragstart=\"drag(event, '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
@@ -3211,9 +3211,9 @@ function program37(depth0,data) {
     + "\" data-concept-id='"
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "' data-term='"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>\n                "
-    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term), options)))
+    + escapeExpression((helper = helpers.removeSemtag || (depth0 && depth0.removeSemtag),options={hash:{},data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options) : helperMissing.call(depth0, "removeSemtag", ((stack1 = (depth0 && depth0.target)),stack1 == null || stack1 === false ? stack1 : stack1.defaultTerm), options)))
     + "</span><br>\n        ";
   return buffer;
   }
@@ -7161,8 +7161,10 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "' data-term='"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "' data-term='";
+  if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "' data-statedDescendants='";
   if (helper = helpers.statedDescendants) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.statedDescendants); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
@@ -7190,8 +7192,10 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" data-term=\"";
+  if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\" data-statedDescendants=\"";
   if (helper = helpers.statedDescendants) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.statedDescendants); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
@@ -7202,8 +7206,10 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">"
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">";
+  if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "</span>\n                </a>\n        ";
   return buffer;
   }
@@ -7230,8 +7236,10 @@ function program6(depth0,data) {
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" data-term=\"";
+  if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\" draggable=\"true\" ondragstart=\"drag(event, '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
@@ -7251,8 +7259,10 @@ function program8(depth0,data) {
   if (helper = helpers.conceptId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.conceptId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" data-term=\""
-    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.fsn)),stack1 == null || stack1 === false ? stack1 : stack1.term)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" data-term=\"";
+  if (helper = helpers.defaultTerm) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.defaultTerm); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\" draggable=\"true\" ondragstart=\"drag(event, '";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
