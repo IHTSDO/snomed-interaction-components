@@ -1331,14 +1331,26 @@ function conceptDetails(divElement, conceptId, options) {
                             }
                         });
 
-                        $.ajax({
-                            url:options.serverUrl + "/browser/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release + '/' : '') + "concepts/bulk-load",
-                            type:"POST",
-                            data: JSON.stringify({"conceptIds":ids}),
-                            contentType:"application/json; charset=utf-8",
-                            dataType:"json",
-                            success: function(concepts){                                                               
-                                var populateRefsetMember = function (list, type, conceptsMap) {
+                        var getConcepts =  function(list) {     
+							var dfd = $.Deferred();
+							var result = {concepts: []};
+							for (var i = 0 ; i < list.length; i++) {
+								$.getJSON(options.serverUrl + "/browser/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release + '/' : '') + "concepts/" + list[i], function (concept) {
+								}).done(function (concept) {								    
+									result.concepts.push(concept)
+									if (result.concepts.length  === list.length) {
+									  dfd.resolve(result);
+									}
+								}).fail(function (xhr, textStatus, error) {
+									// do nothing
+								});
+							}							  
+							return dfd.promise();
+						};
+				
+						$.when(getConcepts(ids)).then(
+							function( respone ) {
+								var populateRefsetMember = function (list, type, conceptsMap) {
                                     if (type === 'simple' || type === 'simplemap'){
                                         list.forEach(function(item) {
                                             var concept = conceptsMap[item.refsetId];
@@ -1376,7 +1388,7 @@ function conceptDetails(divElement, conceptId, options) {
                                 }
 
                                 var conceptsMap = {};
-                                concepts.forEach(function(item) {
+                                respone.concepts.forEach(function(item) {
                                     conceptsMap[item.conceptId] = item;
                                 });
 
@@ -1394,8 +1406,11 @@ function conceptDetails(divElement, conceptId, options) {
                                 };
                                 
                                 $('#refsets-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/refset.hbs"](context));
-                            }
-                        });                        
+							},
+							function( status ) {
+								// do nothing
+							}
+						);                        
                     } else {
                         var context = {
                             firstMatch : firstMatch,
