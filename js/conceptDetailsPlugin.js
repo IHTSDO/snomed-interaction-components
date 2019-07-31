@@ -781,6 +781,13 @@ function conceptDetails(divElement, conceptId, options) {
 //            }
             // START FOR
             var allLangsHtml = "";
+            firstMatch.descriptions.sort(function(a, b) {
+                if (a.lang == options.defaultLanguage && b.lang != options.defaultLanguage)
+                    return -1;
+                if (a.lang != options.defaultLanguage && b.lang == options.defaultLanguage)
+                    return 1;
+                return 0;
+            });
             for (var language in options.languageObject) {
                 var allDescriptions = firstMatch.descriptions.slice(0);
                 var homeDescriptionsHtml = "";
