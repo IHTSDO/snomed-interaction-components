@@ -853,7 +853,7 @@ function conceptDetails(divElement, conceptId, options) {
                     }
 
                     if (included) {
-                        if (options.displayInactiveDescriptions) {
+                        if (panel.options.displayInactiveDescriptions) {
                             auxDescriptions.push(description);
                         } else {
                             if (description.active) {
