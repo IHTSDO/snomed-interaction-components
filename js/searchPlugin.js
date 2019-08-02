@@ -620,13 +620,12 @@ function searchPanel(divElement, options) {
                         branch = branch + "/" + options.release;
                     };
                     var searchUrl = options.serverUrl + "/browser/" + branch + "/descriptions?" +
-                        "&limit=50";
+                        "&limit=100";
                     if (panel.options.statusSearchFilter == "activeOnly" && options.serverUrl.includes('snowstorm')) {
                         searchUrl = searchUrl + "&term=" + encodeURIComponent(t);
+                        searchUrl = searchUrl + "&active=true";
                         searchUrl = searchUrl + "&conceptActive=true";
                         searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
-                        searchUrl = searchUrl + "&skipTo=" + skipTo;
-                        searchUrl = searchUrl + "&returnLimit=" + returnLimit;
                     }
                     else if(panel.options.statusSearchFilter == "activeOnly" && options.serverUrl.includes('snowowl')) {
                         searchUrl = searchUrl + "&query=" + encodeURIComponent(t);
@@ -634,9 +633,8 @@ function searchPanel(divElement, options) {
                     if (panel.options.statusSearchFilter == "inactiveOnly" && options.serverUrl.includes('snowstorm')) {
                         searchUrl = searchUrl + "&term=" + encodeURIComponent(t);
                         searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
-                        searchUrl = searchUrl + "&skipTo=" + skipTo;
-                        searchUrl = searchUrl + "&returnLimit=" + returnLimit;
-                        searchUrl = searchUrl + "&conceptActive=" + 'false';
+                        searchUrl = searchUrl + "&active=false";
+                        searchUrl = searchUrl + "&conceptActive=false";
                     }
                     else if(panel.options.statusSearchFilter == "inactiveOnly" && options.serverUrl.includes('snowowl')) {
                         searchUrl = searchUrl + "&query=" + encodeURIComponent(t);
@@ -644,8 +642,6 @@ function searchPanel(divElement, options) {
                     if (panel.options.statusSearchFilter == "activeAndInactive" && options.serverUrl.includes('snowstorm')) {
                         searchUrl = searchUrl + "&term=" + encodeURIComponent(t);
                         searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
-                        searchUrl = searchUrl + "&skipTo=" + skipTo;
-                        searchUrl = searchUrl + "&returnLimit=" + returnLimit;
                     }
                     else if(panel.options.statusSearchFilter == "activeAndInactive" && options.serverUrl.includes('snowowl')) {
                         searchUrl = searchUrl + "&query=" + encodeURIComponent(t);
@@ -683,21 +679,10 @@ function searchPanel(divElement, options) {
                                 aux.danger = true;
                             }
                             if (field.active && field.concept.active) {
-                                if (panel.options.statusSearchFilter == "activeOnly") {
-                                    resDescriptions.push(aux);
-                                }
-                                if (panel.options.statusSearchFilter == "activeAndInactive") {
-                                    resDescriptions.push(aux);
-                                }
                             } else {
                                 aux.danger = true;
-                                if (panel.options.statusSearchFilter == "inactiveOnly") {
-                                    resDescriptions.push(aux);
-                                }
-                                if (panel.options.statusSearchFilter == "activeAndInactive") {
-                                    resDescriptions.push(aux);
-                                }
                             }
+                            resDescriptions.push(aux);
                         });
 
                         // Convert response format
