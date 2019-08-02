@@ -264,7 +264,7 @@ function dropT(ev, id) {
         if (typeof term == "undefined"){
             term = text.substr(i);
         }
-        var definitionStatus = ev.dataTransfer.getData("def-status");
+        var definitionStatus = ev.dataTransfer.getData("data-def-status");
         var module = ev.dataTransfer.getData("module");
 
         $.each(componentsRegistry, function (i, field){

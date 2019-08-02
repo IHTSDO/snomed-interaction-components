@@ -328,6 +328,7 @@ function taxonomyPanel(divElement, conceptId, options) {
     }
 
     this.setupParents = function(parents, focusConcept) {
+        console.log(focusConcept);
         var lastParent;
         $.each(parents, function(i, parent) {
             lastParent = parent;
@@ -408,6 +409,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 var selectedLabel = $(event.target).attr('data-term');
                 var statedDescendants = $(event.target).attr('data-statedDescendants');
                 var inferredDescendants = $(event.target).attr('data-inferredDescendants');
+                var definitionStatus = $(event.target).attr('data-definition-status');
                 panel.history.push({ term: selectedLabel, conceptId: selectedId, time: time });
                 var branch = options.edition;
                 if(options.release.length > 0 && options.release !== 'None'){
@@ -428,8 +430,9 @@ function taxonomyPanel(divElement, conceptId, options) {
                                 item.defaultTerm = item.fsn.term;
                             }
                         });
+                        console.log(result);
                     }).done(function(result) {
-                        panel.setupParents(result, { conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: "PRIMITIVE", module: selectedModule, statedDescendants: statedDescendants, inferredDescendants: inferredDescendants });
+                        panel.setupParents(result, { conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: definitionStatus, module: selectedModule, statedDescendants: statedDescendants, inferredDescendants: inferredDescendants });
                     }).fail(function() {});
                 }
             }
@@ -514,7 +517,6 @@ function taxonomyPanel(divElement, conceptId, options) {
                 else{
                     item.defaultTerm = item.fsn.term;
                 }
-                console.log(item);
             });
             result.sort(function(a, b) {
                 if (a.defaultTerm.toLowerCase() < b.defaultTerm.toLowerCase())
@@ -833,8 +835,6 @@ function taxonomyPanel(divElement, conceptId, options) {
         });
         if (!unsubscribed) {
             panel.subscriptionsColor = colors;
-            //            console.log(panel.divElement.id);
-            //            console.log(panel.subscriptionsColor);
             colors = [];
             $.each(panelToUnsubscribe.subscribers, function(i, field) {
                 if (field != panel.divElement.id) {

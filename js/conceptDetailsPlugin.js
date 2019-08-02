@@ -358,7 +358,6 @@ function conceptDetails(divElement, conceptId, options) {
                     })
                 }
             });
-            console.log(pt);
             if(pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && result.fsn.lang != options.defaultLanguage){
                 result.defaultTerm = pt.term;
             }
