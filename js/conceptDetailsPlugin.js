@@ -1865,10 +1865,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
 
-            result.referencesByType.sort(function(a, b) {
-                if (a.referenceType.id === '116680003' || b.referenceType.id === '116680003') {
-                    return -1;
-                }
+            result.referencesByType.sort(function(a, b) {                
                 if (a.referenceType.fsn.term >  b.referenceType.fsn.term) {
                     return 1;
                 }
