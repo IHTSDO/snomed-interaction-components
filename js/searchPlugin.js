@@ -789,7 +789,14 @@ function searchPanel(divElement, options) {
 //                                result.filters.semTag = sortObject(result.filters.semTag);
 //                            }
                         }
+                             
+                        var server = 'snowstorm';
+                        if(options.serverUrl.includes('snowowl')){
+                           server = 'snowowl';
+                        };
+                        
                         var context = {
+                            server: server,
                             result: result,
                             elapsed: elapsed,
                             divElementId: panel.divElement.id,
