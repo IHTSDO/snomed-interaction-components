@@ -416,11 +416,13 @@ function taxonomyPanel(divElement, conceptId, options) {
                     branch = branch + "/" + options.release;
                 };
                 if (typeof selectedId != "undefined") {
-                    $.ajaxSetup({
-                      headers : {   
-                        'Accept-Language': options.languages
-                      }
-                    });
+                    if(!options.serverUrl.includes('snowowl')){
+                       $.ajaxSetup({
+                          headers : {
+                            'Accept-Language': options.languages
+                          }
+                        });
+                    };
                     $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
                         result.forEach(function(item) {
                             if(item.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && item.fsn.lang != options.defaultLanguage){
@@ -503,11 +505,13 @@ function taxonomyPanel(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
-        $.ajaxSetup({
-          headers : {   
-            'Accept-Language': options.languages
-          }
-        });
+        if(!options.serverUrl.includes('snowowl')){
+           $.ajaxSetup({
+              headers : {
+                'Accept-Language': options.languages
+              }
+            });
+        };
         $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
             if (result && result[0] && typeof result[0].statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
             result.forEach(function(item) {
@@ -620,11 +624,13 @@ function taxonomyPanel(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
-        $.ajaxSetup({
-          headers : {   
-            'Accept-Language': options.languages
-          }
-        });
+        if(!options.serverUrl.includes('snowowl')){
+           $.ajaxSetup({
+              headers : {
+                'Accept-Language': options.languages
+              }
+            });
+        };
         $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(parents) {
             // done
         }).done(function(parents) {
@@ -744,11 +750,13 @@ function taxonomyPanel(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
-        $.ajaxSetup({
-          headers : {   
-            'Accept-Language': options.languages
-          }
-        });
+        if(!options.serverUrl.includes('snowowl')){
+           $.ajaxSetup({
+              headers : {
+                'Accept-Language': options.languages
+              }
+            });
+        };
         $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
             $.each(result, function(i, item) {
                 if (typeof item.defaultTerm == "undefined") {
@@ -767,11 +775,13 @@ function taxonomyPanel(divElement, conceptId, options) {
             }
             if (conceptId == 138875005) statedDescendants = options.rootConceptDescendants;
             if (typeof term == "undefined" || typeof statedDescendants == "undefined") {
-                $.ajaxSetup({
-                  headers : {   
-                    'Accept-Language': options.languages
-                  }
-                });
+                if(!options.serverUrl.includes('snowowl')){
+                   $.ajaxSetup({
+                      headers : {
+                        'Accept-Language': options.languages
+                      }
+                    });
+                };
                 $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId, function(res) {
                     if(res.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && res.fsn.lang != options.defaultLanguage){
                         res.defaultTerm = res.pt.term;
@@ -939,11 +949,13 @@ function taxonomyPanel(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
-        $.ajaxSetup({
-          headers : {   
-            'Accept-Language': options.languages
-          }
-        });
+        if(!options.serverUrl.includes('snowowl')){
+           $.ajaxSetup({
+              headers : {
+                'Accept-Language': options.languages
+              }
+            });
+        };
         xhr = $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId, function(result) {
             if (typeof result.statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
         }).done(function(result) {

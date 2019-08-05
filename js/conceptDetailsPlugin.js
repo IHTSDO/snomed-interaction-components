@@ -339,11 +339,13 @@ function conceptDetails(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
-        $.ajaxSetup({
-          headers : {
-            'Accept-Language': options.languages
-          }
-        });
+        if(!options.serverUrl.includes('snowowl')){
+           $.ajaxSetup({
+              headers : {
+                'Accept-Language': options.languages
+              }
+            });
+        };
         xhr = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId, function(result) {
 
         }).done(function(result) {
@@ -1707,11 +1709,13 @@ function conceptDetails(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
-        $.ajaxSetup({
-          headers : {
-            'Accept-Language': options.languages
-          }
-        });
+        if(!options.serverUrl.includes('snowowl')){
+           $.ajaxSetup({
+              headers : {
+                'Accept-Language': options.languages
+              }
+            });
+        };
         xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
@@ -1848,11 +1852,13 @@ function conceptDetails(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
-        $.ajaxSetup({
-          headers : {
-            'Accept-Language': options.languages
-          }
-        });
+        if(!options.serverUrl.includes('snowowl')){
+           $.ajaxSetup({
+              headers : {
+                'Accept-Language': options.languages
+              }
+            });
+        };
         xhrReferences = $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId + "/references?stated=" + (panel.options.selectedView === 'stated') + '&offset=0&limit=10000', function(result) {
 
         }).done(function(result) {
@@ -1934,11 +1940,13 @@ function conceptDetails(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
-        $.ajaxSetup({
-          headers : {
-            'Accept-Language': options.languages
-          }
-        });
+        if(!options.serverUrl.includes('snowowl')){
+           $.ajaxSetup({
+              headers : {
+                'Accept-Language': options.languages
+              }
+            });
+        };
         xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/children?form=" + panel.options.selectedView, function(result) {}).done(function(result) {
             result.forEach(function(c) { setDefaultTerm(c) });
             result.sort(function(a, b) {
@@ -2021,11 +2029,13 @@ function conceptDetails(divElement, conceptId, options) {
         if(options.release.length > 0 && options.release !== 'None'){
             branch = branch + "/" + options.release;
         };
-        $.ajaxSetup({
-          headers : {
-            'Accept-Language': options.languages
-          }
-        });
+        if(!options.serverUrl.includes('snowowl')){
+           $.ajaxSetup({
+              headers : {
+                'Accept-Language': options.languages
+              }
+            });
+        };
         xhrParents = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + "/parents?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {

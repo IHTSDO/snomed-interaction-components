@@ -477,11 +477,13 @@ function searchPanel(divElement, options) {
                         if(options.release.length > 0 && options.release !== 'None'){
                             branch = branch + "/" + options.release;
                         };
-                        $.ajaxSetup({
-                          headers : {   
-                            'Accept-Language': options.languages
-                          }
-                        });
+                        if(!options.serverUrl.includes('snowowl')){
+                           $.ajaxSetup({
+                              headers : {
+                                'Accept-Language': options.languages
+                              }
+                            });
+                        };
                         xhr = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + t, function(result) {
 
                         }).done(function(result) {
@@ -559,7 +561,11 @@ function searchPanel(divElement, options) {
                         $.ajax({
                              url: options.serverUrl + "/" + branch + "/descriptions/" + t,
                              type: "GET",
-                             beforeSend: function(xhr){xhr.setRequestHeader('Accept-Language', options.languages);},
+                             beforeSend: function(xhr){
+                                 if(!options.serverUrl.includes('snowowl')){
+                                    xhr.setRequestHeader('Accept-Language', options.languages);
+                                 };
+                             },
                              success: function(result) { 
                                 console.log(result);
                                 Handlebars.registerHelper('if_eq', function(a, b, opts) {
@@ -668,7 +674,11 @@ function searchPanel(divElement, options) {
                     $.ajax({
                          url: searchUrl,
                          type: "GET",
-                         beforeSend: function(xhr){xhr.setRequestHeader('Accept-Language', options.languages);},
+                         beforeSend: function(xhr){
+                             if(!options.serverUrl.includes('snowowl')){
+                                xhr.setRequestHeader('Accept-Language', options.languages);
+                             };
+                         },
                          success: function(result) { 
                         var resDescriptions = [];
                         $.each(result.items, function(i, field) {
