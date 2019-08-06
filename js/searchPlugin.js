@@ -956,6 +956,7 @@ function searchPanel(divElement, options) {
                         } else {
                             $('#' + panel.divElement.id + '-resultsTable').append(JST["views/searchPlugin/body/default.hbs"](context));
                         }
+                        $("#" + panel.divElement.id + "-groupConcept").unbind();
                         $("#" + panel.divElement.id + "-groupConcept").click(function() {
                             panel.search(t, parseInt(skipTo), returnLimit, true);
                         });
