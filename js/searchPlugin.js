@@ -685,14 +685,36 @@ function searchPanel(divElement, options) {
                             var aux = field;
                             aux.definitionStatus = result.definitionStatus;
                             aux.conceptActive = field.concept.active;
-                            if (!aux.active || !aux.conceptActive) {
-                                aux.danger = true;
+                            
+                            //Filter results by active status for snowowl
+                            if(options.serverUrl.includes('snowowl')){
+                                if (field.active && field.concept.active) {
+                                    if (panel.options.statusSearchFilter == "activeOnly") {
+                                        resDescriptions.push(aux);
+                                    }
+                                    if (panel.options.statusSearchFilter == "activeAndInactive") {
+                                        resDescriptions.push(aux);
+                                    }
+                                } else {
+                                    aux.danger = true;
+                                    if (panel.options.statusSearchFilter == "inactiveOnly") {
+                                        resDescriptions.push(aux);
+                                    }
+                                    if (panel.options.statusSearchFilter == "activeAndInactive") {
+                                        resDescriptions.push(aux);
+                                    }
+                                }
                             }
-                            if (field.active && field.concept.active) {
-                            } else {
-                                aux.danger = true;
+                            else{
+                                if (!aux.active || !aux.conceptActive) {
+                                    aux.danger = true;
+                                }
+                                if (field.active && field.concept.active) {
+                                } else {
+                                    aux.danger = true;
+                                }
+                                resDescriptions.push(aux);
                             }
-                            resDescriptions.push(aux);
                         });
 
                         // Convert response format
