@@ -659,10 +659,10 @@ function searchPanel(divElement, options) {
                         searchUrl = searchUrl + "&langFilter=" + panel.options.langFilter;
                     }
                     if (panel.options.moduleFilter != 'none') {
-                        searchUrl = searchUrl + "&moduleFilter=" + panel.options.moduleFilter;
+                        searchUrl = searchUrl + "&module=" + panel.options.moduleFilter;
                     }
                     if (panel.options.refsetFilter != 'none') {
-                        searchUrl = searchUrl + "&refsetFilter=" + panel.options.refsetFilter;
+                        searchUrl = searchUrl + "&conceptRefset=" + panel.options.refsetFilter;
                     }
                     if (panel.options.textIndexNormalized != "none") {
                         searchUrl = searchUrl + "&normalize=" + panel.options.textIndexNormalized;
