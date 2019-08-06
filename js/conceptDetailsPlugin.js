@@ -33,10 +33,11 @@ function conceptDetails(divElement, conceptId, options) {
         "900000000000509007": "United States of America English language reference set",
         "900000000000508004": "Great Britain English language reference set"
     };
-
-    if (options.languageNameOfLangRefset)
+    
+    if (options.languageNameOfLangRefset){
         languageNameOfLangRefset = options.languageNameOfLangRefset;
-
+    }
+    
     var panel = this;
     this.type = "concept-details";
     this.conceptId = conceptId;
@@ -68,6 +69,14 @@ function conceptDetails(divElement, conceptId, options) {
     panel.subscriptionsColor = [];
     panel.subscriptions = [];
     panel.subscribers = [];
+    panel.server = "";
+    
+    if (options.serverUrl.includes('snowowl')){
+        panel.server = 'snowowl';
+    }
+    else{
+        panel.server = 'snowstorm';
+    }
 
     componentLoaded = false;
     $.each(componentsRegistry, function(i, field) {
