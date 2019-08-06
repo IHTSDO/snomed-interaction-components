@@ -124,8 +124,10 @@ function conceptDetails(divElement, conceptId, options) {
         panel.childrenPId = panel.divElement.id + "-children-panel";
         panel.defaultTerm = "";
         $(divElement).html();
+        
         var context = {
             divElementId: panel.divElement.id,
+            server: panel.server
         };
         //        options statedParents inferredParents firstMatch statedRoles inferredRoles allDescriptions
         // dataContentValue = document.URL.split("?")[0].split("#")[0]
@@ -585,7 +587,8 @@ function conceptDetails(divElement, conceptId, options) {
                 panel: panel,
                 firstMatch: firstMatch,
                 divElementId: panel.divElement.id,
-                link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&languages=" + panel.options.languages
+                link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&server=" + panel.options.serverUrl + "&languages=" + panel.options.languages,
+                server: panel.server
             };
             $('#home-attributes-' + panel.divElement.id).html(JST["views/conceptDetailsPlugin/tabs/home/attributes.hbs"](context));
 
@@ -924,6 +927,7 @@ function conceptDetails(divElement, conceptId, options) {
                     languageName: "(" + language + ")",
                     longLangName: panel.options.languagesArray[language],
                     divElementId: panel.divElement.id,
+                    server: panel.server,
                     allDescriptions: allDescriptions
                 };
 
@@ -1197,6 +1201,7 @@ function conceptDetails(divElement, conceptId, options) {
 
             var context = {
                 divElementId: panel.divElement.id,
+                server: panel.server,
                 statedParents: panel.statedParents,
                 inferredParents: panel.inferredParents,
                 options: panel.options,
@@ -1758,6 +1763,7 @@ function conceptDetails(divElement, conceptId, options) {
             var context = {
                 displayChildren: panel.options.displayChildren,
                 divElementId: panel.divElement.id,
+                server: panel.server,
                 childrenResult: result,
                 selectedView: panel.options.selectedView
             };
@@ -1906,6 +1912,7 @@ function conceptDetails(divElement, conceptId, options) {
 
             var context = {
                 divElementId: panel.divElement.id,
+                server: panel.server,
                 result: result
             };
             //            $("#references-" + panel.divElement.id + "-total").html(result.length  + " references");
@@ -1972,6 +1979,7 @@ function conceptDetails(divElement, conceptId, options) {
                 displayChildren: panel.options.displayChildren,
                 childrenResult: result,
                 divElementId: panel.divElement.id,
+                server: panel.server,
                 selectedView: panel.options.selectedView
             };
             if (typeof forceShow != "undefined") {
@@ -2181,6 +2189,7 @@ function conceptDetails(divElement, conceptId, options) {
                 context = {
                     result: {'items':[]},
                     divElementId: panel.divElement.id,
+                    server: panel.server,
                     total: total,
                     skipTo: 0,
                     referenceComponentsOfRefsetAreNotConcepts: true
@@ -2192,6 +2201,7 @@ function conceptDetails(divElement, conceptId, options) {
                     returnLimit: returnLimit2,
                     remaining: remaining,
                     divElementId: panel.divElement.id,
+                    server: panel.server,
                     skipTo: skipTo,
                     panel: panel,
                     total: total,
