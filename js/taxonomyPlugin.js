@@ -746,6 +746,7 @@ function taxonomyPanel(divElement, conceptId, options) {
     }
 
     this.setToConcept = function(conceptId, term, definitionStatus, module, statedDescendants) {
+        console.log(definitionStatus);
         $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         var branch = options.edition;
         if(options.release.length > 0 && options.release !== 'None'){
@@ -771,11 +772,8 @@ function taxonomyPanel(divElement, conceptId, options) {
                 }
             });
         }).done(function(result) {
-            if (definitionStatus != "PRIMITIVE" && definitionStatus != "FULLY_DEFINED") {
-                definitionStatus = "PRIMITIVE";
-            }
             if (conceptId == 138875005) statedDescendants = options.rootConceptDescendants;
-            if (typeof term == "undefined" || typeof statedDescendants == "undefined") {
+            if (typeof term == "undefined" || typeof statedDescendants == "undefined" || typeof definitionStatus == "undefined") {
                 if(!options.serverUrl.includes('snowowl')){
                    $.ajaxSetup({
                       headers : {
@@ -797,7 +795,7 @@ function taxonomyPanel(divElement, conceptId, options) {
 
                     if (typeof res.statedDescendants == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
                     statedDescendants = res.statedDescendants;
-                    panel.setupParents(result, { conceptId: conceptId, defaultTerm: res.defaultTerm, definitionStatus: definitionStatus, module: module, statedDescendants: statedDescendants });
+                    panel.setupParents(result, { conceptId: conceptId, defaultTerm: res.defaultTerm, definitionStatus: res.definitionStatus, module: module, statedDescendants: statedDescendants });
                 });
             } else {
                 panel.setupParents(result, { conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus, module: module, statedDescendants: statedDescendants });
