@@ -30,18 +30,18 @@
                 {{/if_undefined}}
                 </span>
             </h4>
-            <br>SCTID: {{firstMatch.conceptId}}
+            <br>SCTID: {{firstMatch.conceptId}}<span>,</span>
 
             {{#if_eq firstMatch.definitionStatus "PRIMITIVE"}}
-                , <span class='i18n' data-i18n-id='i18n_primitive'>PRIMITIVE</span>
+                <span class='i18n' data-i18n-id='i18n_primitive'>PRIMITIVE</span><span>,</span>
             {{else}}
-                , <span class='i18n' data-i18n-id='i18n_fully_defined'>Fully defined</span>
+                <span class='i18n' data-i18n-id='i18n_fully_defined'>Defined</span><span>,</span>
             {{/if_eq}}
-
+            
             {{#if_eq firstMatch.active true}}
-                , <span class='i18n' data-i18n-id='i18n_active'>Active</span>
+                <span class='i18n' data-i18n-id='i18n_active'>Active</span>
             {{else}}
-                , <span class='i18n' data-i18n-id='i18n_inactive'>Inactive</span>
+                <span class='i18n' data-i18n-id='i18n_inactive'>Inactive</span>
             {{/if_eq}}
             {{#if_undefined firstMatch.statedDescendantsString}}
             {{else}}
