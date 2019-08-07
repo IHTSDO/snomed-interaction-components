@@ -606,7 +606,8 @@ function conceptDetails(divElement, conceptId, options) {
                 var concept = {
                     module: firstMatch.module,
                     conceptId: firstMatch.conceptId,
-                    defaultTerm: firstMatch.defaultTerm
+                    defaultTerm: firstMatch.defaultTerm,
+                    definitionStatus: firstMatch.definitionStatus
                 };
                 if ($(e.target).hasClass("glyphicon-star")) {
                     var favs = stringToArray(localStorage.getItem("favs")),
