@@ -7,7 +7,7 @@
                 {{#if active}}
                     <li data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' class='treeLabel'>
                         <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-{{#if_eq ../../selectedView "inferred"}}{{#if_eq isLeafInferred true}}minus{{else}}chevron-right{{/if_eq}}{{else}}{{#if_eq isLeafStated true}}minus{{else}}chevron-right{{/if_eq}}{{/if_eq}} treeButton' id='{{../../divElementId}}-treeicon-{{conceptId}}'></i></button>
-                        {{#if_eq definitionStatus "Primitive"}}
+                        {{#if_eq definitionStatus "PRIMITIVE"}}
                             <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}">&nbsp;&nbsp;</span>&nbsp;&nbsp;
                         {{else}}
                             <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}">&equiv;</span>&nbsp;&nbsp;
@@ -37,7 +37,7 @@
                     {{#if active}}
                         <li data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' class='treeLabel'>
                             <button class='btn btn-link btn-xs treeButton' style='padding:2px'><i class='glyphicon glyphicon-{{#if_eq ../../selectedView "inferred"}}{{#if_eq isLeafInferred true}}minus{{else}}chevron-right{{/if_eq}}{{else}}{{#if_eq isLeafStated true}}minus{{else}}chevron-right{{/if_eq}}{{/if_eq}} treeButton' id='{{../../divElementId}}-treeicon-{{conceptId}}'></i></button>
-                            {{#if_eq definitionStatus "Primitive"}}
+                            {{#if_eq definitionStatus "PRIMITIVE"}}
                                 <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}">&nbsp;&nbsp;</span>&nbsp;&nbsp;
                             {{else}}
                                 <span class="badge alert-warning" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}">&equiv;</span>&nbsp;&nbsp;

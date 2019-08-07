@@ -66,9 +66,9 @@ function queryComputerPanel(divElement, options) {
                 }
             });
         }
-        $("#" + panelId + "-ownMarker").show();
+        // $("#" + panelId + "-ownMarker").show();
         $("#" + panel.divElement.id + "-subscribersMarker").show();
-        $("#" + panelId + "-ownMarker").show();
+        // $("#" + panelId + "-ownMarker").show();
     }
 
     this.setUpPanel = function() {
@@ -245,9 +245,13 @@ function queryComputerPanel(divElement, options) {
         });
 
         if (!panel.typeArray || !panel.typeArray.length) {
+            var branch = options.edition;
+            if(options.release.length > 0 && options.release !== 'None'){
+                branch = branch + "/" + options.release;
+            };
             $.ajax({
                 type: "POST",
-                url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+                url: options.serverUrl.replace("snomed", "expressions/") + branch + "/execute/brief",
                 data: {
                     expression: "< 410662002|Concept model attribute (attribute)|",
                     limit: 5000,
@@ -729,7 +733,7 @@ function queryComputerPanel(divElement, options) {
             panel.execute("inferred", expression, true);
             /* } else {
                       alertEvent("Invalid Expression", "error")
-                  } 
+                  }
               }).fail(function(err) {
                   //console.log(err);
               }).always(function() { */
@@ -841,9 +845,13 @@ function queryComputerPanel(divElement, options) {
         panel.lastRequest.skip = 0;
         panel.lastRequest.limit = panel.lastTotalValues + 1;
         $('#' + panel.divElement.id + '-exportXls').html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+        var branch = options.edition;
+        if(options.release.length > 0 && options.release !== 'None'){
+            branch = branch + "/" + options.release;
+        };
         xhrTotal = $.ajax({
             type: "POST",
-            url: options.serverUrl.replace("snomed", "expressions/") + options.edition + "/" + options.release + "/execute/brief",
+            url: options.serverUrl.replace("snomed", "expressions/") + "/" + branch + "/execute/brief",
             data: panel.lastRequest,
             dataType: "json",
             success: function(result) {
@@ -1204,13 +1212,11 @@ function queryComputerPanel(divElement, options) {
         panel.lastRequest = data;
         page = skip / limit;
         var expressionURL;
-        if (options.queryBranch == 'MAIN') {
-            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?module=900000000000207008&ecl=" + encodeURIComponent(strippedExpression) + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
-        } else if (options.queryBranch.includes('SNOMEDCT-US')) {
-            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?&ecl=" + encodeURIComponent(strippedExpression) + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
-        } else {
-            expressionURL = options.queryServerUrl + "/" + options.queryBranch + "/concepts?ecl=" + encodeURIComponent(strippedExpression) + "&page=" + page + "&size=" + limit;
-        }
+        var branch = options.edition;
+                if(options.release.length > 0 && options.release !== 'None'){
+                    branch = branch + "/" + options.release;
+                };
+        expressionURL = options.serverUrl + "/" + branch + "/concepts?module=900000000000207008&ecl=" + encodeURIComponent(strippedExpression) + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
         console.log("queryURL " + expressionURL);
         if (xhrExecute != null && !onlyTotal)
             xhrExecute.abort();
