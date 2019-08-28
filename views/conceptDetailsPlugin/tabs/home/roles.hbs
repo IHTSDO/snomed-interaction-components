@@ -30,66 +30,63 @@
             {{/if_eq}}
         {{/if_eq}}
         {{#if_eq attributesFromAxioms.length 0}}
-        {{else}}       
+        {{else}}
             {{#each firstMatch.classAxioms}}
                 <div>Axiom</div>
-                {{#each relationships}}
-                    {{#if_eq type.conceptId "116680003"}}
-                    {{else}}
-                        <!--<br>-->
-                        {{#eqLastGroup groupId}}
-                            </div>
-                            {{setLastGroup groupId}}
-                            {{lastColor "random"}}
-                            <div {{#if_eq groupId 0}}{{else}}style="border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;"{{/if_eq}}>
-                            <span style='background-color: {{lastColor "get"}}'></span>
-                        {{else}}
-                            <span style='background-color: {{lastColor "get"}}'></span>
-                        {{/eqLastGroup}}
-                        &nbsp;<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
-                            {{removeSemtag type.defaultTerm}}</span>&nbsp;&rarr;&nbsp;
+                <div style="border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;">
+                    {{#each relationships}}
 
-                        {{#if_eq target.definitionStatus "PRIMITIVE"}}
-                            <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+                        {{#if_eq type.conceptId "116680003"}}
                         {{else}}
+                            {{#eqLastGroup groupId}}
+                                {{setLastGroup groupId}}
+                                {{lastColor "random"}}
+                                <span style='background-color: {{lastColor "get"}}'></span>
+                            {{else}}
+                                <span style='background-color: {{lastColor "get"}}'></span>
+                            {{/eqLastGroup}}
+                            &nbsp;<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>{{removeSemtag type.defaultTerm}}</span>&nbsp;&rarr;&nbsp;
+
+                            {{#if_eq target.definitionStatus "PRIMITIVE"}}
+                            <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
+                            {{else}}
                             <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
-                        {{/if_eq}}
-                        {{removeSemtag target.defaultTerm}}
+                            {{/if_eq}}
+                            {{removeSemtag target.defaultTerm}}
                         </span><br>
-                    {{/if_eq}}
-                {{/each}}
-                </div>           
+                        {{/if_eq}}
+                    {{/each}}
+                </span>
+                </div>
             {{/each}}
         {{/if_eq}}
         {{#if_eq firstMatch.gciAxioms.length 0}}
-        {{else}} 
+        {{else}}
             {{#each firstMatch.gciAxioms}}
                 <div>GCI</div>
-                {{#each relationships}}
-                    {{#if_eq type.conceptId "116680003"}}
-                    {{else}}
-                        <!--<br>-->
-                        {{#eqLastGroup groupId}}
-                            </div>
-                            {{setLastGroup groupId}}
-                            {{lastColor "random"}}
-                            <div {{#if_eq groupId 0}}{{else}}style="border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;"{{/if_eq}}>
-                            <span style='background-color: {{lastColor "get"}}'></span>
+                <div style="border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;">
+                    {{#each relationships}}
+                        {{#if_eq type.conceptId "116680003"}}
                         {{else}}
-                            <span style='background-color: {{lastColor "get"}}'></span>
-                        {{/eqLastGroup}}
-                        &nbsp;<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>
-                            {{removeSemtag type.defaultTerm}}</span>&nbsp;&rarr;&nbsp;
+                            {{#eqLastGroup groupId}}
+                                {{setLastGroup groupId}}
+                                {{lastColor "random"}}
+                                <span style='background-color: {{lastColor "get"}}'></span>
+                            {{else}}
+                                <span style='background-color: {{lastColor "get"}}'></span>
+                            {{/eqLastGroup}}
+                            &nbsp;<span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-attribute-compact' data-module="{{type.module}}" data-concept-id='{{type.conceptId}}' data-term='{{type.defaultTerm}}'>{{removeSemtag type.defaultTerm}}</span>&nbsp;&rarr;&nbsp;
 
-                        {{#if_eq target.definitionStatus "PRIMITIVE"}}
+                            {{#if_eq target.definitionStatus "PRIMITIVE"}}
                             <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-primitive-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
-                        {{else}}
+                            {{else}}
                             <span draggable = "true" ondragstart="drag(event, '{{divElementId}}')" class='sct-defined-concept-compact' data-module="{{target.module}}" data-concept-id='{{target.conceptId}}' data-term='{{target.defaultTerm}}'>
-                        {{/if_eq}}
-                        {{removeSemtag target.defaultTerm}}
+                            {{/if_eq}}
+                            {{removeSemtag target.defaultTerm}}
                         </span><br>
-                    {{/if_eq}}
-                {{/each}}
+                        {{/if_eq}}
+                    {{/each}}
+                </span>
                 </div>
             {{/each}}
             </div>
