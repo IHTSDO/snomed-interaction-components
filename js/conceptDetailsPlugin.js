@@ -33,11 +33,11 @@ function conceptDetails(divElement, conceptId, options) {
         "900000000000509007": "United States of America English language reference set",
         "900000000000508004": "Great Britain English language reference set"
     };
-    
+
     if (options.languageNameOfLangRefset){
         languageNameOfLangRefset = options.languageNameOfLangRefset;
     }
-    
+
     var panel = this;
     this.type = "concept-details";
     this.conceptId = conceptId;
@@ -70,7 +70,7 @@ function conceptDetails(divElement, conceptId, options) {
     panel.subscriptions = [];
     panel.subscribers = [];
     panel.server = "";
-    
+
     if (options.serverUrl.includes('snowowl')){
         panel.server = 'snowowl';
     }
@@ -124,7 +124,7 @@ function conceptDetails(divElement, conceptId, options) {
         panel.childrenPId = panel.divElement.id + "-children-panel";
         panel.defaultTerm = "";
         $(divElement).html();
-        
+
         var context = {
             divElementId: panel.divElement.id,
             server: panel.server
@@ -472,6 +472,8 @@ function conceptDetails(divElement, conceptId, options) {
             };
 
             firstMatch.classAxioms.forEach(function(axiom) {
+                axiom.clinicalFindingRelationships = true;
+
                 if(axiom.active){
                     axiom.relationships.forEach(function(rel) {
                         if(rel.type.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && rel.type.fsn.lang != options.defaultLanguage){
@@ -495,11 +497,16 @@ function conceptDetails(divElement, conceptId, options) {
                             rel.effectiveTime = axiom.effectiveTime;
                             panel.attributesFromAxioms.push(rel);
                         }
+                        if(rel.active && rel.type.conceptId !== "116680003") {
+                            axiom.clinicalFindingRelationships = false;
+                        }
                     });
                 }
                 sortAxiomRelationships(axiom.relationships);
             });
             firstMatch.gciAxioms.forEach(function(axiom) {
+                axiom.clinicalFindingRelationships = true;
+
                 if(axiom.active){
                     axiom.relationships.forEach(function(rel) {
                         if(rel.type.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && rel.type.fsn.lang != options.defaultLanguage){
@@ -522,6 +529,9 @@ function conceptDetails(divElement, conceptId, options) {
                         else if(rel.active){
                             rel.axiomId = axiom.axiomId;
                             rel.effectiveTime = axiom.effectiveTime;
+                        }
+                        if(rel.active && rel.type.conceptId !== "116680003") {
+                            axiom.clinicalFindingRelationships = false;
                         }
                     });
                 }
@@ -1887,7 +1897,7 @@ function conceptDetails(divElement, conceptId, options) {
                 }
             });
 
-            result.referencesByType.sort(function(a, b) {                
+            result.referencesByType.sort(function(a, b) {
                 if (a.referenceType.fsn.term >  b.referenceType.fsn.term) {
                     return 1;
                 }

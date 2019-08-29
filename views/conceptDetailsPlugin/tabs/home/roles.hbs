@@ -32,8 +32,11 @@
         {{#if_eq attributesFromAxioms.length 0}}
         {{else}}
             {{#each firstMatch.classAxioms}}
-                <div>Axiom</div>
-                <div style="border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;">
+                {{#if_eq clinicalFindingRelationships true}}
+                {{else}}
+                    <div>Axiom</div>
+                    <div style="border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;">
+                {{/if_eq}}
                     {{#each relationships}}
 
                         {{#if_eq type.conceptId "116680003"}}
@@ -63,8 +66,11 @@
         {{#if_eq firstMatch.gciAxioms.length 0}}
         {{else}}
             {{#each firstMatch.gciAxioms}}
-                <div>GCI</div>
-                <div style="border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;">
+                {{#if_eq clinicalFindingRelationships true}}
+                {{else}}
+                    <div>GCI</div>
+                    <div style="border: 1px solid darkgrey; border-radius: 4px; padding: 3px; background-color: white; margin: 5px;">
+                {{/if_eq}}
                     {{#each relationships}}
                         {{#if_eq type.conceptId "116680003"}}
                         {{else}}
