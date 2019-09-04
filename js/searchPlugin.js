@@ -513,6 +513,9 @@ function searchPanel(divElement, options) {
                                     if (!aux.active) {
                                         aux.danger = true;
                                     }
+                                    if(!result.active){
+                                        aux.danger = true;
+                                    }
                                     if (field.active) {
                                         if (panel.options.statusSearchFilter == "activeOnly") {
                                             resDescriptions.push(aux);
@@ -521,14 +524,6 @@ function searchPanel(divElement, options) {
                                             resDescriptions.push(aux);
                                         }
                                         if (panel.options.statusSearchFilter == "inactiveOnly") {
-                                            resDescriptions.push(aux);
-                                        }
-                                    } else {
-                                        aux.danger = true;
-                                        if (panel.options.statusSearchFilter == "inactiveOnly") {
-                                            resDescriptions.push(aux);
-                                        }
-                                        if (panel.options.statusSearchFilter == "activeAndInactive") {
                                             resDescriptions.push(aux);
                                         }
                                     }
@@ -645,15 +640,16 @@ function searchPanel(divElement, options) {
                         searchUrl = searchUrl + "&query=" + encodeURIComponent(t);
                     }
                     if (panel.options.statusSearchFilter == "inactiveOnly" && options.serverUrl.includes('snowstorm')) {
+                        searchUrl = searchUrl + "&active=true";
                         searchUrl = searchUrl + "&term=" + encodeURIComponent(t);
                         searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
-                        searchUrl = searchUrl + "&active=false";
                         searchUrl = searchUrl + "&conceptActive=false";
                     }
                     else if(panel.options.statusSearchFilter == "inactiveOnly" && options.serverUrl.includes('snowowl')) {
                         searchUrl = searchUrl + "&query=" + encodeURIComponent(t);
                     }
                     if (panel.options.statusSearchFilter == "activeAndInactive" && options.serverUrl.includes('snowstorm')) {
+                        searchUrl = searchUrl + "&active=true";
                         searchUrl = searchUrl + "&term=" + encodeURIComponent(t);
                         searchUrl = searchUrl + "&lang=" + panel.options.searchLang;
                     }
