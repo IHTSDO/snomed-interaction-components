@@ -8,7 +8,7 @@
     {{#if_eq options.langFilter "none"}}
     {{else}}
         <h3 style="margin-top: 5px;">
-            <span style="font-size: 12px; margin-top: 5px;" class='label label-danger'>{{options.langFilter}}&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>
+            <span style="font-size: 12px; margin-top: 5px;" class='label label-danger'>{{parseLanguageName options.langFilter}}&nbsp;<a href='javascript:void(0);' style='color: white;text-decoration: none;' class='remove-lang'>&times;</a></span>
         </h3>
     {{/if_eq}}
     {{#if_eq options.semTagFilter "none"}}
