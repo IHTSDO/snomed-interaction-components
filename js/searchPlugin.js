@@ -752,6 +752,15 @@ function searchPanel(divElement, options) {
                         Handlebars.registerHelper("first20chars", function(string) {
                             return (string.substr(0, 18) + "...");
                         });
+                        Handlebars.registerHelper("parseLanguageName", function(language) {
+                            var displayLanguage = "";
+                            $.each(result.languageNames, function(key, value) {
+                                if(key == language){
+                                    displayLanguage = displayLanguage + value;
+                                }
+                            });
+                            return displayLanguage;
+                        });
                         var auxArray = [];
                         if (result.buckets) {
                             if (result.buckets.membership) {

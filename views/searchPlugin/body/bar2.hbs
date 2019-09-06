@@ -35,7 +35,7 @@
                         {{#each result.buckets.language}}
                             <li class="list-group-item">
                                 <span class="badge">{{this}}</span>
-                                <a class='lang-link' href='javascript:void(0);' data-lang='{{@key}}'>{{@key}}</a>
+                                <a class='lang-link' href='javascript:void(0);' data-lang='{{@key}}'>{{parseLanguageName @key}}</a>
                             </li>
                         {{/each}}
                     </ul>

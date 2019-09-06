@@ -6426,13 +6426,13 @@ function program27(depth0,data) {
   }
 function program28(depth0,data) {
   
-  var buffer = "", stack1;
+  var buffer = "", stack1, helper, options;
   buffer += "\n                            <li class=\"list-group-item\">\n                                <span class=\"badge\">"
     + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
     + "</span>\n                                <a class='lang-link' href='javascript:void(0);' data-lang='"
     + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "'>"
-    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression((helper = helpers.parseLanguageName || (depth0 && depth0.parseLanguageName),options={hash:{},data:data},helper ? helper.call(depth0, (data == null || data === false ? data : data.key), options) : helperMissing.call(depth0, "parseLanguageName", (data == null || data === false ? data : data.key), options)))
     + "</a>\n                            </li>\n                        ";
   return buffer;
   }
