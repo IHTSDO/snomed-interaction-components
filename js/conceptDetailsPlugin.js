@@ -275,7 +275,7 @@ function conceptDetails(divElement, conceptId, options) {
         $("#" + panel.divElement.id + "-apply-button").click(function() {
             //console.log("apply!");
             panel.readOptionsPanel();
-            //            panel.updateCanvas();
+            panel.updateCanvas();
         });
 
         //        $("#" + panel.divElement.id + "-linkerButton").click(function(event) {
@@ -973,12 +973,9 @@ function conceptDetails(divElement, conceptId, options) {
                 $('#details-' + panel.divElement.id + '-inferred-button').removeClass("btn-primary");
                 $('#home-' + panel.divElement.id + '-inferred-button').click(function(event) {
                     panel.options.selectedView = "inferred";
+                    panel.setupOptionsPanel();
                     panel.updateCanvas();
-                });
-                $('#details-' + panel.divElement.id + '-inferred-button').click(function(event) {
-                    panel.options.selectedView = "inferred";
-                    panel.updateCanvas();
-                });
+                });               
             } else {
                 //$('#home-' + panel.divElement.id + '-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
                 //$('#home-' + panel.divElement.id + '-diagram-viewLabel').html("<span class='i18n' data-i18n-id='i18n_inferred_view'>Inferred view</span>");
@@ -996,12 +993,9 @@ function conceptDetails(divElement, conceptId, options) {
                 $('#details-' + panel.divElement.id + '-stated-button').removeClass("btn-primary");
                 $('#home-' + panel.divElement.id + '-stated-button').click(function(event) {
                     panel.options.selectedView = "stated";
+                    panel.setupOptionsPanel();
                     panel.updateCanvas();
-                });
-                $('#details-' + panel.divElement.id + '-stated-button').click(function(event) {
-                    panel.options.selectedView = "stated";
-                    panel.updateCanvas();
-                });
+                });                
             }
             panel.relsPId = divElement.id + "-rels-panel";
 
@@ -1346,6 +1340,7 @@ function conceptDetails(divElement, conceptId, options) {
 
             if (xhrRefsets != null) {
                 xhrRefsets.abort();
+                xhrRefsets = null;
             }
 
             xhrRefsets = $.getJSON(options.serverUrl + "/" + options.edition + "/" + ((options.release && options.release !== 'None') ? options.release + '/': '') + "members?referencedComponentId=" + firstMatch.conceptId + '&active=true', function(result) {
@@ -1717,6 +1712,12 @@ function conceptDetails(divElement, conceptId, options) {
               }
             });
         };
+
+        if (xhrChildren != null) {
+            xhrChildren.abort();
+            xhrChildren = null;
+        }
+
         xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
@@ -2367,6 +2368,7 @@ function conceptDetails(divElement, conceptId, options) {
                     if (panel.loadMarkers)
                         panel.loadMarkers();
                 }
+                panel.readOptionsPanel();
                 panel.updateCanvas();
                 //            This creates a cycle
                 //            channel.publish(panel.divElement.id, {
@@ -2558,8 +2560,7 @@ function conceptDetails(divElement, conceptId, options) {
         $.each(componentsRegistry, function(i, field) {
             if (field.loadMarkers)
                 field.loadMarkers();
-        });
-        panel.updateCanvas();
+        });        
     }
 }
 
