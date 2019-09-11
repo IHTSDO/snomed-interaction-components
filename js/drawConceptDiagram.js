@@ -111,11 +111,14 @@ function drawConceptDiagram (concept, div, options, panel) {
     }
     //console.log("In draw: " + concept.defaultTerm + " " + concept.conceptId + " " + sctClass);
     var fsn = '';
-    if(concept.fsn.term){
+    if(concept.pt.term){
+        fsn = concept.pt.term;
+    }
+    else if(concept.fsn.term){
         fsn = concept.fsn.term;
     }
     else{
-        fsn = concept.fsn;
+        fsn = concept.defaultTerm;
     }
     var rect1 = drawSctBox(svg, x, y, fsn, concept.conceptId, sctClass);
     x = x + 90;
@@ -150,7 +153,7 @@ function drawConceptDiagram (concept, div, options, panel) {
         } else {
             sctClass = "sct-defined-concept";
         }
-        var rectParent = drawSctBox(svg, x, y, relationship.target.fsn.term, relationship.target.conceptId, sctClass);
+        var rectParent = drawSctBox(svg, x, y, relationship.target.pt.term, relationship.target.conceptId, sctClass);
         // $("#" + rectParent.id).css({"top":
         // (rectParent.outerHeight()/2) + "px"});
         connectElements(svg, circle2, rectParent, 'center', 'left', 'ClearTriangle');
@@ -167,9 +170,9 @@ function drawConceptDiagram (concept, div, options, panel) {
             sctClass = "sct-defined-concept";
         }
         if (relationship.groupId == 0) {
-            var rectAttr = drawSctBox(svg, x, y, relationship.type.fsn.term,relationship.type.conceptId, "sct-attribute");
+            var rectAttr = drawSctBox(svg, x, y, relationship.type.pt.term,relationship.type.conceptId, "sct-attribute");
             connectElements(svg, circle2, rectAttr, 'center', 'left');
-            var rectTarget = drawSctBox(svg, x + rectAttr.getBBox().width + 50, y, relationship.target.fsn.term,relationship.target.conceptId, sctClass);
+            var rectTarget = drawSctBox(svg, x + rectAttr.getBBox().width + 50, y, relationship.target.pt.term,relationship.target.conceptId, sctClass);
             connectElements(svg, rectAttr, rectTarget, 'right', 'left');
             y = y + rectTarget.getBBox().height + 25;
             maxX = ((maxX < x + rectAttr.getBBox().width + 50 + rectTarget.getBBox().width + 50) ? x + rectAttr.getBBox().width + 50 + rectTarget.getBBox().width + 50 : maxX);
@@ -192,9 +195,9 @@ function drawConceptDiagram (concept, div, options, panel) {
                 } else {
                     sctClass = "sct-defined-concept";
                 }
-                var rectRole = drawSctBox(svg, x + 85, y - 18, relationship.type.fsn.term, relationship.type.conceptId,"sct-attribute");
+                var rectRole = drawSctBox(svg, x + 85, y - 18, relationship.type.pt.term, relationship.type.conceptId,"sct-attribute");
                 connectElements(svg, conjunctionNode, rectRole, 'center', 'left');
-                var rectRole2 = drawSctBox(svg, x + 85 + rectRole.getBBox().width + 30, y - 18, relationship.target.fsn.term,relationship.target.conceptId, sctClass);
+                var rectRole2 = drawSctBox(svg, x + 85 + rectRole.getBBox().width + 30, y - 18, relationship.target.pt.term,relationship.target.conceptId, sctClass);
                 connectElements(svg, rectRole, rectRole2, 'right', 'left');
                 y = y + rectRole2.getBBox().height + 25;
                 maxX = ((maxX < x + 85 + rectRole.getBBox().width + 30 + rectRole2.getBBox().width + 50) ? x + 85 + rectRole.getBBox().width + 30 + rectRole2.getBBox().width + 50 : maxX);
@@ -234,7 +237,7 @@ function drawConceptDiagram (concept, div, options, panel) {
                 } else {
                     sctClass = "sct-defined-concept";
                 }
-                var rectParent = drawSctBox(svg, x, y, relationship.target.fsn.term, relationship.target.conceptId, sctClass);
+                var rectParent = drawSctBox(svg, x, y, relationship.target.pt.term, relationship.target.conceptId, sctClass);
                 // $("#" + rectParent.id).css({"top":
                 // (rectParent.outerHeight()/2) + "px"});
                 connectElements(svg, circle2, rectParent, 'center', 'left', 'ClearTriangle');
@@ -248,9 +251,9 @@ function drawConceptDiagram (concept, div, options, panel) {
                     sctClass = "sct-defined-concept";
                 }
                 if (relationship.groupId === 0) {
-                    var rectAttr = drawSctBox(svg, x, y, relationship.type.fsn.term, relationship.type.conceptId, "sct-attribute");
+                    var rectAttr = drawSctBox(svg, x, y, relationship.type.pt.term, relationship.type.conceptId, "sct-attribute");
                     connectElements(svg, circle2, rectAttr, 'center', 'left');
-                    var rectTarget = drawSctBox(svg, x + rectAttr.getBBox().width + 50, y, relationship.target.fsn.term, relationship.target.conceptId, sctClass);
+                    var rectTarget = drawSctBox(svg, x + rectAttr.getBBox().width + 50, y, relationship.target.pt.term, relationship.target.conceptId, sctClass);
                     connectElements(svg, rectAttr, rectTarget, 'right', 'left');
                     y = y + rectTarget.getBBox().height + 25;
                     maxX = ((maxX < x + rectAttr.getBBox().width + 50 + rectTarget.getBBox().width + 50) ? x + rectAttr.getBBox().width + 50 + rectTarget.getBBox().width + 50 : maxX);
@@ -276,9 +279,9 @@ function drawConceptDiagram (concept, div, options, panel) {
                         "PRIMITIVE") { sctClass = "sct-primitive-concept"; } else {
                         sctClass = "sct-defined-concept";
                     }
-                    var rectRole = drawSctBox(svg, x + 85, y - 18, relationship.type.fsn.term, relationship.type.conceptId, "sct-attribute");
+                    var rectRole = drawSctBox(svg, x + 85, y - 18, relationship.type.pt.term, relationship.type.conceptId, "sct-attribute");
                     connectElements(svg, conjunctionNode, rectRole, 'center', 'left');
-                    var rectRole2 = drawSctBox(svg, x + 85 + rectRole.getBBox().width + 30, y - 18, relationship.target.fsn.term, relationship.target.conceptId, sctClass);
+                    var rectRole2 = drawSctBox(svg, x + 85 + rectRole.getBBox().width + 30, y - 18, relationship.target.pt.term, relationship.target.conceptId, sctClass);
                     connectElements(svg, rectRole, rectRole2, 'right', 'left');
                     y = y + rectRole2.getBBox().height + 25;
                     maxX = ((maxX < x + 85 + rectRole.getBBox().width + 30 + rectRole2.getBBox().width + 50) ? x + 85 + rectRole.getBBox().width + 30 + rectRole2.getBBox().width + 50 : maxX);
