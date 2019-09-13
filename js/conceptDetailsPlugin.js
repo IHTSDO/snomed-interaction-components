@@ -556,8 +556,42 @@ function conceptDetails(divElement, conceptId, options) {
                 //                dataContentValue: options.serverUrl.substr(0, options.serverUrl.length - 10)
                 dataContentValue: document.URL.split("?")[0].split("#")[0]
             };
-
             $('#' + panel.attributesPId).html(JST["views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs"](context));
+            
+            if (options.edition === "MAIN/SNOMEDCT-SE") {               
+                
+                if( $('#' + panel.divElement.id + '-issues-collector').length != 0) {
+                    $('#' + panel.divElement.id + '-issues-collector').remove();                   
+                }
+
+                var issueCollectorFrame = document.createElement('iframe');
+                issueCollectorFrame.setAttribute('id', panel.divElement.id + '-issues-collector');
+                issueCollectorFrame.setAttribute("style", "width: 100%;position: fixed;height: 1000px;z-index: 0;display: none;");
+                
+                var firstChildAfterBody = document.body.firstChild;
+                firstChildAfterBody.parentNode.insertBefore(issueCollectorFrame, firstChildAfterBody);
+                
+                var context = {                    
+                    firstMatch: firstMatch,
+                    divElementId: panel.divElement.id,
+                    frameId: panel.divElement.id + '-issues-collector'
+                };
+                var issueCollectorFrameHtml = JST["views/conceptDetailsPlugin/tabs/details/jira-issues-collector.hbs"](context);
+                var blob = new Blob([issueCollectorFrameHtml], {type: 'text/html'});
+                issueCollectorFrame.src = URL.createObjectURL(blob);
+
+                $('#' + panel.divElement.id + '-addsyn-sctid-details').click(function(e) {                   
+                    e.preventDefault();
+                    var iframe = $('#' + panel.divElement.id + '-issues-collector');                    
+                    if (iframe) {
+                        $(iframe[0]).css({ "z-index": '10000',"display": 'block'});  
+                        
+                        var iframeContent = (iframe[0].contentWindow || iframe[0].contentDocument);
+                        iframeContent.openJiraIssueCollectorDialog();
+                    }
+                });
+            }            
+
             $('#' + 'share-link-' + panel.divElement.id).disableTextSelect();
             $('#' + 'share-link-' + panel.divElement.id).click(function(event) {
                 setTimeout(function() {

@@ -668,15 +668,15 @@ function program28(depth0,data) {
 function program30(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n            <script type=\"text/javascript\" src=\"https://jira.ihtsdotools.org/s/d41d8cd98f00b204e9800998ecf8427e-CDN/-6fupcg/802003/fe47b4489ac981edbb824b5107716c37/2.2.4.7/_/download/batch/com.atlassian.plugins.jquery:jquery/com.atlassian.plugins.jquery:jquery.js?collectorId=bedcc164\"></script><script type=\"text/javascript\" src=\"https://jira.ihtsdotools.org/s/1e429f95cf34cfd3040da73ee0505926-T/-6fupcg/802003/fe47b4489ac981edbb824b5107716c37/3.0.7/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en&collectorId=bedcc164\"></script>\n\n            <script type=\"text/javascript\">\n                var QueryString = function() {\n                    var query_string = {};\n                    var query = window.location.search.substring(1);\n                    var vars = query.split(\"&\");\n                    for (var i = 0; i < vars.length; i++) {\n                        var pair = vars[i].split(\"=\");\n                        if (typeof query_string[pair[0]] === \"undefined\") {\n                            query_string[pair[0]] = pair[1];\n                        } else if (typeof query_string[pair[0]] === \"string\") {\n                            var arr = [query_string[pair[0]], pair[1]];\n                            query_string[pair[0]] = arr;\n                        } else {\n                            query_string[pair[0]].push(pair[1]);\n                        }\n                    }\n                    return query_string;\n                }();\n                window.ATL_JQ_PAGE_PROPS =  {\n                    \"triggerFunction\": function(showCollectorDialog) {\n                        //Requires that jQuery is available! \n                        jQuery(\"#fh-cd1_canvas-addsyn-sctid-details\").click(function(e) {\n                            e.preventDefault();\n                            showCollectorDialog();\n                        });\n                    },\n\n                    fieldValues: {\n                        'summary': 'Förslag på synonymer för begreppet: ' + QueryString.conceptId1,\n                        'customfield_10602': QueryString.conceptId1\n                    }\n                };\n            </script>\n            <span class=\"pull-right\">\n                <div class=\"dropdown\">\n                    <button class=\"btn btn-link dropdown-toggle\" type=\"button\" id=\"dropdownMenu1-details\" data-toggle=\"dropdown\" aria-expanded=\"true\">\n                        <i class=\"glyphicon glyphicon-plus-sign pull-right\" id=\"";
+  buffer += "\n                <span class=\"pull-right\">\n                    <div class=\"dropdown\">\n                        <button class=\"btn btn-link dropdown-toggle\" type=\"button\" id=\"dropdownMenu1-details\" data-toggle=\"dropdown\" aria-expanded=\"true\">\n                            <i class=\"glyphicon glyphicon-plus-sign pull-right\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-addsyn-icon-details\"></i>\n                    </button>\n                    <ul class=\"dropdown-menu small pull-right\" role=\"menu\" aria-labelledby=\"dropdownMenu2-details\">\n                        <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"javascript:void(0);\" id=\"";
+    + "-addsyn-icon-details\"></i>\n                        </button>\n                        <ul class=\"dropdown-menu small pull-right\" role=\"menu\" aria-labelledby=\"dropdownMenu2-details\">\n                            <li role=\"presentation\"><a role=\"menuitem\" tabindex=\"-1\" href=\"javascript:void(0);\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-addsyn-sctid-details\">Skicka synonymförslag</a></li>\n                    </ul>\n                </div>\n            </span>\n            ";
+    + "-addsyn-sctid-details\">Skicka synonymförslag</a></li>\n                        </ul>\n                    </div>\n                </span>\n            ";
   return buffer;
   }
 
@@ -1126,6 +1126,36 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "-diagram-body\" class=\"row\" style=\"overflow: auto; width: 1000;\"></div>\n</div>";
+  return buffer;
+  });
+
+this["JST"]["views/conceptDetailsPlugin/tabs/details/jira-issues-collector.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div>\n    <script type=\"text/javascript\" src=\"https://jira.ihtsdotools.org/s/d41d8cd98f00b204e9800998ecf8427e-CDN/-6fupcg/802003/fe47b4489ac981edbb824b5107716c37/2.2.4.7/_/download/batch/com.atlassian.plugins.jquery:jquery/com.atlassian.plugins.jquery:jquery.js?collectorId=bedcc164\"></script>\n    <script type=\"text/javascript\" src=\"https://jira.ihtsdotools.org/s/1e429f95cf34cfd3040da73ee0505926-T/-6fupcg/802003/fe47b4489ac981edbb824b5107716c37/3.0.7/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en&collectorId=bedcc164\"></script>\n\n    <script type=\"text/javascript\">        \n        window.ATL_JQ_PAGE_PROPS =  {\n            \"triggerFunction\": function(showCollectorDialog) {\n                jQuery(\"#";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-addsyn-issue-collector\").click(function(e) {\n                    e.preventDefault();\n                    showCollectorDialog();\n                });\n            },\n\n            fieldValues: {\n                'summary': 'Förslag på synonymer för begreppet: ' + "
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + ",\n                'customfield_10602': "
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.firstMatch)),stack1 == null || stack1 === false ? stack1 : stack1.conceptId)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\n            }\n        };\n\n        function openJiraIssueCollectorDialog() {\n            var link = document.getElementById('";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-addsyn-issue-collector');\n            link.click();\n            watchIssueCollectorDialogEvents();            \n        }\n\n        function watchIssueCollectorDialogEvents() {\n            //watch if dialog has been loaded completely\n            var issueCollectorDialoglocadingCompleteInterval = setInterval(function() {              \n                var elm = $('#atlwdg-container');                \n                if (elm && elm.length > 0 && !elm[0].classList.contains('atlwdg-hidden')) {\n                    clearInterval(issueCollectorDialoglocadingCompleteInterval);\n                    \n                    //watch if dialog is being got closed\n                    var issueCollectorDialogClosingInterval = setInterval(function() {              \n                        var elm = $('#atlwdg-container');                \n                        if (elm && elm.length > 0 && elm[0].classList.contains('atlwdg-hidden')) {\n                            clearInterval(issueCollectorDialogClosingInterval);\n                            var frame = parent.document.getElementById('";
+  if (helper = helpers.frameId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.frameId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "');\n                            frame.style.display = 'none';\n                            frame.style.zIndex = '0';\n                        }\n                    }, 1000);\n                }\n            }, 1000);\n        }\n\n    </script>\n\n    <button style=\"display: none !important\">\n        <i id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-addsyn-issue-collector\"></i>\n    </button>\n</div>";
   return buffer;
   });
 
