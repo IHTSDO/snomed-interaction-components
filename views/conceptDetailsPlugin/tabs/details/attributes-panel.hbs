@@ -78,7 +78,7 @@
                     </ul>
                 </div>
             </span>
-            {{#if_eq edition "MAIN/SNOMEDCT-SE"}}
+            {{#if swedishExtension}}
                 <span class="pull-right">
                     <div class="dropdown">
                         <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1-details" data-toggle="dropdown" aria-expanded="true">
@@ -89,7 +89,7 @@
                         </ul>
                     </div>
                 </span>
-            {{/if_eq}}
+            {{/if}}
             <!--<button type="button" id="share-link-{{divElementId}}" class="btn btn-link more-fields-button pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="-->
                     <!--<form><input class='form-control' id='share-field-{{divElementId}}' value='{{dataContentValue}}?perspective=full&conceptId1={{firstMatch.conceptId}}&edition={{edition}}&release={{release}}&server={{server}}&langRefset={{langRefset}}'></form><br>Copy the concept link (e.g. CTRL-C) to save and share a reference to this concept.-->
                     <!--" data-html="true"><i class="glyphicon glyphicon-share-alt"></i></button>-->
