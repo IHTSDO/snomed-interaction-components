@@ -544,6 +544,8 @@ function conceptDetails(divElement, conceptId, options) {
             if (firstMatch.inferredDescendants) {
                 firstMatch.inferredDescendantsString = firstMatch.inferredDescendants.toLocaleString();
             }
+
+            var swedishExtension = options.edition.startsWith('MAIN/SNOMEDCT-SE');
             var context = {
                 options: panel.options,
                 firstMatch: firstMatch,
@@ -554,11 +556,12 @@ function conceptDetails(divElement, conceptId, options) {
                 langRefset: panel.options.languages,
                 link: document.URL.split("?")[0].split("#")[0] + "?perspective=full&conceptId1=" + firstMatch.conceptId + "&edition=" + panel.options.edition + "&release=" + panel.options.release + "&languages=" + panel.options.languages,
                 //                dataContentValue: options.serverUrl.substr(0, options.serverUrl.length - 10)
-                dataContentValue: document.URL.split("?")[0].split("#")[0]
+                dataContentValue: document.URL.split("?")[0].split("#")[0],
+                swedishExtension: swedishExtension
             };
             $('#' + panel.attributesPId).html(JST["views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs"](context));
             
-            if (options.edition === "MAIN/SNOMEDCT-SE") {               
+            if (swedishExtension) {               
                 
                 if( $('#' + panel.divElement.id + '-issues-collector').length != 0) {
                     $('#' + panel.divElement.id + '-issues-collector').remove();                   
@@ -566,7 +569,7 @@ function conceptDetails(divElement, conceptId, options) {
 
                 var issueCollectorFrame = document.createElement('iframe');
                 issueCollectorFrame.setAttribute('id', panel.divElement.id + '-issues-collector');
-                issueCollectorFrame.setAttribute("style", "width: 100%;position: fixed;height: 1000px;z-index: 0;display: none;");
+                issueCollectorFrame.setAttribute("style", "width: 100%;position: fixed;height: 100%;z-index: 0;display: none;");
                 
                 var firstChildAfterBody = document.body.firstChild;
                 firstChildAfterBody.parentNode.insertBefore(issueCollectorFrame, firstChildAfterBody);
