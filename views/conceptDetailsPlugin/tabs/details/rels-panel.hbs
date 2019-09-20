@@ -78,7 +78,7 @@
                     </thead>
                         <tbody>
                         {{#each firstMatch.statedRelationships}}
-                            {{#if_eq active true}}                   
+                            {{#if_eq active true}}
                                 <tr style="display: table-row">
                                     <td>
                                         {{#if_eq type.definitionStatus "PRIMITIVE"}}
@@ -104,7 +104,7 @@
                                             </table>
                                             " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
                                     </td>
-                                </tr>                   
+                                </tr>
                             {{/if_eq}}
                         {{/each}}
                         </tbody>
@@ -130,7 +130,7 @@
                     <tbody>
                     {{#each relationships}}
                         {{#if active}}
-                            <tr>
+                            <tr class='{{#if_eq effectiveTime ../../options.highlightByEffectiveTime}}highlightEffectiveTime{{/if_eq}}'>
                                 <td>
                                     {{#if_eq type.definitionStatus "PRIMITIVE"}}
                                         <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
@@ -162,7 +162,7 @@
             {{/each}}
         {{/if_eq}}
     {{/if_eq}}
-    {{#if_eq firstMatch.gciAxioms.length 0}}       
+    {{#if_eq firstMatch.gciAxioms.length 0}}
     {{else}}
         {{#if_eq options.selectedView "stated"}}
             {{#each firstMatch.gciAxioms}}
@@ -179,7 +179,7 @@
                     <tbody>
                     {{#each relationships}}
                         {{#if active}}
-                            <tr>
+                            <tr class='{{#if_eq effectiveTime ../../options.highlightByEffectiveTime}}highlightEffectiveTime{{/if_eq}}'>
                                 <td>
                                     {{#if_eq type.definitionStatus "PRIMITIVE"}}
                                         <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;" draggable = "true" ondragstart="drag(event, '{{divElementId}}')" data-module="{{moduleId}}" data-concept-id="{{type.conceptId}}" data-term="{{type.defaultTerm}}" data-def-status="{{type.definitionStatus}}"><span class="badge alert-warning">&nbsp;</span></a>&nbsp;&nbsp;
@@ -211,7 +211,7 @@
             {{/each}}
         {{/if_eq}}
     {{/if_eq}}
-    {{#if_undefined additionalRels}}        
+    {{#if_undefined additionalRels}}
     {{else}}
         <table class='table table-bordered'>
             <thead>
