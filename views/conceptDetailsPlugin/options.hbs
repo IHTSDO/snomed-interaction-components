@@ -66,6 +66,17 @@
             {{/if_eq}}           
         </select>
     </div>
+    
+    <label><span class="i18n" data-i18n-id="i18n_language_refset">{{i18n "i18n_language_refset" "Language Refset"}}</span></label>
+    {{#if options.languageRefsets}}
+        {{#each options.languageRefsets}}
+            <div class="checkbox">
+                <label>
+                    <input class="langOption" type="checkbox" value="{{conceptId}}" {{#ifIn conceptId ../../options.langRefset }}checked{{/ifIn}}> {{fsn.term}}
+                </label>
+            </div>
+        {{/each}}
+    {{/if}}
     <!--<div class="form-group">-->
         <!--<table class='table table-bordered table-hover'>-->
             <!--<thead>-->

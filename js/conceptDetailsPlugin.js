@@ -29,10 +29,6 @@ function conceptDetails(divElement, conceptId, options) {
         "11000146104": "NL"
     };
 
-    var longLanguageNameOfLangRefset = {
-        "900000000000509007": "United States of America English language reference set",
-        "900000000000508004": "Great Britain English language reference set"
-    };
 
     if (options.languageNameOfLangRefset){
         languageNameOfLangRefset = options.languageNameOfLangRefset;
@@ -147,10 +143,6 @@ function conceptDetails(divElement, conceptId, options) {
 
         $("#" + panel.divElement.id + "-closeButton").click(function(event) {
             $(divElement).remove();
-        });
-
-        $("#" + panel.divElement.id + "-configButton").click(function(event) {
-            panel.setupOptionsPanel();
         });
 
         if (typeof panel.options.closeButton != "undefined" && panel.options.closeButton == false) {
@@ -306,17 +298,64 @@ function conceptDetails(divElement, conceptId, options) {
         //            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
         //        });
 
-        panel.updateCanvas();
+        var branch = options.edition;
+        if(options.release.length > 0 && options.release !== 'None'){
+            branch = branch + "/" + options.release;
+        };
+        if(!options.serverUrl.includes('snowowl')){
+           $.ajaxSetup({
+              headers : {
+                'Accept-Language': options.languages
+              }
+            });
+        };
+        $.getJSON(options.serverUrl + "/browser/" + branch + "/members?active=true&limit=1", function(result) {              
+            // do nothing                
+        }).done(function(result) {
+            panel.options.languageRefsets = [];
+            panel.options.langRefset = [];             
+            Object.keys(result.referenceSets).forEach(function(key) {
+                if (result.referenceSets[key].referenceSetType.id === '900000000000506000') {
+                    panel.options.languageRefsets.push(result.referenceSets[key]);                                      
+                }
+            });
+
+            panel.options.languageRefsets.sort(function(a, b) {
+                if (a.conceptId === '900000000000509007'){
+                    return -1;
+                }
+    
+                if (b.conceptId === '900000000000509007'){
+                    return 1;
+                }
+    
+                return a.fsn.term.localeCompare(b.fsn.term);
+            });
+
+            panel.options.languageRefsets.forEach(function(item) {
+                panel.options.langRefset.push(item.id);  
+            });
+
+            $("#" + panel.divElement.id + "-configButton").click(function(event) {
+                panel.setupOptionsPanel();
+            });
+
+            panel.updateCanvas();
+            
+            panel.setupOptionsPanel();
+        });
+        
         channel.publish(panel.divElement.id, {
             term: panel.term,
             module: panel.module,
             conceptId: panel.conceptId,
             source: panel.divElement.id
         });
-        panel.setupOptionsPanel();
+        
         if (panel.subscriptions.length > 0 || panel.subscribers.length > 0) {
             $("#" + panel.divElement.id + "-subscribersMarker").show();
         }
+        
         $("#" + panel.divElement.id + "-ownMarker").css('color', panel.markerColor);
     }
 
@@ -815,24 +854,7 @@ function conceptDetails(divElement, conceptId, options) {
 
             // load descriptions panel
             panel.descsPId = divElement.id + "-descriptions-panel";
-            var languageName = "";
-//            if (panel.options.langRefset == "900000000000508004") {
-//                languageName = "(GB)";
-//            } else if (panel.options.langRefset == "900000000000509007") {
-//                languageName = "(US)";
-//            } else if (panel.options.langRefset == "450828004") {
-//                languageName = "(ES)";
-//            } else if (panel.options.langRefset == "554461000005103") {
-//                languageName = "(DA)";
-//            } else if (panel.options.langRefset == "46011000052107") {
-//                languageName = "(SV)";
-//            } else if (panel.options.langRefset == "32570271000036106") {
-//                languageName = "(AU)";
-//            } else if (panel.options.langRefset == "999001251000000103") {
-//                languageName = "(UK)";
-//            } else if (panel.options.langRefset == "31000146106") {
-//                languageName = "(NL)";
-//            }
+
             // START FOR
             var allLangsHtml = "";
             firstMatch.descriptions.sort(function(a, b) {
@@ -842,7 +864,7 @@ function conceptDetails(divElement, conceptId, options) {
                     return 1;
                 return 0;
             });
-            for (var language in options.languageObject) {
+            $.each(panel.options.langRefset, function(i, loopSelectedLangRefset) {
                 var allDescriptions = firstMatch.descriptions.slice(0);
                 var homeDescriptionsHtml = "";
                 $.each(allDescriptions, function(i, field) {
@@ -872,13 +894,12 @@ function conceptDetails(divElement, conceptId, options) {
 
                 var auxDescriptions = [];
                 $.each(allDescriptions, function(i, description) {
-                    var included = false;
-                    if(description.lang === language){
-                        included = true;
-                    }
+                    var included = false;                   
                     if (description.acceptabilityMap) {
                         $.each(description.acceptabilityMap, function(langref, acceptability) {
-                            acceptabilityPair = description.acceptabilityMap[i];
+                            if (langref === loopSelectedLangRefset) {
+                                included = true;
+                                acceptabilityPair = description.acceptabilityMap[i];
                                 if (acceptability == "PREFERRED") {
                                     description.preferred = true;
                                 } else {
@@ -886,6 +907,8 @@ function conceptDetails(divElement, conceptId, options) {
                                         description.acceptable = true;
                                     }
                                 }
+                            }
+                            
                         });
                     }
 
@@ -948,8 +971,8 @@ function conceptDetails(divElement, conceptId, options) {
 
                 var context = {
                     options: panel.options,
-                    languageName: "(" + language + ")",
-                    longLangName: panel.options.languagesArray[language],
+                    languageName: "(" + languageNameOfLangRefset[loopSelectedLangRefset] + ")",
+                    longLangName: panel.removeSemtag(panel.options.languageRefsets.filter(function (el) { return el.id == loopSelectedLangRefset;})[0].fsn.term),
                     divElementId: panel.divElement.id,
                     server: panel.server,
                     allDescriptions: allDescriptions
@@ -962,12 +985,13 @@ function conceptDetails(divElement, conceptId, options) {
                         }
                     });
                 }*/
-
-                allLangsHtml += JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context);
+                if (allDescriptions.length != 0) {
+                    allLangsHtml += JST["views/conceptDetailsPlugin/tabs/details/descriptions-panel.hbs"](context);
+                }                
                 //if (panel.options.displaySynonyms) {
                 $('#home-descriptions-' + panel.divElement.id).html(homeDescriptionsHtml);
                 //}
-            }
+            });
             // END FOR
             $("#" + panel.descsPId).html(allLangsHtml);
 
@@ -2564,13 +2588,12 @@ function conceptDetails(divElement, conceptId, options) {
         panel.options.diagrammingMarkupEnabled = $("#" + panel.divElement.id + "-diagrammingMarkupEnabledOption").is(':checked');
         panel.options.selectedView = $("#" + panel.divElement.id + "-relsViewOption").val();
 
-        //panel.options.langRefset = [];
-//        $.each($("#" + panel.divElement.id).find(".langOption"), function(i, field) {
-//            if ($(field).is(':checked')) {
-//                panel.options.langRefset.push($(field).val());
-//            }
-//        });
-        //console.log(panel.options.langRefset);
+        panel.options.langRefset = [];
+        $.each($("#" + panel.divElement.id).find(".langOption"), function(i, field) {
+            if ($(field).is(':checked')) {
+                panel.options.langRefset.push($(field).val());
+            }
+        });
         //panel.options.langRefset = $("#" + panel.divElement.id + "-langRefsetOption").val();
 
         panel.options.displayChildren = $("#" + panel.divElement.id + "-displayChildren").is(':checked');
