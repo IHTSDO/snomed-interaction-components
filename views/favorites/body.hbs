@@ -36,7 +36,10 @@
                                             <span class="phoca-flag {{countryIcon module}}"></span>
                                         </div>
                                     {{/hasCountryIcon}}
-                                    {{defaultTerm}}
+                                    <span draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>
+                                        {{defaultTerm}}
+                                    </span>
+                                    
                                 </a>
                             {{else}}
                                 <a class="fav-item" href="javascript:void(0);" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' style="color: inherit; text-decoration: inherit;">
@@ -46,7 +49,9 @@
                                             <span class="phoca-flag {{countryIcon module}}"></span>
                                         </div>
                                     {{/hasCountryIcon}}
-                                    {{defaultTerm}}
+                                    <span draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>
+                                        {{defaultTerm}}
+                                    </span>
                                 </a>
                             {{/if_eq}}
                         </td>

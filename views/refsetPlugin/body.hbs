@@ -28,7 +28,9 @@
                                             <span class="phoca-flag {{countryIcon module}}"></span>
                                         </div>
                                     {{/hasCountryIcon}}
-                                    {{defaultTerm}}
+                                    <span draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>
+                                        {{defaultTerm}}
+                                    </span>                                    
                                 </a>
                             </td>
                             <td>

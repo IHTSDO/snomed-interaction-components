@@ -16,7 +16,7 @@
                     </div>
                 {{/hasCountryIcon}}
                 <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;">
-                    <span data-module="{{module}}" data-definition-status="{{definitionStatus}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" data-statedDescendants="{{statedDescendants}}" class="treeLabel selectable-row" id="{{../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span>
+                    <span data-module="{{module}}" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-definition-status="{{definitionStatus}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" data-statedDescendants="{{statedDescendants}}" class="treeLabel selectable-row" id="{{../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span>
                 </a>
         {{/each}}
         {{#if_gr parents.length 0}}
@@ -36,7 +36,7 @@
                     </div>
                 {{/hasCountryIcon}}
                 <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;">
-                    <span data-definition-status="{{focusConcept.definitionStatus}}" data-module="{{focusConcept.module}}" data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}" data-statedDescendants="{{focusConcept.statedDescendants}}" class="treeLabel selectable-row" id="{{divElementId}}-treenode-{{focusConcept.conceptId}}">{{focusConcept.defaultTerm}}</span>
+                    <span draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-definition-status="{{focusConcept.definitionStatus}}" data-module="{{focusConcept.module}}" data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}" data-statedDescendants="{{focusConcept.statedDescendants}}" class="treeLabel selectable-row" id="{{divElementId}}-treenode-{{focusConcept.conceptId}}">{{focusConcept.defaultTerm}}</span>
                 </a>
             </li>
         </ul>

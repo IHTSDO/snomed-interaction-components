@@ -16,7 +16,7 @@
                     </div>
                 {{/hasCountryIcon}}
                 <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;">
-                    <span class="treeLabel selectable-row" data-definition-status="{{definitionStatus}}" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" data-statedDescendants="{{statedDescendants}}" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span>
+                    <span class="treeLabel selectable-row" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-definition-status="{{definitionStatus}}" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" data-statedDescendants="{{statedDescendants}}" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span>
                 </a>
                 {{push conceptId}}
             </li>
