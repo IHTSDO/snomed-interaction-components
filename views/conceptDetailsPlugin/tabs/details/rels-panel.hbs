@@ -126,10 +126,17 @@
                 <table class='table table-bordered'>
                     <thead>
                     <tr>
+                        {{#if_gr ../totalStatedAxioms 1}}
+                        <th style="width : 30%"><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
+                        <th style="width : 45%"><span class='i18n' data-i18n-id='i18n_destination'>{{i18n "i18n_destination" "Destination"}}</span></th>
+                        <th style="width : 10%"><span class='i18n' data-i18n-id='i18n_group'>{{i18n "i18n_group" "Group"}}</span></th>
+                        <th style="width : 15%"><span class='i18n' data-i18n-id='i18n_char_type'>{{i18n "i18n_char_type" "CharType"}}</span></th>
+                        {{else}}
                         <th><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
                         <th><span class='i18n' data-i18n-id='i18n_destination'>{{i18n "i18n_destination" "Destination"}}</span></th>
                         <th><span class='i18n' data-i18n-id='i18n_group'>{{i18n "i18n_group" "Group"}}</span></th>
                         <th><span class='i18n' data-i18n-id='i18n_char_type'>{{i18n "i18n_char_type" "CharType"}}</span></th>
+                        {{/if_gr}}
                     </tr>
                     </thead>
                     <tbody>
@@ -180,10 +187,17 @@
                 <table class='table table-bordered'>
                     <thead>
                     <tr>
+                        {{#if_gr ../totalStatedAxioms 1}}
+                        <th style="width : 30%"><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
+                        <th style="width : 45%"><span class='i18n' data-i18n-id='i18n_destination'>{{i18n "i18n_destination" "Destination"}}</span></th>
+                        <th style="width : 10%"><span class='i18n' data-i18n-id='i18n_group'>{{i18n "i18n_group" "Group"}}</span></th>
+                        <th style="width : 25%"><span class='i18n' data-i18n-id='i18n_char_type'>{{i18n "i18n_char_type" "CharType"}}</span></th>
+                        {{else}}
                         <th><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
                         <th><span class='i18n' data-i18n-id='i18n_destination'>{{i18n "i18n_destination" "Destination"}}</span></th>
                         <th><span class='i18n' data-i18n-id='i18n_group'>{{i18n "i18n_group" "Group"}}</span></th>
                         <th><span class='i18n' data-i18n-id='i18n_char_type'>{{i18n "i18n_char_type" "CharType"}}</span></th>
+                        {{/if_gr}}
                     </tr>
                     </thead>
                     <tbody>

@@ -1123,6 +1123,14 @@ function conceptDetails(divElement, conceptId, options) {
                         return opts.inverse(this);
                 }
             });
+            Handlebars.registerHelper('if_gr', function(a, b, opts) {
+                if (a) {
+                    if (a > b)
+                        return opts.fn(this);
+                    else
+                        return opts.inverse(this);
+                }
+            });
             var additionalRels;
             if (firstMatch.additionalRelationships) {
                 $.each(firstMatch.additionalRelationships, function(i, looplr) {
@@ -1142,7 +1150,8 @@ function conceptDetails(divElement, conceptId, options) {
                 statedRoles: panel.statedRoles,
                 additionalRels: additionalRels,
                 statedParentsFromAxioms: panel.statedParentsFromAxioms,
-                attributesFromAxioms : panel.attributesFromAxioms
+                attributesFromAxioms : panel.attributesFromAxioms,
+                totalStatedAxioms : (firstMatch.classAxioms ? firstMatch.classAxioms.length : 0) + (firstMatch.gciAxioms ? firstMatch.gciAxioms.length : 0)
             };
             $("#" + panel.relsPId).html(JST["views/conceptDetailsPlugin/tabs/details/rels-panel.hbs"](context));
 
