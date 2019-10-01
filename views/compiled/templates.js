@@ -2115,7 +2115,7 @@ function program1(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n    ";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.axiomList), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.classAxiomOwlExpressions), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n";
   return buffer;
@@ -2129,14 +2129,37 @@ function program2(depth0,data) {
   buffer += escapeExpression(stack1)
     + "-copy-axiom-expression\" data-clipboard-text=\""
     + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + "\"></i></small></p>\n        <div class=\"expression-code\" style=\"margin-top: 10px; padding: 10px;\">";
-  stack1 = (typeof depth0 === functionType ? depth0.apply(depth0) : depth0);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</div>\n    ";
+    + "\"></i></small></p>\n        <div class=\"expression-code\" style=\"margin-top: 10px; padding: 10px;\"><pre>"
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+    + "</pre></div>\n    ";
   return buffer;
   }
 
 function program4(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n    ";
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.gciAxiomOwlExpressions), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  }
+function program5(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n        <p class=\"\" style=\"margin-top: 20px;\">Expression from GCI Axiom Definition (*)&nbsp;&nbsp;&nbsp;&nbsp;<small><i class=\"glyphicon glyphicon-export clip-btn-exp\" id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-copy-axiom-expression\" data-clipboard-text=\""
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+    + "\"></i></small></p>\n        <div class=\"expression-code\" style=\"margin-top: 10px; padding: 10px;\"><pre>"
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+    + "</pre></div>\n    ";
+  return buffer;
+  }
+
+function program7(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += "\n    <p class=\"\" style=\"margin-top: 20px;\">Expression from Stated Concept Definition (*)&nbsp;&nbsp;&nbsp;&nbsp;<small><i class=\"glyphicon glyphicon-export clip-btn-exp\" id=\"";
@@ -2151,7 +2174,7 @@ function program4(depth0,data) {
   if (helper = helpers.statedExpressionHtml) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.statedExpressionHtml); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</div>\n";
+  buffer += "</div>    \n";
   return buffer;
   }
 
@@ -2167,8 +2190,14 @@ function program4(depth0,data) {
   if (helper = helpers.preCoordinatedExpressionHtml) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.preCoordinatedExpressionHtml); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</div>\n";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.axiomList), {hash:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),data:data});
+  buffer += "</div>\n\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.classAxiomOwlExpressions), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.gciAxiomOwlExpressions), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.statedExpressionHtml), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n<p class=\"\" style=\"margin-top: 20px;\">Expression from Inferred Concept Definition (*)&nbsp;&nbsp;&nbsp;&nbsp;<small><i class=\"glyphicon glyphicon-export clip-btn-exp\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
