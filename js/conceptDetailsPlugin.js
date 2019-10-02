@@ -1603,19 +1603,13 @@ function conceptDetails(divElement, conceptId, options) {
             $("#diagram-tab-link-" + panel.divElement.id).unbind();
             $("#diagram-tab-link-" + panel.divElement.id).click(function(e) {
                 $("#diagram-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-                setTimeout(function() {
-                    $("#diagram-canvas-" + panel.divElement.id).html("");
-                    drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options, panel);
-                }, 1000);
+                drawConceptDiagram(firstMatch, $("#diagram-canvas-" + panel.divElement.id), panel.options, panel);
             });
 
             $("#expression-tab-link-" + panel.divElement.id).unbind();
             $("#expression-tab-link-" + panel.divElement.id).click(function(e) {
                 $("#expression-canvas-" + panel.divElement.id).html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
-                setTimeout(function() {
-                    $("#expression-canvas-" + panel.divElement.id).html("");
-                    renderExpression(firstMatch, firstMatch, $("#expression-canvas-" + panel.divElement.id), options);
-                }, 1000)
+                renderExpression(firstMatch, firstMatch, $("#expression-canvas-" + panel.divElement.id), options);
             });
 
             if (firstMatch.defaultTerm.endsWith("(clinical drug)")) {
