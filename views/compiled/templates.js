@@ -4933,7 +4933,7 @@ function program1(depth0,data,depth1) {
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-ExpTab\" style=\"padding: 15px;margin: 0;\">\n          <textarea rows=\"5\" class=\"form-control\" placeholder=\"Expression...\" id=\"";
+    + "-ExpTab\" style=\"padding: 15px;margin: 0;\">\n          <textarea rows=\"5\" ondrop=\"dropE(event);\" class=\"form-control\" placeholder=\"Expression...\" id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

@@ -144,6 +144,27 @@ function drag(ev, id) {
     ev.dataTransfer.setData("divElementId", id);
 }
 
+function dropE(ev){
+    $(document).find('.drop-highlighted').removeClass('drop-highlighted');
+    ev.preventDefault();
+    var text = ev.dataTransfer.getData("Text");
+    if (text != "javascript:void(0);"){
+        var i = 0;
+        while (text.charAt(i) != "|" && i < text.length){
+            i++;
+        }
+        var conceptId = ev.dataTransfer.getData("concept-id");
+        if (typeof conceptId == "undefined" && i < text.length){
+            conceptId = text.substr(0, i);
+        }
+        var term = ev.dataTransfer.getData("term");
+        if (typeof term == "undefined"){
+            term = text.substr(i);
+        }
+        $(ev.target).val(ev.target.value + conceptId + " |" + term + "|");        
+    }
+}
+
 function dropS(ev){
     $(document).find('.drop-highlighted').removeClass('drop-highlighted');
     ev.preventDefault();

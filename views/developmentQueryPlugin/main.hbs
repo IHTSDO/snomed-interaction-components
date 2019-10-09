@@ -100,7 +100,7 @@
           </div>
         </div>
         <div class="tab-pane active" id="{{divElementId}}-ExpTab" style="padding: 15px;margin: 0;">
-          <textarea rows="5" class="form-control" placeholder="Expression..." id="{{divElementId}}-ExpText"></textarea>
+          <textarea rows="5" ondrop="dropE(event);" class="form-control" placeholder="Expression..." id="{{divElementId}}-ExpText"></textarea>
           <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton2'>{{{i18n "i18n_run_query" "Execute"}}}</div>
           <div class="btn btn-success" style="display: none; margin: 10px;" id='{{divElementId}}-computeOntoserver2'>Run on Ontoserver</div>
           <br>
