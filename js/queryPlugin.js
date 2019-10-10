@@ -350,6 +350,21 @@ function queryComputerPanel(divElement, options) {
             panel.setUpPanel();
         });
 
+        $("#" + panel.divElement.id + "-configButton").click(function(event) {
+            panel.setupOptionsPanel();
+        });
+
+        $("#" + panel.divElement.id + "-apply-button").click(function() {            
+            panel.readOptionsPanel();
+            console.log(panel.options);
+
+            var expression = $.trim($("#" + panel.divElement.id + "-ExpText").val());
+            $('#' + panel.divElement.id + '-computeInferredButton2').addClass("disabled");           
+            panel.execute("inferred", expression, true);            
+            $('#' + panel.divElement.id + '-computeInferredButton2').removeClass("disabled");
+           
+        });
+
         $('#' + panel.divElement.id + '-copyConstraint').unbind();
         $("#" + panel.divElement.id + "-copyConstraint").disableTextSelect();
         var clientGrammar = new ZeroClipboard(document.getElementById(panel.divElement.id + "-copyConstraint"));
@@ -1118,6 +1133,33 @@ function queryComputerPanel(divElement, options) {
         return grammar;
     };
 
+    this.setupOptionsPanel = function() {        
+        var context = {
+            options: panel.options,
+            divElementId: panel.divElement.id
+        };
+        Handlebars.registerHelper('if_eq', function(a, b, opts) {
+            if (opts != "undefined") {
+                if (a == b)
+                    return opts.fn(this);
+                else
+                    return opts.inverse(this);
+            }
+        });
+        Handlebars.registerHelper('ifIn', function(elem, list, options) {
+            if (list.indexOf(elem) > -1) {
+                return options.fn(this);
+            }
+            return options.inverse(this);
+        });
+        $("#" + panel.divElement.id + "-modal-body").html(JST["views/developmentQueryPlugin/options.hbs"](context));
+        
+    }
+
+    this.readOptionsPanel = function() {
+        panel.options.displayPreferredTerm = $("#" + panel.divElement.id + "-displayPreferredTermOption").is(':checked');
+    }
+
     this.execute = function(form, expression, clean, onlyTotal) {
         panel.currentEx++;
         var currentEx = panel.currentEx;
@@ -1244,8 +1286,8 @@ function queryComputerPanel(divElement, options) {
                         }
                     }
                     $.each(data.items, function(i, row) {
-                        $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.moduleId + "' data-concept-id='" + row.id + "' data-term='" + row.pt.term + "'><td>" + row.pt.term + "</td><td>" + row.id + "</td></tr>");
-                        $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + row.pt.term + "</td><td>" + row.id + "</td></tr>");
+                        $('#' + panel.divElement.id + '-outputBody').append("<tr style='cursor: pointer;' class='conceptResult' data-module='" + row.moduleId + "' data-concept-id='" + row.id + "' data-term='" + (panel.options.displayPreferredTerm ? row.pt.term : row.fsn.term) + "'><td>" + (panel.options.displayPreferredTerm ? row.pt.term : row.fsn.term) + "</td><td>" + row.id + "</td></tr>");
+                        $('#' + panel.divElement.id + '-outputBody2').append("<tr><td>" + (panel.options.displayPreferredTerm ? row.pt.term : row.fsn.term) + "</td><td>" + row.id + "</td></tr>");
                     });
 
                     $('#' + panel.divElement.id + '-outputBody').find(".conceptResult").unbind();

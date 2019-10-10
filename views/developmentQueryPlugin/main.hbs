@@ -4,6 +4,7 @@
       <div class='col-md-6' id='{{divElementId}}-panelTitle'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>{{{i18n "i18n_terminology_content_selection" "Terminology content selections"}}}</strong></div>
       <div class='col-md-6 text-right'>
         <!--<a class="btn btn-link" href="help/topics/creating-queries.html" target="_blank" title="Help" role="button"><i class='glyphicon glyphicon-question-sign'></i></a>-->
+        <button id='{{divElementId}}-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#{{divElementId}}-configModal'><i class='glyphicon glyphicon-cog'></i></button>
       </div>
     </div>
   </div>
@@ -404,3 +405,20 @@
       </div>
     </div>
   </div>
+  <div class='modal fade' id='{{divElementId}}-configModal'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+                <h4 class='modal-title'><span class='i18n' data-i18n-id='i18n_options'>Options</span></h4>
+            </div>
+            <div class='modal-body' id='{{divElementId}}-modal-body'>
+                <p></p>
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-danger' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_cancel'>Cancel</span></button>
+                <button id='{{divElementId}}-apply-button' type='button' class='btn btn-success' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_apply_changes'>Apply changes</span></button>
+            </div>
+        </div>
+    </div>
+</div>
