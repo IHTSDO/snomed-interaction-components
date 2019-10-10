@@ -9,5 +9,20 @@
                 {{/if}}
             </label>
         </div>
-    </div>    
+    </div>
+    <div class="form-group">
+        <label for="selectedRelsView"><span class="i18n" data-i18n-id="i18n_rels_view">ECL query results filtered by relationship view</span></label>
+        <select class="form-control" id="{{divElementId}}-relsTypeFilterOption">
+            {{#if_eq options.eclQueryFilter "stated"}}
+                <option value="stated" selected>Stated</option>
+            {{else}}
+                <option value="stated">Stated</option>
+            {{/if_eq}}
+            {{#if_eq options.eclQueryFilter "inferred"}}
+                <option value="inferred" selected>Inferred</option>
+            {{else}}
+                <option value="inferred">Inferred</option>
+            {{/if_eq}}           
+        </select>
+    </div>   
 </form>

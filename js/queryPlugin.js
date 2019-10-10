@@ -12,6 +12,7 @@ function queryComputerPanel(divElement, options) {
     panel.currentEx = 0;
     this.divElement = divElement;
     this.options = jQuery.extend(true, {}, options);
+    this.options.eclQueryFilter = "inferred";
     this.type = "query-computer";
     panel.subscribers = [];
     panel.totalResults = [];
@@ -356,11 +357,10 @@ function queryComputerPanel(divElement, options) {
 
         $("#" + panel.divElement.id + "-apply-button").click(function() {            
             panel.readOptionsPanel();
-            console.log(panel.options);
-
+            
             var expression = $.trim($("#" + panel.divElement.id + "-ExpText").val());
             $('#' + panel.divElement.id + '-computeInferredButton2').addClass("disabled");           
-            panel.execute("inferred", expression, true);            
+            panel.execute(panel.options.eclQueryFilter, expression, true);            
             $('#' + panel.divElement.id + '-computeInferredButton2').removeClass("disabled");
            
         });
@@ -1158,6 +1158,7 @@ function queryComputerPanel(divElement, options) {
 
     this.readOptionsPanel = function() {
         panel.options.displayPreferredTerm = $("#" + panel.divElement.id + "-displayPreferredTermOption").is(':checked');
+        panel.options.eclQueryFilter = $("#" + panel.divElement.id + "-relsTypeFilterOption").val();
     }
 
     this.execute = function(form, expression, clean, onlyTotal) {
@@ -1258,7 +1259,7 @@ function queryComputerPanel(divElement, options) {
                 if(options.release.length > 0 && options.release !== 'None'){
                     branch = branch + "/" + options.release;
                 };
-        expressionURL = options.serverUrl + "/" + branch + "/concepts?module=900000000000207008&ecl=" + encodeURIComponent(strippedExpression) + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
+        expressionURL = options.serverUrl + "/" + branch + "/concepts?module=900000000000207008&" + (panel.options.eclQueryFilter === "stated" ? "statedEcl" : "ecl")   + "=" + encodeURIComponent(strippedExpression) + "&offset=" + skip + "&limit=" + limit + "&expand=fsn()";
         console.log("queryURL " + expressionURL);
         if (xhrExecute != null && !onlyTotal)
             xhrExecute.abort();
@@ -1337,7 +1338,14 @@ function queryComputerPanel(divElement, options) {
                 $('#' + panel.divElement.id + '-outputBody2').html("");
                 $("#" + panel.divElement.id + "-footer").html("");
                 $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-danger'>" + jqXHR.responseJSON.computeResponse.message + "</span>");
-            } else {
+            } 
+            else if (jqXHR && jqXHR.status && jqXHR.status === 500) {
+                $('#' + panel.divElement.id + '-outputBody').html("");
+                $('#' + panel.divElement.id + '-outputBody2').html("");
+                $("#" + panel.divElement.id + "-footer").html("");
+                $('#' + panel.divElement.id + '-resultInfo').html("<span class='text-danger'>" + jqXHR.responseJSON.message + "</span>");
+            }
+            else {
                 var textStatus = xhrExecute2.statusText;
                 if (textStatus != "abort") {
                     if (xhrExecute2.status == 0)
