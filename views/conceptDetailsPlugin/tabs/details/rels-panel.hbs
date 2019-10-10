@@ -117,14 +117,18 @@
     {{else}}
         {{#if_eq options.selectedView "stated"}}
             {{#each firstMatch.classAxioms}}
-            <b>Axiom</b>
-            <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" style="padding-left: 20px; padding-right: 20px; padding-top: 0px; padding-bottom: 0px" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                <table class='table table-bordered'>
+                    <thead>
+                    <tr>
+                        <th colspan="4" class="text-center">
+                            <span>Axiom</span>
+                            <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" style="padding-top: 0px; padding-bottom: 0px" data-container="body" data-toggle="popover" data-placement="left" data-content="
                                         <table border='1'><tr><th style='padding: 3px;'>Axiom ID</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
                                             <tr><td style='padding: 3px;'>{{axiomId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
                                         </table>
                                         " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
-                <table class='table table-bordered'>
-                    <thead>
+                        </th>
+                    </tr>
                     <tr>
                         {{#if_gr ../totalStatedAxioms 1}}
                         <th style="width : 30%"><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
@@ -178,14 +182,16 @@
     {{else}}
         {{#if_eq options.selectedView "stated"}}
             {{#each firstMatch.gciAxioms}}
-            <b>GCI</b>
-            <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" style="padding-left: 20px; padding-right: 20px; padding-top: 0px; padding-bottom: 0px" data-container="body" data-toggle="popover" data-placement="left" data-content="
+                <table class='table table-bordered'>
+                    <thead>
+                    <th colspan="4" class="text-center">
+                        <span>GCI</span>
+                        <button type="button" class="btn btn-link unobtrusive-icon more-fields-button pull-right" style="padding-top: 0px; padding-bottom: 0px" data-container="body" data-toggle="popover" data-placement="left" data-content="
                                             <table border='1'><tr><th style='padding: 3px;'>Axiom ID</th><th style='padding: 3px;'>Effective Time</th><th style='padding: 3px;'>ModuleId</th></tr>
                                                 <tr><td style='padding: 3px;'>{{axiomId}}</td><td style='padding: 3px;'>{{effectiveTime}}</td><td style='padding: 3px;'>{{moduleId}}</td></tr>
                                             </table>
                                             " data-html="true"><i class="glyphicon glyphicon-info-sign"></i></button>
-                <table class='table table-bordered'>
-                    <thead>
+                    </th>
                     <tr>
                         {{#if_gr ../totalStatedAxioms 1}}
                         <th style="width : 30%"><span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</span></th>
