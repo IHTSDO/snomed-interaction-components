@@ -553,7 +553,8 @@ function searchPanel(divElement, options) {
                                         term: $(event.target).attr('data-term'),
                                         module: $(event.target).attr("data-module"),
                                         conceptId: $(event.target).attr('data-concept-id'),
-                                        source: panel.divElement.id
+                                        source: panel.divElement.id,
+                                        showConcept: true
                                     });
                                 });
                             }
@@ -611,7 +612,8 @@ function searchPanel(divElement, options) {
                                         term: $(event.target).attr('data-term'),
                                         module: $(event.target).attr("data-module"),
                                         conceptId: $(event.target).attr('data-concept-id'),
-                                        source: panel.divElement.id
+                                        source: panel.divElement.id,
+                                        showConcept: true
                                     });
                                 });
                              }
@@ -1022,7 +1024,8 @@ function searchPanel(divElement, options) {
                                 term: $(event.target).attr("data-term"),
                                 module: $(event.target).attr("data-module"),
                                 conceptId: $(event.target).attr('data-concept-id'),
-                                source: panel.divElement.id
+                                source: panel.divElement.id,
+                                showConcept: true
                             });
                         });
                         $("[draggable='true']").tooltip({

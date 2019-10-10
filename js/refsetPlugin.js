@@ -98,7 +98,8 @@ function refsetPanel(divElement, options) {
                     term: $(event.target).attr('data-term'),
                     module: $(event.target).attr("data-module"),
                     conceptId: $(event.target).attr('data-concept-id'),
-                    source: panel.divElement.id
+                    source: panel.divElement.id,
+                    showConcept: true
                 });
             });
         }).done(function(result) {
@@ -306,7 +307,8 @@ function refsetPanel(divElement, options) {
                     term: clickedBadge.attr('data-term'),
                     module: clickedBadge.attr("data-module"),
                     conceptId: clickedBadge.attr('data-concept-id'),
-                    source: panel.divElement.id
+                    source: panel.divElement.id,
+                    showConcept: true
                 });
             });
         }).fail(function(err) {

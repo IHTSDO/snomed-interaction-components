@@ -472,7 +472,8 @@ function taxonomyPanel(divElement, conceptId, options) {
                         term: $(event.target).attr('data-term'),
                         module: $(event.target).attr("data-module"),
                         conceptId: selectedId,
-                        source: panel.divElement.id
+                        source: panel.divElement.id,
+                        showConcept: true
                     });
                 }
             }

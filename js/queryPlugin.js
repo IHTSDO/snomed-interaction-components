@@ -813,7 +813,8 @@ function queryComputerPanel(divElement, options) {
                             term: $(event.target).closest("tr").attr('data-term'),
                             module: $(event.target).closest("tr").attr("data-module"),
                             conceptId: $(event.target).closest("tr").attr('data-concept-id'),
-                            source: panel.divElement.id
+                            source: panel.divElement.id,
+                            showConcept: true
                         });
                     });
                 }).fail(function(err) {
