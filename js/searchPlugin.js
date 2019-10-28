@@ -537,6 +537,12 @@ function searchPanel(divElement, options) {
                                     }
                                 });
                                 result.descriptions = resDescriptions;
+                                
+                                $("#" + panel.divElement.id + "-groupConcept").unbind();
+                                $("#" + panel.divElement.id + "-groupConcept").click(function() {
+                                    panel.search(t, parseInt(skipTo), returnLimit, true);
+                                });
+
                                 var context = {
                                     result: result
                                 };
@@ -594,6 +600,12 @@ function searchPanel(divElement, options) {
                                     else
                                         return opts.inverse(this);
                                 });
+                                
+                                $("#" + panel.divElement.id + "-groupConcept").unbind();
+                                $("#" + panel.divElement.id + "-groupConcept").click(function() {
+                                    panel.search(t, parseInt(skipTo), returnLimit, true);
+                                });
+
                                 var tempResults = {};
                                 tempResults.matches = [];
                                 tempResults.matches.push(result);
