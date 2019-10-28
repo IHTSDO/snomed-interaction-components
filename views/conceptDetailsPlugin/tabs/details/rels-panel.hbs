@@ -14,7 +14,6 @@
                 <tr><td colspan='4'><span class='text-muted'>No relationships</span></td></tr>
             {{/if_eq}}
         {{else}}
-
             {{#each firstMatch.relationships}}
                 {{#if active}}
                     {{#if_eq characteristicType "INFERRED_RELATIONSHIP"}}
@@ -113,7 +112,6 @@
             {{/if_eq}}
         {{/if_eq}}
     {{#if_eq firstMatch.classAxioms.length 0}}
-        <p>No Axioms found</p>
     {{else}}
         {{#if_eq options.selectedView "stated"}}
             {{#each firstMatch.classAxioms}}
