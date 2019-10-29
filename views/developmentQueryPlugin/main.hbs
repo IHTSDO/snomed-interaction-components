@@ -187,9 +187,7 @@
         <div class="modal-body" style="max-height: 450px; overflow: auto;">
           <h2>SNOMED CT Expression Constraint Language</h2>
           <p>This tool implements the full set of ECL v1.3 functions from the "SNOMED CT Expression Constraint Language Specification and Guide" (<a href="http://snomed.org/expressionconstraint" target="_blank">http://snomed.org/expressionconstraint)</a>. </p>
-          <p>The goal of this tool is to enable the creation of a terminology constraint for the selection of content in SNOMED CT, with a user friendly UI designed to support the most common real world use cases for content selection, like the creation
-            of reference sets to support implementation.</p>
-          <p class="lead">Reference</p>
+          <p class="lead">For example:</p>
           <table class="c0">
             <tbody>
               <tr class="c15">
@@ -365,6 +363,51 @@
                   <p class="c3"><span class="c9">&lt; 19829001 |disorder of lung| MINUS &lt; 301867009 |edema of trunk|</span></p>
                 </td>
               </tr>
+              <tr class="c19">
+                <td class="c8" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c2">[x..y]</span></p>
+                </td>
+                <td class="c11" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c5">Cardinality</span></p>
+                </td>
+                <td class="c13" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c5">Only those concepts with at least x and at most y relationships that match the following attribute value pair</span></p>
+                </td>
+                <td class="c6" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c9">&lt; 373873005 |Pharmaceutical / biologic product|: [1..3] 127489000 |Has active ingredient| = &lt; 105590001 |Substance|</span></p>
+                </td>
+              </tr>
+              <tr class="c19">
+                <td class="c8" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c2">R</span></p>
+                </td>
+                <td class="c11" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c5">Reverse attribute</span></p>
+                </td>
+                <td class="c13" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c5">The set of attribute values (target concepts) for the given attribute and source concept</span></p>
+                </td>
+                <td class="c6" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c9">&lt; 91723000 |Anatomical structure|: R 363698007 |Finding site| = &lt; 125605004 |Fracture of bone|</span></p>
+                </td>
+              </tr>
+
+              <tr class="c19">
+                <td class="c8" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c2">.</span></p>
+                </td>
+                <td class="c11" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c5">Dotted attribute</span></p>
+                </td>
+                <td class="c13" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c5">The set of attribute values (target concepts) for the given attribute and source concept</span></p>
+                </td>
+                <td class="c6" colspan="1" rowspan="1">
+                  <p class="c3"><span class="c9">&lt; 125605004 |Fracture of bone|. 363698007 |Finding site|</span></p>
+                </td>
+              </tr>
+
+
             </tbody>
           </table>
         </div>
