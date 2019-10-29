@@ -52,7 +52,16 @@
                                 <a href="#"id='{{divElementId}}-inactiveOnlyButton' data-i18n-id='i18n_inactive_only'>{{i18n "i18n_inactive_only" "Inactive components only"}}</a>
                             </li>
                         </ul>
-                    </div>
+                    </div> 
+                    <div style="margin-top: 5px; position: relative">
+                        <select name="type[]" id="{{divElementId}}-searchTypeOpt" multiple >
+                            <option value="fsn">FSN</option>
+                            <option value="preferredTerm">Preferred Term</option>
+                            <option value="noDEF">No DEF</option>
+                            <option value="noPT">non-PT</option>
+                        </select>
+                    </div>                  
+                    
                     {{#if_eq server 'snowstorm'}}
                         <div style="margin-top: 5px; " class="checkbox">
                             <label>

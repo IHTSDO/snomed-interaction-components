@@ -76,6 +76,20 @@ function searchPanel(divElement, options) {
             //console.log("Semtag click: " + $(this).html());
         });
 
+        $('#' + panel.divElement.id + '-searchTypeOpt').multiselect({
+            columns: 1,
+            placeholder: 'Search Type...',
+            onOptionClick: function( element ){
+                var thisElement = $(element);
+                panel.options.typeSearchFilter = thisElement.val();
+        
+                var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+                if (searchTerm.length > 0) {
+                    panel.search(searchTerm, 0, 100, true);
+                }
+            }
+        });
+
         //$("#" + panel.divElement.id + "-searchConfigBar").slideUp('fast');
         if (options.searchMode != "fullText") {
             $("#" + panel.divElement.id + '-navLanguageLabel').closest('a').hide();
