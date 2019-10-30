@@ -1,7 +1,7 @@
 <div style='height:100%;margin: 5px; overflow:auto;' class='panel panel-default' id='{{divElementId}}-mainPanel'>
   <div class='panel-heading' id='{{divElementId}}-panelHeading'>
     <div class='row'>
-      <div class='col-md-6' id='{{divElementId}}-panelTitle'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>{{{i18n "i18n_terminology_content_selection" "Terminology content selections"}}}</strong></div>
+      <div class='col-md-6' id='{{divElementId}}-panelTitle'>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong class="i18n" data-i18n-id="i18n_terminology_content_selection">{{i18n "i18n_terminology_content_selection" "Terminology content selections"}}</strong></div>
       <div class='col-md-6 text-right'>
         <!--<a class="btn btn-link" href="help/topics/creating-queries.html" target="_blank" title="Help" role="button"><i class='glyphicon glyphicon-question-sign'></i></a>-->
         <button id='{{divElementId}}-configButton' class='btn btn-link' data-toggle='modal' style='padding:2px' data-target='#{{divElementId}}-configModal'><i class='glyphicon glyphicon-cog'></i></button>
@@ -11,14 +11,14 @@
   <div class='panel-body' style='height:100%' id='{{divElementId}}-panelBody'>
     <!--<p style="margin: 10px;">Create a query, conditions are evaluated in order:</p>-->
     <div class="row container-fluid" style="margin: 10px;">
-      <p class="lead col-md-6">Enter an expression</p>
-      <button type="button" id="{{divElementId}}-helpButton" class="btn btn-default pull-right" style="margin: 10px;" data-toggle="modal" data-target="#{{divElementId}}-queryHelpModal">{{{i18n "i18n_help" "Help"}}}</button>
-      <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right" style="margin: 10px;">{{{i18n "i18n_clear" "Clear"}}}</button>
+      <p class="lead col-md-6 i18n" data-i18n-id="i18n__enter_an_expression">{{i18n "i18n__enter_an_expression" "Enter an expression"}}</p>
+      <button type="button" id="{{divElementId}}-helpButton" class="btn btn-default pull-right i18n" style="margin: 10px;" data-toggle="modal" data-target="#{{divElementId}}-queryHelpModal" data-i18n-id="i18n_Help">{{i18n "i18n_Help" "Help"}}</button>
+      <button type="button" id="{{divElementId}}-clearButton" class="btn btn-default pull-right i18n" style="margin: 10px;" data-i18n-id="i18n_clear">{{i18n "i18n_clear" "Clear"}}</button>
       <!--<p><strong>This will execute against the current MAIN branch of the authoring platform. Please make sure you have logged into the authoring platform to be able to run any queries.</strong></p> -->
     </div>
     <div>
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#{{divElementId}}-ExpTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_expression">Enter an existing expression</span></a></li>
+        <li class="active"><a href="#{{divElementId}}-ExpTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_enter_an_existing_expression">{{i18n "i18n_enter_an_existing_expression" "Enter an existing expression"}}</span></a></li>
         <!--                <li><a href="#{{divElementId}}-BuilderTab" data-toggle="tab"><span class="i18n" data-i18n-id="i18n_builder">Build a simple expression</span></a></li>
 -->
       </ul>
@@ -86,7 +86,7 @@
             </form>
             <form class="form-inline" role="form">
               <div class="form-group">
-                <button type="button" class="btn btn-primary" id='{{divElementId}}-addCriteriaButton' style="margin: 10px;">{{{i18n "i18n_add_condition" "Add instruction"}}}</button>
+                <button type="button" class="btn btn-primary" id='{{divElementId}}-addCriteriaButton' style="margin: 10px;">{{i18n "i18n_add_condition" "Add instruction"}}</button>
                 <!--<button type="button" class="btn btn-primary"  id='{{divElementId}}-cloudResults' style="margin: 10px; position: relative;" title="Open Cloud Queries Processor" data-toggle="modal" data-target="#{{divElementId}}-cloudModal"><i class='glyphicon glyphicon-cloud' style="position: relative; top: 3px;"></i> <span id="{{divElementId}}-cloudCount"></span></button>-->
 
                 <span id="{{divElementId}}-addmsg" for="{{divElementId}}-addCriteriaButton" class="small text-danger"></span>
@@ -94,15 +94,15 @@
             </form>
             <ul class="list-group" id="{{divElementId}}-listGroup">
             </ul>
-            <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton'>{{{i18n "i18n_run_query" "Execute"}}}</div>
+            <div class="btn btn-success i18n" style="margin: 10px;" id='{{divElementId}}-computeInferredButton' data-i18n-id="i18n_execute">{{i18n "i18n_execute" "Execute"}}</div>
             <button type="button" class="btn btn-primary pull-right" id='{{divElementId}}-open-grammar' style="margin: 10px; position: relative;" data-toggle="modal" data-target="#{{divElementId}}-constraintGrammarModal">{{{i18n "i18n_constraint_grammar" "Constraint Grammar"}}}</button>
             <br>
             <br>
           </div>
         </div>
         <div class="tab-pane active" id="{{divElementId}}-ExpTab" style="padding: 15px;margin: 0;">
-          <textarea rows="5" ondrop="dropE(event);" class="form-control" placeholder="Expression..." id="{{divElementId}}-ExpText"></textarea>
-          <div class="btn btn-success" style="margin: 10px;" id='{{divElementId}}-computeInferredButton2'>{{{i18n "i18n_run_query" "Execute"}}}</div>
+          <textarea rows="5" ondrop="dropE(event);" class="form-control i18n" placeholder="{{i18n "i18n_expression" "Expression"}}..." id="{{divElementId}}-ExpText"></textarea>
+          <div class="btn btn-success i18n" style="margin: 10px;" id='{{divElementId}}-computeInferredButton2' data-i18n-id="i18n_execute">{{i18n "i18n_execute" "Execute"}}</div>
           <div class="btn btn-success" style="display: none; margin: 10px;" id='{{divElementId}}-computeOntoserver2'>Run on Ontoserver</div>
           <br>
         </div>
@@ -112,7 +112,7 @@
             {{{i18n "i18n_results" "Results"}}}:  <span id="{{divElementId}}-resultInfo" class="text-muted small"></span>
 -->
         <div class="row container-fluid" style="margin: 10px;">
-          <p class="lead">{{{i18n "i18n_results" "Results"}}}: <span id="{{divElementId}}-resultInfo"></p></span>
+          <p class="lead"><span class="i18n" data-i18n-id="i18n_results">{{i18n "i18n_results" "Results"}}</span>: <span id="{{divElementId}}-resultInfo"></p></span>
         </div>
 
         <div class="row container-fluid" id="{{divElementId}}-output" style="margin: 10px;">
@@ -171,7 +171,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button id="{{divElementId}}-ExamplesModal-close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button id="{{divElementId}}-ExamplesModal-close" type="button" class="btn btn-default i18n" data-dismiss="modal" data-i18n-id="i18n_close">{{i18n "i18n_close" "Close"}}</button>
         </div>
       </div>
     </div>
@@ -182,31 +182,31 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Terminology content selections help</h4>
+          <h4 class="modal-title i18n" data-i18n-id="i18n_terminology_content_selections_help">{{i18n "i18n_terminology_content_selections_help" "Terminology content selections help"}}</h4>
         </div>
         <div class="modal-body" style="max-height: 450px; overflow: auto;">
-          <h2>SNOMED CT Expression Constraint Language</h2>
-          <p>This tool implements the full set of ECL v1.3 functions from the "SNOMED CT Expression Constraint Language Specification and Guide" (<a href="http://snomed.org/expressionconstraint" target="_blank">http://snomed.org/expressionconstraint)</a>. </p>
-          <p class="lead">For example:</p>
+          <h2 class="i18n" data-i18n-id="i18n_snomed_ecl_title">{{i18n "i18n_snomed_ecl_title" "SNOMED CT Expression Constraint Language"}}</h2>
+          <p> <span class="i18n" data-i18n-id="i18n_snomed_ecl_description">{{i18n "i18n_snomed_ecl_description" 'This tool implements the full set of ECL v1.3 functions from the "SNOMED CT Expression Constraint Language Specification and Guide"'}}</span> (<a href="http://snomed.org/expressionconstraint" target="_blank">http://snomed.org/expressionconstraint)</a>. </p>
+          <p class="lead"><span class="i18n" data-i18n-id="i18n_for_example">{{i18n "i18n_for_example" "For example"}}</span>:</p>
           <table class="c0">
             <tbody>
               <tr class="c15">
                 <td class="c18 c24" colspan="2" rowspan="1">
-                  <p class="c3"><span class="c2">ECL Operator</span></p>
+                  <p class="c3"><span class="c2 i18n" data-i18n-id="i18n_ecl_operation">{{i18n "i18n_ecl_operation" "ECL Operator"}}</span></p>
                 </td>
                 <td class="c13 c18" colspan="1" rowspan="2">
-                  <p class="c3"><span class="c2">Summary</span></p>
+                  <p class="c3"><span class="c2 i18n" data-i18n-id="i18n_summary">{{i18n "i18n_summary" "Summary"}}</span></p>
                 </td>
                 <td class="c6 c18" colspan="1" rowspan="2">
-                  <p class="c3"><span class="c2">Example</span></p>
+                  <p class="c3"><span class="c2 i18n" data-i18n-id="i18n_example">{{i18n "i18n_example" "Example"}}</span></p>
                 </td>
               </tr>
               <tr class="c15">
                 <td class="c7" colspan="1" rowspan="1">
-                  <p class="c3"><span class="c2">Symbol</span></p>
+                  <p class="c3"><span class="c2 i18n" data-i18n-id="i18n_symbol">{{i18n "i18n_symbol" "Symbol"}}</span></p>
                 </td>
                 <td class="c10" colspan="1" rowspan="1">
-                  <p class="c3"><span class="c2">Name</span></p>
+                  <p class="c3"><span class="c2 i18n" data-i18n-id="i18n_name">{{i18n "i18n_name" "Name"}}</span></p>
                 </td>
               </tr>
               <tr class="c16">
@@ -414,7 +414,7 @@
 
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default i18n" data-dismiss="modal" data-i18n-id="i18n_close">{{i18n "i18n_close" "Close"}}</button>
         </div>
       </div>
     </div>
@@ -443,7 +443,7 @@
             <button type="button" class="btn btn-default" id="home-{{divElementId}}-brief-syntax-button">Brief</button>
           </div>
           &nbsp;&nbsp;
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default i18n" data-dismiss="modal" data-i18n-id="i18n_close">{{i18n "i18n_close" "Close"}}</button>
         </div>
       </div>
     </div>
@@ -453,14 +453,14 @@
         <div class='modal-content'>
             <div class='modal-header'>
                 <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-                <h4 class='modal-title'><span class='i18n' data-i18n-id='i18n_options'>Options</span></h4>
+                <h4 class='modal-title'><span class='i18n' data-i18n-id='i18n_options'>{{i18n "i18n_options" "Options"}}</span></h4>
             </div>
             <div class='modal-body' id='{{divElementId}}-modal-body'>
                 <p></p>
             </div>
             <div class='modal-footer'>
-                <button type='button' class='btn btn-danger' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_cancel'>Cancel</span></button>
-                <button id='{{divElementId}}-apply-button' type='button' class='btn btn-success' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_apply_changes'>Apply changes</span></button>
+                <button type='button' class='btn btn-danger' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_cancel'>{{i18n "i18n_cancel" "Cancel"}}</span></button>
+                <button id='{{divElementId}}-apply-button' type='button' class='btn btn-success' data-dismiss='modal'><span class='i18n' data-i18n-id='i18n_apply_changes'>{{i18n "i18n_apply_changes" "Apply changes"}}</span></button>
             </div>
         </div>
     </div>
