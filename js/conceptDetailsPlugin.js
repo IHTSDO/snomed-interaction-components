@@ -356,6 +356,10 @@ function conceptDetails(divElement, conceptId, options) {
               }
             });
         };
+        if (typeof panel.options.selectedView == "undefined") {
+            panel.options.selectedView = "inferred";
+        }
+
         xhr = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId, function(result) {
 
         }).done(function(result) {
@@ -2123,7 +2127,7 @@ function conceptDetails(divElement, conceptId, options) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
         }).done(function(result) {
             result.forEach(function(c) {
-                if(c.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && c.fsn.lang != options.defaultLanguage){
+                if(c.pt && c.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && c.fsn.lang != options.defaultLanguage){
                     c.defaultTerm = c.pt.term;
                 }
                 else{
