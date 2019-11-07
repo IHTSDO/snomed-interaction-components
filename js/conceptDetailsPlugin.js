@@ -1144,8 +1144,7 @@ function conceptDetails(divElement, conceptId, options) {
                     $("#" + panel.divElement.id + "-configButton").removeAttr("disabled");
 
                     panel.setupOptionsPanel();
-                },
-                function() {
+                }).fail(function() {
                     loadDesriptionsPanel(firstMatch);
 
                     $("#" + panel.divElement.id + "-configButton").removeAttr("disabled");
