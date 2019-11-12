@@ -22,7 +22,11 @@
                             <td>{{type}}</td>
                             <td>
                                 <a class="refset-item" href="javascript:void(0);" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' style="color: inherit; text-decoration: inherit;">
-                                    <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;&nbsp;</span>
+                                    {{#if_eq definitionStatus "PRIMITIVE"}}
+                                        <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&nbsp;&nbsp;</span>
+                                    {{else}}
+                                        <span class="badge alert-warning" draggable='true' ondragstart="drag(event, '{{../divElementId}}')" data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}'>&equiv;</span>
+                                    {{/if_eq}}
                                     {{#hasCountryIcon module}}
                                         <div class="phoca-flagbox" style="width:22px;height:22px">
                                             <span class="phoca-flag {{countryIcon module}}"></span>

@@ -71,6 +71,7 @@ function refsetPanel(divElement, options) {
                 refsetItem.defaultTerm = result.referenceSets[key].fsn.term;
                 refsetItem.count = result.memberCountsByReferenceSet[key];
                 refsetItem.type = result.referenceSets[key].referenceSetType.pt.term;
+                refsetItem.definitionStatus = result.referenceSets[key].definitionStatus;
 
                 refsets.push(refsetItem);
             });
