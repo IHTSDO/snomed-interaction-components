@@ -4,16 +4,16 @@
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>
-                        <th>Type</th>
-                        <th>Refset</th>
-                        <th>Active Members Count</th>
+                        <th class="i18n" data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type"}}</th>
+                        <th class="i18n" data-i18n-id='i18n_refset'>{{i18n "i18n_refset" "Refset"}}</th>
+                        <th class="i18n" data-i18n-id='i18n_active_members_count'>{{i18n "i18n_active_members_count" "Active Members Count"}}</th>
                     </tr>
                 </thead>
                 <tbody>
                 {{#if_eq refsets.length 0}}
                     <tr>
                         <td colspan="3">
-                            <span class="text-muted"> No refsets</span>
+                            <span class="text-muted i18n" data-i18n-id='i18n_no_refsets'>{{i18n "i18n_no_refsets" "No refsets"}}</span>
                         </td>
                     </tr>
                 {{else}}

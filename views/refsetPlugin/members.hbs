@@ -1,7 +1,7 @@
 {{#if_eq skipTo 0}}
     <thead>
         <tr>
-            <th colspan="2">Members of {{term}} (<span>{{total}}</span>)</th>
+            <th colspan="2" class="i18n" data-i18n-id="i18n_members_of">{{i18n "i18n_members_of" "Members of"}} {{term}} (<span>{{total}}</span>)</th>
         </tr>
         <tr>
             <th><span data-i18n-id="i18n_term" class="i18n">{{i18n "i18n_term" "Term"}}</span></th>
@@ -31,7 +31,7 @@
 
     <tr class="more-row">
         {{#if_eq referenceComponentsOfRefsetAreNotConcepts true}}
-            <td class="text-muted" class="text-center" colspan="2">The reference components of these reference set members are not concepts.</span></td>
+            <td class="text-center text-muted i18n" colspan="2" data-i18n-id="i18n_reference_components_are_not_concept">{{i18n "i18n_reference_components_are_not_concept" "The reference components of these reference set members are not concepts"}}.</span></td>
         {{else}}
             {{#if_eq remaining "asd"}}
                 <td class="text-center" id="{{divElementId}}-moreMembers" colspan="2">
@@ -39,7 +39,7 @@
                 </td>
             {{else}}
                 {{#if_eq remaining 0}}
-                    <td class="text-muted" class="text-center" colspan="2">{{total}} <span data-i18n-id="i18n_members" class="i18n">members</span></td>
+                    <td class="text-muted" class="text-center" colspan="2">{{total}} <span data-i18n-id="i18n_members" class="i18n">{{i18n "i18n_members" "members"}}</span></td>
                 {{else}}
                     {{#if_gr remaining returnLimit}}
                         <td class="text-center" id="{{divElementId}}-moreMembers" colspan="2">

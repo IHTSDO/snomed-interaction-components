@@ -1,10 +1,10 @@
 <div style="margin: 10px;">
-    <a class="btn btn-primary btn-sm pull-right" href="https://mapping.ihtsdotools.org/#/record/conceptId/{{firstMatch.conceptId}}/autologin?refSetId=P447562003" target="_blank" role="button">Open maps for this concept</a>
+    <a class="btn btn-primary btn-sm pull-right i18n" href="https://mapping.ihtsdotools.org/#/record/conceptId/{{firstMatch.conceptId}}/autologin?refSetId=P447562003" target="_blank" role="button" data-i18n-id='i18n_open_maps_for_concept'>{{i18n "i18n_open_maps_for_concept" "Open maps for this concept"}}</a>
 </div>
 
 <table class='table table-hover'>
     <thead><tr>
-        <th colspan="3"><span class='i18n' data-i18n-id='i18n_simple_refset_memberships'>Simple Refsets Membership</span></th>
+        <th colspan="3"><span class='i18n' data-i18n-id='i18n_simple_refset_memberships'>{{i18n "i18n_simple_refset_memberships" "Simple Refsets Membership"}}</span></th>
     </tr></thead>
 <tbody>
     {{#each simpleRefsetMembers}}
@@ -30,14 +30,14 @@
     {{#if_not_empty simpleRefsetMembers}}
         </tbody>
     {{else}}
-        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
+        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>{{i18n "i18n_no_memberships" "No memberships"}}</span></td></tr>
         </tbody>
     {{/if_not_empty}}
 </table>
 
 <table class='table table-hover'>
     <thead><tr>
-        <th colspan="3"><span class='i18n' data-i18n-id='i18n_simple_map_refset_name'>Simple Map Refset name</span></th>
+        <th colspan="3"><span class='i18n' data-i18n-id='i18n_simple_map_refset_name'>{{i18n "i18n_simple_map_refset_name" "Simple Map Refset name"}}</span></th>
     </tr></thead>
 <tbody>
     {{#each simpleMapRefsetMembers}}        
@@ -64,14 +64,14 @@
     {{#if_not_empty simpleMapRefsetMembers}}
         </tbody>
     {{else}}
-        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
+        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>{{i18n "i18n_no_memberships" "No memberships"}}</span></td></tr>
         </tbody>
     {{/if_not_empty}}
 </table>
 
 <table class='table table-hover'>
     <thead><tr>
-        <th colspan="3"><span class='i18n' data-i18n-id='i18n_attribute_value_refset_name'>Attribute Value Refset name</span></th>
+        <th colspan="3"><span class='i18n' data-i18n-id='i18n_attribute_value_refset_name'>{{i18n "i18n_attribute_value_refset_name" "Attribute Value Refset name"}}</span></th>
     </tr></thead>
 <tbody>
 
@@ -105,14 +105,14 @@
     {{#if_not_empty attributeValueRefsetMembers}}
         </tbody>
     {{else}}
-        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
+        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>{{i18n "i18n_no_memberships" "No memberships"}}</span></td></tr>
         </tbody>
     {{/if_not_empty}}
 </table>
 
 <table class='table table-hover'>
     <thead><tr>
-        <th colspan="3"><span class='i18n' data-i18n-id='i18n_association_refset_name'>Association Refset name</span></th>
+        <th colspan="3"><span class='i18n' data-i18n-id='i18n_association_refset_name'>{{i18n "i18n_association_refset_name" "Association Refset name"}}</span></th>
     </tr></thead>
 <tbody>
     {{#each associationRefsetMembers}}        
@@ -148,7 +148,7 @@
     {{#if_not_empty associationRefsetMembers}}
         </tbody>
     {{else}}
-        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>No memberships</span></td></tr>
+        <tr><td><span class='i18n text-muted' data-i18n-id='i18n_no_memberships'>{{i18n "i18n_no_memberships" "No memberships"}}</span></td></tr>
         </tbody>
     {{/if_not_empty}}
 </table>
