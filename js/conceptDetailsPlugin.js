@@ -564,6 +564,33 @@ function conceptDetails(divElement, conceptId, options) {
             };
             $('#' + panel.attributesPId).html(JST["views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs"](context));
             
+            var branch = options.edition;
+            if(options.release.length > 0 && options.release !== 'None'){
+                branch = branch + "/" + options.release;
+            };
+            
+            // get stated and inferred descendant count for concept detail tab
+            $("#" + panel.divElement.id + "-statedDescendantCount").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+            $("#" + panel.divElement.id+ "-inferredDescendantCount").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
+            
+            $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId + "/children?form=inferred&includeDescendantCount=true", function(result) {            
+            }).done(function(result) {
+                var inferredDescendantCount = result.length;
+                result.forEach(function(children){
+                    inferredDescendantCount += children.descendantCount;                    
+                });
+                $("#" + panel.divElement.id + "-inferredDescendantCount").html(inferredDescendantCount);               
+            });
+
+            $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId + "/children?form=stated&includeDescendantCount=true", function(result) {            
+            }).done(function(result) {
+                var statedDescendantCount = result.length;
+                result.forEach(function(children){
+                    statedDescendantCount += children.descendantCount;                    
+                });
+                $("#" + panel.divElement.id + "-statedDescendantCount").html(statedDescendantCount);              
+            });
+
             if (swedishExtension) {               
                 
                 if( $('#' + panel.divElement.id + '-issues-collector').length != 0) {
@@ -1920,11 +1947,12 @@ function conceptDetails(divElement, conceptId, options) {
         if (xhrChildren != null) {
             xhrChildren.abort();
             xhrChildren = null;
-        }
-
-        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView, function(result) {
+        }        
+        
+        xhrChildren = $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + panel.conceptId + "/children?form=" + panel.options.selectedView + "&includeDescendantCount=true", function(result) {
             //$.getJSON(panel.url + "rest/browser/concepts/" + panel.conceptId + "/children", function(result) {
-        }).done(function(result) {
+        }).done(function(result) {          
+
             result.forEach(function(item) {
                 if(item.pt && item.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && item.fsn.lang != options.defaultLanguage){
                     item.defaultTerm = item.pt.term;
