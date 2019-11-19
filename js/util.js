@@ -301,6 +301,7 @@ function dropT(ev, id) {
             if (typeof conceptId != "undefined") {
                 var d = new Date();
                 var time = d.getTime();
+                panel.default.conceptId = conceptId;
                 panel.history.push({term: term, conceptId: conceptId, time: time});
                 panel.setToConcept(conceptId, term, definitionStatus, module);
                 channel.publish(panel.divElement.id, {

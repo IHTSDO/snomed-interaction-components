@@ -1,7 +1,7 @@
 <div style='height:100%;margin-bottom: 15px;'>
     <ul style='list-style-type: none; padding-left: 5px;'>
         {{#each parents}}
-            <li data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' data-statedDescendants='{{statedDescendants}}' class='treeLabel'>
+            <li data-module="{{module}}" data-concept-id='{{conceptId}}' data-term='{{defaultTerm}}' data-statedDescendants='{{descendantCount}}' class='treeLabel'>
                 <button class='btn btn-link btn-xs treeButton' style='padding:2px'>
                     <i class='glyphicon glyphicon-chevron-{{#if_def conceptId}}down{{else}}up{{/if_def}} treeButton' id='{{../divElementId}}-treeicon-{{conceptId}}'></i>
                 </button>
@@ -16,7 +16,7 @@
                     </div>
                 {{/hasCountryIcon}}
                 <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;">
-                    <span data-module="{{module}}" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-definition-status="{{definitionStatus}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" data-statedDescendants="{{statedDescendants}}" class="treeLabel selectable-row" id="{{../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span>
+                    <span data-module="{{module}}" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-definition-status="{{definitionStatus}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" data-statedDescendants="{{descendantCount}}" class="treeLabel selectable-row" id="{{../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span>
                 </a>
         {{/each}}
         {{#if_gr parents.length 0}}
@@ -36,7 +36,7 @@
                     </div>
                 {{/hasCountryIcon}}
                 <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;">
-                    <span draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-definition-status="{{focusConcept.definitionStatus}}" data-module="{{focusConcept.module}}" data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}" data-statedDescendants="{{focusConcept.statedDescendants}}" class="treeLabel selectable-row" id="{{divElementId}}-treenode-{{focusConcept.conceptId}}">{{focusConcept.defaultTerm}}</span>
+                    <span draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-definition-status="{{focusConcept.definitionStatus}}" data-module="{{focusConcept.module}}" data-concept-id="{{focusConcept.conceptId}}" data-term="{{focusConcept.defaultTerm}}" data-statedDescendants="{{focusConcept.descendantCount}}" class="treeLabel selectable-row" id="{{divElementId}}-treenode-{{focusConcept.conceptId}}">{{focusConcept.defaultTerm}}</span>
                 </a>
             </li>
         </ul>
