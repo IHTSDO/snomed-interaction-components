@@ -564,7 +564,7 @@ function conceptDetails(divElement, conceptId, options) {
             };
             $('#' + panel.attributesPId).html(JST["views/conceptDetailsPlugin/tabs/details/attributes-panel.hbs"](context));
             
-            if (result.descendantCount) {
+            if (typeof result.descendantCount !== 'undefined') {
                 var branch = options.edition;
                 if(options.release.length > 0 && options.release !== 'None'){
                     branch = branch + "/" + options.release;
