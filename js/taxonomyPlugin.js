@@ -133,15 +133,13 @@ function taxonomyPanel(divElement, conceptId, options) {
         //            delay: 1000
         //        });
 
-        $("#" + panel.divElement.id + "-resetButton").click(function() {
-            //            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "PRIMITIVE", "statedDescendants": options.rootConceptDescendants });
+        $("#" + panel.divElement.id + "-resetButton").click(function() {            
             panel.setToConcept(panel.default.conceptId);
         });
 
         $("#" + panel.divElement.id + "-apply-button").click(function() {
             //console.log("apply!");
-            panel.readOptionsPanel();
-            //            panel.setupParents([], {conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "PRIMITIVE", "statedDescendants": options.rootConceptDescendants });
+            panel.readOptionsPanel();            
         });
 
         $("#" + panel.divElement.id + "-historyButton").click(function(event) {
@@ -214,7 +212,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         //            });
         //            $("#" + panel.divElement.id + "-linkerButton").popover('toggle');
         //        });
-
+        
         $("#" + panel.divElement.id + "-descendantsCountTrue").click(function(event) {
             panel.options.descendantsCount = true;
             $("#" + panel.divElement.id + '-txViewLabel2').html("Descendants Count: On");
@@ -222,7 +220,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 panel.setToConcept(panel.default.conceptId);
             }
             else {
-                panel.setupParents([], { conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "PRIMITIVE" });
+                panel.setToConcept(138875005); // root concept
             }
             
         });
@@ -234,7 +232,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 panel.setToConcept(panel.default.conceptId);
             }
             else {
-                panel.setupParents([], { conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "PRIMITIVE" });
+                panel.setToConcept(138875005); // root concept
             }            
         });
 
@@ -245,7 +243,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 panel.setToConcept(panel.default.conceptId);
             }
             else {
-                panel.setupParents([], { conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "PRIMITIVE" });
+                panel.setToConcept(138875005); // root concept
             }            
         });
 
@@ -256,7 +254,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 panel.setToConcept(panel.default.conceptId);
             }
             else {
-                panel.setupParents([], { conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "PRIMITIVE" });
+                panel.setToConcept(138875005); // root concept
             }
             
         });
@@ -368,6 +366,15 @@ function taxonomyPanel(divElement, conceptId, options) {
         });
         $("#" + panel.divElement.id + "-panelBody").html(JST["views/taxonomyPlugin/body/parents.hbs"](context));
         
+        if (panel.options.descendantsCount == true) {            
+            var auxArray = parents;
+            auxArray.push(focusConcept);
+            auxArray.forEach(function(concept) {
+                var descedants = concept.descendantCount;                
+                $("#" + panel.divElement.id + "-panelBody").find('.selectable-row[data-concept-id="' + concept.conceptId + '"]').append("&nbsp;&nbsp;&nbsp;&nbsp;<span class='text-muted'>" + descedants + "</span>");                
+            });
+        }
+
         //console.log(JST["views/taxonomyPlugin/body/parents.hbs"](context));
         $(".treeButton").disableTextSelect();
         $("#" + panel.divElement.id + "-panelBody").unbind("dblclick");
@@ -377,6 +384,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                 var time = d.getTime();
                 var selectedModule = $(event.target).attr('data-module');
                 var selectedId = $(event.target).attr('data-concept-id');
+                var descendantCount = $(event.target).attr('data-descendants')
                 var selectedLabel = $(event.target).attr('data-term');
                 var definitionStatus = $(event.target).attr('data-definition-status');
                 panel.history.push({ term: selectedLabel, conceptId: selectedId, time: time });
@@ -392,7 +400,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                           }
                         });
                     };
-                    $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView, function(result) {
+                    $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + selectedId + "/parents?form=" + panel.options.selectedView + "&includeDescendantCount=true", function(result) {
                         result.forEach(function(item) {
                             if(item.pt && item.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && item.fsn.lang != options.defaultLanguage){
                                 item.defaultTerm = item.pt.term;
@@ -403,7 +411,7 @@ function taxonomyPanel(divElement, conceptId, options) {
                         });
                         console.log(result);
                     }).done(function(result) {
-                        panel.setupParents(result, { conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: definitionStatus, module: selectedModule});
+                        panel.setupParents(result, { conceptId: selectedId, defaultTerm: selectedLabel, definitionStatus: definitionStatus, module: selectedModule, descendantCount: descendantCount});
                     }).fail(function() {});
                 }
             }
@@ -454,10 +462,10 @@ function taxonomyPanel(divElement, conceptId, options) {
         $("#" + iconId).addClass("glyphicon-refresh");
         $("#" + iconId).addClass("icon-spin");
         //console.log("getChildren..." + focusConcept.conceptId);
-        panel.getChildren(focusConcept.conceptId, parents, focusConcept);
+        panel.getChildren(focusConcept.conceptId);
     };
 
-    this.getChildren = function(conceptId, parents, focusConcept) {
+    this.getChildren = function(conceptId) {
         if (typeof panel.options.selectedView == "undefined") {
             panel.options.selectedView = "inferred";
         }
@@ -502,20 +510,6 @@ function taxonomyPanel(divElement, conceptId, options) {
             //console.log(JSON.stringify(result));
             var listIconIds = [];
             //console.log(JSON.stringify(listIconIds));
-            
-            if (panel.options.descendantsCount == true && focusConcept) {
-                var focusConceptDescendantCount = result.length;
-                result.forEach(function(children){
-                    focusConceptDescendantCount += children.descendantCount;                    
-                });
-                focusConcept.descendantCount = focusConceptDescendantCount;
-                var auxArray = parents;
-                auxArray.push(focusConcept);
-                auxArray.forEach(function(concept) {
-                    var descedants = concept.descendantCount;                
-                    $("#" + panel.divElement.id + "-panelBody").find('.selectable-row[data-concept-id="' + concept.conceptId + '"]').append("&nbsp;&nbsp;&nbsp;&nbsp;<span class='text-muted'>" + descedants + "</span>");                
-                });
-            }
 
             var context = {
                 result: result,
@@ -690,7 +684,7 @@ function taxonomyPanel(divElement, conceptId, options) {
         }).fail(function() {});
     }
 
-    this.setToConcept = function(conceptId, term, definitionStatus, module) {
+    this.setToConcept = function(conceptId, term, definitionStatus, module, descendantCount) {
         console.log(definitionStatus);
         $("#" + panel.divElement.id + "-panelBody").html("<i class='glyphicon glyphicon-refresh icon-spin'></i>");
         var branch = options.edition;
@@ -725,23 +719,22 @@ function taxonomyPanel(divElement, conceptId, options) {
                       }
                     });
                 };
-                var urlArgs = '';
+                var urlArgs = '?descendantCountForm=' + panel.options.selectedView;
                 if(options.serverUrl.includes('snowowl')){
-                    urlArgs = urlArgs + '?expand=fsn()';
+                    urlArgs = urlArgs + '&expand=fsn()';
                 }
-                $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId + urlArgs, function(res) {
+                $.getJSON(options.serverUrl + "/browser/" + branch + "/concepts/" + conceptId + urlArgs, function(res) {
                     if(res.pt && res.pt.lang === options.defaultLanguage && options.defaultLanguage != 'en' && res.fsn.lang != options.defaultLanguage){
                         res.defaultTerm = res.pt.term;
                     }
                     else{
                         res.defaultTerm = res.fsn.term;
                     }
-
                     
-                    panel.setupParents(result, { conceptId: conceptId, defaultTerm: res.defaultTerm, definitionStatus: res.definitionStatus, module: module });
+                    panel.setupParents(result, { conceptId: conceptId, defaultTerm: res.defaultTerm, definitionStatus: res.definitionStatus, module: module, descendantCount: res.descendantCount });
                 });
             } else {
-                panel.setupParents(result, { conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus, module: module });
+                panel.setupParents(result, { conceptId: conceptId, defaultTerm: term, definitionStatus: definitionStatus, module: module, descendantCount: descendantCount });
             }
         }).fail(function() {
             $("#" + panel.divElement.id + "-panelBody").html("<div class='alert alert-danger'><span class='i18n' data-i18n-id='i18n_ajax_failed'><strong>Error</strong> while retrieving data from server...</span></div>");
@@ -762,7 +755,8 @@ function taxonomyPanel(divElement, conceptId, options) {
             var subscription = channel.subscribe(panelId, function(data, envelope) {
                 //                console.log("listening in " + panel.divElement.id);
                 panel.default.conceptId = data.conceptId;
-                panel.setToConcept(data.conceptId, data.fsn.term, data.definitionStatus, data.module);
+                panel.setToConcept(data.conceptId);
+                
             });
             panel.subscriptions.push(subscription);
             panelToSubscribe.subscribers.push(panel.divElement.id);
@@ -885,49 +879,31 @@ function taxonomyPanel(divElement, conceptId, options) {
 
 
     this.setupCanvas();
-    if (!conceptId || conceptId == 138875005) {
-        this.setupParents([], { conceptId: 138875005, defaultTerm: "SNOMED CT Concept", definitionStatus: "PRIMITIVE" });
+
+    var branch = options.edition;
+    if(options.release.length > 0 && options.release !== 'None'){
+        branch = branch + "/" + options.release;
+    };
+    if(!options.serverUrl.includes('snowowl')){
+        $.ajaxSetup({
+            headers : {
+            'Accept-Language': options.languages
+            }
+        });
+    };
+    var urlArgs = '?descendantCountForm=' + panel.options.selectedView;
+    if(options.serverUrl.includes('snowowl')){
+        urlArgs = urlArgs + '&expand=fsn()';
+    }
+    if (!conceptId || conceptId == 138875005) {        
+        panel.setToConcept(138875005);       
     } else {
         if (xhr != null) {
             xhr.abort();
             //console.log("aborting call...");
         }
-        var branch = options.edition;
-        if(options.release.length > 0 && options.release !== 'None'){
-            branch = branch + "/" + options.release;
-        };
-        if(!options.serverUrl.includes('snowowl')){
-           $.ajaxSetup({
-              headers : {
-                'Accept-Language': options.languages
-              }
-            });
-        };
-        var urlArgs = '';
-        if(options.serverUrl.includes('snowowl')){
-            urlArgs = urlArgs + '?expand=fsn()';
-        }
-        xhr = $.getJSON(options.serverUrl + "/" + branch + "/concepts/" + conceptId + urlArgs, function(result) {
-            //if (typeof result.descendantCount == "undefined") $("#" + panel.divElement.id + "-txViewLabel2").closest("li").hide();
-        }).done(function(result) {
-            if (panel.options.selectedView == 'stated') {
-                if(result.pt && result.pt.lang === options.defaultLanguage){
-                    panel.setToConcept(conceptId, result.pt.term, result.definitionStatus, result.module);
-                }
-                else{
-                    panel.setToConcept(conceptId, result.fsn.term, result.definitionStatus, result.module);
-                }
-            } else {
-                if(result.pt && result.pt.lang === options.defaultLanguage){
-                    panel.setToConcept(conceptId, result.pt.term, result.definitionStatus, result.module);
-                }
-                else{
-                    panel.setToConcept(conceptId, result.fsn.term, result.definitionStatus, result.module);
-                }
-            }
-        }).fail(function() {
-            //console.log("Error");
-        });
+
+        panel.setToConcept(conceptId); 
     }
 }
 

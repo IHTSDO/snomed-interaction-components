@@ -1,7 +1,7 @@
 <ul style='list-style-type: none; padding-left: 15px;'>
     {{#each result}}
         {{#if active}}
-            <li data-module="{{module}}" data-concept-id='{{conceptId}}' data-term="{{defaultTerm}} data-statedDescendants='{{descendantCount}}" class='treeLabel'>
+            <li data-module="{{module}}" data-concept-id='{{conceptId}}' data-term="{{defaultTerm}} data-descendants='{{descendantCount}}" class='treeLabel'>
                 <button class='btn btn-link btn-xs treeButton' style='padding:2px'>
                     <i class='glyphicon glyphicon-{{#if_eq ../../selectedView "inferred"}}{{#if_eq isLeafInferred true}}minus{{else}}chevron-right{{/if_eq}}{{else}}{{#if_eq isLeafStated true}}minus{{else}}chevron-right{{/if_eq}}{{/if_eq}} treeButton' id='{{../../divElementId}}-treeicon-{{conceptId}}'></i>
                 </button>
@@ -16,7 +16,7 @@
                     </div>
                 {{/hasCountryIcon}}
                 <a href="javascript:void(0);" style="color: inherit;text-decoration: inherit;">
-                    <span class="treeLabel selectable-row" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-definition-status="{{definitionStatus}}" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" data-statedDescendants="{{descendantCount}}" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span>
+                    <span class="treeLabel selectable-row" draggable="true" ondragstart="drag(event, '{{../../divElementId}}')" data-definition-status="{{definitionStatus}}" data-module="{{module}}" data-concept-id="{{conceptId}}" data-term="{{defaultTerm}}" data-descendants="{{descendantCount}}" id="{{../../divElementId}}-treenode-{{conceptId}}">{{defaultTerm}}</span>
                 </a>
                 {{push conceptId}}
             </li>

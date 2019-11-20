@@ -303,7 +303,7 @@ function dropT(ev, id) {
                 var time = d.getTime();
                 panel.default.conceptId = conceptId;
                 panel.history.push({term: term, conceptId: conceptId, time: time});
-                panel.setToConcept(conceptId, term, definitionStatus, module);
+                panel.setToConcept(conceptId);
                 channel.publish(panel.divElement.id, {
                     term: term,
                     conceptId: conceptId,
