@@ -388,9 +388,12 @@ function searchPanel(divElement, options) {
         $('#' + panel.divElement.id + '-filterLanguageRefsetOpt').multiselect({            
             buttonClass: 'btn btn-success',       
             selectedClass: '',
+            templates: {
+                button: '<button type="button" style="white-space: normal;" class="multiselect dropdown-toggle" data-toggle="dropdown"><span class="multiselect-selected-text"></span> <b class="caret"></b></button>',
+            },
             buttonText: function(options, select) {
                 if (options.length === 0) {
-                   return 'Filter by language refset';
+                   return 'Language Refsets';
                 }
                 else{
                     var selected = '';
@@ -398,7 +401,7 @@ function searchPanel(divElement, options) {
                        var label = ($(this).attr('label') !== undefined) ?  $(this).attr('label'):$(this).html();
                        selected += label + ', ';
                     });
-                    return 'Language Refset: ' + selected.substr(0, selected.length - 2);
+                    return 'Language Refsets: ' + selected.substr(0, selected.length - 2);
                  }
             },          
             onChange: function(option, checked, select) {
