@@ -341,8 +341,7 @@ function searchPanel(divElement, options) {
         $("#" + panel.divElement.id + "-preferredTermyButton").click(function(event) {
             panel.options.typeSearchFilter = 'pt';
             panel.updateTypeFilterLabel();
-        });     
-
+        });
 
         $("#" + panel.divElement.id + "-partialMatchingButton").click();
         $("#" + panel.divElement.id + "-ownMarker").css('color', panel.markerColor);
@@ -368,11 +367,69 @@ function searchPanel(divElement, options) {
             panel.options.languageRefsets = [];        
             Object.keys(result.referenceSets).forEach(function(key) {
                 if (result.referenceSets[key].referenceSetType.id === '900000000000506000') {
-                    panel.options.languageRefsets.push(result.referenceSets[key]);                                      
+                    panel.options.languageRefsets.push(result.referenceSets[key]);
                 }
             });
+
+            if (panel.options.languageRefsets.length !== 0) {
+                panel.setupLanguageRefsetDropdown();
+            }
         });
     }
+
+    this.setupLanguageRefsetDropdown = function() {
+        panel.options.languageRefsets.forEach(function(concept) {
+            // add item to language refset dropdow list
+            var o = new Option(concept.pt.term, concept.id);
+            $(o).html(concept.pt.term);
+            $('#' + panel.divElement.id + '-filterLanguageRefsetOpt').append(o);
+        });
+
+        $('#' + panel.divElement.id + '-filterLanguageRefsetOpt').multiselect({            
+            buttonClass: 'btn btn-success',       
+            selectedClass: '',
+            buttonText: function(options, select) {
+                if (options.length === 0) {
+                   return 'Filter by language refset';
+                }
+                else{
+                    var selected = '';
+                    options.each(function() {
+                       var label = ($(this).attr('label') !== undefined) ?  $(this).attr('label'):$(this).html();
+                       selected += label + ', ';
+                    });
+                    return 'Language Refset: ' + selected.substr(0, selected.length - 2);
+                 }
+            },          
+            onChange: function(option, checked, select) {
+                if (typeof panel.options.languageRefsetSearchFilter === 'undefined') {
+                    panel.options.languageRefsetSearchFilter = [];
+                }
+
+                if (checked) {
+                    if (!panel.options.languageRefsetSearchFilter.includes(option.val())) {
+                        panel.options.languageRefsetSearchFilter.push(option.val());
+                    }
+                }
+                else {
+                    panel.options.languageRefsetSearchFilter = panel.options.languageRefsetSearchFilter.filter(function (value) {
+                        return value !== option.val();
+                    });
+                }
+
+                var searchTerm = $('#' + panel.divElement.id + '-searchBox').val();
+                if (searchTerm.length > 0) {
+                    panel.search(searchTerm, 0, 100, true);
+                }
+            }
+        });
+
+        // must add a label attribue after muiltiselect initialised
+        $('#' + panel.divElement.id + '-filterLanguageRefsetOpt option').each(function() {
+            $(this).attr('label', panel.options.languageNameOfLangRefset[$(this).val()]);
+        });
+        $('#' + panel.divElement.id + '-filterLanguageRefsetOptHidden').hide()
+    };
 
     this.setupOptionsPanel = function() {
         var possibleSubscribers = [];
@@ -817,7 +874,11 @@ function searchPanel(divElement, options) {
                             });                            
                         }                                                
                     }
-                    
+                    if (panel.options.languageRefsetSearchFilter && panel.options.languageRefsetSearchFilter.length !== 0){
+                        $.each(panel.options.languageRefsetSearchFilter, function(i, languageRefsetId){
+                            searchUrl = searchUrl + "&preferredOrAcceptableIn=" + languageRefsetId;
+                        });
+                    }
                     $.ajax({
                          url: searchUrl,
                          type: "GET",

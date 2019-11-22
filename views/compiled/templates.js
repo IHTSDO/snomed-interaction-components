@@ -6101,13 +6101,13 @@ function program3(depth0,data) {
   buffer += escapeExpression(stack1)
     + "-inactiveOnlyButton' data-i18n-id='i18n_inactive_only'>"
     + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_inactive_only", "Inactive components only", options) : helperMissing.call(depth0, "i18n", "i18n_inactive_only", "Inactive components only", options)))
-    + "</a>\n                            </li>\n                        </ul>\n                    </div>\n                    <div style=\"margin-top: 5px\" class=\"btn-group\">\n                        <button style=\"white-space: normal;\" type=\"button\" class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\">\n                            <span class='i18n' data-i18n-id='i18n_type'>"
+    + "</a>\n                            </li>\n                        </ul>\n                    </div>\n                    <div style=\"margin-top: 5px\" class=\"btn-group dropdown\">\n                        <button style=\"white-space: normal;\" type=\"button\" class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\">\n                            <span class='i18n' data-i18n-id='i18n_type'>"
     + escapeExpression((helper = helpers.i18n || (depth0 && depth0.i18n),options={hash:{},data:data},helper ? helper.call(depth0, "i18n_type", "Type", options) : helperMissing.call(depth0, "i18n", "i18n_type", "Type", options)))
     + "</span>: <span id=\"";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-searchTypeOpt\"></span>&nbsp;<span class=\"caret\"></span>\n                        </button>\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                             <li>\n                                <a href=\"#\" id='";
+    + "-searchTypeOpt\"></span>&nbsp;<span class=\"caret\"></span>\n                        </button>\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li>\n                                <a href=\"#\" id='";
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -6123,7 +6123,15 @@ function program3(depth0,data) {
   if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "-preferredTermyButton'>Preferred Term</a>\n                            </li>\n                        </ul>\n                    </div>                  \n                    \n                    ";
+    + "-preferredTermyButton'>Preferred Term</a>\n                            </li>\n                        </ul>\n                    </div>\n                    <div style=\"margin-top: 5px\" class=\"btn-group dropdown\" id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-filterLanguageRefsetOptHidden\">\n                        <button style=\"white-space: normal;\" type=\"button\" class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\">\n                            <span>Filter by language refset</span>&nbsp;<span class=\"caret\"></span>\n                        </button>                        \n                    </div>                \n                    <div style=\"margin-top: 5px; position: relative\">\n                        <select id=\"";
+  if (helper = helpers.divElementId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.divElementId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "-filterLanguageRefsetOpt\" multiple=\"multiple\" style=\"display: none\"></select>\n                    </div>\n                     \n                    ";
   stack1 = (helper = helpers.if_eq || (depth0 && depth0.if_eq),options={hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.server), "snowstorm", options) : helperMissing.call(depth0, "if_eq", (depth0 && depth0.server), "snowstorm", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                </div>\n            </div>\n            <div id=\"";

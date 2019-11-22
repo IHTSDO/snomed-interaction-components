@@ -53,12 +53,12 @@
                             </li>
                         </ul>
                     </div>
-                    <div style="margin-top: 5px" class="btn-group">
+                    <div style="margin-top: 5px" class="btn-group dropdown">
                         <button style="white-space: normal;" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                             <span class='i18n' data-i18n-id='i18n_type'>{{i18n "i18n_type" "Type" }}</span>: <span id="{{divElementId}}-searchTypeOpt"></span>&nbsp;<span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                             <li>
+                            <li>
                                 <a href="#" id='{{divElementId}}-allTypeButton'> All </a>
                             </li>
                             <li>
@@ -71,8 +71,16 @@
                                 <a href="#"id='{{divElementId}}-preferredTermyButton'>Preferred Term</a>
                             </li>
                         </ul>
-                    </div>                  
-                    
+                    </div>
+                    <div style="margin-top: 5px" class="btn-group dropdown" id="{{divElementId}}-filterLanguageRefsetOptHidden">
+                        <button style="white-space: normal;" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                            <span>Filter by language refset</span>&nbsp;<span class="caret"></span>
+                        </button>                        
+                    </div>                
+                    <div style="margin-top: 5px; position: relative">
+                        <select id="{{divElementId}}-filterLanguageRefsetOpt" multiple="multiple" style="display: none"></select>
+                    </div>
+                     
                     {{#if_eq server 'snowstorm'}}
                         <div style="margin-top: 5px; " class="checkbox">
                             <label>
