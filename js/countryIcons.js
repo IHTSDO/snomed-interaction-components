@@ -30,7 +30,7 @@ countryIcons = {
     '11000172109': 'be',
     '21000210109': 'nz',
     '51000202101': 'no',
-    '11000181102': 'et'
+    '11000181102': 'ee'
 };
 
 Handlebars.registerHelper('countryIcon', function(moduleId) {
